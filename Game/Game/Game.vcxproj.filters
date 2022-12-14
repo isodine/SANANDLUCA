@@ -18,6 +18,8 @@
     <ClInclude Include="source\ModeGame.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="source\ApplicationMain.h" />
+    <ClInclude Include="source\ApplicationMain.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
