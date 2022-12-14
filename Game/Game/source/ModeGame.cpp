@@ -334,7 +334,7 @@ void ModeGame::charJump() {
 	height += 10.0f - throughtime;
 	throughtime += 0.5f;
 	if (height == 1) {
-
+		int kkkk = 1;
 	}
 }
 
