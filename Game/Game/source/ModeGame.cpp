@@ -8,7 +8,7 @@ bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
 	// モデルデータのロード（テクスチャも読み込まれる）
-	_handle = MV1LoadModel("res/mecha-shiteyanyo/Model/mecha.mv1");
+	_handle = MV1LoadModel("res/promodel_multimotion_fujisaki.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -163,9 +163,9 @@ bool ModeGame::Process() {
 		_vPos = VAdd(_vPos, v);
 
 		// 移動した先でコリジョン判定
-		MV1_COLL_RESULT_POLY hitPoly;
+		/*MV1_COLL_RESULT_POLY hitPoly;
 		// 主人公の腰位置から下方向への直線
-		hitPoly = MV1CollCheck_Line(box3handle, collision1,
+		hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
 			VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)));
 		if (hitPoly.HitFlag) {
 			// 当たった
@@ -177,6 +177,22 @@ bool ModeGame::Process() {
 			}
 			// 当たったY位置をキャラ座標にする
 			_vPos.y = hitPoly.HitPosition.y + height;
+
+			// カメラも移動する
+			_cam._vPos = VAdd(_cam._vPos, v);
+			_cam._vTarget = VAdd(_cam._vTarget, v);
+		}
+		else {
+			// 当たらなかった。元の座標に戻す
+			_vPos = oldvPos;
+		}*/
+		MV1SetupCollInfo(box3handle, -1, 8, 8, 8);
+		MV1_COLL_RESULT_POLY_DIM hitPoly;
+		// 主人公の腰位置から下方向への直線
+		hitPoly = MV1CollCheck_Capsule(box3handle,-1, _vPos, VGet(_vPos.x, 75, _vPos.z),30.0f);
+		if (hitPoly.HitNum >= 1) {
+			throughtime = 0.0f;
+			_status = STATUS::WAIT;
 
 			// カメラも移動する
 			_cam._vPos = VAdd(_cam._vPos, v);
@@ -305,70 +321,14 @@ bool ModeGame::Render() {
 		vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		MV1SetRotationXYZ(_handle, vRot);
 		// 描画
-		MV1SetScale(_handle, VGet(3.0f, 3.0f, 3.0f));
 		MV1DrawModel(_handle);
-		DrawSphere3D(_vPos, 80.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
-
+		DrawCapsule3D(_vPos, VGet(_vPos.x, 75, _vPos.z), 30.0f, 8, GetColor(0, 255, 255), GetColor(255, 255, 255), false);
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
 			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 		}
 
 	}
-
-	// カメラターゲットを中心に短い線を引く
-	/* {
-		float linelength = 10.f;
-		VECTOR v = _cam._vTarget;
-		DrawLine3D(VAdd(v, VGet(-linelength, 0, 0)), VAdd(v, VGet(linelength, 0, 0)), GetColor(255, 0, 0));
-		DrawLine3D(VAdd(v, VGet(0, -linelength, 0)), VAdd(v, VGet(0, linelength, 0)), GetColor(0, 255, 0));
-		DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
-	}
-
-	// 再生時間をセットする
-	MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
-
-	// モデルを描画する
-	{
-		// 位置
-		MV1SetPosition(_handle, _vPos);
-		// 向きからY軸回転を算出
-		VECTOR vRot = { 0,0,0 };
-		vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
-		MV1SetRotationXYZ(_handle, vRot);
-		// 描画
-		MV1SetScale(_handle, VGet(3.0f, 3.0f, 3.0f));
-		MV1DrawModel(_handle);
-
-		// コリジョン判定用ラインの描画
-		if (_bViewCollision) {
-			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
-		}
-
-	}
-
-	// マップモデルを描画する
-	{
-		MV1DrawModel(_handleMap);
-		MV1DrawModel(_handleSkySphere);
-	}
-
-	// カメラ情報表示
-	{
-		int x = 0, y = 0, size = 16;
-		SetFontSize(size);
-		DrawFormatString(x, y, GetColor(255, 0, 0), "Camera:"); y += size;
-		DrawFormatString(x, y, GetColor(255, 0, 0), "  target = (%5.2f, %5.2f, %5.2f)", _cam._vTarget.x, _cam._vTarget.y, _cam._vTarget.z); y += size;
-		DrawFormatString(x, y, GetColor(255, 0, 0), "  pos    = (%5.2f, %5.2f, %5.2f)", _cam._vPos.x, _cam._vPos.y, _cam._vPos.z); y += size;
-		float sx = _cam._vPos.x - _cam._vTarget.x;
-		float sz = _cam._vPos.z - _cam._vTarget.z;
-		float length = sqrt(sz * sz + sx * sx);
-		float rad = atan2(sz, sx);
-		float deg = RAD2DEG(rad);
-		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
-	}*/
-
-
 	return true;
 }
 
