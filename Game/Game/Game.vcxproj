@@ -160,7 +160,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\amg\Downloads\221006_PG1年_game\221006_PG1年_game\01_base\Game\Game\source\ApplicationMain.h" />
     <ClInclude Include="source\ModeGame.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
