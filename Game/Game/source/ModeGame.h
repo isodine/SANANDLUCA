@@ -34,6 +34,13 @@ protected:
 
 	// 3Dモデル描画用
 	int _handle;
+
+	int box1handle;
+	int box2handle;
+	int box21handle;
+	int box3handle;
+	int box31handle;
+	
 	int _attach_index;
 	float _total_time;
 	float _play_time;
@@ -53,7 +60,8 @@ protected:
 	int _handleMap;
 	int _handleSkySphere;
 	int _frameMapCollision;
-
+	int collision1;
+	int collision2;
 
 	// デバッグ用
 	bool	_bViewCollision;

@@ -16,15 +16,23 @@ bool ModeGame::Initialize() {
 	_total_time = 0.f;
 	_play_time = 0.0f;
 	// 位置,向きの初期化
-	_vPos = VGet(0, 0, 0);
+	_vPos = VGet(0, 25, 0);
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
 	_handleMap = MV1LoadModel("res/plain/plain.mv1");
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
+	box1handle = MV1LoadModel("res/a_block_1.mv1");
+	box2handle = MV1LoadModel("res/a_block_2.mv1");
+	box21handle = MV1DuplicateModel(box2handle);
+	box3handle = MV1LoadModel("res/a_block_3.mv1");
+	box31handle = MV1DuplicateModel(box3handle);
+
 	// コリジョン情報の生成
 	_frameMapCollision = MV1SearchFrame(_handleMap, "Mesh");
+	collision1 = MV1SearchFrame(box3handle, "a_block_X_harfwall");
+	collision2 = MV1SearchFrame(box31handle, "a_block_X_harfwall");
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
@@ -157,7 +165,7 @@ bool ModeGame::Process() {
 		// 移動した先でコリジョン判定
 		MV1_COLL_RESULT_POLY hitPoly;
 		// 主人公の腰位置から下方向への直線
-		hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
+		hitPoly = MV1CollCheck_Line(box3handle, collision1,
 			VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)));
 		if (hitPoly.HitFlag) {
 			// 当たった
@@ -247,8 +255,8 @@ bool ModeGame::Render() {
 
 	// 3D基本設定
 	SetUseZBuffer3D(TRUE);
-	SetWriteZBuffer3D(TRUE);
-	SetUseBackCulling(TRUE);
+	SetWriteZBuffer3D(FALSE);
+	SetUseBackCulling(FALSE);
 
 	// ライト設定
 	SetUseLighting(TRUE);
@@ -274,8 +282,42 @@ bool ModeGame::Render() {
 		DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
 	}
 
-	// カメラターゲットを中心に短い線を引く
+	MV1SetPosition(box1handle, VGet(0,0,0));
+	MV1SetPosition(box2handle, VGet(750, 12.5, 250));
+	MV1SetPosition(box21handle, VGet(750, 12.5, -250));
+	MV1SetPosition(box3handle, VGet(-512.5, 0, 250));
+	MV1SetPosition(box31handle, VGet(-512.5, 0, -250));
+	MV1SetRotationXYZ(box3handle, VGet(0, 90.0f * DX_PI_F / 180.0f,0));
+	MV1SetRotationXYZ(box31handle, VGet(0, 90.0f * DX_PI_F / 180.0f, 0));
+	MV1DrawModel(box1handle);
+	MV1DrawModel(box2handle);
+	MV1DrawModel(box21handle);
+	MV1DrawModel(box3handle);
+	MV1DrawModel(box31handle);
+	MV1DrawModel(_handleSkySphere);
+
+	// モデルを描画する
 	{
+		// 位置
+		MV1SetPosition(_handle, _vPos);
+		// 向きからY軸回転を算出
+		VECTOR vRot = { 0,0,0 };
+		vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
+		MV1SetRotationXYZ(_handle, vRot);
+		// 描画
+		MV1SetScale(_handle, VGet(3.0f, 3.0f, 3.0f));
+		MV1DrawModel(_handle);
+		DrawSphere3D(_vPos, 80.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
+
+		// コリジョン判定用ラインの描画
+		if (_bViewCollision) {
+			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
+		}
+
+	}
+
+	// カメラターゲットを中心に短い線を引く
+	/* {
 		float linelength = 10.f;
 		VECTOR v = _cam._vTarget;
 		DrawLine3D(VAdd(v, VGet(-linelength, 0, 0)), VAdd(v, VGet(linelength, 0, 0)), GetColor(255, 0, 0));
@@ -324,7 +366,7 @@ bool ModeGame::Render() {
 		float rad = atan2(sz, sx);
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
-	}
+	}*/
 
 
 	return true;
