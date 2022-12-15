@@ -113,7 +113,7 @@ bool ModeGame::Process() {
 		if (key & PAD_INPUT_UP) { v.x = -1; }
 		if (key & PAD_INPUT_LEFT) { v.z = -1; }
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-		//if (key & PAD_INPUT_10) { v.y = 10; }
+		
 
 		// vをrad分回転させる
 		float length = 0.f;
@@ -123,8 +123,12 @@ bool ModeGame::Process() {
 		v.z = sin(rad + camrad) * length;
 
 		// vの分移動
-		_cam._vPos = VAdd(_cam._vPos, v);
-		_cam._vTarget = VAdd(_cam._vTarget, v);
+		_cam._vPos = _cam._vPos;
+		_cam._vTarget = _cam._vTarget;
+
+		_cam._vPos = _cam._vPos;
+		_cam._vTarget = _cam._vTarget;
+
 	}
 	else {
 		// キャラ移動(カメラ設定に合わせて)
@@ -141,11 +145,12 @@ bool ModeGame::Process() {
 		if (key & PAD_INPUT_8) { v.x = -1; }
 		if (key & PAD_INPUT_4) { v.z = -1; }
 		if (key & PAD_INPUT_6) { v.z = 1; }
+		if (CheckHitKey(KEY_INPUT_UP) ) 
+		{ _vPos.y += 1; }
 
-		//if (key & PAD_INPUT_DOWN) { v.x = 1; }
-		//if (key & PAD_INPUT_UP) { v.x = -1; }
-		//if (key & PAD_INPUT_LEFT) { v.z = -1; }
-		//if (key & PAD_INPUT_RIGHT) { v.z = 1; }
+		if (CheckHitKey(KEY_INPUT_DOWN))
+		{ _vPos.y -= 1; }
+
 		if (key & PAD_INPUT_10 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
 		if (_status == STATUS::JUMP) { charJump(); }
@@ -193,14 +198,14 @@ bool ModeGame::Process() {
 		if (hitPoly.HitNum >= 1) {
 			throughtime = 0.0f;
 			_status = STATUS::WAIT;
-
+			_vPos = oldvPos;
 			// カメラも移動する
 			_cam._vPos = VAdd(_cam._vPos, v);
 			_cam._vTarget = VAdd(_cam._vTarget, v);
 		}
 		else {
 			// 当たらなかった。元の座標に戻す
-			_vPos = oldvPos;
+			//_vPos = oldvPos;
 		}
 
 		// 移動量をそのままキャラの向きにする
@@ -214,7 +219,6 @@ bool ModeGame::Process() {
 		else {
 			_status = STATUS::WAIT;
 		}
-
 
 		// デバッグ機能
 		if (trg & PAD_INPUT_2) {
@@ -298,11 +302,19 @@ bool ModeGame::Render() {
 		DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
 	}
 
+	//box1は緑の足場1000×1000　厚さ50
 	MV1SetPosition(box1handle, VGet(0,0,0));
+	//box2,box21は茶色の足場500×500　厚さ25
+	//box1の高さに合わせるため、Ｙ座標に厚さの1/2を足している
+	//X座標は緑の足場の中心からの距離の500と茶色の足場の中心からの距離250を足している
 	MV1SetPosition(box2handle, VGet(750, 12.5, 250));
 	MV1SetPosition(box21handle, VGet(750, 12.5, -250));
+	//box3,box31は茶色の壁500×500　厚さ25
+	//Ｘ座標は緑の足場の中心からの距離500に壁の厚さの半分の12.5を足してめり込まないようにしている
 	MV1SetPosition(box3handle, VGet(-512.5, 0, 250));
 	MV1SetPosition(box31handle, VGet(-512.5, 0, -250));
+	//ここでＹ軸を中心に90度回転させている
+	//回転させないと手前か奥の壁になる向き
 	MV1SetRotationXYZ(box3handle, VGet(0, 90.0f * DX_PI_F / 180.0f,0));
 	MV1SetRotationXYZ(box31handle, VGet(0, 90.0f * DX_PI_F / 180.0f, 0));
 	MV1DrawModel(box1handle);
@@ -322,7 +334,7 @@ bool ModeGame::Render() {
 		MV1SetRotationXYZ(_handle, vRot);
 		// 描画
 		MV1DrawModel(_handle);
-		DrawCapsule3D(_vPos, VGet(_vPos.x, 75, _vPos.z), 30.0f, 8, GetColor(0, 255, 255), GetColor(255, 255, 255), false);
+		DrawCapsule3D(VGet(_vPos.x, _vPos.y + 30, _vPos.z), VGet(_vPos.x, _vPos.y + 50, _vPos.z), 30.0f, 8, GetColor(0, 255, 255), GetColor(255, 255, 255), false);
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
 			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
