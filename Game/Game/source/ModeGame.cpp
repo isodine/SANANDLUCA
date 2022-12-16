@@ -8,6 +8,14 @@ bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
 	// モデルデータのロード（テクスチャも読み込まれる）
+	//MV1SetLoadModelPhysicsWorldGravity(-122.5f)読み込むモデルの物理演算に適用する重力パラメータを設定する -122.5はデフォルト値
+	MV1SetLoadModelPhysicsWorldGravity(-122.5f);
+	//MV1SetLoadModelUsePhysicsMode(int PhysicsMode)読み込むモデルの物理演算モードを設定する
+	//DX_LOADMODEL_PHYSICS_LOADCALC　　ファイル読み込み時に物理演算を行う
+	//DX_LOADMODEL_PHYSICS_REALTIME　　　リアルタイム物理演算を行う
+	//DX_LOADMODEL_PHYSICS_DISABLE　　　　物理演算を使用しない
+	//どちらもモデルに物理演算用の情報があることが前提
+	MV1SetLoadModelUsePhysicsMode(DX_LOADMODEL_PHYSICS_REALTIME);
 	_handle = MV1LoadModel("res/promodel_multimotion_fujisaki.mv1");
 	_handle1 = MV1DuplicateModel(_handle);
 	_attach_index = -1;		// アニメーションアタッチはされていない
@@ -127,9 +135,6 @@ bool ModeGame::Process() {
 		_cam._vPos = _cam._vPos;
 		_cam._vTarget = _cam._vTarget;
 
-		_cam._vPos = _cam._vPos;
-		_cam._vTarget = _cam._vTarget;
-
 	}
 	else {
 		// キャラ移動(カメラ設定に合わせて)
@@ -146,6 +151,7 @@ bool ModeGame::Process() {
 		if (key & PAD_INPUT_8) { v.x = -1; }
 		if (key & PAD_INPUT_4) { v.z = -1; }
 		if (key & PAD_INPUT_6) { v.z = 1; }
+		//if (CheckHitKey(KEY_INPUT_SPACE)) { _vPos.y += height; }
 		if (CheckHitKey(KEY_INPUT_UP) ) 
 		{ _vPos.y += 1; }
 
@@ -181,6 +187,22 @@ bool ModeGame::Process() {
 		else {
 			_cam._vPos = VAdd(_cam._vPos, v);
 		  _cam._vTarget = VAdd(_cam._vTarget, v);
+		}
+
+		MV1SetupCollInfo(box1handle, -1, 8, 8, 8);
+		//MV1_COLL_RESULT_POLY_DIM hitPoly;
+		// 主人公の腰位置から下方向への直線
+		hitPoly = MV1CollCheck_Capsule(box1handle, -1, _vPos, VGet(_vPos.x, 75, _vPos.z), 30.0f);
+		if (hitPoly.HitNum >= 1) {
+			throughtime = 0.0f;
+			_status = STATUS::WAIT;
+			
+		}
+		//当たっている
+		else {
+			//_cam._vPos = VAdd(_cam._vPos, v);
+			//_cam._vTarget = VAdd(_cam._vTarget, v);
+			_vPos = oldvPos;
 		}
 
 		// 移動量をそのままキャラの向きにする
@@ -221,10 +243,10 @@ bool ModeGame::Process() {
 		// ステータスに合わせてアニメーションのアタッチ
 		switch (_status) {
 		case STATUS::WAIT:
-			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle,"Anim003"), -1, FALSE);
+			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle,"wait"), -1, FALSE);
 			break;
 		case STATUS::WALK:
-			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim004"), -1, FALSE);
+			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "walk"), -1, FALSE);
 			break;
 		case STATUS::JUMP:
 			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim002"), -1, FALSE);
@@ -307,7 +329,7 @@ bool ModeGame::Render() {
 		VECTOR vRot = { 0,0,0 };
 		vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		MV1SetRotationXYZ(_handle, vRot);
-		MV1SetRotationXYZ(_handle1, VGet(0,25,0));
+		//MV1SetRotationXYZ(_handle1, VGet(0,25,0));
 		// 描画
 
 		MV1DrawModel(_handle1);
@@ -327,7 +349,7 @@ bool ModeGame::Render() {
 }
 
 void ModeGame::charJump() {
-	height += 10.0f - throughtime;
+	_vPos.y += 10.0f - throughtime;
 	throughtime += 0.5f;
 }
 
