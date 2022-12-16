@@ -34,6 +34,7 @@ protected:
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int _handle;
+	int _handle1;
 
 	int box1handle;
 	int box2handle;

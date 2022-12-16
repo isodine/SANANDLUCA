@@ -9,6 +9,7 @@ bool ModeGame::Initialize() {
 
 	// モデルデータのロード（テクスチャも読み込まれる）
 	_handle = MV1LoadModel("res/promodel_multimotion_fujisaki.mv1");
+	_handle1 = MV1DuplicateModel(_handle);
 	_attach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -167,30 +168,6 @@ bool ModeGame::Process() {
 		// vの分移動
 		_vPos = VAdd(_vPos, v);
 
-		// 移動した先でコリジョン判定
-		/*MV1_COLL_RESULT_POLY hitPoly;
-		// 主人公の腰位置から下方向への直線
-		hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
-			VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)));
-		if (hitPoly.HitFlag) {
-			// 当たった
-			if (_vPos.y < hitPoly.HitPosition.y) {
-				throughtime = 0.0f;
-				height = 0.0f;
-				_vPos.y = 0.f;
-				_status = STATUS::WAIT;
-			}
-			// 当たったY位置をキャラ座標にする
-			_vPos.y = hitPoly.HitPosition.y + height;
-
-			// カメラも移動する
-			_cam._vPos = VAdd(_cam._vPos, v);
-			_cam._vTarget = VAdd(_cam._vTarget, v);
-		}
-		else {
-			// 当たらなかった。元の座標に戻す
-			_vPos = oldvPos;
-		}*/
 		MV1SetupCollInfo(box3handle, -1, 8, 8, 8);
 		MV1_COLL_RESULT_POLY_DIM hitPoly;
 		// 主人公の腰位置から下方向への直線
@@ -199,13 +176,11 @@ bool ModeGame::Process() {
 			throughtime = 0.0f;
 			_status = STATUS::WAIT;
 			_vPos = oldvPos;
-			// カメラも移動する
-			_cam._vPos = VAdd(_cam._vPos, v);
-			_cam._vTarget = VAdd(_cam._vTarget, v);
 		}
+		//当たっている
 		else {
-			// 当たらなかった。元の座標に戻す
-			//_vPos = oldvPos;
+			_cam._vPos = VAdd(_cam._vPos, v);
+		  _cam._vTarget = VAdd(_cam._vTarget, v);
 		}
 
 		// 移動量をそのままキャラの向きにする
@@ -332,9 +307,16 @@ bool ModeGame::Render() {
 		VECTOR vRot = { 0,0,0 };
 		vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		MV1SetRotationXYZ(_handle, vRot);
+		MV1SetRotationXYZ(_handle1, VGet(0,25,0));
 		// 描画
+
+		MV1DrawModel(_handle1);
+		DrawCapsule3D(VGet(0, 55, 0), VGet(0, 75, 0), 30.0f, 8, GetColor(0, 255, 255), GetColor(255, 255, 255), true);
+		DrawSphere3D(VGet(0, 65, 0), 40.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
+
 		MV1DrawModel(_handle);
-		DrawCapsule3D(VGet(_vPos.x, _vPos.y + 30, _vPos.z), VGet(_vPos.x, _vPos.y + 50, _vPos.z), 30.0f, 8, GetColor(0, 255, 255), GetColor(255, 255, 255), false);
+		DrawCapsule3D(VGet(_vPos.x, _vPos.y + 30, _vPos.z), VGet(_vPos.x, _vPos.y + 50, _vPos.z), 30.0f, 8, GetColor(0, 255, 255), GetColor(255, 255, 255), true);
+		DrawSphere3D(VGet(_vPos.x, _vPos.y + 40, _vPos.z), 40.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
 			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
@@ -347,8 +329,5 @@ bool ModeGame::Render() {
 void ModeGame::charJump() {
 	height += 10.0f - throughtime;
 	throughtime += 0.5f;
-	if (height == 1) {
-		int kkkk = 1;
-	}
 }
 
