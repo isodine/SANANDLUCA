@@ -9,6 +9,7 @@ public:
 	virtual void Initialize();
 	virtual void Update();
 	virtual void Render();
+	void charJump();
 
 public:
 	enum Type
@@ -18,12 +19,31 @@ public:
 	};
 	Type mypH;
 
+	enum class STATUS {
+		NONE,
+		WAIT,
+		WALK,
+		JUMP,
+		_EOT_
+	};
+	STATUS _status;
+
+	Camera _cam;
+
 	// 3Dモデル描画用
 	int Mhandle;
 	int Mattach_index;
 	float Mtotal_time;
 	float Mplay_time;
+	VECTOR vPos;	// 位置
+	VECTOR vDir;	// 向き
+	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
 	int HP;
 	VECTOR myPos;
+
+	//ジャンプ処理用
+	float throughtime;
+	float height;
+
 };

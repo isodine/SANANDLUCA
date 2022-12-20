@@ -1,7 +1,12 @@
 
 #include "appframe.h"
+#include "Player.h"
+#include "SANclass.h"
+#include "LKAclass.h"
 
 #include <string>
+#include <memory>
+#include <vector>
 
 // 計算用マクロ
 #define	PI	(3.1415926535897932386f)
@@ -61,5 +66,9 @@ protected:
 	//ジャンプ処理用
 	float throughtime;
 	float height;
-
+public:
+	std::vector<std::unique_ptr<Player>> sanlka;
+	Player player;
+	SAN san;
+	LKA lka;
 }; 

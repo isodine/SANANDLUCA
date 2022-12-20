@@ -44,6 +44,13 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
+	auto san = std::make_unique<SAN>(*this);
+	auto lka = std::make_unique<LKA>(*this);
+	san->Initialize();
+	lka->Initialize();
+	sanlka.emplace_back(std::move(san));
+	sanlka.emplace_back(std::move(lka));
+
 	return true;
 }
 
@@ -121,6 +128,9 @@ bool ModeGame::Process() {
 	else {
 		// キャラ移動(カメラ設定に合わせて)
 
+		for (auto&& SanLka : sanlka) {
+			SanLka->Update();
+		}
 		// カメラの向いている角度を取得
 		float sx = _cam._vPos.x - _cam._vTarget.x;
 		float sz = _cam._vPos.z - _cam._vTarget.z;
@@ -297,6 +307,9 @@ bool ModeGame::Render() {
 		// 描画
 		MV1SetScale(_handle, VGet(3.0f, 3.0f, 3.0f));
 		MV1DrawModel(_handle);
+		for (auto&& SanLka : sanlka) {
+			SanLka->Render();
+		}
 
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
