@@ -61,7 +61,7 @@ void LKA::Update() {
 	// 移動した先でコリジョン判定
 	MV1_COLL_RESULT_POLY hitPoly;
 	// 主人公の腰位置から下方向への直線
-	hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
+	hitPoly = MV1CollCheck_Line(_handleMap, ModeGame::_frameMapCollision,
 		VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
 	if (hitPoly.HitFlag) {
 		// 当たった
@@ -97,50 +97,49 @@ void LKA::Update() {
 
 
 	// デバッグ機能
-	if (trg & PAD_INPUT_2) {
-		_bViewCollision = !_bViewCollision;
-	}
-	if (_bViewCollision) {
-		MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
+	//if (trg & PAD_INPUT_2) {
+	//	_bViewCollision = !_bViewCollision;
+	//}
+	//if (_bViewCollision) {
+	//	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
+	//}
+	//else {
+	//	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
+	//}
+
+	// ステータスが変わっていないか？
+	if (oldStatus == _status) {
+		// 再生時間を進める
+		_play_time += 0.5f;
 	}
 	else {
-		MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
+		// アニメーションがアタッチされていたら、デタッチする
+		if (_attach_index != -1) {
+			MV1DetachAnim(_handle, _attach_index);
+			_attach_index = -1;
+		}
+		// ステータスに合わせてアニメーションのアタッチ
+		switch (_status) {
+		case STATUS::WAIT:
+			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim003"), -1, FALSE);
+			break;
+		case STATUS::WALK:
+			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim004"), -1, FALSE);
+			break;
+		case STATUS::JUMP:
+			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim002"), -1, FALSE);
+			break;
+		}
+		// アタッチしたアニメーションの総再生時間を取得する
+		Mtotal_time = MV1GetAttachAnimTotalTime(_handle, _attach_index);
+		// 再生時間を初期化
+		Mplay_time = 0.0f;
 	}
-}
 
-// ステータスが変わっていないか？
-if (oldStatus == _status) {
-	// 再生時間を進める
-	_play_time += 0.5f;
-}
-else {
-	// アニメーションがアタッチされていたら、デタッチする
-	if (_attach_index != -1) {
-		MV1DetachAnim(_handle, _attach_index);
-		_attach_index = -1;
+	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
+	if (_play_time >= _total_time) {
+		_play_time = 0.0f;
 	}
-	// ステータスに合わせてアニメーションのアタッチ
-	switch (_status) {
-	case STATUS::WAIT:
-		_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim003"), -1, FALSE);
-		break;
-	case STATUS::WALK:
-		_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim004"), -1, FALSE);
-		break;
-	case STATUS::JUMP:
-		_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim002"), -1, FALSE);
-		break;
-	}
-	// アタッチしたアニメーションの総再生時間を取得する
-	Mtotal_time = MV1GetAttachAnimTotalTime(_handle, _attach_index);
-	// 再生時間を初期化
-	Mplay_time = 0.0f;
-}
-
-// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
-if (_play_time >= _total_time) {
-	_play_time = 0.0f;
-}
 }
 
 void LKA::Render() {}

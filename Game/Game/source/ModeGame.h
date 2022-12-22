@@ -32,8 +32,6 @@ public:
 	virtual bool Render();
 	void charJump();
 
-protected:
-
 	// ƒJƒƒ‰
 	Camera	_cam;
 
