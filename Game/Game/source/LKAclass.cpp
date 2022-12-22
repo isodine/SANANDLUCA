@@ -20,8 +20,8 @@ void LKA::Initialize()
 }
 
 void LKA::Update() {
-	int key = ApplicationMain::GetInstance()->GetKey();
-	int trg = ApplicationMain::GetInstance()->GetTrg();
+	int key = ApplicationMain::GetInstance()->GetKey1P();
+	int trg = ApplicationMain::GetInstance()->GetTrg1P();
 
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;
