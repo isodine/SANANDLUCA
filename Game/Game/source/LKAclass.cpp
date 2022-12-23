@@ -33,6 +33,13 @@ void LKA::Initialize()
 
 }
 
+int LKA::Input()
+{
+	int keyold1P = Key1P;
+	Key1P = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+}
+
 void LKA::Update() 
 {
 	int key = ApplicationMain::GetInstance()->GetKey1P();

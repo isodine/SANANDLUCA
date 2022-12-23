@@ -9,6 +9,6 @@ public:
 	void Initialize()override;
 	void Update();
 	void Render()override;
-private:
+	int Input();
 
 };
