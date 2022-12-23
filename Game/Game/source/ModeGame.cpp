@@ -44,8 +44,8 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
-	auto san = std::make_unique<SAN>(*this);
-	auto lka = std::make_unique<LKA>(*this);
+	auto san = std::make_unique<SAN>();
+	auto lka = std::make_unique<LKA>();
 	san->Initialize();
 	lka->Initialize();
 	sanlka.emplace_back(std::move(san));
@@ -61,8 +61,8 @@ bool ModeGame::Terminate() {
 
 bool ModeGame::Process() {
 	base::Process();
-	int key = ApplicationMain::GetInstance()->GetKey1P();
-	int trg = ApplicationMain::GetInstance()->GetTrg1P();
+	int key = ApplicationMain::GetInstance()->GetKey2P();
+	int trg = ApplicationMain::GetInstance()->GetTrg2P();
 
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;

@@ -16,19 +16,35 @@ LKA::~LKA()
 
 void LKA::Initialize()
 {
+	// モデルデータのロード（テクスチャも読み込まれる）
+	Mhandle = MV1LoadModel("res/mecha-shiteyanyo/Model/mecha.mv1");
+	Mattach_index = -1;		// アニメーションアタッチはされていない
+	// ステータスを「無し」に設定
+	_status = STATUS::NONE;
+	// 再生時間の初期化
+	Mtotal_time = 0.f;
+	Mplay_time = 0.0f;
+	// 位置,向きの初期化
+	vPos = VGet(0, 0, 0);
+	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
+
+	// 腰位置の設定
+	_colSubY = 60.f;
 
 }
 
-void LKA::Update() {
+void LKA::Update() 
+{
 	int key = ApplicationMain::GetInstance()->GetKey1P();
 	int trg = ApplicationMain::GetInstance()->GetTrg1P();
+	std::unique_ptr<Camera> cam = std::make_unique<Camera>();
 
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;
 	// カメラの向いている角度を取得
-	float sx = _cam._vPos.x - _cam._vTarget.x;
-	float sz = _cam._vPos.z - _cam._vTarget.z;
-	float camrad = atan2(sz, sx);
+	//float sx = _cam._vPos.x - _cam._vTarget.x;
+	//float sz = _cam._vPos.z - _cam._vTarget.z;
+	//float camrad = atan2(sz, sx);
 
 	// 移動方向を決める
 	VECTOR v = { 0,0,0 };
@@ -46,11 +62,11 @@ void LKA::Update() {
 
 	if (_status == STATUS::JUMP) { charJump(); }
 	// vをrad分回転させる
-	float length = 0.f;
-	if (VSize(v) > 0.f) { length = mvSpeed; }
-	float rad = atan2(v.z, v.x);
-	v.x = cos(rad + camrad) * length;
-	v.z = sin(rad + camrad) * length;
+	//float length = 0.f;
+	//if (VSize(v) > 0.f) { length = mvSpeed; }
+	//float rad = atan2(v.z, v.x);
+	//v.x = cos(rad + camrad) * length;
+	//v.z = sin(rad + camrad) * length;
 
 	// 移動前の位置を保存
 	VECTOR oldvPos = vPos;
@@ -61,7 +77,7 @@ void LKA::Update() {
 	// 移動した先でコリジョン判定
 	MV1_COLL_RESULT_POLY hitPoly;
 	// 主人公の腰位置から下方向への直線
-	hitPoly = MV1CollCheck_Line(_handleMap, ModeGame::_frameMapCollision,
+	hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
 		VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
 	if (hitPoly.HitFlag) {
 		// 当たった
@@ -75,8 +91,8 @@ void LKA::Update() {
 		vPos.y = hitPoly.HitPosition.y + height;
 
 		// カメラも移動する
-		_cam._vPos = VAdd(_cam._vPos, v);
-		_cam._vTarget = VAdd(_cam._vTarget, v);
+		cam->_vPos = VAdd(cam->_vPos, v);
+		cam->_vTarget = VAdd(cam->_vTarget, v);
 	}
 	else {
 		// 当たらなかった。元の座標に戻す
@@ -110,36 +126,56 @@ void LKA::Update() {
 	// ステータスが変わっていないか？
 	if (oldStatus == _status) {
 		// 再生時間を進める
-		_play_time += 0.5f;
+		Mplay_time += 0.5f;
 	}
 	else {
 		// アニメーションがアタッチされていたら、デタッチする
-		if (_attach_index != -1) {
-			MV1DetachAnim(_handle, _attach_index);
-			_attach_index = -1;
+		if (Mattach_index != -1) {
+			MV1DetachAnim(Mhandle, Mattach_index);
+			Mattach_index = -1;
 		}
 		// ステータスに合わせてアニメーションのアタッチ
 		switch (_status) {
 		case STATUS::WAIT:
-			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim003"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "Anim003"), -1, FALSE);
 			break;
 		case STATUS::WALK:
-			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim004"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "Anim004"), -1, FALSE);
 			break;
 		case STATUS::JUMP:
-			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim002"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "Anim002"), -1, FALSE);
 			break;
 		}
 		// アタッチしたアニメーションの総再生時間を取得する
-		Mtotal_time = MV1GetAttachAnimTotalTime(_handle, _attach_index);
+		Mtotal_time = MV1GetAttachAnimTotalTime(Mhandle, Mattach_index);
 		// 再生時間を初期化
 		Mplay_time = 0.0f;
 	}
 
 	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
-	if (_play_time >= _total_time) {
-		_play_time = 0.0f;
+	if (Mplay_time >= Mtotal_time) {
+		Mplay_time = 0.0f;
 	}
 }
 
-void LKA::Render() {}
+void LKA::Render() {
+	// 再生時間をセットする
+	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
+
+	// モデルを描画する
+	{
+		// 位置
+		MV1SetPosition(Mhandle, vPos);
+		// 向きからY軸回転を算出
+		VECTOR vRot = { 0,0,0 };
+		vRot.y = atan2(vDir.x * -1, vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
+		MV1SetRotationXYZ(Mhandle, vRot);
+		// 描画
+		MV1SetScale(Mhandle, VGet(3.0f, 3.0f, 3.0f));
+		MV1DrawModel(Mhandle);
+
+		// コリジョン判定用ラインの描画
+		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
+
+	}
+}

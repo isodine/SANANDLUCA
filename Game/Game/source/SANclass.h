@@ -7,9 +7,8 @@ public:
 	SAN();
 	~SAN();
 	void Initialize()override;
-	void Update()override;
+	void Update();
 	void Render()override;
 private:
 
 };
-

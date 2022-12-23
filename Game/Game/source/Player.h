@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+#include <vector>
 #include "appframe.h"
 
 class Player
@@ -28,7 +30,10 @@ public:
 	};
 	STATUS _status;
 
-	Camera _cam;
+	//Camera _cam;
+
+	//std::unique_ptr<Camera> cam = std::make_unique<Camera>();
+
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int Mhandle;

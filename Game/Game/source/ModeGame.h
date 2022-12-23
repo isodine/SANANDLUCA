@@ -13,6 +13,11 @@
 #define	DEG2RAD(x)			( ((x) / 180.0f ) * PI )
 #define	RAD2DEG(x)			( ((x) * 180.0f ) / PI )
 
+	// マップ用
+extern int _handleMap;
+extern int _handleSkySphere;
+extern int _frameMapCollision;
+
 // カメラ
 class Camera {
 public:
@@ -34,6 +39,7 @@ public:
 
 	// カメラ
 	Camera	_cam;
+	
 
 	// 3Dモデル描画用
 	int _handle;
@@ -51,11 +57,6 @@ public:
 		_EOT_
 	};
 	STATUS _status;
-
-	// マップ用
-	int _handleMap;
-	int _handleSkySphere;
-	int _frameMapCollision;
 
 
 	// デバッグ用
