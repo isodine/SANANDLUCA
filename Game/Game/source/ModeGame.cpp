@@ -43,12 +43,15 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
-	auto san = std::make_unique<SAN>();
-	auto lka = std::make_unique<LKA>();
-	san->Initialize();
-	lka->Initialize();
-	sanlka.emplace_back(std::move(san));
-	sanlka.emplace_back(std::move(lka));
+	san.Initialize();
+	lka.Initialize();
+
+	//auto san = std::make_unique<SAN>();
+	//auto lka = std::make_unique<LKA>();
+	//san->Initialize();
+	//lka->Initialize();
+	//sanlka.emplace_back(std::move(san));
+	//sanlka.emplace_back(std::move(lka));
 
 	return true;
 }
@@ -61,9 +64,10 @@ bool ModeGame::Terminate() {
 bool ModeGame::Process() {
 	base::Process();
 
-	for (auto&& SanLka : sanlka) {
-		SanLka->Update();
-	}
+	//for (auto&& SanLka : sanlka) {
+	//	SanLka->Update();
+	//}
+
 	san.Update(_cam);
 	lka.Update(_cam);
 
@@ -312,10 +316,14 @@ bool ModeGame::Render() {
 		//vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		//MV1SetRotationXYZ(_handle, vRot);
 		//// 描画
+		
 		//MV1DrawModel(_handle);
-		for (auto&& SanLka : sanlka) {
-			SanLka->Render();
-		}
+		//for (auto&& SanLka : sanlka) {
+		//	SanLka->Render();
+		//}
+
+		san.Render();
+		lka.Render();
 
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
