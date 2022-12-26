@@ -7,8 +7,8 @@ public:
 	LKA();
 	~LKA();
 	void Initialize()override;
-	void Update();
+	void Update(Camera& cam);
 	void Render()override;
-	int Input();
+	void Input();
 
 };

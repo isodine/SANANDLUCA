@@ -33,18 +33,22 @@ void LKA::Initialize()
 
 }
 
-int LKA::Input()
+void LKA::Input()
 {
 	int keyold1P = Key1P;
 	Key1P = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 
-void LKA::Update() 
+void LKA::Update(Camera& cam)
 {
-	int key = ApplicationMain::GetInstance()->GetKey1P();
-	int trg = ApplicationMain::GetInstance()->GetTrg1P();
-	std::unique_ptr<Camera> cam = std::make_unique<Camera>();
+	int keyold1P = Key1P;
+	Input();
+	//int key = ApplicationMain::GetInstance()->GetKey1P();
+	//int trg = ApplicationMain::GetInstance()->GetTrg1P();
+	int key = Key1P;
+	int trg = Trg1P;
+	//std::unique_ptr<Camera> cam = std::make_unique<Camera>();
 
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;
@@ -56,10 +60,10 @@ void LKA::Update()
 	// 移動方向を決める
 	VECTOR v = { 0,0,0 };
 	float mvSpeed = 6.f;
-	if (key & PAD_INPUT_5) { v.x = 1; }
-	if (key & PAD_INPUT_8) { v.x = -1; }
-	if (key & PAD_INPUT_4) { v.z = -1; }
-	if (key & PAD_INPUT_6) { v.z = 1; }
+	if (key & PAD_INPUT_RIGHT) { v.x = 1; }
+	if (key & PAD_INPUT_LEFT) { v.x = -1; }
+	if (key & PAD_INPUT_DOWN) { v.z = -1; }
+	if (key & PAD_INPUT_UP) { v.z = 1; }
 
 	//if (key & PAD_INPUT_DOWN) { v.x = 1; }
 	//if (key & PAD_INPUT_UP) { v.x = -1; }
@@ -98,8 +102,8 @@ void LKA::Update()
 		vPos.y = hitPoly.HitPosition.y + height;
 
 		// カメラも移動する
-		cam->_vPos = VAdd(cam->_vPos, v);
-		cam->_vTarget = VAdd(cam->_vTarget, v);
+		cam._vPos = VAdd(cam._vPos, v);
+		cam._vTarget = VAdd(cam._vTarget, v);
 	}
 	else {
 		// 当たらなかった。元の座標に戻す

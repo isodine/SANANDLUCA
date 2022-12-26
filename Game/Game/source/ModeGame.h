@@ -49,14 +49,6 @@ public:
 	VECTOR _vPos;	// 位置
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
-	enum class STATUS {
-		NONE,
-		WAIT,
-		WALK,
-		JUMP,
-		_EOT_
-	};
-	STATUS _status;
 
 
 	// デバッグ用

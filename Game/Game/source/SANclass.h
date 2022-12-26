@@ -7,7 +7,7 @@ public:
 	SAN();
 	~SAN();
 	void Initialize()override;
-	void Update();
+	void Update(Camera& cam);
 	void Render()override;
 	void Input();
 private:

@@ -16,6 +16,6 @@ void SAN::Initialize()
 
 }
 
-void SAN::Update() {}
+void SAN::Update(Camera& cam) {}
 
 void SAN::Render() {}

@@ -8,10 +8,9 @@ bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
 	// モデルデータのロード（テクスチャも読み込まれる）
-	_handle = MV1LoadModel("res/mecha-shiteyanyo/Model/mecha.mv1");
+	_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
-	// ステータスを「無し」に設定
-	_status = STATUS::NONE;
+
 	// 再生時間の初期化
 	_total_time = 0.f;
 	_play_time = 0.0f;
@@ -20,11 +19,11 @@ bool ModeGame::Initialize() {
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
-	_handleMap = MV1LoadModel("res/plain/plain.mv1");
+	_handleMap = MV1LoadModel("res/Dungeon/Dungeon.mv1");
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	_frameMapCollision = MV1SearchFrame(_handleMap, "Mesh");
+	_frameMapCollision = MV1SearchFrame(_handleMap, "Dungeon_collision");
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
@@ -61,192 +60,199 @@ bool ModeGame::Terminate() {
 
 bool ModeGame::Process() {
 	base::Process();
-	int key = ApplicationMain::GetInstance()->GetKey2P();
-	int trg = ApplicationMain::GetInstance()->GetTrg2P();
 
-	// 処理前のステータスを保存しておく
-	STATUS oldStatus = _status;
-
-
-	if ((key & (PAD_INPUT_7 | PAD_INPUT_1)) == (PAD_INPUT_7 | PAD_INPUT_1)) {	// Q & Z
-		// 距離、ターゲットの高さ変更
-		float sx = _cam._vPos.x - _cam._vTarget.x;
-		float sz = _cam._vPos.z - _cam._vTarget.z;
-		float rad = atan2(sz, sx);
-		float length = sqrt(sz * sz + sx * sx);
-		if (key & PAD_INPUT_LEFT) { length -= 1.f; }
-		if (key & PAD_INPUT_RIGHT) { length += 1.f; }
-		_cam._vPos.x = _cam._vTarget.x + cos(rad) * length;
-		_cam._vPos.z = _cam._vTarget.z + sin(rad) * length;
-
-		// Y位置
-		if (key & PAD_INPUT_DOWN) { _cam._vTarget.y -= 1.f; }
-		if (key & PAD_INPUT_UP) { _cam._vTarget.y += 1.f; }
+	for (auto&& SanLka : sanlka) {
+		SanLka->Update();
 	}
-	else if (key & PAD_INPUT_7) {	// Q
-		// 角度変更
-		// Y軸回転
-		float sx = _cam._vPos.x - _cam._vTarget.x;
-		float sz = _cam._vPos.z - _cam._vTarget.z;
-		float rad = atan2(sz, sx);
-		float length = sqrt(sz * sz + sx * sx);
-		if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
-		if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-		_cam._vPos.x = _cam._vTarget.x + cos(rad) * length;
-		_cam._vPos.z = _cam._vTarget.z + sin(rad) * length;
+	san.Update(_cam);
+	lka.Update(_cam);
 
-		// Y位置
-		if (key & PAD_INPUT_DOWN) { _cam._vPos.y -= 5.f; }
-		if (key & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
-	}
-	else if (key & PAD_INPUT_1) {	// Z
-		// カメラ位置（注目位置もXZスライド）
-		float sx = _cam._vPos.x - _cam._vTarget.x;
-		float sz = _cam._vPos.z - _cam._vTarget.z;
-		float camrad = atan2(sz, sx);
+	//int key = ApplicationMain::GetInstance()->GetKey2P();
+	//int trg = ApplicationMain::GetInstance()->GetTrg2P();
 
-		// 移動方向を決める
-		VECTOR v = { 0,0,0 };
-		float mvSpeed = 2.f;
-		if (key & PAD_INPUT_DOWN) { v.x = 1; }
-		if (key & PAD_INPUT_UP) { v.x = -1; }
-		if (key & PAD_INPUT_LEFT) { v.z = -1; }
-		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-		//if (key & PAD_INPUT_10) { v.y = 10; }
-
-		// vをrad分回転させる
-		float length = 0.f;
-		if (VSize(v) > 0.f) { length = mvSpeed; }
-		float rad = atan2(v.z, v.x);
-		v.x = cos(rad + camrad) * length;
-		v.z = sin(rad + camrad) * length;
-
-		// vの分移動
-		_cam._vPos = VAdd(_cam._vPos, v);
-		_cam._vTarget = VAdd(_cam._vTarget, v);
-	}
-	else {
-		// キャラ移動(カメラ設定に合わせて)
-
-		for (auto&& SanLka : sanlka) {
-			SanLka->Update();
-		}
-		// カメラの向いている角度を取得
-		float sx = _cam._vPos.x - _cam._vTarget.x;
-		float sz = _cam._vPos.z - _cam._vTarget.z;
-		float camrad = atan2(sz, sx);
-
-		// 移動方向を決める
-		VECTOR v = { 0,0,0 };
-		float mvSpeed = 6.f;
-		if (key & PAD_INPUT_5) { v.x = 1; }
-		if (key & PAD_INPUT_8) { v.x = -1; }
-		if (key & PAD_INPUT_4) { v.z = -1; }
-		if (key & PAD_INPUT_6) { v.z = 1; }
-
-		//if (key & PAD_INPUT_DOWN) { v.x = 1; }
-		//if (key & PAD_INPUT_UP) { v.x = -1; }
-		//if (key & PAD_INPUT_LEFT) { v.z = -1; }
-		//if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-		if (key & PAD_INPUT_10 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
-
-		if (_status == STATUS::JUMP) { charJump(); }
-		// vをrad分回転させる
-		float length = 0.f;
-		if (VSize(v) > 0.f) { length = mvSpeed; }
-		float rad = atan2(v.z, v.x);
-		v.x = cos(rad + camrad) * length;
-		v.z = sin(rad + camrad) * length;
-
-		// 移動前の位置を保存
-		VECTOR oldvPos = _vPos;
-
-		// vの分移動
-		_vPos = VAdd(_vPos, v);
-
-		// 移動した先でコリジョン判定
-		MV1_COLL_RESULT_POLY hitPoly;
-		// 主人公の腰位置から下方向への直線
-		hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
-			VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)));
-		if (hitPoly.HitFlag) {
-			// 当たった
-			if (_vPos.y < hitPoly.HitPosition.y) {
-				throughtime = 0.0f;
-				height = 0.0f;
-				_vPos.y = 0.f;
-				_status = STATUS::WAIT;
-			}
-			// 当たったY位置をキャラ座標にする
-			_vPos.y = hitPoly.HitPosition.y + height;
-
-			// カメラも移動する
-			_cam._vPos = VAdd(_cam._vPos, v);
-			_cam._vTarget = VAdd(_cam._vTarget, v);
-		}
-		else {
-			// 当たらなかった。元の座標に戻す
-			_vPos = oldvPos;
-		}
-
-		// 移動量をそのままキャラの向きにする
-		if (VSize(v) > 0.f) {		// 移動していない時は無視するため
-			_vDir = v;
-			if (!(_status == STATUS::JUMP)) {
-				_status = STATUS::WALK;
-			}
-		}
-		else if(throughtime > 0.0f){}
-		else {
-			_status = STATUS::WAIT;
-		}
+	//// 処理前のステータスを保存しておく
+	//STATUS oldStatus = _status;
 
 
-		// デバッグ機能
-		if (trg & PAD_INPUT_2) {
-			_bViewCollision = !_bViewCollision;
-		}
-		if (_bViewCollision) {
-			MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
-		}
-		else {
-			MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
-		}
-	}
+	//if ((key & (PAD_INPUT_7 | PAD_INPUT_1)) == (PAD_INPUT_7 | PAD_INPUT_1)) {	// Q & Z
+	//	// 距離、ターゲットの高さ変更
+	//	float sx = _cam._vPos.x - _cam._vTarget.x;
+	//	float sz = _cam._vPos.z - _cam._vTarget.z;
+	//	float rad = atan2(sz, sx);
+	//	float length = sqrt(sz * sz + sx * sx);
+	//	if (key & PAD_INPUT_LEFT) { length -= 1.f; }
+	//	if (key & PAD_INPUT_RIGHT) { length += 1.f; }
+	//	_cam._vPos.x = _cam._vTarget.x + cos(rad) * length;
+	//	_cam._vPos.z = _cam._vTarget.z + sin(rad) * length;
 
-	// ステータスが変わっていないか？
-	if (oldStatus == _status) {
-		// 再生時間を進める
-		_play_time += 0.5f;
-	}
-	else {
-		// アニメーションがアタッチされていたら、デタッチする
-		if (_attach_index != -1) {
-			MV1DetachAnim(_handle, _attach_index);
-			_attach_index = -1;
-		}
-		// ステータスに合わせてアニメーションのアタッチ
-		switch (_status) {
-		case STATUS::WAIT:
-			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle,"Anim003"), -1, FALSE);
-			break;
-		case STATUS::WALK:
-			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim004"), -1, FALSE);
-			break;
-		case STATUS::JUMP:
-			_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim002"), -1, FALSE);
-			break;
-		}
-		// アタッチしたアニメーションの総再生時間を取得する
-		_total_time = MV1GetAttachAnimTotalTime(_handle, _attach_index);
-		// 再生時間を初期化
-		_play_time = 0.0f;
-	}
+	//	// Y位置
+	//	if (key & PAD_INPUT_DOWN) { _cam._vTarget.y -= 1.f; }
+	//	if (key & PAD_INPUT_UP) { _cam._vTarget.y += 1.f; }
+	//}
+	//else if (key & PAD_INPUT_7) {	// Q
+	//	// 角度変更
+	//	// Y軸回転
+	//	float sx = _cam._vPos.x - _cam._vTarget.x;
+	//	float sz = _cam._vPos.z - _cam._vTarget.z;
+	//	float rad = atan2(sz, sx);
+	//	float length = sqrt(sz * sz + sx * sx);
+	//	if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
+	//	if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
+	//	_cam._vPos.x = _cam._vTarget.x + cos(rad) * length;
+	//	_cam._vPos.z = _cam._vTarget.z + sin(rad) * length;
 
-	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
-	if (_play_time >= _total_time) {
-		_play_time = 0.0f;
-	}
+	//	// Y位置
+	//	if (key & PAD_INPUT_DOWN) { _cam._vPos.y -= 5.f; }
+	//	if (key & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
+	//}
+	//else if (key & PAD_INPUT_1) {	// Z
+	//	// カメラ位置（注目位置もXZスライド）
+	//	float sx = _cam._vPos.x - _cam._vTarget.x;
+	//	float sz = _cam._vPos.z - _cam._vTarget.z;
+	//	float camrad = atan2(sz, sx);
+
+	//	// 移動方向を決める
+	//	VECTOR v = { 0,0,0 };
+	//	float mvSpeed = 2.f;
+	//	if (key & PAD_INPUT_DOWN) { v.x = 1; }
+	//	if (key & PAD_INPUT_UP) { v.x = -1; }
+	//	if (key & PAD_INPUT_LEFT) { v.z = -1; }
+	//	if (key & PAD_INPUT_RIGHT) { v.z = 1; }
+	//	//if (key & PAD_INPUT_10) { v.y = 10; }
+
+	//	// vをrad分回転させる
+	//	float length = 0.f;
+	//	if (VSize(v) > 0.f) { length = mvSpeed; }
+	//	float rad = atan2(v.z, v.x);
+	//	v.x = cos(rad + camrad) * length;
+	//	v.z = sin(rad + camrad) * length;
+
+	//	// vの分移動
+	//	_cam._vPos = VAdd(_cam._vPos, v);
+	//	_cam._vTarget = VAdd(_cam._vTarget, v);
+	//}
+	//else {
+	//	// キャラ移動(カメラ設定に合わせて)
+
+	//	for (auto&& SanLka : sanlka) {
+	//		SanLka->Update();
+	//	}
+	//	// カメラの向いている角度を取得
+	//	float sx = _cam._vPos.x - _cam._vTarget.x;
+	//	float sz = _cam._vPos.z - _cam._vTarget.z;
+	//	float camrad = atan2(sz, sx);
+
+	//	// 移動方向を決める
+	//	VECTOR v = { 0,0,0 };
+	//	float mvSpeed = 6.f;
+	//	if (key & PAD_INPUT_5) { v.x = 1; }
+	//	if (key & PAD_INPUT_8) { v.x = -1; }
+	//	if (key & PAD_INPUT_4) { v.z = -1; }
+	//	if (key & PAD_INPUT_6) { v.z = 1; }
+
+	//	//if (key & PAD_INPUT_DOWN) { v.x = 1; }
+	//	//if (key & PAD_INPUT_UP) { v.x = -1; }
+	//	//if (key & PAD_INPUT_LEFT) { v.z = -1; }
+	//	//if (key & PAD_INPUT_RIGHT) { v.z = 1; }
+	//	if (key & PAD_INPUT_10 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+
+	//	if (_status == STATUS::JUMP) { charJump(); }
+	//	// vをrad分回転させる
+	//	float length = 0.f;
+	//	if (VSize(v) > 0.f) { length = mvSpeed; }
+	//	float rad = atan2(v.z, v.x);
+	//	v.x = cos(rad + camrad) * length;
+	//	v.z = sin(rad + camrad) * length;
+
+	//	// 移動前の位置を保存
+	//	VECTOR oldvPos = _vPos;
+
+	//	// vの分移動
+	//	_vPos = VAdd(_vPos, v);
+
+	//	// 移動した先でコリジョン判定
+	//	MV1_COLL_RESULT_POLY hitPoly;
+	//	// 主人公の腰位置から下方向への直線
+	//	hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
+	//		VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)));
+	//	if (hitPoly.HitFlag) {
+	//		// 当たった
+	//		if (_vPos.y < hitPoly.HitPosition.y) {
+	//			throughtime = 0.0f;
+	//			height = 0.0f;
+	//			_vPos.y = 0.f;
+	//			_status = STATUS::WAIT;
+	//		}
+	//		// 当たったY位置をキャラ座標にする
+	//		_vPos.y = hitPoly.HitPosition.y + height;
+
+	//		// カメラも移動する
+	//		_cam._vPos = VAdd(_cam._vPos, v);
+	//		_cam._vTarget = VAdd(_cam._vTarget, v);
+	//	}
+	//	else {
+	//		// 当たらなかった。元の座標に戻す
+	//		_vPos = oldvPos;
+	//	}
+
+	//	// 移動量をそのままキャラの向きにする
+	//	if (VSize(v) > 0.f) {		// 移動していない時は無視するため
+	//		_vDir = v;
+	//		if (!(_status == STATUS::JUMP)) {
+	//			_status = STATUS::WALK;
+	//		}
+	//	}
+	//	else if(throughtime > 0.0f){}
+	//	else {
+	//		_status = STATUS::WAIT;
+	//	}
+
+
+	//	// デバッグ機能
+	//	if (trg & PAD_INPUT_2) {
+	//		_bViewCollision = !_bViewCollision;
+	//	}
+	//	if (_bViewCollision) {
+	//		MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
+	//	}
+	//	else {
+	//		MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
+	//	}
+	//}
+
+	//// ステータスが変わっていないか？
+	//if (oldStatus == _status) {
+	//	// 再生時間を進める
+	//	_play_time += 0.5f;
+	//}
+	//else {
+	//	// アニメーションがアタッチされていたら、デタッチする
+	//	if (_attach_index != -1) {
+	//		MV1DetachAnim(_handle, _attach_index);
+	//		_attach_index = -1;
+	//	}
+	//	// ステータスに合わせてアニメーションのアタッチ
+	//	switch (_status) {
+	//	case STATUS::WAIT:
+	//		_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle,"Anim003"), -1, FALSE);
+	//		break;
+	//	case STATUS::WALK:
+	//		_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim004"), -1, FALSE);
+	//		break;
+	//	case STATUS::JUMP:
+	//		_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim002"), -1, FALSE);
+	//		break;
+	//	}
+	//	// アタッチしたアニメーションの総再生時間を取得する
+	//	_total_time = MV1GetAttachAnimTotalTime(_handle, _attach_index);
+	//	// 再生時間を初期化
+	//	_play_time = 0.0f;
+	//}
+
+	//// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
+	//if (_play_time >= _total_time) {
+	//	_play_time = 0.0f;
+	//}
 
 
 	return true;
@@ -294,19 +300,19 @@ bool ModeGame::Render() {
 	}
 
 	// 再生時間をセットする
-	MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
+	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	// モデルを描画する
+	
 	{
 		// 位置
-		MV1SetPosition(_handle, _vPos);
-		// 向きからY軸回転を算出
-		VECTOR vRot = { 0,0,0 };
-		vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
-		MV1SetRotationXYZ(_handle, vRot);
-		// 描画
-		MV1SetScale(_handle, VGet(3.0f, 3.0f, 3.0f));
-		MV1DrawModel(_handle);
+		//MV1SetPosition(_handle, _vPos);
+		//// 向きからY軸回転を算出
+		//VECTOR vRot = { 0,0,0 };
+		//vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
+		//MV1SetRotationXYZ(_handle, vRot);
+		//// 描画
+		//MV1DrawModel(_handle);
 		for (auto&& SanLka : sanlka) {
 			SanLka->Render();
 		}
@@ -320,8 +326,8 @@ bool ModeGame::Render() {
 
 	// マップモデルを描画する
 	{
-		MV1DrawModel(_handleMap);
 		MV1DrawModel(_handleSkySphere);
+		MV1DrawModel(_handleMap);
 	}
 
 	// カメラ情報表示
