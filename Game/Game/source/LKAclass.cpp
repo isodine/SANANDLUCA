@@ -35,6 +35,7 @@ void LKA::Initialize()
 
 void LKA::Input()
 {
+	//デバッグする時にここを2Pに変える
 	int keyold1P = Key1P;
 	Key1P = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
