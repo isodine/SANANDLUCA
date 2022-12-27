@@ -10,6 +10,5 @@ public:
 	void Update(Camera& cam);
 	void Render()override;
 	void Input();
-private:
 
 };

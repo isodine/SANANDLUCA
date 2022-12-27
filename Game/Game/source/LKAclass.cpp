@@ -25,7 +25,7 @@ void LKA::Initialize()
 	Mtotal_time = 0.f;
 	Mplay_time = 0.0f;
 	// 位置,向きの初期化
-	vPos = VGet(0, 0, 0);
+	vPos = VGet(20, 0, 0);
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// 腰位置の設定
@@ -42,7 +42,6 @@ void LKA::Input()
 
 void LKA::Update(Camera& cam)
 {
-	int keyold1P = Key1P;
 	Input();
 	//int key = ApplicationMain::GetInstance()->GetKey1P();
 	//int trg = ApplicationMain::GetInstance()->GetTrg1P();
