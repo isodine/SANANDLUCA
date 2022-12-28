@@ -25,7 +25,7 @@ void LKA::Initialize()
 	Mtotal_time = 0.f;
 	Mplay_time = 0.0f;
 	// 位置,向きの初期化
-	vPos = VGet(20, 0, 0);
+	vPos = VGet(60, 0, 0);
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// 腰位置の設定
@@ -36,9 +36,9 @@ void LKA::Initialize()
 void LKA::Input()
 {
 	//デバッグする時にここを2Pに変える
-	int keyold1P = Key1P;
-	Key1P = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	int keyold2P = Key2P;
+	Key2P = GetJoypadInputState(DX_INPUT_PAD2);
+	Trg2P = (Key2P ^ keyold2P) & Key2P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 
 void LKA::Update(Camera& cam)
@@ -46,8 +46,8 @@ void LKA::Update(Camera& cam)
 	Input();
 	//int key = ApplicationMain::GetInstance()->GetKey1P();
 	//int trg = ApplicationMain::GetInstance()->GetTrg1P();
-	int key = Key1P;
-	int trg = Trg1P;
+	int key = Key2P;
+	int trg = Trg2P;
 	//std::unique_ptr<Camera> cam = std::make_unique<Camera>();
 
 	// 処理前のステータスを保存しておく
