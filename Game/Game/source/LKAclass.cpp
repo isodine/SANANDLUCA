@@ -53,31 +53,31 @@ void LKA::Update(Camera& cam)
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;
 	// カメラの向いている角度を取得
-	//float sx = _cam._vPos.x - _cam._vTarget.x;
-	//float sz = _cam._vPos.z - _cam._vTarget.z;
-	//float camrad = atan2(sz, sx);
+	float sx = cam._vPos.x - cam._vTarget.x;
+	float sz = cam._vPos.z - cam._vTarget.z;
+	float camrad = atan2(sz, sx);
 
 	// 移動方向を決める
 	VECTOR v = { 0,0,0 };
 	float mvSpeed = 6.f;
-	if (key & PAD_INPUT_RIGHT) { v.x = 1; }
-	if (key & PAD_INPUT_LEFT) { v.x = -1; }
-	if (key & PAD_INPUT_DOWN) { v.z = -1; }
-	if (key & PAD_INPUT_UP) { v.z = 1; }
+	//if (key & PAD_INPUT_RIGHT) { v.x = 1; }
+	//if (key & PAD_INPUT_LEFT) { v.x = -1; }
+	//if (key & PAD_INPUT_DOWN) { v.z = -1; }
+	//if (key & PAD_INPUT_UP) { v.z = 1; }
 
-	//if (key & PAD_INPUT_DOWN) { v.x = 1; }
-	//if (key & PAD_INPUT_UP) { v.x = -1; }
-	//if (key & PAD_INPUT_LEFT) { v.z = -1; }
-	//if (key & PAD_INPUT_RIGHT) { v.z = 1; }
+	if (key & PAD_INPUT_DOWN) { v.x = 1; }
+	if (key & PAD_INPUT_UP) { v.x = -1; }
+	if (key & PAD_INPUT_LEFT) { v.z = -1; }
+	if (key & PAD_INPUT_RIGHT) { v.z = 1; }
 	if (key & PAD_INPUT_10 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
 	if (_status == STATUS::JUMP) { charJump(); }
 	// vをrad分回転させる
-	//float length = 0.f;
-	//if (VSize(v) > 0.f) { length = mvSpeed; }
-	//float rad = atan2(v.z, v.x);
-	//v.x = cos(rad + camrad) * length;
-	//v.z = sin(rad + camrad) * length;
+	float length = 0.f;
+	if (VSize(v) > 0.f) { length = mvSpeed; }
+	float rad = atan2(v.z, v.x);
+	v.x = cos(rad + camrad) * length;
+	v.z = sin(rad + camrad) * length;
 
 	// 移動前の位置を保存
 	VECTOR oldvPos = vPos;
@@ -102,6 +102,7 @@ void LKA::Update(Camera& cam)
 		vPos.y = hitPoly.HitPosition.y + height;
 
 		// カメラも移動する
+		v.x = v.x / 2; v.y = v.y / 2; v.z = v.z / 2;
 		cam._vPos = VAdd(cam._vPos, v);
 		cam._vTarget = VAdd(cam._vTarget, v);
 	}
