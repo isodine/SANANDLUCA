@@ -8,6 +8,10 @@
 #include <memory>
 #include <vector>
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
 // 計算用マクロ
 #define	PI	(3.1415926535897932386f)
 #define	DEG2RAD(x)			( ((x) / 180.0f ) * PI )
@@ -62,4 +66,4 @@ public:
 	Player player;
 	SAN san;
 	LKA lka;
-}; 
+};

@@ -13,7 +13,7 @@ SAN::~SAN()
 
 void SAN::Initialize()
 {
-	// モデルデータのロード（テクスチャも読み込まれる）
+	// モデルデータのロード（テクスチャも読み込まれる)
 	Mhandle = MV1LoadModel("res/mecha-shiteyanyo/Model/mecha.mv1");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
@@ -32,7 +32,7 @@ void SAN::Initialize()
 void SAN::Input()
 {
 	int keyold1P = Key1P;
-	Key1P = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Key1P = GetJoypadInputState(DX_INPUT_PAD1);
 	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 

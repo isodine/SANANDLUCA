@@ -15,7 +15,6 @@ Player::~Player()
 
 void Player::Initialize()
 {
-
 }
 
 void Player::Update(){}

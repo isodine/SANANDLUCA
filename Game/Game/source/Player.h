@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+
 #include "appframe.h"
 
 class Camera;
@@ -38,6 +39,7 @@ public:
 
 	int Key1P, Key2P;
 	int Trg1P, Trg2P;
+
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int Mhandle;
