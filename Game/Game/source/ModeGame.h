@@ -32,9 +32,13 @@ protected:
 	// ƒJƒƒ‰
 	Camera	_cam;
 
+	bool JumpFlag;
+
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int _handle;
 	int _handle1;
+
+	int MapSample1;
 
 	int box1handle;
 	int box2handle;

@@ -8,16 +8,12 @@ bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
 	// モデルデータのロード（テクスチャも読み込まれる）
-	//MV1SetLoadModelPhysicsWorldGravity(-122.5f)読み込むモデルの物理演算に適用する重力パラメータを設定する -122.5はデフォルト値
-	MV1SetLoadModelPhysicsWorldGravity(-122.5f);
-	//MV1SetLoadModelUsePhysicsMode(int PhysicsMode)読み込むモデルの物理演算モードを設定する
-	//DX_LOADMODEL_PHYSICS_LOADCALC　　ファイル読み込み時に物理演算を行う
-	//DX_LOADMODEL_PHYSICS_REALTIME　　　リアルタイム物理演算を行う
-	//DX_LOADMODEL_PHYSICS_DISABLE　　　　物理演算を使用しない
-	//どちらもモデルに物理演算用の情報があることが前提
-	MV1SetLoadModelUsePhysicsMode(DX_LOADMODEL_PHYSICS_REALTIME);
+	JumpFlag = false;
 	_handle = MV1LoadModel("res/promodel_multimotion_fujisaki.mv1");
 	_handle1 = MV1DuplicateModel(_handle);
+
+	MapSample1 = MV1LoadModel("res/testMap.mv1");
+
 	_attach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -151,14 +147,10 @@ bool ModeGame::Process() {
 		if (key & PAD_INPUT_8) { v.x = -1; }
 		if (key & PAD_INPUT_4) { v.z = -1; }
 		if (key & PAD_INPUT_6) { v.z = 1; }
-		//if (CheckHitKey(KEY_INPUT_SPACE)) { _vPos.y += height; }
-		if (CheckHitKey(KEY_INPUT_UP) ) 
-		{ _vPos.y += 1; }
-
-		if (CheckHitKey(KEY_INPUT_DOWN))
-		{ _vPos.y -= 1; }
-
-		if (key & PAD_INPUT_10 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+		if (CheckHitKey(KEY_INPUT_SPACE)) 
+		{JumpFlag = true;}
+		
+		if (CheckHitKey(KEY_INPUT_SPACE) && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
 		if (_status == STATUS::JUMP) { charJump(); }
 		// vをrad分回転させる
@@ -173,49 +165,27 @@ bool ModeGame::Process() {
 
 		// vの分移動
 		_vPos = VAdd(_vPos, v);
+		_vPos.y -= 10.0f;
 
-		MV1SetupCollInfo(box3handle, -1, 8, 8, 8);
+		MV1SetupCollInfo(MapSample1, 6, 8, 8, 8);
 		MV1_COLL_RESULT_POLY_DIM hitPoly;
-		// 主人公の腰位置から下方向への直線
-		hitPoly = MV1CollCheck_Capsule(box3handle,-1, _vPos, VGet(_vPos.x, 75, _vPos.z),30.0f);
+
+		hitPoly = MV1CollCheck_Capsule(MapSample1,6, VGet(_vPos.x, _vPos.y + 30, _vPos.z), VGet(_vPos.x, 80, _vPos.z),30.0f);
 		if (hitPoly.HitNum >= 1) {
+			//throughtime = 0.0f;
+			//_status = STATUS::WAIT;
+			//_vPos = oldvPos;
+			JumpFlag = false;
 			throughtime = 0.0f;
 			_status = STATUS::WAIT;
-			_vPos = oldvPos;
+			_vPos.y = oldvPos.y;
 		}
-		//当たっている
+		//当たってない
 		else {
-			_cam._vPos = VAdd(_cam._vPos, v);
-		  _cam._vTarget = VAdd(_cam._vTarget, v);
+			//_vPos = oldvPos;
 		}
-
-		MV1SetupCollInfo(box1handle, -1, 8, 8, 8);
-		//MV1_COLL_RESULT_POLY_DIM hitPoly;
-		// 主人公の腰位置から下方向への直線
-		hitPoly = MV1CollCheck_Capsule(box1handle, -1, _vPos, VGet(_vPos.x, 75, _vPos.z), 30.0f);
-		if (hitPoly.HitNum >= 1) {
-			throughtime = 0.0f;
-			_status = STATUS::WAIT;
-			
-		}
-		//当たっている
-		else {
-			//_cam._vPos = VAdd(_cam._vPos, v);
-			//_cam._vTarget = VAdd(_cam._vTarget, v);
-			_vPos = oldvPos;
-		}
-
-		// 移動量をそのままキャラの向きにする
-		if (VSize(v) > 0.f) {		// 移動していない時は無視するため
-			_vDir = v;
-			if (!(_status == STATUS::JUMP)) {
-				_status = STATUS::WALK;
-			}
-		}
-		else if(throughtime > 0.0f){}
-		else {
-			_status = STATUS::WAIT;
-		}
+		_cam._vPos = VAdd(_cam._vPos, v);
+		_cam._vTarget = VAdd(_cam._vTarget, v);
 
 		// デバッグ機能
 		if (trg & PAD_INPUT_2) {
@@ -263,7 +233,6 @@ bool ModeGame::Process() {
 		_play_time = 0.0f;
 	}
 
-
 	return true;
 }
 
@@ -299,26 +268,8 @@ bool ModeGame::Render() {
 		DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
 	}
 
-	//box1は緑の足場1000×1000　厚さ50
-	MV1SetPosition(box1handle, VGet(0,0,0));
-	//box2,box21は茶色の足場500×500　厚さ25
-	//box1の高さに合わせるため、Ｙ座標に厚さの1/2を足している
-	//X座標は緑の足場の中心からの距離の500と茶色の足場の中心からの距離250を足している
-	MV1SetPosition(box2handle, VGet(750, 12.5, 250));
-	MV1SetPosition(box21handle, VGet(750, 12.5, -250));
-	//box3,box31は茶色の壁500×500　厚さ25
-	//Ｘ座標は緑の足場の中心からの距離500に壁の厚さの半分の12.5を足してめり込まないようにしている
-	MV1SetPosition(box3handle, VGet(-512.5, 0, 250));
-	MV1SetPosition(box31handle, VGet(-512.5, 0, -250));
-	//ここでＹ軸を中心に90度回転させている
-	//回転させないと手前か奥の壁になる向き
-	MV1SetRotationXYZ(box3handle, VGet(0, 90.0f * DX_PI_F / 180.0f,0));
-	MV1SetRotationXYZ(box31handle, VGet(0, 90.0f * DX_PI_F / 180.0f, 0));
-	MV1DrawModel(box1handle);
-	MV1DrawModel(box2handle);
-	MV1DrawModel(box21handle);
-	MV1DrawModel(box3handle);
-	MV1DrawModel(box31handle);
+	//仮マップ描画
+	MV1DrawModel(MapSample1);
 	MV1DrawModel(_handleSkySphere);
 
 	// モデルを描画する
@@ -330,12 +281,7 @@ bool ModeGame::Render() {
 		vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		MV1SetRotationXYZ(_handle, vRot);
 		//MV1SetRotationXYZ(_handle1, VGet(0,25,0));
-		// 描画
-
-		MV1DrawModel(_handle1);
-		DrawCapsule3D(VGet(0, 55, 0), VGet(0, 75, 0), 30.0f, 8, GetColor(0, 255, 255), GetColor(255, 255, 255), true);
-		DrawSphere3D(VGet(0, 65, 0), 40.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
-
+		
 		MV1DrawModel(_handle);
 		DrawCapsule3D(VGet(_vPos.x, _vPos.y + 30, _vPos.z), VGet(_vPos.x, _vPos.y + 50, _vPos.z), 30.0f, 8, GetColor(0, 255, 255), GetColor(255, 255, 255), true);
 		DrawSphere3D(VGet(_vPos.x, _vPos.y + 40, _vPos.z), 40.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
@@ -349,7 +295,10 @@ bool ModeGame::Render() {
 }
 
 void ModeGame::charJump() {
-	_vPos.y += 10.0f - throughtime;
-	throughtime += 0.5f;
+	if (_status == STATUS::JUMP) {
+		_vPos.y += 10.0f - throughtime;
+		throughtime += 0.3f;
+	}
 }
+
 
