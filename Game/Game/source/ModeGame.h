@@ -54,6 +54,7 @@ public:
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
+	int LightHandle;
 
 	// デバッグ用
 	bool	_bViewCollision;

@@ -30,11 +30,11 @@ bool ModeGame::Initialize() {
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
-	_handleMap = MV1LoadModel("res/plain/plain.mv1");
+	_handleMap = MV1LoadModel("res/0.3.mv1");
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	_frameMapCollision = MV1SearchFrame(_handleMap, "Mesh");
+	_frameMapCollision = MV1SearchFrame(_handleMap, "Comp_floor_01");
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
@@ -57,7 +57,9 @@ bool ModeGame::Initialize() {
 	san.Initialize();
 	lka.Initialize();
 
-	std::ifstream ifs("res/test.csv");
+	//CSVによる初期化（レベルデザイン時に実装）
+
+	/*std::ifstream ifs("res/test.csv");
 
 	std::string line;
 	std::vector<std::string> strresult;
@@ -102,7 +104,9 @@ bool ModeGame::Initialize() {
 			}
 		}
 		cnt++;
-	}
+	}*/
+
+
 	//auto san = std::make_unique<SAN>();
 	//auto lka = std::make_unique<LKA>();
 	//san->Initialize();
@@ -167,8 +171,10 @@ bool ModeGame::Render() {
 	// ライト設定
 	SetUseLighting(TRUE);
 #if 1	// 平行ライト
-	SetGlobalAmbientLight(GetColorF(0.5f, 0.5f, 0.5f, 0.f));
-	ChangeLightTypeDir(VGet(-1, -1, 0));
+	SetGlobalAmbientLight(GetColorF(1.0f, 1.0f, 1.0f, 0.f));
+	ChangeLightTypeDir(VGet(0, -1, 1));
+	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
+
 #endif
 #if 0	// ポイントライト
 	SetGlobalAmbientLight(GetColorF(0.f, 0.f, 0.f, 0.f));
