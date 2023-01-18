@@ -25,6 +25,9 @@
     <ClCompile Include="source\SANclass.cpp">
       <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
+    <ClCompile Include="source\Damage.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ModeGame.h">
@@ -40,6 +43,9 @@
       <Filter>ソース ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="source\SANclass.h">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Damage.h">
       <Filter>ソース ファイル\Player</Filter>
     </ClInclude>
   </ItemGroup>

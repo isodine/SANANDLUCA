@@ -186,6 +186,10 @@ void LKA::Render() {
 		MV1SetScale(Mhandle, VGet(3.0f, 3.0f, 3.0f));
 		MV1DrawModel(Mhandle);
 
+		//ダメージ判定の描画
+		DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
+		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
+
 		// コリジョン判定用ラインの描画
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 
