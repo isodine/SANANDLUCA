@@ -56,7 +56,7 @@ bool ModeGame::Initialize() {
 
 	san.Initialize();
 	lka.Initialize();
-
+	damage.Initialize();
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	/*std::ifstream ifs("res/test.csv");
@@ -124,7 +124,7 @@ bool ModeGame::Terminate() {
 
 bool ModeGame::Process() {
 	base::Process();
-
+	damage.Process();
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}
@@ -224,6 +224,7 @@ bool ModeGame::Render() {
 
 		san.Render();
 		lka.Render();
+		damage.Render();
 
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {

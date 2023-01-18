@@ -1,10 +1,11 @@
 #pragma once
-
-class SAN;
-class LKA;
+#include "SANclass.h"
+#include "LKAclass.h"
 
 class Damage{
 public:
+	Damage();
+	~Damage();
 	virtual void Initialize();
 	virtual void Terminate();
 	virtual void Process();
@@ -19,6 +20,6 @@ public:
 	float Distance;
 
 protected:
-	SAN& san;
-	LKA& lka;
+	SAN San;
+	LKA Lka;
 };

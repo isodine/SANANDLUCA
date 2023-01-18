@@ -1,12 +1,21 @@
 #include "Damage.h"
 #include "AppFrame.h"
 #include "ApplicationMain.h"
-#include"LKAclass.h"
-#include"SANclass.h"
-#include "ModeGame.h"
 
+
+Damage::Damage() {
+	
+}
+
+Damage::~Damage() {
+
+}
 
 void Damage::Initialize() {
+
+	San.Initialize();
+	Lka.Initialize();
+
 	SanHP = 100;
 	LkaHP = 100;
 
@@ -23,7 +32,7 @@ void Damage::Terminate() {
 
 void Damage::Process() {
 	
-	Distance = VSize(VSub(san.vPos, lka.vPos));
+	Distance = VSize(VSub(San.vPos, Lka.vPos));
 
 	if (Distance < 70 && SanHitFlag == false && LkaHitFlag == false) {
 		SanHP -= 2;
@@ -31,7 +40,7 @@ void Damage::Process() {
 		SanHitFlag = true;
 		LkaHitFlag = true;
 	}
-	else if (Distance < 110 && SanHitFlag == false && LkaHitFlag == false) {
+	else if (Distance < 110 && Distance >= 70 && SanHitFlag == false && LkaHitFlag == false) {
 		SanHP -= 1;
 		LkaHP -= 1;
 		SanHitFlag = true;
@@ -41,7 +50,7 @@ void Damage::Process() {
 }
 
 void Damage::Render() {
-	DrawFormatString(0, 100, GetColor(0, 0, 255), "San %d", SanHP);
-	DrawFormatString(0, 120, GetColor(0, 0, 255), "Lka %d", LkaHP);
+	DrawFormatString(0, 200, GetColor(255, 255, 255), "San %d", SanHP);
+	DrawFormatString(0, 220, GetColor(255, 255, 255), "Lka %d", LkaHP);
 
 }
