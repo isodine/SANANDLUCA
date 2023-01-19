@@ -14,6 +14,9 @@ public:
 	int SanHP;
 	int LkaHP;
 
+	float SanCoolTime;
+	float LkaCoolTime;
+
 	bool SanHitFlag;
 	bool LkaHitFlag;
 

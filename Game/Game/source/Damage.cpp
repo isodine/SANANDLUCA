@@ -1,6 +1,7 @@
 #include "Damage.h"
 #include "AppFrame.h"
 #include "ApplicationMain.h"
+#include "time.h"
 
 
 Damage::Damage() {
@@ -20,6 +21,9 @@ void Damage::Initialize() {
 	LkaHP = 100;
 
 	Distance = 1000;
+
+	SanCoolTime = 1;
+	LkaCoolTime = 1;
 
 	SanHitFlag = false;
 	LkaHitFlag = false;
@@ -47,6 +51,37 @@ void Damage::Process() {
 		LkaHitFlag = true;
 	}
 	
+	if (SanHitFlag == true) {
+		SanCoolTime = 1;
+		clock_t start = clock();
+
+		for (;;) {
+			clock_t end = clock();
+
+			double sec = (double)(end - start) / CLOCKS_PER_SEC;
+
+			if (sec >= SanCoolTime) {
+				SanHitFlag = false;
+				break;
+			}
+		}
+	}
+
+	if (LkaHitFlag == true) {
+		LkaCoolTime = 1;
+		clock_t start = clock();
+
+		for (;;) {
+			clock_t end = clock();
+
+			double sec = (double)(end - start) / CLOCKS_PER_SEC;
+
+			if (sec >= LkaCoolTime) {
+				LkaHitFlag = false;
+				break;
+			}
+		}
+	}
 }
 
 void Damage::Render() {
