@@ -5,8 +5,9 @@ int _handleMap;
 int _handleSkySphere;
 int _frameMapCollision;
 
-Player::Player()
+Player::Player(bool issan)
 {
+	isSan = issan;
 }
 
 Player::~Player()
@@ -15,6 +16,18 @@ Player::~Player()
 
 void Player::Initialize()
 {
+}
+
+void Player::DamageProcess()
+{
+	if (isSan)
+	{
+		// sanのダメージ判定
+	}
+	else
+	{
+		// lkaのダメージ判定
+	}
 }
 
 void Player::Update(){}

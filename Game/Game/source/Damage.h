@@ -6,7 +6,7 @@ class Damage{
 public:
 	Damage();
 	~Damage();
-	virtual void Initialize();
+	virtual void Initialize(SAN* san, LKA* lka);
 	virtual void Terminate();
 	virtual void Process();
 	virtual void Render();
@@ -22,7 +22,12 @@ public:
 
 	float Distance;
 
+	int SanOldtime;
+	int LkaOldTime;
+	float SanTime;
+	float LkaTime;
+
 protected:
-	SAN San;
-	LKA Lka;
+	SAN* San;
+	LKA* Lka;
 };

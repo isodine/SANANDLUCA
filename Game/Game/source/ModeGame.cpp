@@ -56,7 +56,8 @@ bool ModeGame::Initialize() {
 
 	san.Initialize();
 	lka.Initialize();
-	damage.Initialize();
+	damage.Initialize(&san, &lka);
+
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	/*std::ifstream ifs("res/test.csv");
@@ -124,21 +125,21 @@ bool ModeGame::Terminate() {
 
 bool ModeGame::Process() {
 	base::Process();
-	damage.Process();
+
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}
 
 	san.Update(_cam);
 	lka.Update(_cam);
-
+	damage.Process();
 	//int key = ApplicationMain::GetInstance()->GetKey2P();
 	//int trg = ApplicationMain::GetInstance()->GetTrg2P();
 
 	//// 処理前のステータスを保存しておく
 	//STATUS oldStatus = _status;
 
-	int key= GetJoypadInputState(DX_INPUT_KEY);
+	int key = GetJoypadInputState(DX_INPUT_KEY);
 
 	if (key & PAD_INPUT_7) {	// Q
 		// 角度変更
@@ -178,7 +179,7 @@ bool ModeGame::Render() {
 #endif
 #if 0	// ポイントライト
 	SetGlobalAmbientLight(GetColorF(0.f, 0.f, 0.f, 0.f));
-	ChangeLightTypePoint(VAdd(_vPos,VGet(0,50.f,0)), 1000.f, 0.f, 0.005f, 0.f);
+	ChangeLightTypePoint(VAdd(_vPos, VGet(0, 50.f, 0)), 1000.f, 0.f, 0.005f, 0.f);
 #endif
 
 	// カメラ設定更新
@@ -207,7 +208,7 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	// モデルを描画する
-	
+
 	{
 		// 位置
 		//MV1SetPosition(_handle, _vPos);
@@ -216,7 +217,7 @@ bool ModeGame::Render() {
 		//vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		//MV1SetRotationXYZ(_handle, vRot);
 		//// 描画
-		
+
 		//MV1DrawModel(_handle);
 		//for (auto&& SanLka : sanlka) {
 		//	SanLka->Render();
@@ -224,7 +225,7 @@ bool ModeGame::Render() {
 
 		san.Render();
 		lka.Render();
-		damage.Render();
+
 
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
@@ -253,16 +254,14 @@ bool ModeGame::Render() {
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 	}
-
+	damage.Render();
 
 	return true;
 }
 
 void ModeGame::charJump() {
 	height += 10.0f - throughtime;
-	throughtime += 0.5f;
-	if (height == 1) {
-		int kkkk = 1;
-	}
+	throughtime += 0.3f;
+
 }
 

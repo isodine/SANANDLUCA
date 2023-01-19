@@ -9,12 +9,13 @@ class Camera;
 class Player
 {
 public:
-	Player();
+	Player(bool issan);
 	~Player();
 	virtual void Initialize();
 	virtual void Update();
 	virtual void Render();
 	void charJump();
+	void DamageProcess();
 
 public:
 	enum Type
@@ -56,5 +57,6 @@ public:
 	//ƒWƒƒƒ“ƒvˆ——p
 	float throughtime;
 	float height;
-
+protected:
+	bool isSan;
 };
