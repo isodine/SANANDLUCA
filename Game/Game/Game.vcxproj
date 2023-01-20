@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Damage.h" />
+    <ClInclude Include="source\Include.h" />
     <ClInclude Include="source\LKAclass.h" />
     <ClInclude Include="source\ModeBoss.h" />
     <ClInclude Include="source\ModeEnding.h" />

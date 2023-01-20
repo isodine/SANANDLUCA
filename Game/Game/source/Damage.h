@@ -2,6 +2,8 @@
 #include "SANclass.h"
 #include "LKAclass.h"
 
+
+
 class Damage{
 public:
 	Damage();

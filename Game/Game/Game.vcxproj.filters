@@ -28,6 +28,33 @@
     <ClCompile Include="source\Damage.cpp">
       <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
+    <ClCompile Include="source\ModeBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModeEnding.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModeGameOver.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModeLogo.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModeStage0.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModeStage1.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModeStage2.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModeStage3.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModeTitle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ModeGame.h">
@@ -48,5 +75,15 @@
     <ClInclude Include="source\Damage.h">
       <Filter>ソース ファイル\Player</Filter>
     </ClInclude>
+    <ClInclude Include="source\ModeBoss.h" />
+    <ClInclude Include="source\ModeEnding.h" />
+    <ClInclude Include="source\ModeGameOver.h" />
+    <ClInclude Include="source\ModeLogo.h" />
+    <ClInclude Include="source\ModeStage0.h" />
+    <ClInclude Include="source\ModeStage1.h" />
+    <ClInclude Include="source\ModeStage2.h" />
+    <ClInclude Include="source\ModeStage3.h" />
+    <ClInclude Include="source\ModeTitle.h" />
+    <ClInclude Include="source\Include.h" />
   </ItemGroup>
 </Project>

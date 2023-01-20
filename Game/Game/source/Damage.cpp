@@ -2,9 +2,10 @@
 #include "AppFrame.h"
 #include "ApplicationMain.h"
 #include "time.h"
+#include "Include.h"
 
 
-Damage::Damage() {
+Damage::Damage(){
 	a = 0;
 	oldtime = GetNowCount();
 }
@@ -17,6 +18,7 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
 
+	
 	SanHP = 100;
 	LkaHP = 100;
 
