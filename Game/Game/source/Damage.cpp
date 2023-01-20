@@ -40,13 +40,13 @@ void Damage::Process() {
 
 	Distance = VSize(VSub(VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z), VGet(San->vPos.x, San->vPos.y + 50, San->vPos.z)));
 
-	if (Distance < 70 && SanHitFlag == false && LkaHitFlag == false) {
+	if (Distance < 85 && SanHitFlag == false && LkaHitFlag == false) {
 		SanHP -= 2;
 		LkaHP -= 2;
 		SanHitFlag = true;
 		LkaHitFlag = true;
 	}
-	else if (Distance < 110 && Distance >= 70 && SanHitFlag == false && LkaHitFlag == false) {
+	else if (Distance < 110 && Distance >= 85 && SanHitFlag == false && LkaHitFlag == false) {
 		SanHP -= 1;
 		LkaHP -= 1;
 		SanHitFlag = true;
@@ -82,5 +82,11 @@ void Damage::Render() {
 
 	DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vec1.x, vec1.y, vec1.z);
 	DrawFormatString(0, 280, GetColor(255, 255, 255), "%f, %f, %f", vec2.x, vec2.y, vec2.z);
+
+	DrawFormatString(0, 300, GetColor(255, 255, 255), "SanCoolTime %f", SanCoolTime);
+	DrawFormatString(0, 320, GetColor(255, 255, 255), "LkaCoolTime %f", LkaCoolTime);
+
+	DrawFormatString(0, 340, GetColor(255, 255, 255), "SanHitFlag %d", SanHitFlag);
+	DrawFormatString(0, 360, GetColor(255, 255, 255), "LkaHitFlag %d", LkaHitFlag);
 	
 }
