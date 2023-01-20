@@ -30,11 +30,11 @@ bool ModeGame::Initialize() {
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
-	_handleMap = MV1LoadModel("res/0.3.mv1");
+	_handleMap = MV1LoadModel("res/a_map01.mv1");
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	_frameMapCollision = MV1SearchFrame(_handleMap, "Comp_floor_01");
+	_frameMapCollision = MV1SearchFrame(_handleMap, "col_normol");
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
@@ -65,7 +65,6 @@ bool ModeGame::Initialize() {
 
 	san.Initialize();
 	lka.Initialize();
-	damage.Initialize(&san, &lka);
 
 	//CSVによる初期化（レベルデザイン時に実装）
 
@@ -141,7 +140,6 @@ bool ModeGame::Process() {
 
 	san.Update(_cam);
 	lka.Update(_cam);
-	damage.Process();
 	//int key = ApplicationMain::GetInstance()->GetKey2P();
 	//int trg = ApplicationMain::GetInstance()->GetTrg2P();
 
@@ -263,7 +261,6 @@ bool ModeGame::Render() {
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 	}
-	damage.Render();
 
 	return true;
 }

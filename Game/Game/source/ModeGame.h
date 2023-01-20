@@ -68,5 +68,4 @@ public:
 	Player player;
 	SAN san;
 	LKA lka;
-	Damage damage;
 };

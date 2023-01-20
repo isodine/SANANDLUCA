@@ -72,6 +72,15 @@ void LKA::Update(Camera& cam)
 	// vの分移動
 	vPos = VAdd(vPos, v);
 
+	// 画面内にキャラクターが入っていないかどうかを描画する
+//TRUEは入ってない、FALSEは入ってる
+	if (CheckCameraViewClip(vPos) == TRUE)
+	{
+		// 画面外に出た。元の座標に戻す
+		vPos = oldvPos;
+		v = { 0,0,0 };
+	}
+
 	// 移動した先でコリジョン判定
 	MV1_COLL_RESULT_POLY hitPoly;
 	// 主人公の腰位置から下方向への直線
@@ -109,6 +118,7 @@ void LKA::Update(Camera& cam)
 	else {
 		_status = STATUS::WAIT;
 	}
+
 
 
 	// デバッグ機能
