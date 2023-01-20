@@ -2,6 +2,7 @@
 #include "AppFrame.h"
 #include "ApplicationMain.h"
 #include "ModeGame.h"
+#include "ModeLogo.h"
 
 // ŽÀ‘Ì
 ApplicationMain				g_oApplicationMain;
@@ -11,7 +12,7 @@ bool ApplicationMain::Initialize(HINSTANCE hInstance) {
 
 	// ƒ‚[ƒh‚Ì“o˜^
 	ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
-
+	//ModeServer::GetInstance()->Add(new ModeLogo(), 1, "logo");
 	return true;
 }
 

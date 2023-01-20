@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "SANclass.h"
 #include "LKAclass.h"
+#include "Damage.h"
 
 #include <string>
 #include <memory>
@@ -67,4 +68,5 @@ public:
 	Player player;
 	SAN san;
 	LKA lka;
+	Damage damage;
 };

@@ -16,7 +16,7 @@ void LKA::Initialize()
 	Player::Initialize(mypH);
 
 	// モデルデータのロード（テクスチャも読み込まれる）
-	Mhandle = MV1LoadModel("res/mecha-shiteyanyo/Model/mecha.mv1");
+	Mhandle = MV1LoadModel("res/Lka/Lka multimotion.mv1");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -143,13 +143,13 @@ void LKA::Update(Camera& cam)
 		// ステータスに合わせてアニメーションのアタッチ
 		switch (_status) {
 		case STATUS::WAIT:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "Anim003"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle2"), -1, FALSE);
 			break;
 		case STATUS::WALK:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "Anim004"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "walk2"), -1, FALSE);
 			break;
 		case STATUS::JUMP:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "Anim002"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jump2"), -1, FALSE);
 			break;
 		}
 		// アタッチしたアニメーションの総再生時間を取得する
@@ -180,8 +180,11 @@ void LKA::Render()
 		vRot.y = atan2(vDir.x * -1, vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		MV1SetRotationXYZ(Mhandle, vRot);
 		// 描画
-		MV1SetScale(Mhandle, VGet(3.0f, 3.0f, 3.0f));
 		MV1DrawModel(Mhandle);
+
+		//ダメージ判定の描画
+		DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
+		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 
 		// コリジョン判定用ラインの描画
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
