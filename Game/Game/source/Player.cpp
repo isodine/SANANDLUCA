@@ -5,9 +5,9 @@ int _handleMap;
 int _handleSkySphere;
 int _frameMapCollision;
 
-Player::Player(bool issan)
+Player::Player()
 {
-	isSan = issan;
+	
 }
 
 Player::~Player()

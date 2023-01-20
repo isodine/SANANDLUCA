@@ -6,8 +6,7 @@
 
 
 Damage::Damage(){
-	a = 0;
-	oldtime = GetNowCount();
+
 }
 
 Damage::~Damage() {
@@ -17,15 +16,14 @@ Damage::~Damage() {
 void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
-
-	
+  
 	SanHP = 100;
 	LkaHP = 100;
 
 	Distance = 1000;
 
-	SanCoolTime = 1;
-	LkaCoolTime = 1;
+	SanCoolTime = 0;
+	LkaCoolTime = 0;
 
 	SanHitFlag = false;
 	LkaHitFlag = false;
@@ -40,7 +38,6 @@ void Damage::Process() {
 	San->DamageProcess();
 	Lka->DamageProcess();
 
-	//Distance = VSize(VSub(VGet(Lka.vPos.x, Lka.vPos.y + 50, Lka.vPos.z), VGet(San.vPos.x, San.vPos.y + 50, San.vPos.z)));
 	Distance = VSize(VSub(VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z), VGet(San->vPos.x, San->vPos.y + 50, San->vPos.z)));
 
 	if (Distance < 70 && SanHitFlag == false && LkaHitFlag == false) {
@@ -56,21 +53,21 @@ void Damage::Process() {
 		LkaHitFlag = true;
 	}
 	if (SanHitFlag == true) {
-		SanTime += (GetNowCount() - SanOldtime) / 1000.0f;
-		oldtime = GetNowCount();
+		SanCoolTime += 1;
 	}
 	
 	if (LkaHitFlag == true) {
-		SanTime += (GetNowCount() - oldtime) / 1000.0f;
-		oldtime = GetNowCount();
+		LkaCoolTime += 1;
 	}
 
-	if (SanTime >= SanHitFlag) {
+	if (SanCoolTime >= 60) {
 		SanHitFlag = false;
+		SanCoolTime = 0;
 	}
 
-	if (LkaTime >= LkaHitFlag) {
-		SanHitFlag = false;
+	if (LkaCoolTime >= 60) {
+		LkaHitFlag = false;
+		LkaCoolTime = 0;
 	}
 }
 
@@ -82,7 +79,6 @@ void Damage::Render() {
 	auto vec1 = VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z);
 	auto vec2 = VGet(San->vPos.x, San->vPos.y + 50, San->vPos.z);
 
-	DrawFormatString(0, 280, GetColor(255, 255, 255), "a %f", SanTime);
 
 	DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vec1.x, vec1.y, vec1.z);
 	DrawFormatString(0, 280, GetColor(255, 255, 255), "%f, %f, %f", vec2.x, vec2.y, vec2.z);

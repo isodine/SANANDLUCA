@@ -4,6 +4,7 @@
 #include "ModeGame.h"
 
 SAN::SAN()
+	:Player()
 {
 }
 

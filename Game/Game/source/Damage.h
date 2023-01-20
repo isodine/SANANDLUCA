@@ -24,11 +24,6 @@ public:
 
 	float Distance;
 
-	int SanOldtime;
-	int LkaOldTime;
-	float SanTime;
-	float LkaTime;
-
 protected:
 	SAN* San;
 	LKA* Lka;

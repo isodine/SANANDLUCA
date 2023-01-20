@@ -9,7 +9,7 @@ class Camera;
 class Player
 {
 public:
-	Player(bool issan);
+	Player();
 	~Player();
 	virtual void Initialize();
 	virtual void Update();
