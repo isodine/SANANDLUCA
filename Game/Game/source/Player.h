@@ -11,8 +11,8 @@ class Player
 public:
 	enum Type
 	{
-		SAN,
-		LKA
+		San,
+		Lka
 	};
 	Type mypH;
 
