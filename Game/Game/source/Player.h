@@ -9,20 +9,22 @@ class Camera;
 class Player
 {
 public:
-	Player();
-	~Player();
-	virtual void Initialize();
-	virtual void Update();
-	virtual void Render();
-	void charJump();
-
-public:
 	enum Type
 	{
 		SAN,
 		LKA
 	};
 	Type mypH;
+
+	Player();
+	~Player();
+	virtual void Initialize(Type mypH);
+	virtual void Update(Type mypH);
+	virtual void Render(Type mypH);
+	void charJump();
+
+public:
+
 
 	enum class STATUS {
 		NONE,

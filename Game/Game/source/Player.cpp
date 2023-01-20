@@ -13,13 +13,13 @@ Player::~Player()
 {
 }
 
-void Player::Initialize()
+void Player::Initialize(Type myph)
 {
 }
 
-void Player::Update(){}
+void Player::Update(Type mypH){}
 
-void Player::Render(){}
+void Player::Render(Type mypH){}
 
 void Player::charJump() {
 	height += 10.0f - throughtime;

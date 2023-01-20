@@ -44,11 +44,8 @@ void LKA::Input()
 void LKA::Update(Camera& cam)
 {
 	Input();
-	//int key = ApplicationMain::GetInstance()->GetKey1P();
-	//int trg = ApplicationMain::GetInstance()->GetTrg1P();
 	int key = Key2P;
 	int trg = Trg2P;
-	//std::unique_ptr<Camera> cam = std::make_unique<Camera>();
 
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;
@@ -60,16 +57,12 @@ void LKA::Update(Camera& cam)
 	// 移動方向を決める
 	VECTOR v = { 0,0,0 };
 	float mvSpeed = 6.f;
-	//if (key & PAD_INPUT_RIGHT) { v.x = 1; }
-	//if (key & PAD_INPUT_LEFT) { v.x = -1; }
-	//if (key & PAD_INPUT_DOWN) { v.z = -1; }
-	//if (key & PAD_INPUT_UP) { v.z = 1; }
 
 	if (key & PAD_INPUT_DOWN) { v.x = 1; }
 	if (key & PAD_INPUT_UP) { v.x = -1; }
 	if (key & PAD_INPUT_LEFT) { v.z = -1; }
 	if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-	if (key & PAD_INPUT_10 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+	if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
 	if (_status == STATUS::JUMP) { charJump(); }
 	// vをrad分回転させる

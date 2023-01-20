@@ -48,6 +48,15 @@ bool ModeGame::Initialize() {
 	_cam._clipNear = 2.f;
 	_cam._clipFar = 10000.f;
 
+	//フォグを使ってみる
+	SetFogEnable(TRUE);
+
+	// フォグの色を設定
+	SetFogColor(255, 255, 255);
+
+	// フォグの開始距離、終了距離を設定
+	SetFogStartEnd(0.0f, 3000.0f);
+
 	// その他初期化
 	_bViewCollision = TRUE;
 
@@ -140,22 +149,22 @@ bool ModeGame::Process() {
 
 	int key= GetJoypadInputState(DX_INPUT_KEY);
 
-	if (key & PAD_INPUT_7) {	// Q
-		// 角度変更
-		// Y軸回転
-		float sx = _cam._vPos.x - _cam._vTarget.x;
-		float sz = _cam._vPos.z - _cam._vTarget.z;
-		float rad = atan2(sz, sx);
-		float length = sqrt(sz * sz + sx * sx);
-		if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
-		if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-		_cam._vPos.x = _cam._vTarget.x + cos(rad) * length;
-		_cam._vPos.z = _cam._vTarget.z + sin(rad) * length;
+	//if (key & PAD_INPUT_7) {	// Q
+	//	// 角度変更
+	//	// Y軸回転
+	//	float sx = _cam._vPos.x - _cam._vTarget.x;
+	//	float sz = _cam._vPos.z - _cam._vTarget.z;
+	//	float rad = atan2(sz, sx);
+	//	float length = sqrt(sz * sz + sx * sx);
+	//	if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
+	//	if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
+	//	_cam._vPos.x = _cam._vTarget.x + cos(rad) * length;
+	//	_cam._vPos.z = _cam._vTarget.z + sin(rad) * length;
 
-		// Y位置
-		if (key & PAD_INPUT_DOWN) { _cam._vPos.y -= 5.f; }
-		if (key & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
-	}
+	//	// Y位置
+	//	if (key & PAD_INPUT_DOWN) { _cam._vPos.y -= 5.f; }
+	//	if (key & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
+	//}
 
 	return true;
 }

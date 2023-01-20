@@ -14,7 +14,8 @@ SAN::~SAN()
 void SAN::Initialize()
 {
 	// モデルデータのロード（テクスチャも読み込まれる)
-	Mhandle = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1");
+	//res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1
+	Mhandle = MV1LoadModel("res/slime/slime_kai.mv1");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -36,132 +37,142 @@ void SAN::Input()
 	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 
-void SAN::Update(Camera& cam) 
+void SAN::Update(Camera& cam)
 {
 	Input();
-	//int key = ApplicationMain::GetInstance()->GetKey1P();
-	//int trg = ApplicationMain::GetInstance()->GetTrg1P();
 	int key = Key1P;
 	int trg = Trg1P;
-	//std::unique_ptr<Camera> cam = std::make_unique<Camera>();
 
-	// 処理前のステータスを保存しておく
-	STATUS oldStatus = _status;
-	// カメラの向いている角度を取得
-	float sx = cam._vPos.x - cam._vTarget.x;
-	float sz = cam._vPos.z - cam._vTarget.z;
-	float camrad = atan2(sz, sx);
+	if (key & PAD_INPUT_5) {	// 多分L1ボタン
+		// 角度変更
+		// Y軸回転
+		float sx = cam._vPos.x - cam._vTarget.x;
+		float sz = cam._vPos.z - cam._vTarget.z;
+		float rad = atan2(sz, sx);
+		float length = sqrt(sz * sz + sx * sx);
+		if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
+		if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
+		cam._vPos.x = cam._vTarget.x + cos(rad) * length;
+		cam._vPos.z = cam._vTarget.z + sin(rad) * length;
 
-	// 移動方向を決める
-	VECTOR v = { 0,0,0 };
-	float mvSpeed = 6.f;
-	//if (key & PAD_INPUT_RIGHT) { v.x = 1; }
-	//if (key & PAD_INPUT_LEFT) { v.x = -1; }
-	//if (key & PAD_INPUT_DOWN) { v.z = -1; }
-	//if (key & PAD_INPUT_UP) { v.z = 1; }
+		// Y位置
+		if (key & PAD_INPUT_DOWN) { cam._vPos.y -= 5.f; }
+		if (key & PAD_INPUT_UP) { cam._vPos.y += 5.f; }
+	}
+	else {
 
-	if (key & PAD_INPUT_DOWN) { v.x = 1; }
-	if (key & PAD_INPUT_UP) { v.x = -1; }
-	if (key & PAD_INPUT_LEFT) { v.z = -1; }
-	if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-	if (key & PAD_INPUT_10 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+		// 処理前のステータスを保存しておく
+		STATUS oldStatus = _status;
+		// カメラの向いている角度を取得
+		float sx = cam._vPos.x - cam._vTarget.x;
+		float sz = cam._vPos.z - cam._vTarget.z;
+		float camrad = atan2(sz, sx);
 
-	if (_status == STATUS::JUMP) { charJump(); }
-	// vをrad分回転させる
-	float length = 0.f;
-	if (VSize(v) > 0.f) { length = mvSpeed; }
-	float rad = atan2(v.z, v.x);
-	v.x = cos(rad + camrad) * length;
-	v.z = sin(rad + camrad) * length;
+		// 移動方向を決める
+		VECTOR v = { 0,0,0 };
+		float mvSpeed = 6.f;
+		if (key & PAD_INPUT_DOWN) { v.x = 1; }
+		if (key & PAD_INPUT_UP) { v.x = -1; }
+		if (key & PAD_INPUT_LEFT) { v.z = -1; }
+		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
+		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
-	// 移動前の位置を保存
-	VECTOR oldvPos = vPos;
+		if (_status == STATUS::JUMP) { charJump(); }
+		// vをrad分回転させる
+		float length = 0.f;
+		if (VSize(v) > 0.f) { length = mvSpeed; }
+		float rad = atan2(v.z, v.x);
+		v.x = cos(rad + camrad) * length;
+		v.z = sin(rad + camrad) * length;
 
-	// vの分移動
-	vPos = VAdd(vPos, v);
+		// 移動前の位置を保存
+		VECTOR oldvPos = vPos;
 
-	// 移動した先でコリジョン判定
-	MV1_COLL_RESULT_POLY hitPoly;
-	// 主人公の腰位置から下方向への直線
-	hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
-		VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-	if (hitPoly.HitFlag) {
-		// 当たった
-		if (vPos.y < hitPoly.HitPosition.y) {
-			throughtime = 0.0f;
-			height = 0.0f;
-			vPos.y = 0.f;
+		// vの分移動
+		vPos = VAdd(vPos, v);
+
+		// 移動した先でコリジョン判定
+		MV1_COLL_RESULT_POLY hitPoly;
+		// 主人公の腰位置から下方向への直線
+		hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
+			VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+		if (hitPoly.HitFlag) {
+			// 当たった
+			if (vPos.y < hitPoly.HitPosition.y) {
+				throughtime = 0.0f;
+				height = 0.0f;
+				vPos.y = 0.f;
+				_status = STATUS::WAIT;
+			}
+			// 当たったY位置をキャラ座標にする
+			vPos.y = hitPoly.HitPosition.y + height;
+
+			// カメラも移動する
+			v.x = v.x / 2; v.y = v.y / 2; v.z = v.z / 2;
+			cam._vPos = VAdd(cam._vPos, v);
+			cam._vTarget = VAdd(cam._vTarget, v);
+		}
+		else {
+			// 当たらなかった。元の座標に戻す
+			vPos = oldvPos;
+		}
+
+		// 移動量をそのままキャラの向きにする
+		if (VSize(v) > 0.f) {		// 移動していない時は無視するため
+			vDir = v;
+			if (!(_status == STATUS::JUMP)) {
+				_status = STATUS::WALK;
+			}
+		}
+		else if (throughtime > 0.0f) {}
+		else {
 			_status = STATUS::WAIT;
 		}
-		// 当たったY位置をキャラ座標にする
-		vPos.y = hitPoly.HitPosition.y + height;
 
-		// カメラも移動する
-		v.x = v.x / 2; v.y = v.y / 2; v.z = v.z / 2;
-		cam._vPos = VAdd(cam._vPos, v);
-		cam._vTarget = VAdd(cam._vTarget, v);
-	}
-	else {
-		// 当たらなかった。元の座標に戻す
-		vPos = oldvPos;
-	}
+		// デバッグ機能
+		//if (trg & PAD_INPUT_2) {
+		//	_bViewCollision = !_bViewCollision;
+		//}
+		//if (_bViewCollision) {
+		//	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
+		//}
+		//else {
+		//	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
+		//}
 
-	// 移動量をそのままキャラの向きにする
-	if (VSize(v) > 0.f) {		// 移動していない時は無視するため
-		vDir = v;
-		if (!(_status == STATUS::JUMP)) {
-			_status = STATUS::WALK;
+		// ステータスが変わっていないか？
+		if (oldStatus == _status) {
+			// 再生時間を進める
+			Mplay_time += 0.5f;
 		}
-	}
-	else if (throughtime > 0.0f) {}
-	else {
-		_status = STATUS::WAIT;
-	}
-
-
-	// デバッグ機能
-	//if (trg & PAD_INPUT_2) {
-	//	_bViewCollision = !_bViewCollision;
-	//}
-	//if (_bViewCollision) {
-	//	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
-	//}
-	//else {
-	//	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
-	//}
-
-	// ステータスが変わっていないか？
-	if (oldStatus == _status) {
-		// 再生時間を進める
-		Mplay_time += 0.5f;
-	}
-	else {
-		// アニメーションがアタッチされていたら、デタッチする
-		if (Mattach_index != -1) {
-			MV1DetachAnim(Mhandle, Mattach_index);
-			Mattach_index = -1;
+		else {
+			// アニメーションがアタッチされていたら、デタッチする
+			if (Mattach_index != -1) {
+				MV1DetachAnim(Mhandle, Mattach_index);
+				Mattach_index = -1;
+			}
+			// ステータスに合わせてアニメーションのアタッチ
+			switch (_status) {
+			case STATUS::WAIT:
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle2"), -1, FALSE);
+				break;
+			case STATUS::WALK:
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move2"), -1, FALSE);
+				break;
+			case STATUS::JUMP:
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jump2"), -1, FALSE);
+				break;
+			}
+			// アタッチしたアニメーションの総再生時間を取得する
+			Mtotal_time = MV1GetAttachAnimTotalTime(Mhandle, Mattach_index);
+			// 再生時間を初期化
+			Mplay_time = 0.0f;
 		}
-		// ステータスに合わせてアニメーションのアタッチ
-		switch (_status) {
-		case STATUS::WAIT:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle2"), -1, FALSE);
-			break;
-		case STATUS::WALK:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move2"), -1, FALSE);
-			break;
-		case STATUS::JUMP:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jump2"), -1, FALSE);
-			break;
-		}
-		// アタッチしたアニメーションの総再生時間を取得する
-		Mtotal_time = MV1GetAttachAnimTotalTime(Mhandle, Mattach_index);
-		// 再生時間を初期化
-		Mplay_time = 0.0f;
-	}
 
-	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
-	if (Mplay_time >= Mtotal_time) {
-		Mplay_time = 0.0f;
+		// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
+		if (Mplay_time >= Mtotal_time) {
+			Mplay_time = 0.0f;
+		}
 	}
 }
 
@@ -179,8 +190,14 @@ void SAN::Render()
 		vRot.y = atan2(vDir.x * -1, vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		MV1SetRotationXYZ(Mhandle, vRot);
 		// 描画
-		MV1SetScale(Mhandle, VGet(1.0f, 1.0f, 1.0f));
-		MV1DrawModel(Mhandle);
+		MV1SetScale(Mhandle, VGet(10.0f, 10.0f, 10.0f));
+		//MV1SetFrameOpacityRate(Mhandle, 0, 0.0f);
+		//MV1SetOpacityRate(Mhandle, 0.3f);
+		//MV1SetMaterialDrawBlendMode(Mhandle, 0, DX_BLENDMODE_ALPHA);
+		//MV1SetMaterialDrawBlendParam(Mhandle, 0, 100);
+		//MV1DrawModel(Mhandle);
+		MV1DrawFrame(Mhandle, 1);
+		MV1DrawFrame(Mhandle, 2);
 
 		// コリジョン判定用ラインの描画
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
