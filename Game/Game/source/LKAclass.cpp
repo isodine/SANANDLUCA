@@ -2,9 +2,6 @@
 #include "AppFrame.h"
 #include "ApplicationMain.h"
 #include "ModeGame.h"
-#include <string>
-#include <memory>
-#include <vector>
 
 LKA::LKA()
 {
@@ -16,6 +13,8 @@ LKA::~LKA()
 
 void LKA::Initialize()
 {
+	Player::Initialize(mypH);
+
 	// モデルデータのロード（テクスチャも読み込まれる）
 	Mhandle = MV1LoadModel("res/mecha-shiteyanyo/Model/mecha.mv1");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
@@ -46,6 +45,8 @@ void LKA::Update(Camera& cam)
 	Input();
 	int key = Key2P;
 	int trg = Trg2P;
+
+	Player::Update(mypH);
 
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;
@@ -163,7 +164,10 @@ void LKA::Update(Camera& cam)
 	}
 }
 
-void LKA::Render() {
+void LKA::Render()
+{
+	Player::Render(mypH);
+
 	// 再生時間をセットする
 	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
 

@@ -6,9 +6,9 @@ class LKA:public Player
 public:
 	LKA();
 	~LKA();
-	void Initialize()override;
+	void Initialize();
 	void Update(Camera& cam);
-	void Render()override;
+	void Render();
 	void Input();
 
 };

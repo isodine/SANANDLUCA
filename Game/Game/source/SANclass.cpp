@@ -13,6 +13,8 @@ SAN::~SAN()
 
 void SAN::Initialize()
 {
+	Player::Initialize(mypH);
+
 	// モデルデータのロード（テクスチャも読み込まれる)
 	//res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1
 	Mhandle = MV1LoadModel("res/slime/slime_kai.mv1");
@@ -42,6 +44,8 @@ void SAN::Update(Camera& cam)
 	Input();
 	int key = Key1P;
 	int trg = Trg1P;
+
+	Player::Update(mypH);
 
 	if (key & PAD_INPUT_5) {	// 多分L1ボタン
 		// 角度変更
@@ -178,6 +182,8 @@ void SAN::Update(Camera& cam)
 
 void SAN::Render()
 {
+	Player::Render(mypH);
+
 	// 再生時間をセットする
 	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
 

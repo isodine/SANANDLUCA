@@ -6,9 +6,9 @@ class SAN:public Player
 public:
 	SAN();
 	~SAN();
-	void Initialize()override;
+	void Initialize();
 	void Update(Camera& cam);
-	void Render()override;
+	void Render();
 	void Input();
 
 };
