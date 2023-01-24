@@ -16,8 +16,7 @@ void SAN::Initialize()
 	Player::Initialize(mypH);
 
 	// モデルデータのロード（テクスチャも読み込まれる)
-	//res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1
-	Mhandle = MV1LoadModel("res/slime/slime_kai.mv1");
+	Mhandle = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1");
 
 	// 位置,向きの初期化
 	vPos = VGet(-60, 0, 0);
@@ -115,7 +114,7 @@ void SAN::Update(Camera& cam)
 			vPos.y = hitPoly.HitPosition.y + height;
 
 			// カメラも移動する
-			v.x = v.x / 2; v.y = v.y / 2; v.z = v.z / 2;
+			v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
 			cam._vPos = VAdd(cam._vPos, v);
 			cam._vTarget = VAdd(cam._vTarget, v);
 		}
@@ -201,14 +200,12 @@ void SAN::Render()
 		vRot.y = atan2(vDir.x * -1, vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		MV1SetRotationXYZ(Mhandle, vRot);
 		// 描画
-		MV1SetScale(Mhandle, VGet(10.0f, 10.0f, 10.0f));
+		//MV1SetScale(Mhandle, VGet(10.0f, 10.0f, 10.0f));
 		//MV1SetFrameOpacityRate(Mhandle, 0, 0.0f);
 		//MV1SetOpacityRate(Mhandle, 0.3f);
 		//MV1SetMaterialDrawBlendMode(Mhandle, 0, DX_BLENDMODE_ALPHA);
 		//MV1SetMaterialDrawBlendParam(Mhandle, 0, 100);
-		//MV1DrawModel(Mhandle);
-		MV1DrawFrame(Mhandle, 1);
-		MV1DrawFrame(Mhandle, 2);
+		MV1DrawModel(Mhandle);
 
 		//ダメージ判定の描画
 		DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);

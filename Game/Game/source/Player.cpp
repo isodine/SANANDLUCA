@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "ModeGame.h"
+#include "Include.h"
 
 int _handleMap;
 int _handleSkySphere;
@@ -31,4 +32,9 @@ void Player::Render(Type mypH){}
 void Player::charJump() {
 	height += 10.0f - throughtime;
 	throughtime += 0.5f;
+}
+
+void Player::test()
+{
+
 }

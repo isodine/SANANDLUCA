@@ -40,7 +40,6 @@ public:
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
-	void charJump();
 
 	// ƒJƒƒ‰
 	Camera	_cam;
