@@ -21,6 +21,7 @@ bool ModeGame::Initialize() {
 	// モデルデータのロード（テクスチャも読み込まれる）
 	_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
+	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6/sam_bomb.efkefc_1.6.efkefc", 10.0f);
 
 	// 再生時間の初期化
 	_total_time = 0.f;
@@ -120,6 +121,7 @@ bool ModeGame::Initialize() {
 
 bool ModeGame::Terminate() {
 	base::Terminate();
+	DeleteEffekseerEffect(_effectResourceHandle);
 	return true;
 }
 
@@ -158,11 +160,29 @@ bool ModeGame::Process() {
 		if (key & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
 	}
 
+	// モードカウンタを使って60fpsでエフェクトを生成
+	if (GetModeCount() % 60 == 0) {
+		// エフェクトを再生する。
+		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
+
+		// エフェクトの位置をリセットする。
+		_position_x = 0.0f;
+	}
+
+	// 再生中のエフェクトを移動する。
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, 100.0f, 0);
+	_position_x += 0.2f;
+	SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f,0.1f,0.1f);
+
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer3D();
+
 	return true;
 }
 
 bool ModeGame::Render() {
 	base::Render();
+
 
 	// 3D基本設定
 	SetUseZBuffer3D(TRUE);
@@ -255,6 +275,15 @@ bool ModeGame::Render() {
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 	}
 	damage.Render();
+	int key = GetJoypadInputState(DX_INPUT_KEY);
+	if (key& PAD_INPUT_9)
+	{
+		// DXライブラリのカメラとEffekseerのカメラを同期する。
+		Effekseer_Sync3DSetting();
+
+		// Effekseerにより再生中のエフェクトを描画する。
+		DrawEffekseer3D();
+	}
 
 	return true;
 }
@@ -264,4 +293,5 @@ void ModeGame::charJump() {
 	throughtime += 0.3f;
 
 }
+
 

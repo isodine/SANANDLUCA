@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "../Mode//ModeServer.h"
+#include "EffekseerForDXLib.h"
 
 class ApplicationBase
 {
@@ -32,6 +33,7 @@ protected:
 
 	int		_gKey1P, _gTrg1P;
 	int		_gKey2P, _gTrg2P;
+	int   _gKeyEf, _gTrgEf;
 
 	ModeServer* _serverMode;
 

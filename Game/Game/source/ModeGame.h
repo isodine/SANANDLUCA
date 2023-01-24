@@ -69,4 +69,15 @@ public:
 	SAN san;
 	LKA lka;
 	Damage damage;
+
+//エフェクシア
+protected:
+	int		_effectResourceHandle;		// エフェクトファイルをロードするハンドル
+	int		_playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
+	int  Key, Trg;
+
+	// エフェクト位置
+	float	_position_x = 0.0f;
+	float	_position_y = 0.0f;
+
 };
