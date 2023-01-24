@@ -193,4 +193,18 @@ void LKA::Render()
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 
 	}
+	int x = 0, y = 106, size = 16;
+	SetFontSize(size);
+	switch (_status)
+	{
+	case Player::STATUS::WAIT:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = WAIT");
+		break;
+	case Player::STATUS::WALK:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = WALK");
+		break;
+	case Player::STATUS::JUMP:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = JUMP");
+		break;
+	}
 }

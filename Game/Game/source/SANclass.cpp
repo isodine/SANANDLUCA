@@ -216,4 +216,18 @@ void SAN::Render()
 
 	}
 	//DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vPos.x, vPos.y, vPos.z);
+	int x = 0, y = 90, size = 16;
+	SetFontSize(size);
+	switch (_status)
+	{
+	case Player::STATUS::WAIT:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "San states = WAIT");
+		break;
+	case Player::STATUS::WALK:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "San states = WALK");
+		break;
+	case Player::STATUS::JUMP:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "San states = JUMP");
+		break;
+	}
 }

@@ -201,7 +201,7 @@ bool ModeGame::Render() {
 		MV1DrawModel(_handleMap);
 	}
 
-	// カメラ情報表示
+	// デバッグ表示
 	{
 		int x = 0, y = 0, size = 16;
 		SetFontSize(size);
@@ -215,15 +215,32 @@ bool ModeGame::Render() {
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  San pos    = (%5.2f, %5.2f, %5.2f)", san.vPos.x, san.vPos.y, san.vPos.z); y += size;
-		//switch (san._status)
-		//{
-		//	case 
-		//default:
-		//	break;
-		//}
-		//DrawFormatString(x, y, GetColor(255, 0, 0), "  San states    = %s ", san._status); y += size;
+		switch (san._status)
+		{
+		case Player::STATUS::WAIT:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  San states = WAIT"); y += size;
+			break;
+		case Player::STATUS::WALK:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  San states = WALK"); y += size;
+			break;
+		case Player::STATUS::JUMP:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  San states = JUMP"); y += size;
+			break;
+		}
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka pos    = (%5.2f, %5.2f, %5.2f)", lka.vPos.x, lka.vPos.y, lka.vPos.z); y += size;
-	}
+		switch (lka._status)
+		{
+		case Player::STATUS::WAIT:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = WAIT"); y += size;
+			break;
+		case Player::STATUS::WALK:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = WALK"); y += size;
+			break;
+		case Player::STATUS::JUMP:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
+			break;
+		}
 
+	}
 	return true;
 }
