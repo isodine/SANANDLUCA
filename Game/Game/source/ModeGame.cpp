@@ -30,16 +30,15 @@ bool ModeGame::Initialize() {
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
-	_handleMap = MV1LoadModel("res/a_map02.mv1");
+	_handleMap = MV1LoadModel("res/map03/map_03.mv1");
+	MV1SetPosition(_handleMap, VGet(0.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	_frameMapCollision = MV1SearchFrame(_handleMap, "col_normol");
+	_frameMapCollision = MV1SearchFrame(_handleMap, "con_normal");
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
-	// 腰位置の設定
-	_colSubY = 60.f;
 
 
 	// カメラの設定（わかりやすい位置に）
@@ -198,6 +197,7 @@ bool ModeGame::Render() {
 	// マップモデルを描画する
 	{
 		MV1DrawModel(_handleSkySphere);
+		
 		MV1DrawModel(_handleMap);
 	}
 

@@ -19,7 +19,7 @@ void SAN::Initialize()
 	Mhandle = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1");
 
 	// 位置,向きの初期化
-	vPos = VGet(-60, 0, 0);
+	vPos = VGet(-60, 50, 0);
 
 	// 腰位置の設定
 	_colSubY = 60.f;
@@ -74,7 +74,7 @@ void SAN::Update(Camera& cam)
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
 		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
-		if (_status == STATUS::JUMP) { charJump(); }
+		if (_status == STATUS::JUMP) { Jump();}
 		// vをrad分回転させる
 		float length = 0.f;
 		if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -98,30 +98,34 @@ void SAN::Update(Camera& cam)
 		}
 
 		// 移動した先でコリジョン判定
+		MV1_COLL_RESULT_POLY_DIM hitPolyDim;
 		MV1_COLL_RESULT_POLY hitPoly;
 		// 主人公の腰位置から下方向への直線
 		hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
 			VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-		if (hitPoly.HitFlag) {
+		
+		hitPolyDim = MV1CollCheck_Capsule(_handleMap, _frameMapCollision,
+			VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+		if (hitPolyDim.HitNum >= 1)
+		{
 			// 当たった
-			if (vPos.y < hitPoly.HitPosition.y) {
-				throughtime = 0.0f;
-				height = 0.0f;
-				vPos.y = 0.f;
+			if (vPos.y < hitPoly.HitPosition.y)
+			{
 				_status = STATUS::WAIT;
+				throughtime = 0.0f;
+				
+				// 当たったY位置をキャラ座標にする
+				vPos.y = hitPoly.HitPosition.y - 0.01f;
 			}
-			// 当たったY位置をキャラ座標にする
-			vPos.y = hitPoly.HitPosition.y + height;
-
-			// カメラも移動する
-			v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
-			cam._vPos = VAdd(cam._vPos, v);
-			cam._vTarget = VAdd(cam._vTarget, v);
 		}
 		else {
-			// 当たらなかった。元の座標に戻す
-			vPos = oldvPos;
+			freeFall();
 		}
+
+		// カメラも移動する
+		v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
+		cam._vPos = VAdd(cam._vPos, v);
+		cam._vTarget = VAdd(cam._vTarget, v);
 
 		// 移動量をそのままキャラの向きにする
 		if (VSize(v) > 0.f) {		// 移動していない時は無視するため
@@ -216,18 +220,15 @@ void SAN::Render()
 
 	}
 	//DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vPos.x, vPos.y, vPos.z);
-	int x = 0, y = 90, size = 16;
-	SetFontSize(size);
-	switch (_status)
-	{
-	case Player::STATUS::WAIT:
-		DrawFormatString(x, y, GetColor(255, 0, 0), "San states = WAIT");
-		break;
-	case Player::STATUS::WALK:
-		DrawFormatString(x, y, GetColor(255, 0, 0), "San states = WALK");
-		break;
-	case Player::STATUS::JUMP:
-		DrawFormatString(x, y, GetColor(255, 0, 0), "San states = JUMP");
-		break;
-	}
+}
+void SAN::Jump()
+{
+	if (throughtime == 0.f) { height = 10.f; }
+	vPos.y += height;
+}
+
+void SAN::freeFall()
+{
+	vPos.y -= throughtime;
+	throughtime += 0.5f;
 }

@@ -22,7 +22,6 @@ public:
 	virtual void Update(Type mypH);
 	virtual void Render(Type mypH);
 	void charJump();
-	void test();
 
 public:
 

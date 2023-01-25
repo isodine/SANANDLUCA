@@ -34,7 +34,3 @@ void Player::charJump() {
 	throughtime += 0.5f;
 }
 
-void Player::test()
-{
-
-}
