@@ -3,10 +3,10 @@
 #include "ApplicationMain.h"
 #include "time.h"
 #include "Include.h"
-#include "Player.cpp"
+#include "ModeGame.h"
 
 
-Damage::Damage(Include& include) : _include(include) {
+Damage::Damage(){
 
 }
 

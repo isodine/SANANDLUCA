@@ -3,6 +3,7 @@
 #include "ApplicationMain.h"
 #include "ModeGame.h"
 
+
 std::vector<std::string> splitme(std::string& input, char delimiter)
 {
 	std::istringstream stream(input);
