@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "ModeGame.h"
+#include "Include.h"
 
 int _handleMap;
 int _handleSkySphere;
@@ -7,34 +8,29 @@ int _frameMapCollision;
 
 Player::Player()
 {
-	
 }
 
 Player::~Player()
 {
 }
 
-void Player::Initialize()
+void Player::Initialize(Type myph)
 {
+	Mattach_index = -1;		// アニメーションアタッチはされていない
+	// ステータスを「無し」に設定
+	_status = STATUS::NONE;
+	// 再生時間の初期化
+	Mtotal_time = 0.f;
+	Mplay_time = 0.0f;
+	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 }
 
-void Player::DamageProcess()
-{
-	if (isSan)
-	{
-		// sanのダメージ判定
-	}
-	else
-	{
-		// lkaのダメージ判定
-	}
-}
+void Player::Update(Type mypH){}
 
-void Player::Update(){}
-
-void Player::Render(){}
+void Player::Render(Type mypH){}
 
 void Player::charJump() {
 	height += 10.0f - throughtime;
 	throughtime += 0.5f;
 }
+

@@ -3,7 +3,6 @@
 #include "ApplicationMain.h"
 #include "ModeGame.h"
 
-
 std::vector<std::string> splitme(std::string& input, char delimiter)
 {
 	std::istringstream stream(input);
@@ -31,23 +30,31 @@ bool ModeGame::Initialize() {
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
-	_handleMap = MV1LoadModel("res/a_map02.mv1");
+	_handleMap = MV1LoadModel("res/map03/map_03.mv1");
+	MV1SetPosition(_handleMap, VGet(0.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	_frameMapCollision = MV1SearchFrame(_handleMap, "col_normol");
+	_frameMapCollision = MV1SearchFrame(_handleMap, "con_normal");
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
-	// 腰位置の設定
-	_colSubY = 60.f;
 
 
 	// カメラの設定（わかりやすい位置に）
-	_cam._vPos = VGet(0, 120.f, -300.f);
+	_cam._vPos = VGet(0, 300.f, -300.f);
 	_cam._vTarget = VGet(0, 60, 0);
 	_cam._clipNear = 2.f;
 	_cam._clipFar = 10000.f;
+
+	//フォグを使ってみる
+	//SetFogEnable(TRUE);
+
+	// フォグの色を設定
+	//SetFogColor(255, 255, 255);
+
+	// フォグの開始距離、終了距離を設定
+	//SetFogStartEnd(0.0f, 3000.0f);
 
 	// その他初期化
 	_bViewCollision = TRUE;
@@ -57,7 +64,6 @@ bool ModeGame::Initialize() {
 
 	san.Initialize();
 	lka.Initialize();
-	damage.Initialize(&san, &lka);
 
 	//CSVによる初期化（レベルデザイン時に実装）
 
@@ -108,14 +114,6 @@ bool ModeGame::Initialize() {
 		cnt++;
 	}*/
 
-
-	//auto san = std::make_unique<SAN>();
-	//auto lka = std::make_unique<LKA>();
-	//san->Initialize();
-	//lka->Initialize();
-	//sanlka.emplace_back(std::move(san));
-	//sanlka.emplace_back(std::move(lka));
-
 	return true;
 }
 
@@ -133,31 +131,8 @@ bool ModeGame::Process() {
 
 	san.Update(_cam);
 	lka.Update(_cam);
-	damage.Process();
-	//int key = ApplicationMain::GetInstance()->GetKey2P();
-	//int trg = ApplicationMain::GetInstance()->GetTrg2P();
-
-	//// 処理前のステータスを保存しておく
-	//STATUS oldStatus = _status;
 
 	int key = GetJoypadInputState(DX_INPUT_KEY);
-
-	if (key & PAD_INPUT_7) {	// Q
-		// 角度変更
-		// Y軸回転
-		float sx = _cam._vPos.x - _cam._vTarget.x;
-		float sz = _cam._vPos.z - _cam._vTarget.z;
-		float rad = atan2(sz, sx);
-		float length = sqrt(sz * sz + sx * sx);
-		if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
-		if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-		_cam._vPos.x = _cam._vTarget.x + cos(rad) * length;
-		_cam._vPos.z = _cam._vTarget.z + sin(rad) * length;
-
-		// Y位置
-		if (key & PAD_INPUT_DOWN) { _cam._vPos.y -= 5.f; }
-		if (key & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
-	}
 
 	return true;
 }
@@ -208,25 +183,9 @@ bool ModeGame::Render() {
 	// 再生時間をセットする
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
-	// モデルを描画する
-
 	{
-		// 位置
-		//MV1SetPosition(_handle, _vPos);
-		//// 向きからY軸回転を算出
-		//VECTOR vRot = { 0,0,0 };
-		//vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
-		//MV1SetRotationXYZ(_handle, vRot);
-		//// 描画
-
-		//MV1DrawModel(_handle);
-		//for (auto&& SanLka : sanlka) {
-		//	SanLka->Render();
-		//}
-
 		san.Render();
 		lka.Render();
-
 
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
@@ -238,10 +197,11 @@ bool ModeGame::Render() {
 	// マップモデルを描画する
 	{
 		MV1DrawModel(_handleSkySphere);
+		
 		MV1DrawModel(_handleMap);
 	}
 
-	// カメラ情報表示
+	// デバッグ表示
 	{
 		int x = 0, y = 0, size = 16;
 		SetFontSize(size);
@@ -254,15 +214,33 @@ bool ModeGame::Render() {
 		float rad = atan2(sz, sx);
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
-	}
-	damage.Render();
+		DrawFormatString(x, y, GetColor(255, 0, 0), "  San pos    = (%5.2f, %5.2f, %5.2f)", san.vPos.x, san.vPos.y, san.vPos.z); y += size;
+		switch (san._status)
+		{
+		case Player::STATUS::WAIT:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  San states = WAIT"); y += size;
+			break;
+		case Player::STATUS::WALK:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  San states = WALK"); y += size;
+			break;
+		case Player::STATUS::JUMP:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  San states = JUMP"); y += size;
+			break;
+		}
+		DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka pos    = (%5.2f, %5.2f, %5.2f)", lka.vPos.x, lka.vPos.y, lka.vPos.z); y += size;
+		switch (lka._status)
+		{
+		case Player::STATUS::WAIT:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = WAIT"); y += size;
+			break;
+		case Player::STATUS::WALK:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = WALK"); y += size;
+			break;
+		case Player::STATUS::JUMP:
+			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
+			break;
+		}
 
+	}
 	return true;
 }
-
-void ModeGame::charJump() {
-	height += 10.0f - throughtime;
-	throughtime += 0.3f;
-
-}
-

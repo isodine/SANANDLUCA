@@ -2,9 +2,6 @@
 #include "AppFrame.h"
 #include "ApplicationMain.h"
 #include "ModeGame.h"
-#include <string>
-#include <memory>
-#include <vector>
 
 LKA::LKA()
 {
@@ -16,17 +13,13 @@ LKA::~LKA()
 
 void LKA::Initialize()
 {
+	Player::Initialize(mypH);
+
 	// モデルデータのロード（テクスチャも読み込まれる）
 	Mhandle = MV1LoadModel("res/Lka/Lka multimotion.mv1");
-	Mattach_index = -1;		// アニメーションアタッチはされていない
-	// ステータスを「無し」に設定
-	_status = STATUS::NONE;
-	// 再生時間の初期化
-	Mtotal_time = 0.f;
-	Mplay_time = 0.0f;
+
 	// 位置,向きの初期化
 	vPos = VGet(60, 0, 0);
-	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// 腰位置の設定
 	_colSubY = 60.f;
@@ -35,7 +28,6 @@ void LKA::Initialize()
 
 void LKA::Input()
 {
-	//デバッグする時にここを2Pに変える
 	int keyold2P = Key2P;
 	Key2P = GetJoypadInputState(DX_INPUT_PAD2);
 	Trg2P = (Key2P ^ keyold2P) & Key2P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
@@ -44,11 +36,10 @@ void LKA::Input()
 void LKA::Update(Camera& cam)
 {
 	Input();
-	//int key = ApplicationMain::GetInstance()->GetKey1P();
-	//int trg = ApplicationMain::GetInstance()->GetTrg1P();
 	int key = Key2P;
 	int trg = Trg2P;
-	//std::unique_ptr<Camera> cam = std::make_unique<Camera>();
+
+	Player::Update(mypH);
 
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;
@@ -60,18 +51,14 @@ void LKA::Update(Camera& cam)
 	// 移動方向を決める
 	VECTOR v = { 0,0,0 };
 	float mvSpeed = 6.f;
-	//if (key & PAD_INPUT_RIGHT) { v.x = 1; }
-	//if (key & PAD_INPUT_LEFT) { v.x = -1; }
-	//if (key & PAD_INPUT_DOWN) { v.z = -1; }
-	//if (key & PAD_INPUT_UP) { v.z = 1; }
 
 	if (key & PAD_INPUT_DOWN) { v.x = 1; }
 	if (key & PAD_INPUT_UP) { v.x = -1; }
 	if (key & PAD_INPUT_LEFT) { v.z = -1; }
 	if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-	if (key & PAD_INPUT_10 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+	if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
-	if (_status == STATUS::JUMP) { charJump(); }
+	if (_status == STATUS::JUMP) { Jump(); }
 	// vをrad分回転させる
 	float length = 0.f;
 	if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -85,31 +72,45 @@ void LKA::Update(Camera& cam)
 	// vの分移動
 	vPos = VAdd(vPos, v);
 
+	// 画面内にキャラクターが入っていないかどうかを描画する
+//TRUEは入ってない、FALSEは入ってる
+	if (CheckCameraViewClip(vPos) == TRUE)
+	{
+		// 画面外に出た。元の座標に戻す
+		vPos = oldvPos;
+		v = { 0,0,0 };
+	}
+
 	// 移動した先でコリジョン判定
+	MV1_COLL_RESULT_POLY_DIM hitPolyDim;
 	MV1_COLL_RESULT_POLY hitPoly;
 	// 主人公の腰位置から下方向への直線
 	hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
 		VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-	if (hitPoly.HitFlag) {
-		// 当たった
-		if (vPos.y < hitPoly.HitPosition.y) {
-			throughtime = 0.0f;
-			height = 0.0f;
-			vPos.y = 0.f;
-			_status = STATUS::WAIT;
-		}
-		// 当たったY位置をキャラ座標にする
-		vPos.y = hitPoly.HitPosition.y + height;
 
-		// カメラも移動する
-		v.x = v.x / 2; v.y = v.y / 2; v.z = v.z / 2;
-		cam._vPos = VAdd(cam._vPos, v);
-		cam._vTarget = VAdd(cam._vTarget, v);
+	hitPolyDim = MV1CollCheck_Capsule(_handleMap, 0,
+		VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+	if (hitPolyDim.HitNum >= 1)
+	{
+		// 当たった
+		if (vPos.y < hitPoly.HitPosition.y)
+		{
+			_status = STATUS::WAIT;
+			throughtime = 0.0f;
+
+			// 当たったY位置をキャラ座標にする
+			vPos.y = hitPoly.HitPosition.y - 0.01f;
+		}
 	}
 	else {
 		// 当たらなかった。元の座標に戻す
-		vPos = oldvPos;
+		freeFall();
 	}
+
+	// カメラも移動する
+	v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
+	cam._vPos = VAdd(cam._vPos, v);
+	cam._vTarget = VAdd(cam._vTarget, v);
 
 	// 移動量をそのままキャラの向きにする
 	if (VSize(v) > 0.f) {		// 移動していない時は無視するため
@@ -122,6 +123,7 @@ void LKA::Update(Camera& cam)
 	else {
 		_status = STATUS::WAIT;
 	}
+
 
 
 	// デバッグ機能
@@ -170,7 +172,10 @@ void LKA::Update(Camera& cam)
 	}
 }
 
-void LKA::Render() {
+void LKA::Render()
+{
+	Player::Render(mypH);
+
 	// 再生時間をセットする
 	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
 
@@ -193,4 +198,29 @@ void LKA::Render() {
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 
 	}
+	int x = 0, y = 106, size = 16;
+	SetFontSize(size);
+	switch (_status)
+	{
+	case Player::STATUS::WAIT:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = WAIT");
+		break;
+	case Player::STATUS::WALK:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = WALK");
+		break;
+	case Player::STATUS::JUMP:
+		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = JUMP");
+		break;
+	}
+}
+void LKA::Jump()
+{
+	if (throughtime == 0.f) { height = 10.f; }
+	vPos.y += height;
+}
+
+void LKA::freeFall()
+{
+	vPos.y -= throughtime;
+	throughtime += 0.5f;
 }
