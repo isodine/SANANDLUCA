@@ -15,6 +15,8 @@ std::vector<std::string> splitme(std::string& input, char delimiter)
 	return result;
 }
 
+
+
 bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
@@ -64,7 +66,7 @@ bool ModeGame::Initialize() {
 
 	san.Initialize();
 	lka.Initialize();
-
+	
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	/*std::ifstream ifs("res/test.csv");
@@ -131,7 +133,7 @@ bool ModeGame::Process() {
 
 	san.Update(_cam);
 	lka.Update(_cam);
-
+	include.GetGimmick().Process();
 	int key = GetJoypadInputState(DX_INPUT_KEY);
 
 	return true;
@@ -186,6 +188,8 @@ bool ModeGame::Render() {
 	{
 		san.Render();
 		lka.Render();
+		include.GetGimmick().Render();
+		
 
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {

@@ -36,8 +36,8 @@ void Damage::Terminate() {
 
 void Damage::Process() {
 	
-	San->DamageProcess();
-	Lka->DamageProcess();
+	//San->DamageProcess();
+	//Lka->DamageProcess();
 
 	Distance = VSize(VSub(VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z), VGet(San->vPos.x, San->vPos.y + 50, San->vPos.z)));
 

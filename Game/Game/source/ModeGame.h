@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "Include.h"
+
 
 // 計算用マクロ
 #define	PI	(3.1415926535897932386f)
@@ -69,4 +71,5 @@ public:
 	SAN san;
 	LKA lka;
 	Damage damage;
+	Include include;
 };
