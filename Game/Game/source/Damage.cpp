@@ -6,7 +6,7 @@
 #include "ModeGame.h"
 
 
-Damage::Damage(){
+Damage::Damage() {
 
 }
 
@@ -17,9 +17,9 @@ Damage::~Damage() {
 void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
-  
-	SanHP = 100;
-	LkaHP = 100;
+
+	SanHP = 3;
+	LkaHP = 3;
 
 	Distance = 1000;
 
@@ -31,13 +31,13 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 }
 
 void Damage::Terminate() {
-	
+
 }
 
 void Damage::Process() {
-	
-	San->DamageProcess();
-	Lka->DamageProcess();
+
+	//San->DamageProcess();
+	//Lka->DamageProcess();
 
 	Distance = VSize(VSub(VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z), VGet(San->vPos.x, San->vPos.y + 50, San->vPos.z)));
 
@@ -59,12 +59,12 @@ void Damage::Process() {
 	HitPolySan = MV1CollCheck_Capsule(_handleMap, 2, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
 	HitPolyLka = MV1CollCheck_Capsule(_handleMap, 1, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
 
-	if (HitPolySan.HitNum >= 1) {
+	if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
 		SanHP -= 1;
 		SanHitFlag = true;
 	}
 
-	if (HitPolyLka.HitNum >= 1) {
+	if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
 		LkaHP -= 1;
 		LkaHitFlag = true;
 	}
@@ -72,7 +72,7 @@ void Damage::Process() {
 	if (SanHitFlag == true) {
 		SanCoolTime += 1;
 	}
-	
+
 	if (LkaHitFlag == true) {
 		LkaCoolTime += 1;
 	}
@@ -105,5 +105,5 @@ void Damage::Render() {
 
 	DrawFormatString(0, 340, GetColor(0, 0, 0), "SanHitFlag %d", SanHitFlag);
 	DrawFormatString(0, 360, GetColor(0, 0, 0), "LkaHitFlag %d", LkaHitFlag);
-	
+
 }

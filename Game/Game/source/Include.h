@@ -1,6 +1,6 @@
 #pragma once
-#include"SANclass.h"
-#include"LKAclass.h"
+#include "SANclass.h"
+#include "LKAclass.h"
 #include "Player.h"
 
 class Include {
@@ -9,8 +9,10 @@ public:
 	LKA GetLka() { return lka; }
 	Player GetPlayer() { return player; }
 
+
 protected:
 	SAN san;
 	LKA lka;
 	Player player;
+
 };

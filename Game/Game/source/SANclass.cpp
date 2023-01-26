@@ -1,4 +1,4 @@
-#include"SANclass.h"
+#include "SANclass.h"
 #include "AppFrame.h"
 #include "ApplicationMain.h"
 #include "ModeGame.h"
@@ -75,7 +75,7 @@ void SAN::Update(Camera& cam)
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
 		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
-		if (_status == STATUS::JUMP) { Jump();}
+		if (_status == STATUS::JUMP) { Jump(cam); }
 		// vをrad分回転させる
 		float length = 0.f;
 		if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -86,8 +86,7 @@ void SAN::Update(Camera& cam)
 		// 移動前の位置を保存
 		VECTOR oldvPos = vPos;
 
-		// vの分移動
-		vPos = VAdd(vPos, v);
+
 
 		// 画面内にキャラクターが入っていないかどうかを描画する
 		//TRUEは入ってない、FALSEは入ってる
@@ -114,14 +113,19 @@ void SAN::Update(Camera& cam)
 			{
 				_status = STATUS::WAIT;
 				throughtime = 0.0f;
-				
+				float minusY = vPos.y;
 				// 当たったY位置をキャラ座標にする
-				vPos.y = hitPoly.HitPosition.y - 0.01f;
+				vPos.y = hitPoly.HitPosition.y - 0.5f;
+				cam._vPos.y += (vPos.y - minusY) / 2;
+				cam._vTarget.y += (vPos.y - minusY) / 2;
 			}
 		}
 		else {
-			freeFall();
+			freeFall(cam);
 		}
+
+		// vの分移動
+		vPos = VAdd(vPos, v);
 
 		// カメラも移動する
 		v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
@@ -173,13 +177,17 @@ void SAN::Update(Camera& cam)
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move2"), -1, FALSE);
 				break;
 			case STATUS::JUMP:
-				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jump2"), -1, FALSE);
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jamp2"), -1, FALSE);
 				break;
 			}
 			// アタッチしたアニメーションの総再生時間を取得する
 			Mtotal_time = MV1GetAttachAnimTotalTime(Mhandle, Mattach_index);
 			// 再生時間を初期化
 			Mplay_time = 0.0f;
+			//if(!(oldStatus== STATUS::JUMP)&& _status== STATUS::JUMP)
+			//{
+			//	Mplay_time = 20.0f;
+			//}
 		}
 
 		// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
@@ -217,19 +225,24 @@ void SAN::Render()
 		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 
 		// コリジョン判定用ラインの描画
-		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
+		//DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 
 	}
 	//DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vPos.x, vPos.y, vPos.z);
 }
-void SAN::Jump()
+void SAN::Jump(Camera& cam)
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
+	cam._vPos.y += height/2;
+	cam._vTarget.y += height/2;
+
 }
 
-void SAN::freeFall()
+void SAN::freeFall(Camera& cam)
 {
 	vPos.y -= throughtime;
+	cam._vPos.y -= throughtime/2;
+	cam._vTarget.y -= throughtime/2;
 	throughtime += 0.5f;
 }

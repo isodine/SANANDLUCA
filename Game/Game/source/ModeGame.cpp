@@ -2,6 +2,7 @@
 #include "AppFrame.h"
 #include "ApplicationMain.h"
 #include "ModeGame.h"
+#include "ModeGameOver.h"
 
 std::vector<std::string> splitme(std::string& input, char delimiter)
 {
@@ -30,15 +31,15 @@ bool ModeGame::Initialize() {
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
-	_handleMap = MV1LoadModel("res/map03/map_03.mv1");
+	_handleMap = MV1LoadModel("res/map_0125.fbm/a_map02.mv1");
 	MV1SetPosition(_handleMap, VGet(0.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	_frameMapCollision = MV1SearchFrame(_handleMap, "con_normal");
+	_frameMapCollision = MV1SearchFrame(_handleMap, "con_nor_0125");
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
-	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
+	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
 
 
 	// カメラの設定（わかりやすい位置に）
@@ -57,13 +58,14 @@ bool ModeGame::Initialize() {
 	//SetFogStartEnd(0.0f, 3000.0f);
 
 	// その他初期化
-	_bViewCollision = TRUE;
+	_bViewCollision = FALSE;
 
 	throughtime = 0.0f;
 	height = 0.0f;
 
 	san.Initialize();
 	lka.Initialize();
+	damage.Initialize(&san, &lka);
 
 	//CSVによる初期化（レベルデザイン時に実装）
 
@@ -131,8 +133,13 @@ bool ModeGame::Process() {
 
 	san.Update(_cam);
 	lka.Update(_cam);
+	damage.Process();
 
-	int key = GetJoypadInputState(DX_INPUT_KEY);
+	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
+	{
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
+	}
 
 	return true;
 }
@@ -164,11 +171,11 @@ bool ModeGame::Render() {
 
 	// 0,0,0を中心に線を引く
 	{
-		float linelength = 1000.f;
-		VECTOR v = { 0, 0, 0 };
-		DrawLine3D(VAdd(v, VGet(-linelength, 0, 0)), VAdd(v, VGet(linelength, 0, 0)), GetColor(255, 0, 0));
-		DrawLine3D(VAdd(v, VGet(0, -linelength, 0)), VAdd(v, VGet(0, linelength, 0)), GetColor(0, 255, 0));
-		DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
+		//float linelength = 1000.f;
+		//VECTOR v = { 0, 0, 0 };
+		//DrawLine3D(VAdd(v, VGet(-linelength, 0, 0)), VAdd(v, VGet(linelength, 0, 0)), GetColor(255, 0, 0));
+		//DrawLine3D(VAdd(v, VGet(0, -linelength, 0)), VAdd(v, VGet(0, linelength, 0)), GetColor(0, 255, 0));
+		//DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
 	}
 
 	// カメラターゲットを中心に短い線を引く
@@ -197,7 +204,7 @@ bool ModeGame::Render() {
 	// マップモデルを描画する
 	{
 		MV1DrawModel(_handleSkySphere);
-		
+
 		MV1DrawModel(_handleMap);
 	}
 
@@ -242,5 +249,6 @@ bool ModeGame::Render() {
 		}
 
 	}
+	damage.Render();
 	return true;
 }

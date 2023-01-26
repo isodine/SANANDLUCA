@@ -58,7 +58,7 @@ void LKA::Update(Camera& cam)
 	if (key & PAD_INPUT_RIGHT) { v.z = 1; }
 	if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
 
-	if (_status == STATUS::JUMP) { Jump(); }
+	if (_status == STATUS::JUMP) { Jump(cam); }
 	// vをrad分回転させる
 	float length = 0.f;
 	if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -69,8 +69,7 @@ void LKA::Update(Camera& cam)
 	// 移動前の位置を保存
 	VECTOR oldvPos = vPos;
 
-	// vの分移動
-	vPos = VAdd(vPos, v);
+
 
 	// 画面内にキャラクターが入っていないかどうかを描画する
 //TRUEは入ってない、FALSEは入ってる
@@ -97,15 +96,19 @@ void LKA::Update(Camera& cam)
 		{
 			_status = STATUS::WAIT;
 			throughtime = 0.0f;
-
+			float minusY = vPos.y;
 			// 当たったY位置をキャラ座標にする
-			vPos.y = hitPoly.HitPosition.y - 0.01f;
+			vPos.y = hitPoly.HitPosition.y - 0.5f;
+			cam._vPos.y += (vPos.y - minusY) / 2;
+			cam._vTarget.y += (vPos.y - minusY) / 2;
 		}
 	}
 	else {
 		// 当たらなかった。元の座標に戻す
-		freeFall();
+		freeFall(cam);
 	}
+	// vの分移動
+	vPos = VAdd(vPos, v);
 
 	// カメラも移動する
 	v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
@@ -154,10 +157,10 @@ void LKA::Update(Camera& cam)
 			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle2"), -1, FALSE);
 			break;
 		case STATUS::WALK:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "walk2"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move2"), -1, FALSE);
 			break;
 		case STATUS::JUMP:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jump2"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jamp2"), -1, FALSE);
 			break;
 		}
 		// アタッチしたアニメーションの総再生時間を取得する
@@ -195,7 +198,7 @@ void LKA::Render()
 		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 
 		// コリジョン判定用ラインの描画
-		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
+		//DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 
 	}
 	int x = 0, y = 106, size = 16;
@@ -213,14 +216,18 @@ void LKA::Render()
 		break;
 	}
 }
-void LKA::Jump()
+void LKA::Jump(Camera& cam)
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
+	cam._vPos.y += height / 2;
+	cam._vTarget.y += height / 2;
 }
 
-void LKA::freeFall()
+void LKA::freeFall(Camera& cam)
 {
 	vPos.y -= throughtime;
+	cam._vPos.y -= throughtime / 2;
+	cam._vTarget.y -= throughtime / 2;
 	throughtime += 0.5f;
 }

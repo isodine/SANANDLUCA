@@ -27,7 +27,7 @@ public:
 	int GetCallPerFrame() { return _callPerFrame; }
 	int GetCallOfCount() { return _callOfCount; }
 
-
+	int Key;
 private:
 	friend	ModeServer;
 	// ModeServer—p

@@ -10,6 +10,6 @@ public:
 	void Update(Camera& cam);
 	void Render();
 	void Input();
-	void Jump();
-	void freeFall();
+	void Jump(Camera& cam);
+	void freeFall(Camera& cam);
 };
