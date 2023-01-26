@@ -23,7 +23,7 @@ bool ModeGame::Initialize() {
 	// モデルデータのロード（テクスチャも読み込まれる）
 	_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
-
+	slimeHandle = MV1LoadModel("res/slime_multimotion.mv1");
 	// 再生時間の初期化
 	_total_time = 0.f;
 	_play_time = 0.0f;
@@ -66,7 +66,7 @@ bool ModeGame::Initialize() {
 
 	san.Initialize();
 	lka.Initialize();
-	
+	enemy.Initialize();
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	/*std::ifstream ifs("res/test.csv");
@@ -130,10 +130,10 @@ bool ModeGame::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}
-
+	enemy.Slime(san.vPos, lka.vPos, slimeHandle, _handleMap, 100.0f);
 	san.Update(_cam);
 	lka.Update(_cam);
-	include.GetGimmick().Process();
+	//include.GetGimmick().Process();
 	int key = GetJoypadInputState(DX_INPUT_KEY);
 
 	return true;
@@ -189,8 +189,8 @@ bool ModeGame::Render() {
 		san.Render();
 		lka.Render();
 		include.GetGimmick().Render();
+		enemy.SlimeRender(VGet(-60, 25, 400), slimeHandle);
 		
-
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
 			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));

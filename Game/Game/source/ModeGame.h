@@ -4,6 +4,7 @@
 #include "SANclass.h"
 #include "LKAclass.h"
 #include "Damage.h"
+#include "Enemy.h"
 
 #include <string>
 #include <memory>
@@ -47,6 +48,7 @@ public:
 	// ƒJƒƒ‰
 	Camera	_cam;
 	
+	int slimeHandle;
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int _handle;
@@ -72,4 +74,5 @@ public:
 	LKA lka;
 	Damage damage;
 	Include include;
+	Enemy enemy;
 };
