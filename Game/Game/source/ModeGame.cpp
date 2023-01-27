@@ -1,7 +1,7 @@
 
 #include "AppFrame.h"
-#include "ApplicationMain.h"
-#include "ModeGame.h"
+//#include "ApplicationMain.h"
+//#include "ModeGame.h"
 #include "ModeGameOver.h"
 
 std::vector<std::string> splitme(std::string& input, char delimiter)

@@ -1,7 +1,8 @@
 #include "AppFrame.h"
-#include "ApplicationMain.h"
+//#include "ApplicationMain.h"
 #include "ModeTitle.h"
-#include "ModeGame.h"
+//#include "ModeGame.h"
+#include "ModeStage0.h"
 
 bool ModeTitle::Initialize() {
 	if (!base::Initialize()) { return false; }

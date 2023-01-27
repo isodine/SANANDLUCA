@@ -1,7 +1,7 @@
 #include "AppFrame.h"
-#include "ApplicationMain.h"
+//#include "ApplicationMain.h"
 #include "ModeStage1.h"
-#include "ModeStage2.h"
+//#include "ModeStage2.h"
 #include "ModeGameOver.h"
 
 bool ModeStage1::Initialize() {

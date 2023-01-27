@@ -1,9 +1,9 @@
 #include "Damage.h"
 #include "AppFrame.h"
-#include "ApplicationMain.h"
+//#include "ApplicationMain.h"
 #include "time.h"
 #include "Include.h"
-#include "ModeGame.h"
+//#include "ModeGame.h"
 
 
 Damage::Damage() {

@@ -1,12 +1,12 @@
 #include "AppFrame.h"
-#include "ApplicationMain.h"
+//#include "ApplicationMain.h"
 #include "ModeGameOver.h"
 #include "ModeStage1.h"
 #include "ModeStage2.h"
 #include "ModeStage3.h"
 #include "ModeBoss.h"
 #include "ModeTitle.h"
-#include "ModeGame.h"
+//#include "ModeGame.h"
 
 
 bool ModeGameOver::Initialize() {

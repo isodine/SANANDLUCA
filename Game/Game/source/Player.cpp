@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "ModeGame.h"
+//#include "ModeGame.h"
 #include "Include.h"
 
 int _handleMap;

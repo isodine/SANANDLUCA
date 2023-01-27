@@ -4,6 +4,7 @@
 #include "SANclass.h"
 #include "LKAclass.h"
 #include "Damage.h"
+#include "timer.h"
 
 #include <string>
 #include <memory>

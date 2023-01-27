@@ -1,7 +1,7 @@
 #include "SANclass.h"
 #include "AppFrame.h"
-#include "ApplicationMain.h"
-#include "ModeGame.h"
+//#include "ApplicationMain.h"
+//#include "ModeGame.h"
 
 SAN::SAN()
 	:Player()

@@ -1,7 +1,7 @@
 #include"LKAclass.h"
 #include "AppFrame.h"
-#include "ApplicationMain.h"
-#include "ModeGame.h"
+//#include "ApplicationMain.h"
+//#include "ModeGame.h"
 
 LKA::LKA()
 {
