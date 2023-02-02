@@ -14,7 +14,7 @@ public:
 
 	virtual bool AppWindowed() { return true; }
 	virtual int DispSizeW() { return 1920; }//è¨ëãÇÕ1280
-	virtual int DispSizeH() { return 1080; }//  ÅV  720
+	virtual int DispSizeH() { return 1080; }//  ÅV   720
 
 protected:
 

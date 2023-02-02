@@ -73,7 +73,7 @@ bool ModeGame::Initialize() {
 
 	//CSVによる初期化（レベルデザイン時に実装）
 
-	/*std::ifstream ifs("res/test.csv");
+	std::ifstream ifs("res/test.csv");
 
 	std::string line;
 	std::vector<std::string> strresult;
@@ -118,7 +118,7 @@ bool ModeGame::Initialize() {
 			}
 		}
 		cnt++;
-	}*/
+	}
 
 	return true;
 }
