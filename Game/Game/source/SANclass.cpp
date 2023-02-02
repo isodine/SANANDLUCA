@@ -74,11 +74,9 @@ void SAN::Update(Camera& cam)
 		if (key & PAD_INPUT_LEFT) { v.z = -1; }
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
 		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
-		//if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE) && !(_status == STATUS::ATTACK)) { _status = STATUS::CHARGE; }
-		//if (!(key & PAD_INPUT_2) && (_status == STATUS::CHARGE) && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
-		if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE)) { _status = STATUS::CHARGE; }
-		if (key & PAD_INPUT_3 && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
-		if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
+		//if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE)) { _status = STATUS::CHARGE; }
+		//if (key & PAD_INPUT_3 && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
+		//if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
 		if (_status == STATUS::JUMP) { Jump(cam); }
@@ -117,7 +115,7 @@ void SAN::Update(Camera& cam)
 			// “–‚½‚Á‚½
 			if (vPos.y < hitPoly.HitPosition.y)
 			{
-				//_status = STATUS::WAIT;
+				if (_status == STATUS::JUMP) { _status == STATUS::WAIT; }
 				throughtime = 0.0f;
 				float minusY = vPos.y;
 				// “–‚½‚Á‚½YˆÊ’u‚ðƒLƒƒƒ‰À•W‚É‚·‚é
@@ -146,10 +144,9 @@ void SAN::Update(Camera& cam)
 			}
 		}
 		else if (throughtime > 0.0f) {}
-		else 
+		else
 		{
-			if (motionRes) { _status = STATUS::WAIT; }
-			motionRes = false;
+
 		}
 
 		
@@ -216,7 +213,6 @@ void SAN::Update(Camera& cam)
 		if (Mplay_time >= Mtotal_time)
 		{
 			Mplay_time = 0.0f;
-			motionRes = true;
 		}
 	}
 }
