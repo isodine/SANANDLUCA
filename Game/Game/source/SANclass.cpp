@@ -17,10 +17,10 @@ void SAN::Initialize()
 	Player::Initialize(mypH);
 
 	// モデルデータのロード（テクスチャも読み込まれる)
-	Mhandle = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1");
+	Mhandle = MV1LoadModel("res/San_2023_0130/San_Fullmotion_2023_0130.mv1");
 
 	// 位置,向きの初期化
-	vPos = VGet(-60, 50, 0);
+	vPos = VGet(-60, 20, 0);
 
 	// 腰位置の設定
 	_colSubY = 60.f;
@@ -74,6 +74,12 @@ void SAN::Update(Camera& cam)
 		if (key & PAD_INPUT_LEFT) { v.z = -1; }
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
 		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+		//if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE) && !(_status == STATUS::ATTACK)) { _status = STATUS::CHARGE; }
+		//if (!(key & PAD_INPUT_2) && (_status == STATUS::CHARGE) && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
+		if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE)) { _status = STATUS::CHARGE; }
+		if (key & PAD_INPUT_3 && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
+		if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
+		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
 		if (_status == STATUS::JUMP) { Jump(cam); }
 		// vをrad分回転させる
@@ -103,7 +109,7 @@ void SAN::Update(Camera& cam)
 		// 主人公の腰位置から下方向への直線
 		hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
 			VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-		
+
 		hitPolyDim = MV1CollCheck_Capsule(_handleMap, _frameMapCollision,
 			VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
 		if (hitPolyDim.HitNum >= 1)
@@ -111,7 +117,7 @@ void SAN::Update(Camera& cam)
 			// 当たった
 			if (vPos.y < hitPoly.HitPosition.y)
 			{
-				_status = STATUS::WAIT;
+				//_status = STATUS::WAIT;
 				throughtime = 0.0f;
 				float minusY = vPos.y;
 				// 当たったY位置をキャラ座標にする
@@ -140,11 +146,13 @@ void SAN::Update(Camera& cam)
 			}
 		}
 		else if (throughtime > 0.0f) {}
-		else {
-			_status = STATUS::WAIT;
+		else 
+		{
+			if (motionRes) { _status = STATUS::WAIT; }
+			motionRes = false;
 		}
 
-
+		
 
 		// デバッグ機能
 		//if (trg & PAD_INPUT_2) {
@@ -156,6 +164,7 @@ void SAN::Update(Camera& cam)
 		//else {
 		//	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
 		//}
+		// 
 
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {
@@ -171,15 +180,28 @@ void SAN::Update(Camera& cam)
 			// ステータスに合わせてアニメーションのアタッチ
 			switch (_status) {
 			case STATUS::WAIT:
-				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle2"), -1, FALSE);
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle"), -1, FALSE);
 				break;
 			case STATUS::WALK:
-				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move2"), -1, FALSE);
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move"), -1, FALSE);
 				break;
 			case STATUS::JUMP:
-				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jamp2"), -1, FALSE);
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jamp1"), -1, FALSE);
+				break;
+			case STATUS::DAMAGE:
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "damage"), -1, FALSE);
+				break;
+			case STATUS::CHARGE:
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "attack1"), -1, FALSE);
+				break;
+			case STATUS::ATTACK:
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "attack2"), -1, FALSE);
+				break;
+			case STATUS::DOWN:
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "down"), -1, FALSE);
 				break;
 			}
+
 			// アタッチしたアニメーションの総再生時間を取得する
 			Mtotal_time = MV1GetAttachAnimTotalTime(Mhandle, Mattach_index);
 			// 再生時間を初期化
@@ -191,8 +213,10 @@ void SAN::Update(Camera& cam)
 		}
 
 		// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
-		if (Mplay_time >= Mtotal_time) {
+		if (Mplay_time >= Mtotal_time)
+		{
 			Mplay_time = 0.0f;
+			motionRes = true;
 		}
 	}
 }
@@ -234,15 +258,15 @@ void SAN::Jump(Camera& cam)
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
-	cam._vPos.y += height/2;
-	cam._vTarget.y += height/2;
+	cam._vPos.y += height / 2;
+	cam._vTarget.y += height / 2;
 
 }
 
 void SAN::freeFall(Camera& cam)
 {
 	vPos.y -= throughtime;
-	cam._vPos.y -= throughtime/2;
-	cam._vTarget.y -= throughtime/2;
+	cam._vPos.y -= throughtime / 2;
+	cam._vTarget.y -= throughtime / 2;
 	throughtime += 0.5f;
 }

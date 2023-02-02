@@ -31,6 +31,10 @@ public:
 		WAIT,
 		WALK,
 		JUMP,
+		DAMAGE,
+		CHARGE,
+		ATTACK,
+		DOWN,
 		_EOT_
 	};
 	STATUS _status;
@@ -54,6 +58,8 @@ public:
 
 	int HP;
 	VECTOR myPos;
+
+	bool motionRes = false;
 
 	//ƒWƒƒƒ“ƒvˆ——p
 	float throughtime;

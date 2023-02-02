@@ -20,7 +20,7 @@ bool ModeTitle::Process() {
 	base::Process();
 	int Trg;
 	int keyold = Key;
-	Key = GetJoypadInputState(DX_INPUT_PAD1);
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 
 	if (Trg & PAD_INPUT_5) {

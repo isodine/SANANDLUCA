@@ -57,6 +57,7 @@ public:
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
 	int LightHandle;
+	int MaskHandle;
 
 	// デバッグ用
 	bool	_bViewCollision;

@@ -32,7 +32,7 @@ bool ModeGame::Initialize() {
 
 	// マップ
 	_handleMap = MV1LoadModel("res/map_0125.fbm/a_map02.mv1");
-	MV1SetPosition(_handleMap, VGet(0.0f, 0.0f, 700.0f));
+	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
@@ -41,12 +41,16 @@ bool ModeGame::Initialize() {
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
 
+	//マスクの試験運用
+	MaskHandle = LoadMask("res/San_Lka_Mask.png");
+	CreateMaskScreen();
+
 
 	// カメラの設定（わかりやすい位置に）
-	_cam._vPos = VGet(0, 300.f, -300.f);
+	_cam._vPos = VGet(0, 300.f, -400.f);
 	_cam._vTarget = VGet(0, 60, 0);
 	_cam._clipNear = 2.f;
-	_cam._clipFar = 10000.f;
+	_cam._clipFar = 20000.f;
 
 	//フォグを使ってみる
 	//SetFogEnable(TRUE);
@@ -203,9 +207,11 @@ bool ModeGame::Render() {
 
 	// マップモデルを描画する
 	{
+		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
 		MV1DrawModel(_handleSkySphere);
 
 		MV1DrawModel(_handleMap);
+		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
 
 	// デバッグ表示

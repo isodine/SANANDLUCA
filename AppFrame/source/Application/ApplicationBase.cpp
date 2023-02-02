@@ -19,7 +19,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance) {
 	}
 	SetGraphMode(DispSizeW(), DispSizeH(), 32);
 
-	if (DxLib_Init() == -1)
+	if ((DxLib_Init() == -1)|| CheckHitKey(KEY_INPUT_ESCAPE))
 	{	// エラーが起きたら直ちに終了
 		return false;
 	}

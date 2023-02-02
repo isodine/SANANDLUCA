@@ -4,6 +4,7 @@
 //#include "ModeGame.h"
 
 LKA::LKA()
+	:Player()
 {
 }
 
@@ -19,11 +20,10 @@ void LKA::Initialize()
 	Mhandle = MV1LoadModel("res/Lka/Lka multimotion.mv1");
 
 	// ˆÊ’u,Œü‚«‚Ì‰Šú‰»
-	vPos = VGet(60, 0, 0);
+	vPos = VGet(60, 20, 0);
 
 	// ˜ˆÊ’u‚Ìİ’è
 	_colSubY = 60.f;
-
 }
 
 void LKA::Input()
