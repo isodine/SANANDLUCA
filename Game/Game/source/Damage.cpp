@@ -77,12 +77,12 @@ void Damage::Process() {
 		LkaCoolTime += 1;
 	}
 
-	if (SanCoolTime >= 60) {
+	if (SanCoolTime >= 120) {
 		SanHitFlag = false;
 		SanCoolTime = 0;
 	}
 
-	if (LkaCoolTime >= 60) {
+	if (LkaCoolTime >= 120) {
 		LkaHitFlag = false;
 		LkaCoolTime = 0;
 	}

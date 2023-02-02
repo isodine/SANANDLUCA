@@ -130,7 +130,7 @@ bool ModeGame::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}
-	enemy.Slime(san.vPos, lka.vPos, slimeHandle, 1.0f);
+	enemy.Slime(san.vPos, lka.vPos, slimeHandle, _handleMap, 1.0f);
 	san.Update(_cam);
 	lka.Update(_cam);
 	//include.GetGimmick().Process();

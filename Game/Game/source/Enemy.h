@@ -12,9 +12,11 @@ public:
 	void Process();
 	void Render();
 
-	void Slime(VECTOR SanPos, VECTOR LkaPos, int Handle, float speed);
+	void Slime(VECTOR SanPos, VECTOR LkaPos, int Handle, int HandleMap, float speed);
 	void Spider(VECTOR SanPos, VECTOR LkaPos, VECTOR SpiderPos, int Handle, float speed);
 	void Boss(VECTOR SanPos, VECTOR LkaPos, VECTOR BossPos, int Handle, float speed);
+
+	void SlimeJump();
 
 	void SlimeRender(VECTOR Pos, int Handle);
 	void SpiderRender(VECTOR Pos, int Handle);
@@ -22,10 +24,16 @@ public:
 
 	float sanDistance;
 	float lkaDistance;
+	float height;
+	float slimecount;
+	bool slimeSerch;
+	bool slimeAttackFlag;
 
 	int AttachAnim;
 	float TotalTime;
 	float PlayTime;
+
+	MATRIX _rotationMatrix;
 
 	VECTOR slimeDir;
 
