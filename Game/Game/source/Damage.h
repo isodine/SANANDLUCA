@@ -3,7 +3,7 @@
 #include "LKAclass.h"
 
 
-class Damage{
+class Damage {
 public:
 	Damage();
 	~Damage();

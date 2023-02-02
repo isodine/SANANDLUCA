@@ -6,7 +6,7 @@
 #include "ModeGame.h"
 
 
-Damage::Damage(){
+Damage::Damage() {
 
 }
 
@@ -17,7 +17,7 @@ Damage::~Damage() {
 void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
-  
+
 	SanHP = 100;
 	LkaHP = 100;
 
@@ -31,11 +31,11 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 }
 
 void Damage::Terminate() {
-	
+
 }
 
 void Damage::Process() {
-	
+
 	//San->DamageProcess();
 	//Lka->DamageProcess();
 
@@ -72,7 +72,7 @@ void Damage::Process() {
 	if (SanHitFlag == true) {
 		SanCoolTime += 1;
 	}
-	
+
 	if (LkaHitFlag == true) {
 		LkaCoolTime += 1;
 	}
@@ -105,5 +105,5 @@ void Damage::Render() {
 
 	DrawFormatString(0, 340, GetColor(0, 0, 0), "SanHitFlag %d", SanHitFlag);
 	DrawFormatString(0, 360, GetColor(0, 0, 0), "LkaHitFlag %d", LkaHitFlag);
-	
+
 }

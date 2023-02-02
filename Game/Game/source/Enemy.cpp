@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 
-void Enemy::Initialize(){
+void Enemy::Initialize() {
 	PlayTime = 0.0f;
 	slimePos = VGet(-60, 25, 400);
 	slimeDir = VGet(0, 0, 0);
@@ -9,7 +9,7 @@ void Enemy::Initialize(){
 	AttachAnim = -1;
 }
 
-void Enemy::Terminate(){
+void Enemy::Terminate() {
 
 }
 
@@ -23,42 +23,42 @@ void Enemy::Render() {
 
 void Enemy::Slime(VECTOR SanPos, VECTOR LkaPos, int Handle, float speed) {
 	STATUS oldStatus = _status;
-	
+
 	sanDistance = VSize(VSub(SanPos, slimePos));
 	lkaDistance = VSize(VSub(LkaPos, slimePos));
 
-	
+
 
 	sanPos = VNorm(VSub(SanPos, slimePos));
 	lkaPos = VNorm(VSub(LkaPos, slimePos));
 
 	if (sanDistance < 75)
-	{                  
+	{
 		slimeDir.y = atan2(sanPos.x * -1, sanPos.z * -1);
-	_status = STATUS::ATTACK;
+		_status = STATUS::ATTACK;
 	}
 	else if (lkaDistance < 75)
 	{
 		slimeDir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
-	_status = STATUS::ATTACK;
+		_status = STATUS::ATTACK;
 	}
 
-	else if (sanDistance < lkaDistance) 
+	else if (sanDistance < lkaDistance)
 	{          //サンの方が近いときサンを追いかける
 		slimeDir.y = atan2(sanPos.x * -1, sanPos.z * -1);
 		_status = STATUS::WALK_KAI;
 		slimePos.x += sanPos.x * speed;
 		slimePos.z += sanPos.z * speed;
 	}
-	else if(sanDistance >= lkaDistance) 
+	else if (sanDistance >= lkaDistance)
 	{
 		slimeDir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
 		_status = STATUS::WALK_KAI;
 		slimePos.x += lkaPos.x * speed;
 		slimePos.z += lkaPos.z * speed;
 	}
-	
-	
+
+
 
 	// モーションが切り替わったか？
 	if (oldStatus == _status) {
@@ -103,7 +103,7 @@ void Enemy::Boss(VECTOR SanPos, VECTOR LkaPos, VECTOR BossPos, int Handle, float
 
 void Enemy::SlimeRender(VECTOR Pos, int Handle) {
 	MV1SetPosition(Handle, Pos);
-	MV1SetScale(Handle, VGet(3.0f,3.0f,3.0f));
+	MV1SetScale(Handle, VGet(3.0f, 3.0f, 3.0f));
 	MV1SetRotationXYZ(Handle, slimeDir);
 	MV1DrawModel(Handle);
 }
