@@ -20,8 +20,9 @@ bool ModeGame::Initialize() {
 
 	// モデルデータのロード（テクスチャも読み込まれる）
 	_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
+	_model = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/SUN.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
-	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6/sam_bomb.efkefc_1.6.efkefc", 10.0f);
+	_effectResourceHandle = LoadEffekseerEffect("res/test_F/test_F_neco.efkefc", 10.0f);
 
 	// 再生時間の初期化
 	_total_time = 0.f;
@@ -29,6 +30,7 @@ bool ModeGame::Initialize() {
 	// 位置,向きの初期化
 	_vPos = VGet(0, 0, 0);
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
+	oldcount = 0;
 
 	// マップ
 	_handleMap = MV1LoadModel("res/0.3.mv1");
@@ -160,24 +162,44 @@ bool ModeGame::Process() {
 		if (key & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
 	}
 
-	// モードカウンタを使って60fpsでエフェクトを生成
-	if (GetModeCount() % 60 == 0) {
-		// エフェクトを再生する。
-		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
+	//// モードカウンタを使って60fpsでエフェクトを生成
+	//if (GetModeCount() % 60 == 0) {
+	//	// エフェクトを再生する。
+	//	_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 
-		// エフェクトの位置をリセットする。
-		_position_x = 0.0f;
+	//	// エフェクトの位置をリセットする。
+	//	_position_x = 0.0f;
+
+
+	//}
+
+	//// 再生中のエフェクトを移動する。
+	//SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, 100.0f, 0);
+	//_position_x += 0.2f;
+	//SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f,0.1f,0.1f);
+
+	//// Effekseerにより再生中のエフェクトを更新する。
+	//UpdateEffekseer3D();
+
+	if (key & PAD_INPUT_9 && oldcount == 0)
+	{
+		oldcount = GetNowCount();
 	}
 
-	// 再生中のエフェクトを移動する。
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, 100.0f, 0);
-	_position_x += 0.2f;
-	SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f,0.1f,0.1f);
+	if (oldcount > 0)
+	{
+		auto nowCount = GetNowCount();
+		if (nowCount - oldcount >= 10000)
+		{
+			StopEffekseer3DEffect(_playingEffectHandle);
+			oldcount = 0;
+		}
+	}
 
-	// Effekseerにより再生中のエフェクトを更新する。
-	UpdateEffekseer3D();
+
 
 	return true;
+
 }
 
 bool ModeGame::Render() {
@@ -275,9 +297,41 @@ bool ModeGame::Render() {
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 	}
 	damage.Render();
-	int key = GetJoypadInputState(DX_INPUT_KEY);
-	if (key& PAD_INPUT_9)
+
+	//int AttachIndex;
+	//float TotalTime;
+	//MV1SetMaterialDrawBlendParam(san.Mhandle, 0, 125);
+	////MV1SetScale(_model, VGet(3.0f, 3.0f, 3.0f));
+	//MV1SetPosition(san.Mhandle, VGet(0.0f, 40.0f, 0.0f));
+	//AttachIndex = MV1AttachAnim(san.Mhandle, 1, -1, FALSE);
+	//TotalTime = MV1GetAttachAnimTotalTime(san.Mhandle, AttachIndex);
+		// 再生時間を進める
+	PlayTime += 60.0f;
+
+		//再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
+	//	if (PlayTime >= TotalTime)
+	//	{
+	//		PlayTime = 0.0f;
+	//	}
+	//MV1SetAttachAnimTime(san.Mhandle, AttachIndex, PlayTime);
+	//MV1DrawModel(san.Mhandle);
+
+	if (oldcount != 0)
 	{
+		// モードカウンタを使って60fpsでエフェクトを生成
+		if (GetModeCount() % 60 == 0) {
+			// エフェクトを再生する。
+			_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
+
+		}
+
+		// 再生中のエフェクトを移動する。
+		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x  + 100, san.vPos.y , san.vPos.z);
+		//_position_x += 0.2f;
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
+
+		// Effekseerにより再生中のエフェクトを更新する。
+		UpdateEffekseer3D();
 		// DXライブラリのカメラとEffekseerのカメラを同期する。
 		Effekseer_Sync3DSetting();
 

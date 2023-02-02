@@ -48,6 +48,7 @@ public:
 
 	// 3Dモデル描画用
 	int _handle;
+	int _model;
 	int _attach_index;
 	float _total_time;
 	float _play_time;
@@ -74,6 +75,8 @@ public:
 protected:
 	int		_effectResourceHandle;		// エフェクトファイルをロードするハンドル
 	int		_playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
+	int oldcount;
+	float PlayTime = 0.0f;
 	int  Key, Trg;
 
 	// エフェクト位置
