@@ -39,7 +39,6 @@ void Enemy::Slime(VECTOR SanPos, VECTOR LkaPos, int Handle, int HandleMap, float
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
 
 	MV1SetupCollInfo(Handle, 2, 8, 8, 8);
-	//MV1SetupCollInfo(Handle, 2, 8, 8, 8);
 
 	hitPolyDim1 = MV1CollCheck_Capsule(Handle, 2,
 		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);
