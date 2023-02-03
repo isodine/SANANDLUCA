@@ -245,7 +245,7 @@ bool ModeGame::Render() {
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
 		}
-
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "  slimeHitFlag = %d", enemy.slimeHitFlag);
 	}
 	return true;
 }

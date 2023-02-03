@@ -11,6 +11,7 @@ void Enemy::Initialize() {
 	slimecount = 0;
 	slimeAttackFlag = false;
 	slimeSerch = false;
+	slimeHitFlag = false;
 }
 
 void Enemy::Terminate() {
@@ -33,6 +34,24 @@ void Enemy::Slime(VECTOR SanPos, VECTOR LkaPos, int Handle, int HandleMap, float
 
 	STATUS oldStatus = _status;
 	VECTOR oldPos = slimePos;
+
+	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
+
+	MV1SetupCollInfo(Handle, 2, 8, 8, 8);
+	//MV1SetupCollInfo(Handle, 2, 8, 8, 8);
+
+	hitPolyDim1 = MV1CollCheck_Capsule(Handle, 2,
+		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);
+	hitPolyDim2 = MV1CollCheck_Capsule(Handle, 2,
+		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);
+
+	if (hitPolyDim1.HitNum >= 1 || hitPolyDim2.HitNum >= 1) {
+		slimeHitFlag = true;
+	}
+	else {
+		
+	}
 
 	sanDistance = VSize(VSub(SanPos, slimePos));
 	lkaDistance = VSize(VSub(LkaPos, slimePos));
@@ -123,26 +142,38 @@ void Enemy::SlimeJump() {
 	VECTOR forward{ VTransform({0.0f,0.0f,-1.0f},_rotationMatrix) };
 	VECTOR up{ 0.0f,0.1f,0.0f };
 	float spd = 2.0f;
+	
 
 	forward = VScale(forward, spd);
 	slimecount += 1;
-	if (slimeSerch == true) {
+	if (slimeSerch == true && slimecount == 1) {
 		slimeDir.y = atan2(sanPos.x * -1, sanPos.z * -1);
 	}
-	else {
+	else if(slimeSerch == false && slimecount == 1) {
 		slimeDir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
 	}
-	if (slimecount <= 50 && slimecount != 0 && slimeAttackFlag == true) {
-		slimePos = VAdd(slimePos, forward);
-		slimePos = VAdd(slimePos, VScale(up, 2.0f));
+	if (slimecount <= 20 && slimecount != 0 && slimeAttackFlag == true) {
+
 	}
-	else if (slimecount > 50 && slimecount != 60 && slimeAttackFlag == true) {
-		slimePos = VSub(slimePos, VScale(forward,7.0f));
-		slimePos = VSub(slimePos, VScale(up,11.0f));
+	else if (slimecount <= 40 && slimecount >= 20 && slimeAttackFlag == true) {
+		slimePos = VAdd(slimePos, VScale(forward, 3.0f));
+		slimePos = VAdd(slimePos, VScale(up, 20.0f));
 	}
-	else if (slimecount == 60) {
+	else if (slimecount > 40 && slimecount != 61 && slimeAttackFlag == true) {
+		if (slimeHitFlag == true) {
+			slimePos = VSub(slimePos, VScale(forward, 4.0f));
+			slimePos = VSub(slimePos, VScale(up, 20.0f));
+		}
+		else if(slimeHitFlag == false) {
+			slimePos = VAdd(slimePos, VScale(forward, 0.5f));
+			slimePos = VSub(slimePos, VScale(up, 20.0f));
+		}
+		
+	}
+	else if (slimecount == 61) {
 		slimecount = 0;
 		slimeAttackFlag = false;
+		slimeHitFlag = false;
 	}
 }
 
@@ -151,6 +182,7 @@ void Enemy::SlimeRender(VECTOR Pos, int Handle) {
 	MV1SetScale(Handle, VGet(3.0f, 3.0f, 3.0f));
 	MV1SetRotationXYZ(Handle, slimeDir);
 	MV1DrawModel(Handle);
+	
 }
 
 void Enemy::SpiderRender(VECTOR Pos, int Handle) {

@@ -28,6 +28,8 @@ public:
 	float slimecount;
 	bool slimeSerch;
 	bool slimeAttackFlag;
+	bool slimeHitFlag;
+
 
 	int AttachAnim;
 	float TotalTime;
@@ -36,6 +38,7 @@ public:
 	MATRIX _rotationMatrix;
 
 	VECTOR slimeDir;
+	VECTOR oldPos;
 
 	VECTOR sanPos;
 	VECTOR lkaPos;
