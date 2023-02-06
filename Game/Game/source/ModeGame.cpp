@@ -67,6 +67,7 @@ bool ModeGame::Initialize() {
 	san.Initialize();
 	lka.Initialize();
 	enemy.Initialize();
+	gimmick.Initialize();
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	/*std::ifstream ifs("res/test.csv");
@@ -133,6 +134,7 @@ bool ModeGame::Process() {
 	enemy.Slime(san.vPos, lka.vPos, slimeHandle, _handleMap, 1.0f);
 	san.Update(_cam);
 	lka.Update(_cam);
+	gimmick.Balance(san.vPos, lka.vPos);
 	//include.GetGimmick().Process();
 	int key = GetJoypadInputState(DX_INPUT_KEY);
 

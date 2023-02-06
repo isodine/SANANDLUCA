@@ -9,6 +9,8 @@ Gimmick::Gimmick() {
 
 void Gimmick::Initialize()
 {
+	MV1SetupCollInfo(BalanceHandle, 3, 8, 8, 8);  //ƒTƒ“‚ÌŽM
+	MV1SetupCollInfo(BalanceHandle, 4, 8, 8, 8);  //ƒ‹ƒJ‚ÌŽM
 
 }
 
@@ -22,6 +24,10 @@ void Gimmick::Process() {
 
 void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
+	
+	MV1RefreshCollInfo(BalanceHandle, 3, 8);  //ƒTƒ“‚ÌŽM
+	MV1RefreshCollInfo(BalanceHandle, 4, 8);  //ƒ‹ƒJ‚ÌŽM
+
 	BALANCE oldBalance = balance;
 
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
@@ -29,8 +35,27 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim3;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim4;
 
-	MV1SetupCollInfo(BalanceHandle, 3, 8, 8, 8);  //ƒTƒ“‚ÌŽM
-	MV1SetupCollInfo(BalanceHandle, 4, 8, 8, 8);  //ƒ‹ƒJ‚ÌŽM
+	MV1_COLL_RESULT_POLY hitPoly1;
+	// ƒTƒ“‚Ì˜ˆÊ’u‚©‚ç‰º•ûŒü‚Ö‚Ì’¼ü‚ÆƒTƒ“‚ÌŽM
+	hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
+		VAdd(SanPos, VGet(0, 60.f, 0)), VAdd(SanPos, VGet(0, -99999.f, 0)));
+
+	MV1_COLL_RESULT_POLY hitPoly2;
+	// ƒ‹ƒJ‚Ì˜ˆÊ’u‚©‚ç‰º•ûŒü‚Ö‚Ì’¼ü‚ÆƒTƒ“‚ÌŽM
+	hitPoly2 = MV1CollCheck_Line(BalanceHandle, 3,
+		VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
+
+	MV1_COLL_RESULT_POLY hitPoly3;
+	// ƒTƒ“‚Ì˜ˆÊ’u‚©‚ç‰º•ûŒü‚Ö‚Ì’¼ü‚Æƒ‹ƒJ‚ÌŽM
+	hitPoly3 = MV1CollCheck_Line(BalanceHandle, 4,
+		VAdd(SanPos, VGet(0, 60.f, 0)), VAdd(SanPos, VGet(0, -99999.f, 0)));
+
+	MV1_COLL_RESULT_POLY hitPoly4;
+	// ƒ‹ƒJ‚Ì˜ˆÊ’u‚©‚ç‰º•ûŒü‚Ö‚Ì’¼ü‚Æƒ‹ƒJ‚ÌŽM
+	hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
+		VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
+
+	
 
 	hitPolyDim1 = MV1CollCheck_Capsule(BalanceHandle, 3,
 		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒTƒ“‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
@@ -41,15 +66,33 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
 		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
 
-	if (hitPolyDim1.HitNum >= 1 || hitPolyDim3.HitNum >= 1) {
+	if (hitPolyDim1.HitNum >= 1) {
 		SanHitFlag = true;
+		player.vPos.y = hitPoly1.HitPosition.y;
 	}
 	else {
 		SanHitFlag = false;
 	}
 
-	if(hitPolyDim2.HitNum >= 1 || hitPolyDim4.HitNum >= 1) {
+	if(hitPolyDim2.HitNum >= 1) {
 		LkaHitFlag = true;
+		lka.vPos = hitPoly4.HitPosition;
+	}
+	else {
+		LkaHitFlag = false;
+	}
+
+	if (hitPolyDim3.HitNum >= 1) {
+		LkaHitFlag = true;
+		lka.vPos = hitPoly2.HitPosition;
+	}
+	else {
+		LkaHitFlag = false;
+	}
+
+	if (hitPolyDim4.HitNum >= 1) {
+		LkaHitFlag = true;
+		san.vPos = hitPoly3.HitPosition;
 	}
 	else {
 		LkaHitFlag = false;

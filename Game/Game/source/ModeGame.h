@@ -75,4 +75,5 @@ public:
 	Damage damage;
 	Include include;
 	Enemy enemy;
+	Gimmick gimmick;
 };

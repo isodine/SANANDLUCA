@@ -1,5 +1,7 @@
 #pragma once
 #include "AppFrame.h"
+#include "SANclass.h"
+#include "LKAclass.h"
 #include <string>
 
 class Gimmick {
@@ -33,4 +35,9 @@ protected:
 	};
 
 	BALANCE balance;
+
+private:
+	Player player;
+	SAN san;
+	LKA lka;
 };
