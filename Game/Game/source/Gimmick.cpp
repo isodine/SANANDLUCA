@@ -5,6 +5,11 @@ Gimmick::Gimmick() {
 	BalanceHandle = MV1LoadModel("res/Balance_MOmarge.mv1");
 	SanHitFlag = false;
 	LkaHitFlag = false;
+	balance = BALANCE::EQUAL;
+	AttachAnim1 = MV1AttachAnim(BalanceHandle, 2, -1, FALSE);//水平モーションをアタッチする
+	AttachAnimSAN = -1;
+	AttachAnimLKA = -1;
+	BlendRate = 0;
 }
 
 void Gimmick::Initialize()
@@ -68,7 +73,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (hitPolyDim1.HitNum >= 1) {
 		SanHitFlag = true;
-		player.vPos.y = hitPoly1.HitPosition.y;
+		san.vPos.y = hitPoly1.HitPosition.y;
 	}
 	else {
 		SanHitFlag = false;
@@ -111,10 +116,6 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (oldBalance == balance) {
 		PlayBalance += 1.0f;
-		if (PlayBalance >= TotalBalance)
-		{
-			PlayBalance = 0.0f;
-		}
 	}
 	else {
 		// アニメーションがアタッチされていたら、デタッチする
@@ -130,8 +131,15 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		switch (balance) {
 		case BALANCE::EQUAL:
 			AttachAnim1 = MV1AttachAnim(BalanceHandle, 0, -1, FALSE);//水平モーションをアタッチする
-			AttachAnimSAN = MV1AttachAnim(BalanceHandle, 1, -1, FALSE);//左傾きモーションをアタッチする
-			AttachAnimLKA = MV1AttachAnim(BalanceHandle, 2, -1, FALSE);//右傾きモーションをアタッチする
+			if (oldBalance == BALANCE::SAN) {
+				AttachAnimSAN = MV1AttachAnim(BalanceHandle, 1, -1, FALSE);//左傾きモーションをアタッチする
+			}
+			else if(oldBalance == BALANCE::LKA) {
+				AttachAnimLKA = MV1AttachAnim(BalanceHandle, 2, -1, FALSE);//右傾きモーションをアタッチする
+			}
+			else {
+			 
+			}
 			break;
 		case BALANCE::SAN:
 			AttachAnim1 = MV1AttachAnim(BalanceHandle, 0, -1, FALSE);//水平モーションをアタッチする
@@ -142,17 +150,50 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			AttachAnimLKA = MV1AttachAnim(BalanceHandle, 2, -1, FALSE);//右傾きモーションをアタッチする
 			break;
 		}
-		TotalBalance = MV1GetAttachAnimTotalTime(BalanceHandle, AttachAnim1);
-		PlayBalance = 0.0f;
 	}
 
-	MV1SetAttachAnimTime(BalanceHandle, AttachAnim1, PlayBalance);
+	if (balance == BALANCE::EQUAL) {
+		
+		if (oldBalance == BALANCE::SAN) {
+			if (BlendRate >= 1) {
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
+				BlendRate += 0.01f;
+			}
+		}
+		else if (oldBalance == BALANCE::LKA) {
+			if (BlendRate >= 1) {
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
+				BlendRate += 0.01f;
+			}
+		}
+		else if (oldBalance == BALANCE::EQUAL) {
+
+		}
+	}
+	else if (balance == BALANCE::SAN) {
+		if (BlendRate >= 1) {
+			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
+			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
+			BlendRate += 0.01f;
+		}
+	}
+	else if (balance == BALANCE::LKA) {
+		if (BlendRate >= 1) {
+			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
+			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, BlendRate);
+			BlendRate += 0.01f;
+		}
+	}
+	if (BlendRate == 1) {
+		BlendRate = 0;
+	}
 }
 
 
 
 void Gimmick::Render() {
-
 	MV1SetPosition(BalanceHandle, VGet(-80.0f, 200.0f, 210.0f));
 	MV1DrawModel(BalanceHandle);
 }

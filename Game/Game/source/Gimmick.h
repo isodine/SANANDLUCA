@@ -22,6 +22,8 @@ public:
 
 	float PlayBalance;
 	float TotalBalance;
+	float BlendRate;
+	float nowBlendRate;
 
 	bool SanHitFlag;
 	bool LkaHitFlag;
