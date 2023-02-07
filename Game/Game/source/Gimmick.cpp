@@ -33,85 +33,111 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	MV1RefreshCollInfo(BalanceHandle, 3, 8);  //サンの皿
 	MV1RefreshCollInfo(BalanceHandle, 4, 8);  //ルカの皿
 
+	SANDisk = MV1GetFramePosition(BalanceHandle, 3);
+	LKADisk = MV1GetFramePosition(BalanceHandle, 4);
+
 	BALANCE oldBalance = balance;
 
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim3;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim4;
+	float SanX = SanPos.x;
+	float SanZ = SanPos.z;
+	float SANRadius = 30.f;
 
-	MV1_COLL_RESULT_POLY hitPoly1;
-	// サンの腰位置から下方向への直線とサンの皿
-	hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
-		VAdd(SanPos, VGet(0, 60.f, 0)), VAdd(SanPos, VGet(0, -99999.f, 0)));
+	float BalanceX = SANDisk.x;
+	float BalanceZ = SANDisk.z;
+	float BalanceRadius = 100.f;
 
-	MV1_COLL_RESULT_POLY hitPoly2;
-	// ルカの腰位置から下方向への直線とサンの皿
-	hitPoly2 = MV1CollCheck_Line(BalanceHandle, 3,
-		VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
+	float a = SanX - BalanceX;
+	float b = SanZ - BalanceZ;
+	float c = sqrt(a * a + b * b);
 
-	MV1_COLL_RESULT_POLY hitPoly3;
-	// サンの腰位置から下方向への直線とルカの皿
-	hitPoly3 = MV1CollCheck_Line(BalanceHandle, 4,
-		VAdd(SanPos, VGet(0, 60.f, 0)), VAdd(SanPos, VGet(0, -99999.f, 0)));
-
-	MV1_COLL_RESULT_POLY hitPoly4;
-	// ルカの腰位置から下方向への直線とルカの皿
-	hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
-		VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
+	if (c <= SANRadius + BalanceRadius) {
+		SanHitFlag = true;
+	}
+	/*if (SanPos.y == SANDisk.y) {
+		SanHitFlag = true;
+		san.vPos.y = SANDisk.y;
+	}*/
+	
 
 	
 
-	hitPolyDim1 = MV1CollCheck_Capsule(BalanceHandle, 3,
-		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //サンがサンの皿に乗ったとき
-	hitPolyDim2 = MV1CollCheck_Capsule(BalanceHandle, 4,
-		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ルカがルカの皿に乗ったとき
-	hitPolyDim3 = MV1CollCheck_Capsule(BalanceHandle, 3,
-		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ルカがサンの皿に乗ったとき
-	hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
-		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //サンがルカの皿に乗ったとき
+	//MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
+	//MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
+	//MV1_COLL_RESULT_POLY_DIM hitPolyDim3;
+	//MV1_COLL_RESULT_POLY_DIM hitPolyDim4;
 
-	if (hitPolyDim1.HitNum >= 1) {
-		SanHitFlag = true;
-		san.vPos.y = hitPoly1.HitPosition.y;
-	}
-	else {
-		SanHitFlag = false;
-	}
+	//MV1_COLL_RESULT_POLY hitPoly1;
+	//// サンの腰位置から下方向への直線とサンの皿
+	//hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
+	//	VAdd(SanPos, VGet(0, 60.f, 0)), VAdd(SanPos, VGet(0, -99999.f, 0)));
 
-	if(hitPolyDim2.HitNum >= 1) {
-		LkaHitFlag = true;
-		lka.vPos = hitPoly4.HitPosition;
-	}
-	else {
-		LkaHitFlag = false;
-	}
+	//MV1_COLL_RESULT_POLY hitPoly2;
+	//// ルカの腰位置から下方向への直線とサンの皿
+	//hitPoly2 = MV1CollCheck_Line(BalanceHandle, 3,
+	//	VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
 
-	if (hitPolyDim3.HitNum >= 1) {
-		LkaHitFlag = true;
-		lka.vPos = hitPoly2.HitPosition;
-	}
-	else {
-		LkaHitFlag = false;
-	}
+	//MV1_COLL_RESULT_POLY hitPoly3;
+	//// サンの腰位置から下方向への直線とルカの皿
+	//hitPoly3 = MV1CollCheck_Line(BalanceHandle, 4,
+	//	VAdd(SanPos, VGet(0, 60.f, 0)), VAdd(SanPos, VGet(0, -99999.f, 0)));
 
-	if (hitPolyDim4.HitNum >= 1) {
-		LkaHitFlag = true;
-		san.vPos = hitPoly3.HitPosition;
-	}
-	else {
-		LkaHitFlag = false;
-	}
+	//MV1_COLL_RESULT_POLY hitPoly4;
+	//// ルカの腰位置から下方向への直線とルカの皿
+	//hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
+	//	VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
 
-	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true)) {
-		balance = BALANCE::EQUAL;
-	}
-	else if (SanHitFlag == true && LkaHitFlag == false) {
-		balance = BALANCE::SAN;
-	}
-	else if (SanHitFlag == false && LkaHitFlag == true) {
-		balance = BALANCE::LKA;
-	}
+	//
+
+	//hitPolyDim1 = MV1CollCheck_Capsule(BalanceHandle, 3,
+	//	VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //サンがサンの皿に乗ったとき
+	//hitPolyDim2 = MV1CollCheck_Capsule(BalanceHandle, 4,
+	//	VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ルカがルカの皿に乗ったとき
+	//hitPolyDim3 = MV1CollCheck_Capsule(BalanceHandle, 3,
+	//	VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ルカがサンの皿に乗ったとき
+	//hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
+	//	VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //サンがルカの皿に乗ったとき
+
+	//if (hitPolyDim1.HitNum >= 1) {
+	//	SanHitFlag = true;
+	//	san.vPos.y = hitPoly1.HitPosition.y;
+	//}
+	//else {
+	//	SanHitFlag = false;
+	//}
+
+	//if(hitPolyDim2.HitNum >= 1) {
+	//	LkaHitFlag = true;
+	//	lka.vPos = hitPoly4.HitPosition;
+	//}
+	//else {
+	//	LkaHitFlag = false;
+	//}
+
+	//if (hitPolyDim3.HitNum >= 1) {
+	//	LkaHitFlag = true;
+	//	lka.vPos = hitPoly2.HitPosition;
+	//}
+	//else {
+	//	LkaHitFlag = false;
+	//}
+
+	//if (hitPolyDim4.HitNum >= 1) {
+	//	LkaHitFlag = true;
+	//	san.vPos = hitPoly3.HitPosition;
+	//}
+	//else {
+	//	LkaHitFlag = false;
+	//}
+
+	//if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true)) {
+	//	balance = BALANCE::EQUAL;
+	//}
+	//else if (SanHitFlag == true && LkaHitFlag == false) {
+	//	balance = BALANCE::SAN;
+	//}
+	//else if (SanHitFlag == false && LkaHitFlag == true) {
+	//	balance = BALANCE::LKA;
+	//}
 
 
 	if (oldBalance == balance) {
