@@ -64,12 +64,12 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	hitPolyDim1 = MV1CollCheck_Capsule(BalanceHandle, 3,
 		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒTƒ“‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
-	hitPolyDim2 = MV1CollCheck_Capsule(BalanceHandle, 4,
-		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ƒ‹ƒJ‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
-	hitPolyDim3 = MV1CollCheck_Capsule(BalanceHandle, 3,
-		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ƒ‹ƒJ‚ªƒTƒ“‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
-	hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
-		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
+	//hitPolyDim2 = MV1CollCheck_Capsule(BalanceHandle, 4,
+	//	VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ƒ‹ƒJ‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
+	//hitPolyDim3 = MV1CollCheck_Capsule(BalanceHandle, 3,
+	//	VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ƒ‹ƒJ‚ªƒTƒ“‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
+	//hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
+	//	VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
 
 	if (hitPolyDim1.HitNum >= 1) {
 		SanHitFlag = true;
@@ -79,7 +79,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		SanHitFlag = false;
 	}
 
-	if(hitPolyDim2.HitNum >= 1) {
+	/*if(hitPolyDim2.HitNum >= 1) {
 		LkaHitFlag = true;
 		lka.vPos = hitPoly4.HitPosition;
 	}
@@ -101,7 +101,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	}
 	else {
 		LkaHitFlag = false;
-	}
+	}*/
 
 	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true)) {
 		balance = BALANCE::EQUAL;
@@ -189,6 +189,10 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	if (BlendRate == 1) {
 		BlendRate = 0;
 	}
+	MV1CollResultPolyDimTerminate(hitPolyDim1);
+	/*MV1CollResultPolyDimTerminate(hitPolyDim2);
+	MV1CollResultPolyDimTerminate(hitPolyDim3);
+	MV1CollResultPolyDimTerminate(hitPolyDim4);*/
 }
 
 
@@ -196,4 +200,5 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 void Gimmick::Render() {
 	MV1SetPosition(BalanceHandle, VGet(-80.0f, 200.0f, 210.0f));
 	MV1DrawModel(BalanceHandle);
+	DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
 }
