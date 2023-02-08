@@ -20,6 +20,9 @@ public:
 	int AttachAnimSAN;
 	int AttachAnimLKA;
 
+	VECTOR SANDisk;
+	VECTOR LKADisk;
+
 	float PlayBalance;
 	float TotalBalance;
 	float BlendRate;
