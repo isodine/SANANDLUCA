@@ -151,7 +151,7 @@ bool ModeGame::Process() {
 	san.Update(_cam);
 	lka.Update(_cam);
 	damage.Process();
-	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
+	enemy.Slime(san.vPos, lka.vPos, _handleMap, 100.0f);
 	enemy.SlimeJump();
 	gimmick.Balance(san.vPos, lka.vPos);
 

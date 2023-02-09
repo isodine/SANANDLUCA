@@ -35,6 +35,8 @@ public:
 	float TotalTime;
 	float PlayTime;
 
+	int slimeHandle;
+
 	MATRIX _rotationMatrix;
 
 	VECTOR slimeDir;
@@ -43,8 +45,6 @@ public:
 	VECTOR sanPos;
 	VECTOR lkaPos;
 	VECTOR slimePos;
-
-	int slimeHandle;
 
 protected:
 	enum class STATUS {
