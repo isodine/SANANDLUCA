@@ -55,6 +55,12 @@
     <ClCompile Include="source\Damage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="source\Gimmick.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Enemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ModeGame.h">
@@ -83,5 +89,7 @@
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Include.h" />
     <ClInclude Include="source\Damage.h" />
+    <ClInclude Include="source\Gimmick.h" />
+    <ClInclude Include="source\Enemy.h" />
   </ItemGroup>
 </Project>
