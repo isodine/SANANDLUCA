@@ -22,7 +22,7 @@ bool ModeGame::Initialize() {
 	_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
 	_model = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/SUN.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
-	_effectResourceHandle = LoadEffekseerEffect("res/test_F/test_F_neco.efkefc", 10.0f);
+	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_loop_01.efkefc", 10.0f);
 
 	// 再生時間の初期化
 	_total_time = 0.f;
@@ -31,7 +31,6 @@ bool ModeGame::Initialize() {
 	_vPos = VGet(0, 0, 0);
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 	oldcount = 0;
-
 	// マップ
 	_handleMap = MV1LoadModel("res/0.3.mv1");
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
@@ -143,56 +142,105 @@ bool ModeGame::Process() {
 	//// 処理前のステータスを保存しておく
 	//STATUS oldStatus = _status;
 
-	int key = GetJoypadInputState(DX_INPUT_KEY);
+	int keyoldEf = _KeyEf;
+	_KeyEf = GetJoypadInputState(DX_INPUT_PAD1);
+	_TrgEf = (_KeyEf ^ keyoldEf) & _KeyEf;
 
-	if (key & PAD_INPUT_7) {	// Q
+	if (_gTrgEf & PAD_INPUT_7) {	// Q
 		// 角度変更
 		// Y軸回転
 		float sx = _cam._vPos.x - _cam._vTarget.x;
 		float sz = _cam._vPos.z - _cam._vTarget.z;
 		float rad = atan2(sz, sx);
 		float length = sqrt(sz * sz + sx * sx);
-		if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
-		if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
+		if (_gKeyEf & PAD_INPUT_LEFT) { rad -= 0.05f; }
+		if (_gKeyEf & PAD_INPUT_RIGHT) { rad += 0.05f; }
 		_cam._vPos.x = _cam._vTarget.x + cos(rad) * length;
 		_cam._vPos.z = _cam._vTarget.z + sin(rad) * length;
 
 		// Y位置
-		if (key & PAD_INPUT_DOWN) { _cam._vPos.y -= 5.f; }
-		if (key & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
+		if (_gKeyEf & PAD_INPUT_DOWN) { _cam._vPos.y -= 5.f; }
+		if (_gKeyEf & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
 	}
 
-	//// モードカウンタを使って60fpsでエフェクトを生成
-	//if (GetModeCount() % 60 == 0) {
-	//	// エフェクトを再生する。
-	//	_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 
-	//	// エフェクトの位置をリセットする。
-	//	_position_x = 0.0f;
+	//if (_gTrgEf & PAD_INPUT_9 && oldcount == 0)
+	//{
+	//	old
 
+
+	if (_isthrow == 0) 
+	{
+		_position_x = san.vPos.x;
+		_position_y = san.vPos.y + 150;
+		_position_z = san.vPos.z;
+	}
+	if (_TrgEf & PAD_INPUT_6 && _isEffect == 0)
+	{
+		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
+		// 再生中のエフェクトを移動する。
+		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, _position_y, _position_z);
+		//_position_x += 0.2f;
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
+
+		_isEffect = 1;
+
+		oldcount = GetNowCount();
+
+		//if (GetModeCount() % 60 == 0)
+		//{
+		//	_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
+		//	// 再生中のエフェクトを移動する。
+		//	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, _position_y, _position_z);
+		//	//_position_x += 0.2f;
+		//	SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
+
+		//	_isEffect = 1;
+
+		//}
+	}
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, _position_y, _position_z);
+	UpdateEffekseer3D();
+
+	//if (_TrgEf & PAD_INPUT_5 && _isEffect == 1)
+	//{
+	//	_isthrow = 1;
+	//}
+	//if (_isthrow == 1)
+	//{
+	//	bombthrow();
+	//}
+	//_position_y += _hight;
+	//if (_position_y <= 0)
+	//{
+	//	_hight = 0.0f;
+	//	_isEffect = 0;
+	//	_isthrow = 0;
 
 	//}
 
-	//// 再生中のエフェクトを移動する。
-	//SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, 100.0f, 0);
-	//_position_x += 0.2f;
-	//SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f,0.1f,0.1f);
-
-	//// Effekseerにより再生中のエフェクトを更新する。
-	//UpdateEffekseer3D();
-
-	if (key & PAD_INPUT_9 && oldcount == 0)
-	{
-		oldcount = GetNowCount();
-	}
 
 	if (oldcount > 0)
 	{
 		auto nowCount = GetNowCount();
-		if (nowCount - oldcount >= 10000)
+		if (nowCount - oldcount >= 2000)
 		{
-			StopEffekseer3DEffect(_playingEffectHandle);
-			oldcount = 0;
+			if (_TrgEf & PAD_INPUT_6 && _isEffect == 1)
+			{
+				_isthrow = 1;
+			}
+			if (_isthrow == 1)
+			{
+				bombthrow();
+			}
+			_position_y += _hight;
+			if (_position_y <= 0)
+			{
+				_hight = 0.0f;
+				_isEffect = 0;
+				_isthrow = 0;
+				oldcount = 0;
+			}
 		}
 	}
 
@@ -316,28 +364,19 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(san.Mhandle, AttachIndex, PlayTime);
 	//MV1DrawModel(san.Mhandle);
 
-	if (oldcount != 0)
-	{
-		// モードカウンタを使って60fpsでエフェクトを生成
-		if (GetModeCount() % 60 == 0) {
-			// エフェクトを再生する。
-			_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 
-		}
 
-		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x  + 100, san.vPos.y , san.vPos.z);
-		//_position_x += 0.2f;
-		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
-
-		// Effekseerにより再生中のエフェクトを更新する。
-		UpdateEffekseer3D();
 		// DXライブラリのカメラとEffekseerのカメラを同期する。
 		Effekseer_Sync3DSetting();
+		
+		DrawEffekseer3D_Begin();
+		DrawEffekseer3D_Draw(_playingEffectHandle);
+		DrawEffekseer3D_End();
+		if (_isEffect == 0)
+		{
+			StopEffekseer3DEffect(_playingEffectHandle);
+		}
 
-		// Effekseerにより再生中のエフェクトを描画する。
-		DrawEffekseer3D();
-	}
 
 	return true;
 }
@@ -345,6 +384,13 @@ bool ModeGame::Render() {
 void ModeGame::charJump() {
 	height += 10.0f - throughtime;
 	throughtime += 0.3f;
+
+}
+
+void ModeGame::bombthrow()
+{
+	_hight += 1.0f - _throw;
+	_throw += 0.5f;
 
 }
 

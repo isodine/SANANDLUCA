@@ -41,6 +41,7 @@ public:
 	virtual bool Process();
 	virtual bool Render();
 	void charJump();
+	void bombthrow();
 
 	// カメラ
 	Camera	_cam;
@@ -64,6 +65,10 @@ public:
 	//ジャンプ処理用
 	float throughtime;
 	float height;
+
+	float _throw;
+	float _hight;
+	int _isthrow = 0;
 public:
 	std::vector<std::unique_ptr<Player>> sanlka;
 	Player player;
@@ -77,10 +82,12 @@ protected:
 	int		_playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
 	int oldcount;
 	float PlayTime = 0.0f;
-	int  Key, Trg;
+	int   _gKeyEf, _gTrgEf,_KeyEf,_TrgEf;
+	int _isEffect = 0;
 
 	// エフェクト位置
-	float	_position_x = 0.0f;
-	float	_position_y = 0.0f;
+	float _position_x;
+	float _position_y;
+	float _position_z;
 
 };
