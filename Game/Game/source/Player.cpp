@@ -4,7 +4,8 @@
 
 int _handleMap;
 int _handleSkySphere;
-int _frameMapCollision;
+int frameMapCollisionfloor;
+int frameMapCollisionwall;
 
 Player::Player()
 {

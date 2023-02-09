@@ -23,7 +23,7 @@ void LKA::Initialize()
 	vPos = VGet(60, 20, 0);
 
 	// 腰位置の設定
-	_colSubY = 60.f;
+	_colSubY = 45.f;
 }
 
 void LKA::Input()
@@ -80,25 +80,52 @@ void LKA::Update(Camera& cam)
 		v = { 0,0,0 };
 	}
 
+	// vの分移動
+	this->vPos = VAdd(this->vPos, v);
+
+	// カメラも移動する
+	v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
+	cam._vPos = VAdd(cam._vPos, v);
+	cam._vTarget = VAdd(cam._vTarget, v);
+
 	// 移動した先でコリジョン判定
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim;
-	MV1_COLL_RESULT_POLY hitPoly;
+	MV1_COLL_RESULT_POLY hitPolyfloor;
+	MV1_COLL_RESULT_POLY hitPolywall;
+
+	hitPolywall = MV1CollCheck_Line(_handleMap, frameMapCollisionwall,
+		VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+	if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
+	{
+		float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
+		float subX = vPos.x - oldvPos.x;
+		float subZ = vPos.z - oldvPos.z;
+		vPos.x = oldvPos.x/*- subX*/;
+		vPos.z = oldvPos.z/*- subZ*/;
+
+		cam._vPos.x -= subX / 2;
+		cam._vPos.z -= subZ / 2;
+		cam._vTarget.x -= subX / 2;
+		cam._vTarget.z -= subZ / 2;
+		v = { 0,0,0 };
+	}
+
 	// 主人公の腰位置から下方向への直線
-	hitPoly = MV1CollCheck_Line(_handleMap, _frameMapCollision,
+	hitPolyfloor = MV1CollCheck_Line(_handleMap, frameMapCollisionfloor,
 		VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
 
-	hitPolyDim = MV1CollCheck_Capsule(_handleMap, 0,
+	hitPolyDim = MV1CollCheck_Capsule(_handleMap, frameMapCollisionfloor,
 		VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
 	if (hitPolyDim.HitNum >= 1)
 	{
 		// 当たった
-		if (vPos.y < hitPoly.HitPosition.y)
+		if (vPos.y < hitPolyfloor.HitPosition.y)
 		{
 			_status = STATUS::WAIT;
 			throughtime = 0.0f;
 			float minusY = vPos.y;
 			// 当たったY位置をキャラ座標にする
-			vPos.y = hitPoly.HitPosition.y - 0.5f;
+			vPos.y = hitPolyfloor.HitPosition.y - 0.5f;
 			cam._vPos.y += (vPos.y - minusY) / 2;
 			cam._vTarget.y += (vPos.y - minusY) / 2;
 		}
@@ -107,13 +134,7 @@ void LKA::Update(Camera& cam)
 		// 当たらなかった。元の座標に戻す
 		freeFall(cam);
 	}
-	// vの分移動
-	vPos = VAdd(vPos, v);
 
-	// カメラも移動する
-	v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
-	cam._vPos = VAdd(cam._vPos, v);
-	cam._vTarget = VAdd(cam._vTarget, v);
 
 	// 移動量をそのままキャラの向きにする
 	if (VSize(v) > 0.f) {		// 移動していない時は無視するため
@@ -198,7 +219,7 @@ void LKA::Render()
 		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 
 		// コリジョン判定用ラインの描画
-		//DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
+		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
 
 	}
 	int x = 0, y = 106, size = 16;

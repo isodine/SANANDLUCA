@@ -1,6 +1,5 @@
 #pragma once
 #include <appframe.h>
-#include <appframe.h>
 #include "LKAclass.h"
 #include "SANclass.h"
 #include "Player.h"
@@ -25,3 +24,4 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <DxLib.h>

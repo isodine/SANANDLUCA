@@ -22,7 +22,8 @@
 	// マップ用
 extern int _handleMap;
 extern int _handleSkySphere;
-extern int _frameMapCollision;
+extern int frameMapCollisionfloor;
+extern int frameMapCollisionwall;
 
 // カメラ
 class Camera {

@@ -56,8 +56,8 @@ void Damage::Process() {
 
 	MV1_COLL_RESULT_POLY_DIM HitPolySan;
 	MV1_COLL_RESULT_POLY_DIM HitPolyLka;
-	HitPolySan = MV1CollCheck_Capsule(_handleMap, 2, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
-	HitPolyLka = MV1CollCheck_Capsule(_handleMap, 1, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
+	HitPolySan = MV1CollCheck_Capsule(_handleMap, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
+	HitPolyLka = MV1CollCheck_Capsule(_handleMap, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
 
 	if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
 		SanHP -= 1;
