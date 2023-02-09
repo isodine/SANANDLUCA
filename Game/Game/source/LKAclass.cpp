@@ -67,7 +67,7 @@ void LKA::Update(Camera& cam)
 	v.z = sin(rad + camrad) * length;
 
 	// 移動前の位置を保存
-	VECTOR oldvPos = vPos;
+	oldPos = vPos;
 
 
 
@@ -76,7 +76,7 @@ void LKA::Update(Camera& cam)
 	if (CheckCameraViewClip(vPos) == TRUE)
 	{
 		// 画面外に出た。元の座標に戻す
-		vPos = oldvPos;
+		vPos = oldPos;
 		v = { 0,0,0 };
 	}
 
@@ -98,10 +98,10 @@ void LKA::Update(Camera& cam)
 	if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
 	{
 		float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
-		float subX = vPos.x - oldvPos.x;
-		float subZ = vPos.z - oldvPos.z;
-		vPos.x = oldvPos.x/*- subX*/;
-		vPos.z = oldvPos.z/*- subZ*/;
+		float subX = vPos.x - oldPos.x;
+		float subZ = vPos.z - oldPos.z;
+		vPos.x = oldPos.x/*- subX*/;
+		vPos.z = oldPos.z/*- subZ*/;
 
 		cam._vPos.x -= subX / 2;
 		cam._vPos.z -= subZ / 2;

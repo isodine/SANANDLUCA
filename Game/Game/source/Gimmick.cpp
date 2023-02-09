@@ -72,7 +72,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (hitPolyDim1.HitNum >= 1) {
 		SanHitFlag = true;
-		san->vPos = san->vPos;
+		san->vPos = san->oldPos;
 	}
 	else {
 		SanHitFlag = false;
@@ -80,7 +80,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if(hitPolyDim2.HitNum >= 1) {
 		LkaHitFlag = true;
-		lka->vPos = lka->vPos;
+		lka->vPos = lka->oldPos;
 	}
 	else {
 		LkaHitFlag = false;
@@ -88,7 +88,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (hitPolyDim3.HitNum >= 1) {
 		LkaHitFlag = true;
-		lka->vPos = lka->vPos;
+		lka->vPos = lka->oldPos;
 	}
 	else {
 		LkaHitFlag = false;
@@ -96,7 +96,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (hitPolyDim4.HitNum >= 1) {
 		LkaHitFlag = true;
-		san->vPos = san->vPos;
+		san->vPos = san->oldPos;
 	}
 	else {
 		LkaHitFlag = false;

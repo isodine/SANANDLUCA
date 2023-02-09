@@ -53,6 +53,7 @@ public:
 	float Mtotal_time;
 	float Mplay_time;
 	VECTOR vPos;	// 位置
+	VECTOR oldPos;  //前の位置
 	VECTOR vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
