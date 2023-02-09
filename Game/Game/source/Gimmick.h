@@ -38,6 +38,7 @@ public:
 
 	bool SanHitFlag;
 	bool LkaHitFlag;
+	bool BalanceFlag;
 
 protected:
 	enum class BALANCE {

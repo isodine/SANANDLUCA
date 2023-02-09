@@ -10,6 +10,7 @@ Gimmick::Gimmick() {
 	AttachAnimSAN = -1;
 	AttachAnimLKA = -1;
 	BlendRate = 0;
+	BalanceFlag = false;
 }
 
 void Gimmick::Initialize()
@@ -103,12 +104,15 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true)) {
 		balance = BALANCE::EQUAL;
+		BalanceFlag = true;
 	}
 	else if (SanHitFlag == true && LkaHitFlag == false) {
 		balance = BALANCE::SAN;
+		BalanceFlag = true;
 	}
 	else if (SanHitFlag == false && LkaHitFlag == true) {
 		balance = BALANCE::LKA;
+		BalanceFlag = true;
 	}
 
 
@@ -124,6 +128,9 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			AttachAnimSAN = -1;
 			MV1DetachAnim(BalanceHandle, AttachAnimLKA);
 			AttachAnimLKA = -1;
+		}
+		if (BlendRate == 1) {
+			BlendRate = 0;
 		}
 		// ステータスに合わせてアニメーションをアタッチする
 		switch (balance) {
@@ -188,9 +195,9 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		BlendRate = 0;
 	}
 	MV1CollResultPolyDimTerminate(hitPolyDim1);
-	/*MV1CollResultPolyDimTerminate(hitPolyDim2);
+	MV1CollResultPolyDimTerminate(hitPolyDim2);
 	MV1CollResultPolyDimTerminate(hitPolyDim3);
-	MV1CollResultPolyDimTerminate(hitPolyDim4);*/
+	MV1CollResultPolyDimTerminate(hitPolyDim4);
 }
 
 
