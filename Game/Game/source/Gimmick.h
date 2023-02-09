@@ -4,6 +4,9 @@
 #include "LKAclass.h"
 #include <string>
 
+class SAN;
+class LKA;
+
 class Gimmick {
 public:
 	Gimmick();
@@ -11,6 +14,11 @@ public:
 	void Terminate();
 	void Process();
 	void Render();
+
+	void SetSanLka(SAN* San, LKA* Lka) {
+		san = San;
+		lka = Lka;
+	}
 
 	void Balance(VECTOR SanPos, VECTOR LkaPos);
 
@@ -42,7 +50,6 @@ protected:
 	BALANCE balance;
 
 private:
-	Player player;
-	SAN san;
-	LKA lka;
+	SAN* san;
+	LKA* lka;
 };

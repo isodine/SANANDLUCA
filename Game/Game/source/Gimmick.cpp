@@ -14,6 +14,7 @@ Gimmick::Gimmick() {
 
 void Gimmick::Initialize()
 {
+	MV1SetPosition(BalanceHandle, VGet(-80.0f, 200.0f, 210.0f));
 	MV1SetupCollInfo(BalanceHandle, 3, 8, 8, 8);  //ƒTƒ“‚ÌŽM
 	MV1SetupCollInfo(BalanceHandle, 4, 8, 8, 8);  //ƒ‹ƒJ‚ÌŽM
 
@@ -29,7 +30,6 @@ void Gimmick::Process() {
 
 void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
-	
 	MV1RefreshCollInfo(BalanceHandle, 3, 8);  //ƒTƒ“‚ÌŽM
 	MV1RefreshCollInfo(BalanceHandle, 4, 8);  //ƒ‹ƒJ‚ÌŽM
 
@@ -60,28 +60,26 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
 		VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
 
-	
-
 	hitPolyDim1 = MV1CollCheck_Capsule(BalanceHandle, 3,
 		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒTƒ“‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
-	//hitPolyDim2 = MV1CollCheck_Capsule(BalanceHandle, 4,
-	//	VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ƒ‹ƒJ‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
-	//hitPolyDim3 = MV1CollCheck_Capsule(BalanceHandle, 3,
-	//	VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ƒ‹ƒJ‚ªƒTƒ“‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
-	//hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
-	//	VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
+	hitPolyDim2 = MV1CollCheck_Capsule(BalanceHandle, 4,
+		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ƒ‹ƒJ‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
+	hitPolyDim3 = MV1CollCheck_Capsule(BalanceHandle, 3,
+		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ƒ‹ƒJ‚ªƒTƒ“‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
+	hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
+		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
 
 	if (hitPolyDim1.HitNum >= 1) {
 		SanHitFlag = true;
-		san.vPos.y = hitPoly1.HitPosition.y;
+		san->vPos = san->vPos;
 	}
 	else {
 		SanHitFlag = false;
 	}
 
-	/*if(hitPolyDim2.HitNum >= 1) {
+	if(hitPolyDim2.HitNum >= 1) {
 		LkaHitFlag = true;
-		lka.vPos = hitPoly4.HitPosition;
+		lka->vPos = lka->vPos;
 	}
 	else {
 		LkaHitFlag = false;
@@ -89,7 +87,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (hitPolyDim3.HitNum >= 1) {
 		LkaHitFlag = true;
-		lka.vPos = hitPoly2.HitPosition;
+		lka->vPos = lka->vPos;
 	}
 	else {
 		LkaHitFlag = false;
@@ -97,11 +95,11 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (hitPolyDim4.HitNum >= 1) {
 		LkaHitFlag = true;
-		san.vPos = hitPoly3.HitPosition;
+		san->vPos = san->vPos;
 	}
 	else {
 		LkaHitFlag = false;
-	}*/
+	}
 
 	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true)) {
 		balance = BALANCE::EQUAL;

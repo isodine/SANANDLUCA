@@ -67,6 +67,8 @@ public:
 	//ƒWƒƒƒ“ƒvˆ——p
 	float throughtime;
 	float height;
+	SAN GetSan() { return san; }
+
 public:
 	std::vector<std::unique_ptr<Player>> sanlka;
 	Player player;

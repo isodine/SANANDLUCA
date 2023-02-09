@@ -68,6 +68,7 @@ bool ModeGame::Initialize() {
 	lka.Initialize();
 	enemy.Initialize();
 	gimmick.Initialize();
+	gimmick.SetSanLka(&san, &lka);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	/*std::ifstream ifs("res/test.csv");
