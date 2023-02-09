@@ -19,7 +19,7 @@ public:
 
 	virtual bool AppWindowed() { return true; }
 	virtual int DispSizeW() { return 640; }
-	virtual int DispSizeH() { return 480; }
+	virtual int DispSizeH() { return 1000; }
 
 	static	ApplicationBase	*GetInstance() { return _lpInstance; }
 	virtual int GetKey1P() { return _gKey1P; }

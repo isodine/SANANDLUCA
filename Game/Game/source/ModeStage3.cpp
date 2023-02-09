@@ -1,5 +1,5 @@
 #include "AppFrame.h"
-#include "ApplicationMain.h"
+//#include "ApplicationMain.h"
 #include "ModeStage3.h"
 #include "ModeBoss.h"
 #include "ModeGameOver.h"

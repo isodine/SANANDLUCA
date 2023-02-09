@@ -35,6 +35,10 @@ int WINAPI WinMain(
 		ClearDrawScreen();		// ‰æ–Ê‚ğ‰Šú‰»‚·‚é
 		appBase->Render();
 		ScreenFlip();			// — ‰æ–Ê‚Ì“à—e‚ğ•\‰æ–Ê‚É”½‰f‚³‚¹‚é
+		if(CheckHitKey(KEY_INPUT_ESCAPE))
+		{
+			break;
+		}
 	}
 
 	appBase->Terminate();

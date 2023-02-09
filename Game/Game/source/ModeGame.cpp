@@ -1,7 +1,7 @@
 
 #include "AppFrame.h"
-#include "ApplicationMain.h"
-#include "ModeGame.h"
+//#include "ApplicationMain.h"
+//#include "ModeGame.h"
 #include "ModeGameOver.h"
 
 std::vector<std::string> splitme(std::string& input, char delimiter)
@@ -32,21 +32,29 @@ bool ModeGame::Initialize() {
 
 	// マップ
 	_handleMap = MV1LoadModel("res/map_0125.fbm/a_map02.mv1");
-	MV1SetPosition(_handleMap, VGet(0.0f, 0.0f, 700.0f));
+	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	_frameMapCollision = MV1SearchFrame(_handleMap, "con_nor_0125");
-	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
+	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "Con_bot_pPlane6");
+	frameMapCollisionwall = MV1SearchFrame(_handleMap, "Con_tate_pPlane3");
+	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
-	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	MV1SetFrameVisible(_handleMap, 2, FALSE);
+	MV1SetFrameVisible(_handleMap, 3, FALSE);
 
+	//マスクの試験運用
+	MaskHandle = LoadMask("res/San_Lka_Mask.png");
+	CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
-	_cam._vPos = VGet(0, 300.f, -300.f);
+	_cam._vPos = VGet(0, 300.f, -400.f);
 	_cam._vTarget = VGet(0, 60, 0);
 	_cam._clipNear = 2.f;
-	_cam._clipFar = 10000.f;
+	_cam._clipFar = 20000.f;
+
 
 	//フォグを使ってみる
 	//SetFogEnable(TRUE);
@@ -69,7 +77,7 @@ bool ModeGame::Initialize() {
 
 	//CSVによる初期化（レベルデザイン時に実装）
 
-	/*std::ifstream ifs("res/test.csv");
+	std::ifstream ifs("res/test.csv");
 
 	std::string line;
 	std::vector<std::string> strresult;
@@ -114,7 +122,15 @@ bool ModeGame::Initialize() {
 			}
 		}
 		cnt++;
-	}*/
+	}
+
+	//CSVの調整にカメラを追いつかせる
+	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
+	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	_cam._vPos.z += (san.vPos.z + lka.vPos.z) / 2.f;
+	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
+	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
+	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
 
 	return true;
 }
@@ -155,9 +171,13 @@ bool ModeGame::Render() {
 	// ライト設定
 	SetUseLighting(TRUE);
 #if 1	// 平行ライト
-	SetGlobalAmbientLight(GetColorF(1.0f, 1.0f, 1.0f, 0.f));
-	ChangeLightTypeDir(VGet(0, -1, 1));
+	SetGlobalAmbientLight(GetColorF(0.1f, 0.1f, 0.1f, 0.f));
+	ChangeLightTypeDir(VGet(0, -1, -1));
+	//SetLightEnable(FALSE);
 	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
+
+	LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
+	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));
 
 #endif
 #if 0	// ポイントライト
@@ -203,9 +223,11 @@ bool ModeGame::Render() {
 
 	// マップモデルを描画する
 	{
+		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
 		MV1DrawModel(_handleSkySphere);
 
 		MV1DrawModel(_handleMap);
+		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
 
 	// デバッグ表示

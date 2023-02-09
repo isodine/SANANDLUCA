@@ -4,7 +4,7 @@
 #include "SANclass.h"
 #include "LKAclass.h"
 #include "Damage.h"
-#include "Enemy.h"
+#include "timer.h"
 
 #include <string>
 #include <memory>
@@ -13,8 +13,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "Include.h"
-
 
 // 計算用マクロ
 #define	PI	(3.1415926535897932386f)
@@ -24,7 +22,8 @@
 	// マップ用
 extern int _handleMap;
 extern int _handleSkySphere;
-extern int _frameMapCollision;
+extern int frameMapCollisionfloor;
+extern int frameMapCollisionwall;
 
 // カメラ
 class Camera {
@@ -48,7 +47,6 @@ public:
 	// カメラ
 	Camera	_cam;
 	
-	int slimeHandle;
 
 	// 3Dモデル描画用
 	int _handle;
@@ -60,6 +58,7 @@ public:
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
 	int LightHandle;
+	int MaskHandle;
 
 	// デバッグ用
 	bool	_bViewCollision;
@@ -67,15 +66,10 @@ public:
 	//ジャンプ処理用
 	float throughtime;
 	float height;
-	SAN GetSan() { return san; }
-
 public:
 	std::vector<std::unique_ptr<Player>> sanlka;
 	Player player;
 	SAN san;
 	LKA lka;
 	Damage damage;
-	Include include;
-	Enemy enemy;
-	Gimmick gimmick;
 };
