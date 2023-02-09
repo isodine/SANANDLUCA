@@ -259,7 +259,7 @@ void SAN::Render()
 		//MV1SetOpacityRate(Mhandle, 0.3f);
 		//MV1SetMaterialDrawBlendMode(Mhandle, 0, DX_BLENDMODE_ALPHA);
 		//MV1SetMaterialDrawBlendParam(Mhandle, 0, 100);
-		//MV1DrawModel(Mhandle);
+		MV1DrawModel(Mhandle);
 
 		//É_ÉÅÅ[ÉWîªíËÇÃï`âÊ
 		DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);

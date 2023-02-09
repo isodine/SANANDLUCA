@@ -5,6 +5,8 @@
 #include "LKAclass.h"
 #include "Damage.h"
 #include "timer.h"
+#include "gimmick.h"
+#include "Enemy.h"
 
 #include <string>
 #include <memory>
@@ -72,4 +74,6 @@ public:
 	SAN san;
 	LKA lka;
 	Damage damage;
+	Gimmick gimmick;
+	Enemy enemy;
 };

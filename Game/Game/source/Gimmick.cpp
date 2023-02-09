@@ -203,7 +203,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 
 void Gimmick::Render() {
-	MV1SetPosition(BalanceHandle, VGet(-80.0f, 200.0f, 210.0f));
+	MV1SetPosition(BalanceHandle, VGet(35.0f, 200.0f, 900.0f));
 	MV1DrawModel(BalanceHandle);
 	DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
 }

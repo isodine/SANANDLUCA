@@ -12,6 +12,8 @@ void Enemy::Initialize() {
 	slimeAttackFlag = false;
 	slimeSerch = false;
 	slimeHitFlag = false;
+
+	slimeHandle = MV1LoadModel("res/slime_multimotion.mv1");
 }
 
 void Enemy::Terminate() {
@@ -26,7 +28,7 @@ void Enemy::Render() {
 
 }
 
-void Enemy::Slime(VECTOR SanPos, VECTOR LkaPos, int Handle, int HandleMap, float speed) {
+void Enemy::Slime(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed) {
 
 	_rotationMatrix = MMult(MMult(MGetRotX(slimeDir.x), MGetRotY(slimeDir.y)), MGetRotZ(slimeDir.z));
 
@@ -38,11 +40,11 @@ void Enemy::Slime(VECTOR SanPos, VECTOR LkaPos, int Handle, int HandleMap, float
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
 
-	MV1SetupCollInfo(Handle, 2, 8, 8, 8);
+	MV1SetupCollInfo(slimeHandle, 2, 8, 8, 8);
 
-	hitPolyDim1 = MV1CollCheck_Capsule(Handle, 2,
+	hitPolyDim1 = MV1CollCheck_Capsule(slimeHandle, 2,
 		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);
-	hitPolyDim2 = MV1CollCheck_Capsule(Handle, 2,
+	hitPolyDim2 = MV1CollCheck_Capsule(slimeHandle, 2,
 		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);
 
 	if (hitPolyDim1.HitNum >= 1 || hitPolyDim2.HitNum >= 1) {
@@ -103,26 +105,26 @@ void Enemy::Slime(VECTOR SanPos, VECTOR LkaPos, int Handle, int HandleMap, float
 	else {
 		// アニメーションがアタッチされていたら、デタッチする
 		if (AttachAnim != -1) {
-			MV1DetachAnim(Handle, AttachAnim);
+			MV1DetachAnim(slimeHandle, AttachAnim);
 			AttachAnim = -1;
 		}
 		// ステータスに合わせてアニメーションをアタッチする
 		switch (_status) {
 		case STATUS::WALK_KAI:
-			AttachAnim = MV1AttachAnim(Handle, 2, -1, FALSE);//歩きモーションをアタッチする
+			AttachAnim = MV1AttachAnim(slimeHandle, 2, -1, FALSE);//歩きモーションをアタッチする
 			break;
 		case STATUS::ATTACK:
-			AttachAnim = MV1AttachAnim(Handle, 0, -1, FALSE);//攻撃モーションをアタッチする
+			AttachAnim = MV1AttachAnim(slimeHandle, 0, -1, FALSE);//攻撃モーションをアタッチする
 			break;
 		case STATUS::HIT:
-			AttachAnim = MV1AttachAnim(Handle, 1, -1, FALSE);//ダメージモーションをアタッチする
+			AttachAnim = MV1AttachAnim(slimeHandle, 1, -1, FALSE);//ダメージモーションをアタッチする
 			break;
 		}
-		TotalTime = MV1GetAttachAnimTotalTime(Handle, AttachAnim);
+		TotalTime = MV1GetAttachAnimTotalTime(slimeHandle, AttachAnim);
 		PlayTime = 0.0f;
 	}
 
-	MV1SetAttachAnimTime(Handle, AttachAnim, PlayTime);
+	MV1SetAttachAnimTime(slimeHandle, AttachAnim, PlayTime);
 }
 
 void Enemy::Spider(VECTOR SanPos, VECTOR LkaPos, VECTOR SpiderPos, int Handle, float speed) {
@@ -176,11 +178,11 @@ void Enemy::SlimeJump() {
 	}
 }
 
-void Enemy::SlimeRender(VECTOR Pos, int Handle) {
-	MV1SetPosition(Handle, Pos);
-	MV1SetScale(Handle, VGet(3.0f, 3.0f, 3.0f));
-	MV1SetRotationXYZ(Handle, slimeDir);
-	MV1DrawModel(Handle);
+void Enemy::SlimeRender(VECTOR Pos) {
+	MV1SetPosition(slimeHandle, Pos);
+	MV1SetScale(slimeHandle, VGet(3.0f, 3.0f, 3.0f));
+	MV1SetRotationXYZ(slimeHandle, slimeDir);
+	MV1DrawModel(slimeHandle);
 	
 }
 
