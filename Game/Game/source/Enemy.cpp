@@ -32,7 +32,7 @@ void Enemy::Slime(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed) {
 	MV1RefreshCollInfo(slimeHandle, 2);
 	_rotationMatrix = MMult(MMult(MGetRotX(slimeDir.x), MGetRotY(slimeDir.y)), MGetRotZ(slimeDir.z));
 
-	VECTOR forward{ VTransform({0.0f,0.0f,1.0f},_rotationMatrix) };
+	VECTOR forward{ VTransform({0.0f,0.0f,-1.0f},_rotationMatrix) };
 
 	STATUS oldStatus = _status;
 	VECTOR oldPos = slimePos;
@@ -142,7 +142,7 @@ void Enemy::SlimeJump() {
 		return;
 	}
 
-	VECTOR forward{ VTransform({0.0f,0.0f,1.0f},_rotationMatrix) };
+	VECTOR forward{ VTransform({0.0f,0.0f,-1.0f},_rotationMatrix) };
 	VECTOR up{ 0.0f,0.1f,0.0f };
 	float spd = 2.0f;
 

@@ -76,6 +76,7 @@ bool ModeGame::Initialize() {
 	damage.Initialize(&san, &lka);
 	enemy.Initialize();
 	gimmick.Initialize();
+	gimmick.SetSanLka(&san, &lka);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -151,8 +152,7 @@ bool ModeGame::Process() {
 	san.Update(_cam);
 	lka.Update(_cam);
 	damage.Process();
-	enemy.Slime(san.vPos, lka.vPos, _handleMap, 100.0f);
-	enemy.SlimeJump();
+	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
 	gimmick.Balance(san.vPos, lka.vPos);
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
@@ -218,7 +218,7 @@ bool ModeGame::Render() {
 		san.Render();
 		lka.Render();
 		gimmick.Render();
-		enemy.SlimeRender(VGet(45.0f, 25.0f, 1000.0f));
+		enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
 			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
