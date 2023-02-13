@@ -249,10 +249,12 @@ void SAN::Render()
 	{
 		// 位置
 		MV1SetPosition(Mhandle, vPos);
+
 		// 向きからY軸回転を算出
 		VECTOR vRot = { 0,0,0 };
 		vRot.y = atan2(vDir.x * -1, vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
 		MV1SetRotationXYZ(Mhandle, vRot);
+
 		// 描画
 		//MV1SetScale(Mhandle, VGet(10.0f, 10.0f, 10.0f));
 		//MV1SetFrameOpacityRate(Mhandle, 0, 0.0f);

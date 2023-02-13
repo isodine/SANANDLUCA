@@ -57,7 +57,6 @@ public:
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
 	int HP;
-	VECTOR myPos;
 
 	bool motionRes = false;
 

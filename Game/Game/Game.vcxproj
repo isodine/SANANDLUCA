@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="source\ApplicationMain.cpp" />
     <ClCompile Include="source\Damage.cpp" />
+    <ClCompile Include="source\LkaBomb.cpp" />
     <ClCompile Include="source\LKAclass.cpp" />
     <ClCompile Include="source\ModeBoss.cpp" />
     <ClCompile Include="source\ModeEnding.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="source\ModeStage3.cpp" />
     <ClCompile Include="source\ModeTitle.cpp" />
     <ClCompile Include="source\Player.cpp" />
+    <ClCompile Include="source\SanBomb.cpp" />
     <ClCompile Include="source\SANclass.cpp" />
     <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -195,6 +197,7 @@
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\Include.h" />
+    <ClInclude Include="source\LkaBomb.h" />
     <ClInclude Include="source\LKAclass.h" />
     <ClInclude Include="source\ModeBoss.h" />
     <ClInclude Include="source\ModeEnding.h" />
@@ -212,6 +215,8 @@
     <ClInclude Include="source\ModeStage3.h" />
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Player.h" />
+    <ClInclude Include="source\PlayerBomb.h" />
+    <ClInclude Include="source\SanBomb.h" />
     <ClInclude Include="source\SANclass.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />
