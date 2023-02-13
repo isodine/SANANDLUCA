@@ -220,20 +220,6 @@
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="res\0.3.mv1" />
-    <None Include="res\a_map02.mv1" />
-    <None Include="res\Balance_MOmarge.mv1" />
-    <None Include="res\Laser01.efkefc" />
-    <None Include="res\slime_multimotion.mv1" />
-    <None Include="res\test.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\alkalislime_tex.png" />
-    <Image Include="res\cursor.png" />
-    <Image Include="res\player00.png" />
-    <Image Include="res\San_Lka_Mask.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
