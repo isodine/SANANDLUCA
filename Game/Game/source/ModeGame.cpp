@@ -191,6 +191,8 @@ bool ModeGame::Render() {
 #endif
 
 	// ƒJƒƒ‰İ’èXV
+	_cam._vTarget = VScale(VAdd(san.vPos, lka.vPos),0.5);
+	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 240, -400));
 	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
 	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
 

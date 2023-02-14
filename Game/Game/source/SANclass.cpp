@@ -50,8 +50,7 @@ void SAN::Update(Camera& cam)
 		float length = sqrt(sz * sz + sx * sx);
 		if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
 		if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-		cam._vPos.x = cam._vTarget.x + cos(rad) * length;
-		cam._vPos.z = cam._vTarget.z + sin(rad) * length;
+		
 
 		// Y位置
 		if (key & PAD_INPUT_DOWN) { cam._vPos.y -= 5.f; }
@@ -106,8 +105,7 @@ void SAN::Update(Camera& cam)
 
 		// カメラも移動する
 		v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
-		cam._vPos = VAdd(cam._vPos, v);
-		cam._vTarget = VAdd(cam._vTarget, v);
+		
 
 		// 移動した先でコリジョン判定
 		MV1_COLL_RESULT_POLY_DIM hitPolyDim;
@@ -124,10 +122,7 @@ void SAN::Update(Camera& cam)
 			vPos.x = oldPos.x/*- subX*/;
 			vPos.z = oldPos.z/*- subZ*/;
 
-			cam._vPos.x -= subX/2;
-			cam._vPos.z -= subZ/2;
-			cam._vTarget.x -= subX/2;
-			cam._vTarget.z -= subZ/2;
+			
 			v = { 0,0,0 };
 		}
 
@@ -147,8 +142,7 @@ void SAN::Update(Camera& cam)
 				float minusY = vPos.y;
 				// 当たったY位置をキャラ座標にする
 				vPos.y = hitPolyfloor.HitPosition.y - 0.5f;
-				cam._vPos.y += (vPos.y - minusY) / 2;
-				cam._vTarget.y += (vPos.y - minusY) / 2;
+				
 			}
 		}
 		else if(!OnBalance) {
@@ -259,14 +253,14 @@ void SAN::Render()
 		//MV1SetOpacityRate(Mhandle, 0.3f);
 		//MV1SetMaterialDrawBlendMode(Mhandle, 0, DX_BLENDMODE_ALPHA);
 		//MV1SetMaterialDrawBlendParam(Mhandle, 0, 100);
-		MV1DrawModel(Mhandle);
+		//MV1DrawModel(Mhandle);
 
 		//ダメージ判定の描画
-		DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
-		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
+		/*DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
+		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);*/
 
 		// コリジョン判定用ラインの描画
-		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
+		//DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
 
 	}
 	//DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vPos.x, vPos.y, vPos.z);
@@ -275,15 +269,13 @@ void SAN::Jump(Camera& cam)
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
-	cam._vPos.y += height / 2;
-	cam._vTarget.y += height / 2;
+	
 
 }
 
 void SAN::freeFall(Camera& cam)
 {
 	vPos.y -= throughtime;
-	cam._vPos.y -= throughtime / 2;
-	cam._vTarget.y -= throughtime / 2;
+	
 	throughtime += 0.5f;
 }

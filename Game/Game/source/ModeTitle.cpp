@@ -3,6 +3,7 @@
 #include "ModeTitle.h"
 //#include "ModeGame.h"
 #include "ModeStage0.h"
+#include "Test.h"
 
 ModeTitle::ModeTitle() {
 	titleHandle = LoadGraph("res/title.png");
@@ -32,6 +33,7 @@ bool ModeTitle::Process() {
 	if (Trg & checkKey) {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
+		//ModeServer::GetInstance()->Add(new Test(), 1, "test");
 	}
 
 	return true;

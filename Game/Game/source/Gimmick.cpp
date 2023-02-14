@@ -56,8 +56,9 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	if (hitPolyDim1.HitNum >= 1) {
 		SanHitFlag = true;
 		float MaxY = GetPolyMaxY(hitPolyDim1.Dim, hitPolyDim1.HitNum);
-		san->vPos.y = MaxY - 0.1;
+		san->vPos.y = hitPolyDim1.Dim->HitPosition.y - 0.01;
 	}
+	//hitPolyDim1.Dim->HitPosition.y
 	else {
 		SanHitFlag = false;
 	}
