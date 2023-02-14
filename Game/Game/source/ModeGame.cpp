@@ -74,7 +74,9 @@ bool ModeGame::Initialize() {
 	san.Initialize();
 	lka.Initialize();
 	damage.Initialize(&san, &lka);
-
+	enemy.Initialize();
+	gimmick.Initialize();
+	gimmick.SetSanLka(&san, &lka);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -124,8 +126,6 @@ bool ModeGame::Initialize() {
 		cnt++;
 	}
 
-	sanbomb.Initialize(san);
-
 	//CSVの調整にカメラを追いつかせる
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
 	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
@@ -133,8 +133,6 @@ bool ModeGame::Initialize() {
 	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
-
-	PlayMusic("res/06_Sound/01_BGM/Confectioner.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;
 }
@@ -150,15 +148,17 @@ bool ModeGame::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}
-
-	san.Update(_cam, sanbomb);
+	san.SetOnBalance(gimmick.GetSanHitFlag());
+	lka.SetOnBalance(gimmick.GetLkaHitFlag());
+	san.Update(_cam);
 	lka.Update(_cam);
 	damage.Process();
+	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
+	gimmick.Balance(san.vPos, lka.vPos);
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
 		ModeServer::GetInstance()->Del(this);
-		StopMusic();
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 	}
 
@@ -177,12 +177,12 @@ bool ModeGame::Render() {
 	SetUseLighting(TRUE);
 #if 1	// 平行ライト
 	SetGlobalAmbientLight(GetColorF(0.1f, 0.1f, 0.1f, 0.f));
-	ChangeLightTypeDir(VGet(0, -1, 1));
+	ChangeLightTypeDir(VGet(0, -1, -1));
 	//SetLightEnable(FALSE);
 	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
 
-	//LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
-	//SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));
+	/*LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
+	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));*/
 
 #endif
 #if 0	// ポイントライト
@@ -191,6 +191,8 @@ bool ModeGame::Render() {
 #endif
 
 	// カメラ設定更新
+	_cam._vTarget = VScale(VAdd(san.vPos, lka.vPos),0.5);
+	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 240, -400));
 	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
 	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
 
@@ -216,9 +218,10 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		san.Render(sanbomb);
+		san.Render();
 		lka.Render();
-
+		gimmick.Render();
+		enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
 			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));

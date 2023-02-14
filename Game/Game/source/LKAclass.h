@@ -1,7 +1,8 @@
 #pragma once
 #include"Player.h"
+#include "Gimmick.h"
 
-class LKA:public Player
+class LKA:public Player, public Gimmick
 {
 public:
 	LKA();

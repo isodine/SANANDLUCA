@@ -67,7 +67,7 @@ void LKA::Update(Camera& cam)
 	v.z = sin(rad + camrad) * length;
 
 	// 移動前の位置を保存
-	VECTOR oldvPos = vPos;
+	oldPos = vPos;
 
 
 
@@ -76,7 +76,7 @@ void LKA::Update(Camera& cam)
 	if (CheckCameraViewClip(vPos) == TRUE)
 	{
 		// 画面外に出た。元の座標に戻す
-		vPos = oldvPos;
+		vPos = oldPos;
 		v = { 0,0,0 };
 	}
 
@@ -85,8 +85,7 @@ void LKA::Update(Camera& cam)
 
 	// カメラも移動する
 	v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
-	cam._vPos = VAdd(cam._vPos, v);
-	cam._vTarget = VAdd(cam._vTarget, v);
+	
 
 	// 移動した先でコリジョン判定
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim;
@@ -98,15 +97,12 @@ void LKA::Update(Camera& cam)
 	if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
 	{
 		float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
-		float subX = vPos.x - oldvPos.x;
-		float subZ = vPos.z - oldvPos.z;
-		vPos.x = oldvPos.x/*- subX*/;
-		vPos.z = oldvPos.z/*- subZ*/;
+		float subX = vPos.x - oldPos.x;
+		float subZ = vPos.z - oldPos.z;
+		vPos.x = oldPos.x/*- subX*/;
+		vPos.z = oldPos.z/*- subZ*/;
 
-		cam._vPos.x -= subX / 2;
-		cam._vPos.z -= subZ / 2;
-		cam._vTarget.x -= subX / 2;
-		cam._vTarget.z -= subZ / 2;
+		
 		v = { 0,0,0 };
 	}
 
@@ -126,12 +122,10 @@ void LKA::Update(Camera& cam)
 			float minusY = vPos.y;
 			// 当たったY位置をキャラ座標にする
 			vPos.y = hitPolyfloor.HitPosition.y - 0.5f;
-			cam._vPos.y += (vPos.y - minusY) / 2;
-			cam._vTarget.y += (vPos.y - minusY) / 2;
+			
 		}
 	}
-	else {
-		// 当たらなかった。元の座標に戻す
+	else if (!OnBalance) {
 		freeFall(cam);
 	}
 
@@ -241,14 +235,12 @@ void LKA::Jump(Camera& cam)
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
-	cam._vPos.y += height / 2;
-	cam._vTarget.y += height / 2;
+	
 }
 
 void LKA::freeFall(Camera& cam)
 {
 	vPos.y -= throughtime;
-	cam._vPos.y -= throughtime / 2;
-	cam._vTarget.y -= throughtime / 2;
+	
 	throughtime += 0.5f;
 }

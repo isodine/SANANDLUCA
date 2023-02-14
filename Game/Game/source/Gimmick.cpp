@@ -6,7 +6,7 @@ Gimmick::Gimmick() {
 	SanHitFlag = false;
 	LkaHitFlag = false;
 	balance = BALANCE::EQUAL;
-	AttachAnim1 = MV1AttachAnim(BalanceHandle, 2, -1, FALSE);//水平モーションをアタッチする
+	AttachAnim1 = MV1AttachAnim(BalanceHandle, 0, -1, FALSE);//水平モーションをアタッチする
 	AttachAnimSAN = -1;
 	AttachAnimLKA = -1;
 	BlendRate = 0;
@@ -15,7 +15,7 @@ Gimmick::Gimmick() {
 
 void Gimmick::Initialize()
 {
-	MV1SetPosition(BalanceHandle, VGet(-80.0f, 200.0f, 210.0f));
+	MV1SetPosition(BalanceHandle, VGet(35.0f, 200.0f, 900.0f));
 	MV1SetupCollInfo(BalanceHandle, 3, 8, 8, 8);  //サンの皿
 	MV1SetupCollInfo(BalanceHandle, 4, 8, 8, 8);  //ルカの皿
 
@@ -36,67 +36,49 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	BALANCE oldBalance = balance;
 
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim3;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim4;
-
+	
 	MV1_COLL_RESULT_POLY hitPoly1;
-	// サンの腰位置から下方向への直線とサンの皿
-	hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
-		VAdd(SanPos, VGet(0, 60.f, 0)), VAdd(SanPos, VGet(0, -99999.f, 0)));
-
 	MV1_COLL_RESULT_POLY hitPoly2;
-	// ルカの腰位置から下方向への直線とサンの皿
-	hitPoly2 = MV1CollCheck_Line(BalanceHandle, 3,
-		VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
-
 	MV1_COLL_RESULT_POLY hitPoly3;
-	// サンの腰位置から下方向への直線とルカの皿
-	hitPoly3 = MV1CollCheck_Line(BalanceHandle, 4,
-		VAdd(SanPos, VGet(0, 60.f, 0)), VAdd(SanPos, VGet(0, -99999.f, 0)));
-
 	MV1_COLL_RESULT_POLY hitPoly4;
-	// ルカの腰位置から下方向への直線とルカの皿
+	
+
+	hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
+		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -99999.f, 0)));
+	hitPoly2 = MV1CollCheck_Line(BalanceHandle, 4,
+		VAdd(lka->vPos, VGet(0, lka->_colSubY, 0)), VAdd(lka->vPos, VGet(0, -99999.f, 0)));
+	hitPoly3 = MV1CollCheck_Line(BalanceHandle, 3,
+		VAdd(lka->vPos, VGet(0, lka->_colSubY, 0)), VAdd(lka->vPos, VGet(0, -99999.f, 0)));
 	hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
-		VAdd(LkaPos, VGet(0, 60.f, 0)), VAdd(LkaPos, VGet(0, -99999.f, 0)));
+		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -99999.f, 0)));
 
-	hitPolyDim1 = MV1CollCheck_Capsule(BalanceHandle, 3,
-		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //サンがサンの皿に乗ったとき
-	hitPolyDim2 = MV1CollCheck_Capsule(BalanceHandle, 4,
-		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ルカがルカの皿に乗ったとき
-	hitPolyDim3 = MV1CollCheck_Capsule(BalanceHandle, 3,
-		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ルカがサンの皿に乗ったとき
-	hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
-		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //サンがルカの皿に乗ったとき
-
-	if (hitPolyDim1.HitNum >= 1) {
-		SanHitFlag = true;
-		san->vPos = san->vPos;
+	if (hitPoly1.HitFlag || hitPoly3.HitFlag) {
+		if (hitPoly1.HitFlag) {
+			SanHitFlag = true;
+			san->vPos.y = hitPoly1.HitPosition.y - 0.01;
+			san->throughtime = 0;
+		}
+		else {
+			SanHitFlag = true;
+			lka->vPos.y = hitPoly3.HitPosition.y - 0.01;
+			lka->throughtime = 0;
+		}
 	}
 	else {
 		SanHitFlag = false;
 	}
 
-	if(hitPolyDim2.HitNum >= 1) {
-		LkaHitFlag = true;
-		lka->vPos = lka->vPos;
-	}
-	else {
-		LkaHitFlag = false;
-	}
-
-	if (hitPolyDim3.HitNum >= 1) {
-		LkaHitFlag = true;
-		lka->vPos = lka->vPos;
-	}
-	else {
-		LkaHitFlag = false;
-	}
-
-	if (hitPolyDim4.HitNum >= 1) {
-		LkaHitFlag = true;
-		san->vPos = san->vPos;
+	if (hitPoly2.HitFlag || hitPoly4.HitFlag) {
+		if (hitPoly2.HitFlag) {
+			LkaHitFlag = true;
+			lka->vPos.y = hitPoly2.HitPosition.y - 0.01;
+			lka->throughtime = 0;
+		}
+		else {
+			LkaHitFlag = true;
+			san->vPos.y = hitPoly4.HitPosition.y - 0.01;
+			san->throughtime = 0;
+		}
 	}
 	else {
 		LkaHitFlag = false;
@@ -129,9 +111,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			MV1DetachAnim(BalanceHandle, AttachAnimLKA);
 			AttachAnimLKA = -1;
 		}
-		if (BlendRate == 1) {
-			BlendRate = 0;
-		}
+		
 		// ステータスに合わせてアニメーションをアタッチする
 		switch (balance) {
 		case BALANCE::EQUAL:
@@ -157,20 +137,37 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		}
 	}
 
+	if (BalanceFlag == true && BlendRate == 1) {
+		BlendRate = 0;
+		BalanceFlag = false;
+	}
+	else {
+		BalanceFlag = false;
+	}
+
 	if (balance == BALANCE::EQUAL) {
 		
 		if (oldBalance == BALANCE::SAN) {
-			if (BlendRate >= 1) {
+			if (BlendRate <= 1) {
+				
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
 				BlendRate += 0.01f;
+				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
+				MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
+			}
+			else {
+				BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
 			}
 		}
 		else if (oldBalance == BALANCE::LKA) {
-			if (BlendRate >= 1) {
+			if (BlendRate <= 1) {
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
 				BlendRate += 0.01f;
+			}
+			else {
+				BlendRate >0?BlendRate -= 0.01f: BlendRate = 0;
 			}
 		}
 		else if (oldBalance == BALANCE::EQUAL) {
@@ -178,32 +175,45 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		}
 	}
 	else if (balance == BALANCE::SAN) {
-		if (BlendRate >= 1) {
+		if (BlendRate <= 1) {
+			
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
 			BlendRate += 0.01f;
+			MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
+			MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
+		}
+		else {
+			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
 		}
 	}
 	else if (balance == BALANCE::LKA) {
-		if (BlendRate >= 1) {
+		if (BlendRate <= 1) {
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, BlendRate);
 			BlendRate += 0.01f;
 		}
+		else {
+			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
+		}
 	}
-	if (BlendRate == 1) {
-		BlendRate = 0;
-	}
-	MV1CollResultPolyDimTerminate(hitPolyDim1);
-	MV1CollResultPolyDimTerminate(hitPolyDim2);
-	MV1CollResultPolyDimTerminate(hitPolyDim3);
-	MV1CollResultPolyDimTerminate(hitPolyDim4);
+	
 }
 
-
+float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
+	float MaxY = FLT_MIN;
+	for (auto i = 0; i < num; ++i) {
+		for (auto j = 0; j < 3; ++j) {
+			if (MaxY < Dim[i].Position[j].y) {
+				MaxY = Dim[i].Position[j].y;
+			}
+		}
+	}
+	return MaxY;
+}
 
 void Gimmick::Render() {
-	MV1SetPosition(BalanceHandle, VGet(-80.0f, 200.0f, 210.0f));
+	
 	MV1DrawModel(BalanceHandle);
-	DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
+	//DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
 }
