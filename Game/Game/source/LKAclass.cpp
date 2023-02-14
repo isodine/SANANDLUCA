@@ -125,8 +125,7 @@ void LKA::Update(Camera& cam)
 			
 		}
 	}
-	else {
-		// ìñÇΩÇÁÇ»Ç©Ç¡ÇΩÅBå≥ÇÃç¿ïWÇ…ñﬂÇ∑
+	else if (!OnBalance) {
 		freeFall(cam);
 	}
 

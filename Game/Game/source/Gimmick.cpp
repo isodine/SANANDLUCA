@@ -169,12 +169,18 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 				MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 			}
+			else {
+				BlendRate > 0 ? BlendRate -= 0.001f : BlendRate = 0;
+			}
 		}
 		else if (oldBalance == BALANCE::LKA) {
 			if (BlendRate <= 1) {
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
 				BlendRate += 0.001f;
+			}
+			else {
+				BlendRate >0?BlendRate -= 0.001f: BlendRate = 0;
 			}
 		}
 		else if (oldBalance == BALANCE::EQUAL) {
@@ -190,12 +196,18 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 			MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 		}
+		else {
+			BlendRate > 0 ? BlendRate -= 0.001f : BlendRate = 0;
+		}
 	}
 	else if (balance == BALANCE::LKA) {
 		if (BlendRate <= 1) {
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, BlendRate);
 			BlendRate += 0.001f;
+		}
+		else {
+			BlendRate > 0 ? BlendRate -= 0.001f : BlendRate = 0;
 		}
 	}
 	/*if (BlendRate == 1) {
