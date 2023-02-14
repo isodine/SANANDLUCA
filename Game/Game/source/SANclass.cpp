@@ -24,16 +24,17 @@ void SAN::Initialize()
 
 	// 腰位置の設定
 	_colSubY = 45.f;
+
 }
 
 void SAN::Input()
 {
 	int keyold1P = Key1P;
-	Key1P = GetJoypadInputState(DX_INPUT_PAD1);
+	Key1P = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 
-void SAN::Update(Camera& cam)
+void SAN::Update(Camera& cam, SanBomb& sanB)
 {
 	Input();
 	int key = Key1P;
@@ -41,7 +42,7 @@ void SAN::Update(Camera& cam)
 
 	Player::Update(mypH);
 
-	if (key & PAD_INPUT_5) {	// 多分L1ボタン
+	if (key & PAD_INPUT_5) {	//多分L1ボタン
 		// 角度変更
 		// Y軸回転
 		float sx = cam._vPos.x - cam._vTarget.x;
@@ -79,6 +80,10 @@ void SAN::Update(Camera& cam)
 		//if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
+		if (sanB.situation == None) { attack = Attack::None; }
+		if (key & PAD_INPUT_3 && (attack == Attack::None)) { attack = Attack::Pop; }
+		if (sanB.situation == Keep) { attack = Attack::Keep; }
+		if (key & PAD_INPUT_3 && (attack == Attack::Keep)) { attack = Attack::Throw; }
 		if (_status == STATUS::JUMP) { Jump(cam); }
 		// vをrad分回転させる
 		float length = 0.f;
@@ -100,6 +105,7 @@ void SAN::Update(Camera& cam)
 			vPos = oldvPos;
 			v = { 0,0,0 };
 		}
+
 
 		// vの分移動
 		vPos = VAdd(vPos, v);
@@ -124,10 +130,10 @@ void SAN::Update(Camera& cam)
 			vPos.x = oldvPos.x/*- subX*/;
 			vPos.z = oldvPos.z/*- subZ*/;
 
-			cam._vPos.x -= subX/2;
-			cam._vPos.z -= subZ/2;
-			cam._vTarget.x -= subX/2;
-			cam._vTarget.z -= subZ/2;
+			cam._vPos.x -= subX / 2;
+			cam._vPos.z -= subZ / 2;
+			cam._vTarget.x -= subX / 2;
+			cam._vTarget.z -= subZ / 2;
 			v = { 0,0,0 };
 		}
 
@@ -172,6 +178,10 @@ void SAN::Update(Camera& cam)
 
 
 
+		sanB.Update(this);         //ボムの更新
+
+
+
 		// デバッグ機能
 		//if (trg & PAD_INPUT_2) {
 		//	_bViewCollision = !_bViewCollision;
@@ -182,7 +192,7 @@ void SAN::Update(Camera& cam)
 		//else {
 		//	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
 		//}
-		// 
+
 
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {
@@ -238,7 +248,7 @@ void SAN::Update(Camera& cam)
 	}
 }
 
-void SAN::Render()
+void SAN::Render(SanBomb& sanB)
 {
 	Player::Render(mypH);
 
@@ -261,7 +271,7 @@ void SAN::Render()
 		//MV1SetOpacityRate(Mhandle, 0.3f);
 		//MV1SetMaterialDrawBlendMode(Mhandle, 0, DX_BLENDMODE_ALPHA);
 		//MV1SetMaterialDrawBlendParam(Mhandle, 0, 100);
-		//MV1DrawModel(Mhandle);
+		MV1DrawModel(Mhandle);
 
 		//ダメージ判定の描画
 		DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
@@ -271,6 +281,7 @@ void SAN::Render()
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
 
 	}
+	sanB.Render();
 	//DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vPos.x, vPos.y, vPos.z);
 }
 void SAN::Jump(Camera& cam)

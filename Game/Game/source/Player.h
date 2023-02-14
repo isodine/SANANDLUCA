@@ -56,12 +56,21 @@ public:
 	VECTOR vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
-	int HP;
-
-	bool motionRes = false;
+	//ボム関連用
+	enum Attack
+	{
+		None,
+		Pop,
+		Keep,
+		Throw
+	};
+	Attack attack;
 
 	//ジャンプ処理用
 	float throughtime;
 	float height;
+
+	bool motionRes = false;
+	int HP;
 
 };

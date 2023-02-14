@@ -24,6 +24,7 @@ void Player::Initialize(Type myph)
 	Mtotal_time = 0.f;
 	Mplay_time = 0.0f;
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
+	attack = Attack::None;
 }
 
 void Player::Update(Type mypH){}

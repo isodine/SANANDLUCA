@@ -124,6 +124,8 @@ bool ModeGame::Initialize() {
 		cnt++;
 	}
 
+	sanbomb.Initialize(san);
+
 	//CSVの調整にカメラを追いつかせる
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
 	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
@@ -131,6 +133,8 @@ bool ModeGame::Initialize() {
 	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
+
+	PlayMusic("res/06_Sound/01_BGM/Confectioner.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;
 }
@@ -147,13 +151,14 @@ bool ModeGame::Process() {
 	//	SanLka->Update();
 	//}
 
-	san.Update(_cam);
+	san.Update(_cam, sanbomb);
 	lka.Update(_cam);
 	damage.Process();
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
 		ModeServer::GetInstance()->Del(this);
+		StopMusic();
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 	}
 
@@ -176,8 +181,8 @@ bool ModeGame::Render() {
 	//SetLightEnable(FALSE);
 	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
 
-	LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
-	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));
+	//LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
+	//SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));
 
 #endif
 #if 0	// ポイントライト
@@ -211,7 +216,7 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		san.Render();
+		san.Render(sanbomb);
 		lka.Render();
 
 		// コリジョン判定用ラインの描画

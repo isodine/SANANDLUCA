@@ -9,7 +9,6 @@ public:
 	LKA GetLka() { return lka; }
 	Player GetPlayer() { return player; }
 
-
 protected:
 	SAN san;
 	LKA lka;
