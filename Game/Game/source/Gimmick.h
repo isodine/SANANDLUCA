@@ -24,6 +24,7 @@ public:
 
 	bool GetSanHitFlag() { return SanHitFlag; }
 	bool GetLkaHitFlag() { return LkaHitFlag; }
+	bool SanLkaFlag;
 
 	int BalanceHandle;
 

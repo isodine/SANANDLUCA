@@ -11,6 +11,7 @@ Gimmick::Gimmick() {
 	AttachAnimLKA = -1;
 	BlendRate = 0;
 	BalanceFlag = false;
+	SanLkaFlag = false;
 }
 
 void Gimmick::Initialize()
@@ -110,6 +111,24 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			AttachAnimSAN = -1;
 			MV1DetachAnim(BalanceHandle, AttachAnimLKA);
 			AttachAnimLKA = -1;
+
+			if (BalanceFlag == true && BlendRate >= 1) {
+		BlendRate = 0;
+		BalanceFlag = false;
+		if (balance == BALANCE::EQUAL) {
+			MV1DetachAnim(BalanceHandle, AttachAnimSAN);
+			AttachAnimSAN = -1;
+			MV1DetachAnim(BalanceHandle, AttachAnimLKA);
+			AttachAnimLKA = -1;
+		}
+		else {
+			MV1DetachAnim(BalanceHandle, AttachAnim1);
+			AttachAnim1 = -1;
+		}
+	}
+	else {
+		BalanceFlag = false;
+	}
 		}
 		
 		// ステータスに合わせてアニメーションをアタッチする
@@ -137,41 +156,48 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		}
 	}
 
-	if (BalanceFlag == true && BlendRate == 1) {
-		BlendRate = 0;
-		BalanceFlag = false;
-	}
-	else {
-		BalanceFlag = false;
-	}
+	
 
 	if (balance == BALANCE::EQUAL) {
 		
 		if (oldBalance == BALANCE::SAN) {
 			if (BlendRate <= 1) {
-				
+				SanLkaFlag = true;
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
 				BlendRate += 0.01f;
-				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
-				MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 			}
 			else {
-				BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
+				BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 1;
 			}
 		}
 		else if (oldBalance == BALANCE::LKA) {
 			if (BlendRate <= 1) {
+				SanLkaFlag = false;
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
 				BlendRate += 0.01f;
 			}
 			else {
-				BlendRate >0?BlendRate -= 0.01f: BlendRate = 0;
+				BlendRate >0?BlendRate -= 0.01f: BlendRate = 1;
 			}
 		}
 		else if (oldBalance == BALANCE::EQUAL) {
 
+		}
+		if (SanLkaFlag == true) {
+			if (BlendRate <= 1) {
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
+				BlendRate += 0.01f;
+			}
+		}
+		else if (SanLkaFlag == false) {
+			if (BlendRate <= 1) {
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
+				BlendRate += 0.01f;
+			}
 		}
 	}
 	else if (balance == BALANCE::SAN) {
@@ -180,11 +206,9 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
 			BlendRate += 0.01f;
-			MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
-			MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 		}
 		else {
-			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
+			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 1;
 		}
 	}
 	else if (balance == BALANCE::LKA) {
@@ -194,7 +218,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			BlendRate += 0.01f;
 		}
 		else {
-			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
+			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 1;
 		}
 	}
 	
