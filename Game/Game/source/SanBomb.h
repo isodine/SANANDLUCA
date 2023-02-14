@@ -14,7 +14,7 @@ public:
 
 private:
 	int _effectResourceHandle;
-	int _sanEffectHandle;
+	int _playingEffectHandle;
 	int oldcount;
 	int _isthrow;
 	int _isEffect;

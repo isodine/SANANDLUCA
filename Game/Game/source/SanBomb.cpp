@@ -3,10 +3,14 @@ PlayerBomb::~PlayerBomb() {}
 
 SanBomb::SanBomb() :PlayerBomb()
 {
-	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_1.6_02.efkefc", 10.0f);
+	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_charge_01.efkefc", 10.0f);
 }
 
-SanBomb::~SanBomb() {}
+SanBomb::~SanBomb() {
+
+	DeleteEffekseerEffect(_effectResourceHandle);
+
+}
 
 void SanBomb::Initialize(SAN& san)
 {
@@ -68,16 +72,18 @@ void SanBomb::Update(SAN* san)
 	}
 	if (trg & PAD_INPUT_6 && _isEffect == 0)
 	{
-		_sanEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
+		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(_sanEffectHandle, vPos.x, vPos.y, vPos.z);
+		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, vPos.x, vPos.y, vPos.z);
 		//_position_x += 0.2f;
-		SetScalePlayingEffekseer3DEffect(_sanEffectHandle, 0.1f, 0.1f, 0.1f);
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
 
 		_isEffect = 1;
 
 		oldcount = GetNowCount();
 	}
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, vPos.x, vPos.y, vPos.z);
+	UpdateEffekseer3D();
 		if (oldcount > 0)
 		{
 			auto nowCount = GetNowCount();
@@ -97,11 +103,11 @@ void SanBomb::Update(SAN* san)
 					_isthrow = 0;
 					oldcount = 0;
 					BombReset();
+					StopEffekseer3DEffect(_playingEffectHandle);
 				}
 			}
 		}
-	SetPosPlayingEffekseer3DEffect(_sanEffectHandle, vPos.x, vPos.y, vPos.z);
-	UpdateEffekseer3D();
+
 
 	/*if (vPos.y <= 0)
 	{
@@ -116,12 +122,13 @@ void SanBomb::Render()
 	Effekseer_Sync3DSetting();
 
 	DrawEffekseer3D_Begin();
-	DrawEffekseer3D_Draw(_sanEffectHandle);
+	DrawEffekseer3D_Draw(_playingEffectHandle);
 	DrawEffekseer3D_End();
-	if (_isEffect == 0)
-	{
-		StopEffekseer3DEffect(_sanEffectHandle);
-	}
+
+	//if (_isEffect == 0)
+	//{
+	//	StopEffekseer3DEffect(_playingEffectHandle);
+	//}
 
 }
 

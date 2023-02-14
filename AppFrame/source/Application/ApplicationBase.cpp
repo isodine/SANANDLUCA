@@ -53,6 +53,9 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance) {
 }
 
 bool ApplicationBase::Terminate() {
+
+	// Effekseerを終了する。
+	Effkseer_End();
 	// DXライブラリ開放
 	DxLib_End();
 
