@@ -7,11 +7,12 @@
 
 ModeTitle::ModeTitle() {
 	titleHandle = LoadGraph("res/title.png");
+	SEcrik = LoadSoundMem("res/06_Sound/03_SE/Œˆ’èƒ{ƒ^ƒ“‚ğ‰Ÿ‚·24.mp3");
 }
 
 bool ModeTitle::Initialize() {
 	if (!base::Initialize()) { return false; }
-	
+
 }
 
 bool ModeTitle::Terminate() {
@@ -31,6 +32,7 @@ bool ModeTitle::Process() {
 
 
 	if (Trg & checkKey) {
+		PlaySoundMem(SEcrik, DX_PLAYTYPE_BACK, true);
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
 		//ModeServer::GetInstance()->Add(new Test(), 1, "test");

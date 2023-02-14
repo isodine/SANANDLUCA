@@ -74,14 +74,14 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 		if (key & PAD_INPUT_UP) { v.x = -1; }
 		if (key & PAD_INPUT_LEFT) { v.z = -1; }
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; PlaySoundMem(SEjump, DX_PLAYTYPE_BACK, true); }
 		//if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE)) { _status = STATUS::CHARGE; }
 		//if (key & PAD_INPUT_3 && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
 		//if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
 		if (sanB.situation == None) { attack = Attack::None; }
-		if (trg & PAD_INPUT_6 && (attack == Attack::None)) { 
+		if (trg & PAD_INPUT_6 && (attack == Attack::None)) {
 			attack = Attack::Pop;
 		}
 		if (sanB.situation == Keep) { attack = Attack::Keep; }
@@ -203,7 +203,7 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle"), -1, FALSE);
 				break;
 			case STATUS::WALK:
-				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move"), -1, FALSE);
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "walk"), -1, FALSE);
 				break;
 			case STATUS::JUMP:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jamp1"), -1, FALSE);

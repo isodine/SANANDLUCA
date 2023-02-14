@@ -19,19 +19,19 @@ std::vector<std::string> splitme(std::string& input, char delimiter)
 bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
-	// モデルデータのロード（テクスチャも読み込まれる）
-	_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
-	_attach_index = -1;		// アニメーションアタッチはされていない
+	//// モデルデータのロード（テクスチャも読み込まれる）
+	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
+	//_attach_index = -1;		// アニメーションアタッチはされていない
 
-	// 再生時間の初期化
-	_total_time = 0.f;
-	_play_time = 0.0f;
-	// 位置,向きの初期化
-	_vPos = VGet(0, 0, 0);
-	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
+	//// 再生時間の初期化
+	//_total_time = 0.f;
+	//_play_time = 0.0f;
+	//// 位置,向きの初期化
+	//_vPos = VGet(0, 0, 0);
+	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
-	_handleMap = MV1LoadModel("res/map_0125.fbm/a_map02.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/map_0125.fbm/a_map02.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
@@ -134,6 +134,8 @@ bool ModeGame::Initialize() {
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
 
+	PlayMusic("res/06_Sound/01_BGM/Confectioner.mp3", DX_PLAYTYPE_LOOP);
+
 	return true;
 }
 
@@ -150,7 +152,7 @@ bool ModeGame::Process() {
 	//}
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	san.Update(_cam,sanbomb);
+	san.Update(_cam, sanbomb);
 	lka.Update(_cam);
 	damage.Process();
 	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
@@ -158,6 +160,7 @@ bool ModeGame::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
+		StopMusic();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 	}
@@ -177,7 +180,7 @@ bool ModeGame::Render() {
 	SetUseLighting(TRUE);
 #if 1	// 平行ライト
 	SetGlobalAmbientLight(GetColorF(0.1f, 0.1f, 0.1f, 0.f));
-	ChangeLightTypeDir(VGet(0, -1, -1));
+	ChangeLightTypeDir(VGet(0, -1, 1));
 	//SetLightEnable(FALSE);
 	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
 
@@ -191,7 +194,7 @@ bool ModeGame::Render() {
 #endif
 
 	// カメラ設定更新
-	_cam._vTarget = VScale(VAdd(san.vPos, lka.vPos),0.5);
+	_cam._vTarget = VScale(VAdd(san.vPos, lka.vPos), 0.5);
 	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 240, -400));
 	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
 	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
@@ -223,9 +226,9 @@ bool ModeGame::Render() {
 		gimmick.Render();
 		enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画
-		if (_bViewCollision) {
-			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
-		}
+		//if (_bViewCollision) {
+		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
+		//}
 
 	}
 

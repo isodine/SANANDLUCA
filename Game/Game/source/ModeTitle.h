@@ -11,4 +11,5 @@ public:
 	virtual bool Render();
 	
 	int titleHandle;
+	int SEcrik;
 };

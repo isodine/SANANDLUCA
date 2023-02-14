@@ -70,6 +70,9 @@ public:
 	bool OnBalance;  //天秤に乗っているかどうか
 	void SetOnBalance(bool on) { OnBalance = on; }
 
+	//SE用
+	int SEjump;
+
 	//ジャンプ処理用
 	float throughtime;
 	float height;

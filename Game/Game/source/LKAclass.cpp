@@ -17,7 +17,7 @@ void LKA::Initialize()
 	Player::Initialize(mypH);
 
 	// モデルデータのロード（テクスチャも読み込まれる）
-	Mhandle = MV1LoadModel("res/Lka/Lka multimotion.mv1");
+	Mhandle = MV1LoadModel("res/Lka_2023_0131/Lka_Fullmotion_2023_0131.mv1");
 
 	// 位置,向きの初期化
 	vPos = VGet(60, 20, 0);
@@ -56,7 +56,8 @@ void LKA::Update(Camera& cam)
 	if (key & PAD_INPUT_UP) { v.x = -1; }
 	if (key & PAD_INPUT_LEFT) { v.z = -1; }
 	if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-	if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+	if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP;
+	PlaySoundMem(SEjump, DX_PLAYTYPE_BACK, true);}
 
 	if (_status == STATUS::JUMP) { Jump(cam); }
 	// vをrad分回転させる
@@ -166,13 +167,13 @@ void LKA::Update(Camera& cam)
 		// ステータスに合わせてアニメーションのアタッチ
 		switch (_status) {
 		case STATUS::WAIT:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle2"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle"), -1, FALSE);
 			break;
 		case STATUS::WALK:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move2"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "walk"), -1, FALSE);
 			break;
 		case STATUS::JUMP:
-			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jamp2"), -1, FALSE);
+			Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jamp1"), -1, FALSE);
 			break;
 		}
 		// アタッチしたアニメーションの総再生時間を取得する

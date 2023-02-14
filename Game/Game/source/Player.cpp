@@ -25,6 +25,7 @@ void Player::Initialize(Type myph)
 	Mplay_time = 0.0f;
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 	attack = Attack::None;
+	SEjump = LoadSoundMem("res/06_Sound/03_SE/ani_ta_biyon02.mp3");
 }
 
 void Player::Update(Type mypH){}
