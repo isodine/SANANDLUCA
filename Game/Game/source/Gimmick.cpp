@@ -36,25 +36,12 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	BALANCE oldBalance = balance;
 
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim3;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim4;
-
+	
 	MV1_COLL_RESULT_POLY hitPoly1;
 	MV1_COLL_RESULT_POLY hitPoly2;
 	MV1_COLL_RESULT_POLY hitPoly3;
 	MV1_COLL_RESULT_POLY hitPoly4;
 	
-	
-	hitPolyDim1 = MV1CollCheck_Capsule(BalanceHandle, 3,
-		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //サンがサンの皿に乗ったとき
-	hitPolyDim2 = MV1CollCheck_Capsule(BalanceHandle, 4,
-		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ルカがルカの皿に乗ったとき
-	hitPolyDim3 = MV1CollCheck_Capsule(BalanceHandle, 3,
-		VGet(LkaPos.x, LkaPos.y + 30, LkaPos.z), VGet(LkaPos.x, LkaPos.y + 75, LkaPos.z), 30.0f);  //ルカがサンの皿に乗ったとき
-	hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
-		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //サンがルカの皿に乗ったとき
 
 	hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
 		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -99999.f, 0)));
@@ -65,43 +52,37 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
 		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -99999.f, 0)));
 
-	if (hitPoly1.HitFlag) {
-		SanHitFlag = true;
-		san->vPos.y = hitPoly1.HitPosition.y - 0.01;
-		san->throughtime = 0;
-	}
-	//hitPolyDim1.Dim->HitPosition.y
-	else {
-		SanHitFlag = false;
-	}
-
-	if (hitPoly2.HitFlag) {
-		LkaHitFlag = true;
-		lka->vPos.y = hitPoly2.HitPosition.y - 0.01;
-		lka->throughtime = 0;
-	}
-	else {
-		LkaHitFlag = false;
-	}
-
-	if (hitPoly3.HitFlag) {
-		SanHitFlag = true;
-		lka->vPos.y = hitPoly3.HitPosition.y - 0.01;
-		lka->throughtime = 0;
+	if (hitPoly1.HitFlag || hitPoly3.HitFlag) {
+		if (hitPoly1.HitFlag) {
+			SanHitFlag = true;
+			san->vPos.y = hitPoly1.HitPosition.y - 0.01;
+			san->throughtime = 0;
+		}
+		else {
+			SanHitFlag = true;
+			lka->vPos.y = hitPoly3.HitPosition.y - 0.01;
+			lka->throughtime = 0;
+		}
 	}
 	else {
 		SanHitFlag = false;
 	}
 
-	if (hitPoly4.HitFlag) {
-		LkaHitFlag = true;
-		san->vPos.y = hitPoly4.HitPosition.y - 0.01;
-		san->throughtime = 0;
+	if (hitPoly2.HitFlag || hitPoly4.HitFlag) {
+		if (hitPoly2.HitFlag) {
+			LkaHitFlag = true;
+			lka->vPos.y = hitPoly2.HitPosition.y - 0.01;
+			lka->throughtime = 0;
+		}
+		else {
+			LkaHitFlag = true;
+			san->vPos.y = hitPoly4.HitPosition.y - 0.01;
+			san->throughtime = 0;
+		}
 	}
 	else {
 		LkaHitFlag = false;
 	}
-	
 
 	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true)) {
 		balance = BALANCE::EQUAL;
@@ -130,9 +111,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			MV1DetachAnim(BalanceHandle, AttachAnimLKA);
 			AttachAnimLKA = -1;
 		}
-		/*if (BlendRate == 1) {
-			BlendRate = 0;
-		}*/
+		
 		// ステータスに合わせてアニメーションをアタッチする
 		switch (balance) {
 		case BALANCE::EQUAL:
@@ -158,6 +137,14 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		}
 	}
 
+	if (BalanceFlag == true && BlendRate == 1) {
+		BlendRate = 0;
+		BalanceFlag = false;
+	}
+	else {
+		BalanceFlag = false;
+	}
+
 	if (balance == BALANCE::EQUAL) {
 		
 		if (oldBalance == BALANCE::SAN) {
@@ -165,22 +152,22 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 				
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
-				BlendRate += 0.001f;
+				BlendRate += 0.01f;
 				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 				MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 			}
 			else {
-				BlendRate > 0 ? BlendRate -= 0.001f : BlendRate = 0;
+				BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
 			}
 		}
 		else if (oldBalance == BALANCE::LKA) {
 			if (BlendRate <= 1) {
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
-				BlendRate += 0.001f;
+				BlendRate += 0.01f;
 			}
 			else {
-				BlendRate >0?BlendRate -= 0.001f: BlendRate = 0;
+				BlendRate >0?BlendRate -= 0.01f: BlendRate = 0;
 			}
 		}
 		else if (oldBalance == BALANCE::EQUAL) {
@@ -192,34 +179,25 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
-			BlendRate += 0.001f;
+			BlendRate += 0.01f;
 			MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 			MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 		}
 		else {
-			BlendRate > 0 ? BlendRate -= 0.001f : BlendRate = 0;
+			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
 		}
 	}
 	else if (balance == BALANCE::LKA) {
 		if (BlendRate <= 1) {
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, BlendRate);
-			BlendRate += 0.001f;
+			BlendRate += 0.01f;
 		}
 		else {
-			BlendRate > 0 ? BlendRate -= 0.001f : BlendRate = 0;
+			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
 		}
 	}
-	/*if (BlendRate == 1) {
-		BlendRate = 0;
-	}*/
-
 	
-
-	/*MV1CollResultPolyDimTerminate(hitPolyDim1);
-	MV1CollResultPolyDimTerminate(hitPolyDim2);
-	MV1CollResultPolyDimTerminate(hitPolyDim3);
-	MV1CollResultPolyDimTerminate(hitPolyDim4);*/
 }
 
 float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
