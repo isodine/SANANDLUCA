@@ -216,8 +216,8 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		san.Render(sanbomb);
-		lka.Render();
+		//san.Render(sanbomb);
+		//lka.Render();
 
 		// コリジョン判定用ラインの描画
 		if (_bViewCollision) {
@@ -232,6 +232,8 @@ bool ModeGame::Render() {
 		MV1DrawModel(_handleSkySphere);
 
 		MV1DrawModel(_handleMap);
+		san.Render(sanbomb, damage);
+		lka.Render();
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
 

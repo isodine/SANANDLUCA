@@ -15,7 +15,10 @@ SAN::~SAN()
 void SAN::Initialize()
 {
 	Player::Initialize(mypH);
-
+	sanfrask = LoadGraph("res/pH_gauge/pHgauge_SL_flask.png");
+	sangauge = LoadGraph("res/pH_gauge/ゲージ（中）/酸/pHgauge_strongacid.png");
+	sanicon = LoadGraph("res/pH_gauge/アイコン表情差分/サン/pHgauge_Sun_Emotions_Normal.png");
+	sanframememori = LoadGraph("res/pH_gauge/フレーム/サン/pHgauge_Sun_background_memori.png");
 	// モデルデータのロード（テクスチャも読み込まれる)
 	Mhandle = MV1LoadModel("res/San_2023_0130/San_Fullmotion_2023_0203.mv1");
 
@@ -250,10 +253,15 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 	}
 }
 
-void SAN::Render(SanBomb& sanB)
+void SAN::Render(SanBomb& sanB,Damage& damage)
 {
 	Player::Render(mypH);
-
+	DrawGraph(0, 470, sanfrask, TRUE);
+	DrawGraph(0, 470, sanicon, TRUE);
+	HPgauge = 610 - int((610 / damage.MaxSanHP) * damage.SanHP);
+	DrawRectGraph(0, 470, 0, 0, 220,  HPgauge - 610, sangauge, true, false);
+	/*DrawGraph(0,470,sangauge,TRUE);*/
+	DrawGraph(0, 470, sanframememori, TRUE);
 	// 再生時間をセットする
 	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
 

@@ -14,6 +14,8 @@ public:
 
 	int SanHP;
 	int LkaHP;
+	int MaxSanHP;
+	int MaxLkaHP;
 
 	float SanCoolTime;
 	float LkaCoolTime;
