@@ -19,19 +19,19 @@ std::vector<std::string> splitme(std::string& input, char delimiter)
 bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
-	// モデルデータのロード（テクスチャも読み込まれる）
-	_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
-	_attach_index = -1;		// アニメーションアタッチはされていない
+	//// モデルデータのロード（テクスチャも読み込まれる）
+	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
+	//_attach_index = -1;		// アニメーションアタッチはされていない
 
-	// 再生時間の初期化
-	_total_time = 0.f;
-	_play_time = 0.0f;
-	// 位置,向きの初期化
-	_vPos = VGet(0, 0, 0);
-	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
+	//// 再生時間の初期化
+	//_total_time = 0.f;
+	//_play_time = 0.0f;
+	//// 位置,向きの初期化
+	//_vPos = VGet(0, 0, 0);
+	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
-	_handleMap = MV1LoadModel("res/map_0125.fbm/a_map02.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/map_0125.fbm/a_map02.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
@@ -74,7 +74,9 @@ bool ModeGame::Initialize() {
 	san.Initialize();
 	lka.Initialize();
 	damage.Initialize(&san, &lka);
-
+	enemy.Initialize();
+	gimmick.Initialize();
+	gimmick.SetSanLka(&san, &lka);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -124,8 +126,6 @@ bool ModeGame::Initialize() {
 		cnt++;
 	}
 
-	sanbomb.Initialize(san);
-
 	//CSVの調整にカメラを追いつかせる
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
 	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
@@ -150,15 +150,18 @@ bool ModeGame::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}
-
+	san.SetOnBalance(gimmick.GetSanHitFlag());
+	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	san.Update(_cam, sanbomb);
 	lka.Update(_cam);
 	damage.Process();
+	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
+	gimmick.Balance(san.vPos, lka.vPos);
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
-		ModeServer::GetInstance()->Del(this);
 		StopMusic();
+		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 	}
 
@@ -181,8 +184,8 @@ bool ModeGame::Render() {
 	//SetLightEnable(FALSE);
 	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
 
-	//LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
-	//SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));
+	/*LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
+	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));*/
 
 #endif
 #if 0	// ポイントライト
@@ -191,6 +194,8 @@ bool ModeGame::Render() {
 #endif
 
 	// カメラ設定更新
+	_cam._vTarget = VScale(VAdd(san.vPos, lka.vPos), 0.5);
+	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 240, -400));
 	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
 	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
 
@@ -216,13 +221,14 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		//san.Render(sanbomb);
-		//lka.Render();
-
+		san.Render(sanbomb);
+		lka.Render();
+		gimmick.Render();
+		enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画
-		if (_bViewCollision) {
-			DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
-		}
+		//if (_bViewCollision) {
+		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
+		//}
 
 	}
 
@@ -232,8 +238,6 @@ bool ModeGame::Render() {
 		MV1DrawModel(_handleSkySphere);
 
 		MV1DrawModel(_handleMap);
-		san.Render(sanbomb, damage);
-		lka.Render();
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
 

@@ -19,8 +19,11 @@ public:
 		san = San;
 		lka = Lka;
 	}
-
+	float GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num);
 	void Balance(VECTOR SanPos, VECTOR LkaPos);
+
+	bool GetSanHitFlag() { return SanHitFlag; }
+	bool GetLkaHitFlag() { return LkaHitFlag; }
 
 	int BalanceHandle;
 
@@ -39,6 +42,8 @@ public:
 	bool SanHitFlag;
 	bool LkaHitFlag;
 	bool BalanceFlag;
+
+
 
 protected:
 	enum class BALANCE {

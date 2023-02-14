@@ -77,14 +77,14 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 		if (key & PAD_INPUT_UP) { v.x = -1; }
 		if (key & PAD_INPUT_LEFT) { v.z = -1; }
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; }
+		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP; PlaySoundMem(SEjump, DX_PLAYTYPE_BACK, true); }
 		//if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE)) { _status = STATUS::CHARGE; }
 		//if (key & PAD_INPUT_3 && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
 		//if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
 		if (sanB.situation == None) { attack = Attack::None; }
-		if (trg & PAD_INPUT_6 && (attack == Attack::None)) { 
+		if (trg & PAD_INPUT_6 && (attack == Attack::None)) {
 			attack = Attack::Pop;
 		}
 		if (sanB.situation == Keep) { attack = Attack::Keep; }
@@ -115,10 +115,6 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 		// vの分移動
 		vPos = VAdd(vPos, v);
 
-		// カメラも移動する
-		v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
-		cam._vPos = VAdd(cam._vPos, v);
-		cam._vTarget = VAdd(cam._vTarget, v);
 
 		// 移動した先でコリジョン判定
 		MV1_COLL_RESULT_POLY_DIM hitPolyDim;
@@ -132,13 +128,9 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 			float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
 			float subX = vPos.x - oldvPos.x;
 			float subZ = vPos.z - oldvPos.z;
-			vPos.x = oldvPos.x/*- subX*/;
-			vPos.z = oldvPos.z/*- subZ*/;
+			vPos.x = oldvPos.x;
+			vPos.z = oldvPos.z;
 
-			cam._vPos.x -= subX / 2;
-			cam._vPos.z -= subZ / 2;
-			cam._vTarget.x -= subX / 2;
-			cam._vTarget.z -= subZ / 2;
 			v = { 0,0,0 };
 		}
 
@@ -158,8 +150,6 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 				float minusY = vPos.y;
 				// 当たったY位置をキャラ座標にする
 				vPos.y = hitPolyfloor.HitPosition.y - 0.5f;
-				cam._vPos.y += (vPos.y - minusY) / 2;
-				cam._vTarget.y += (vPos.y - minusY) / 2;
 			}
 		}
 		else {
@@ -216,7 +206,7 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle"), -1, FALSE);
 				break;
 			case STATUS::WALK:
-				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "move"), -1, FALSE);
+				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "walk"), -1, FALSE);
 				break;
 			case STATUS::JUMP:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "jamp1"), -1, FALSE);
@@ -298,15 +288,11 @@ void SAN::Jump(Camera& cam)
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
-	cam._vPos.y += height / 2;
-	cam._vTarget.y += height / 2;
 
 }
 
 void SAN::freeFall(Camera& cam)
 {
 	vPos.y -= throughtime;
-	cam._vPos.y -= throughtime / 2;
-	cam._vTarget.y -= throughtime / 2;
 	throughtime += 0.5f;
 }
