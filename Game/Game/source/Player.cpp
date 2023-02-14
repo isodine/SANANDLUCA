@@ -26,7 +26,8 @@ void Player::Initialize(Type myph)
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 }
 
-void Player::Update(Type mypH){}
+void Player::Update(Type mypH){
+}
 
 void Player::Render(Type mypH){}
 
