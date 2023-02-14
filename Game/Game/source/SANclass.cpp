@@ -259,7 +259,7 @@ void SAN::Render(SanBomb& sanB,Damage& damage)
 	DrawGraph(0, 470, sanfrask, TRUE);
 	DrawGraph(0, 470, sanicon, TRUE);
 	HPgauge = 610 - int((610 / damage.MaxSanHP) * damage.SanHP);
-	DrawRectGraph(0, 470, 0, 0, 220,  HPgauge - 610, sangauge, true, false);
+	DrawRectGraph(0, 470, 0, 0, 220, 610 - HPgauge, sangauge, true, false);
 	/*DrawGraph(0,470,sangauge,TRUE);*/
 	DrawGraph(0, 470, sanframememori, TRUE);
 	// Ä¶ŠÔ‚ğƒZƒbƒg‚·‚é
