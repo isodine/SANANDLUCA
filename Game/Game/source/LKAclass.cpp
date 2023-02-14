@@ -82,9 +82,6 @@ void LKA::Update(Camera& cam)
 
 	// v‚Ì•ªˆÚ“®
 	this->vPos = VAdd(this->vPos, v);
-
-	// ƒJƒƒ‰‚àˆÚ“®‚·‚é
-	v.x = v.x / 2.0f; v.y = v.y / 2.0f; v.z = v.z / 2;
 	
 
 	// ˆÚ“®‚µ‚½æ‚ÅƒRƒŠƒWƒ‡ƒ“”»’è
@@ -99,8 +96,8 @@ void LKA::Update(Camera& cam)
 		float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
 		float subX = vPos.x - oldPos.x;
 		float subZ = vPos.z - oldPos.z;
-		vPos.x = oldPos.x/*- subX*/;
-		vPos.z = oldPos.z/*- subZ*/;
+		vPos.x = oldPos.x;
+		vPos.z = oldPos.z;
 
 		
 		v = { 0,0,0 };
@@ -235,12 +232,10 @@ void LKA::Jump(Camera& cam)
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
-	
 }
 
 void LKA::freeFall(Camera& cam)
 {
 	vPos.y -= throughtime;
-	
 	throughtime += 0.5f;
 }

@@ -150,7 +150,7 @@ bool ModeGame::Process() {
 	//}
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	san.Update(_cam);
+	san.Update(_cam,sanbomb);
 	lka.Update(_cam);
 	damage.Process();
 	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
@@ -218,7 +218,7 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		san.Render();
+		san.Render(sanbomb);
 		lka.Render();
 		gimmick.Render();
 		enemy.SlimeRender(enemy.slimePos);
