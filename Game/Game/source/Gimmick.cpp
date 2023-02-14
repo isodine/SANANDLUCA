@@ -42,6 +42,9 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim4;
 
 	MV1_COLL_RESULT_POLY hitPoly1;
+	MV1_COLL_RESULT_POLY hitPoly2;
+	MV1_COLL_RESULT_POLY hitPoly3;
+	MV1_COLL_RESULT_POLY hitPoly4;
 	
 	
 	hitPolyDim1 = MV1CollCheck_Capsule(BalanceHandle, 3,
@@ -53,35 +56,47 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	hitPolyDim4 = MV1CollCheck_Capsule(BalanceHandle, 4,
 		VGet(SanPos.x, SanPos.y + 30, SanPos.z), VGet(SanPos.x, SanPos.y + 75, SanPos.z), 30.0f);  //ƒTƒ“‚ªƒ‹ƒJ‚ÌŽM‚Éæ‚Á‚½‚Æ‚«
 
-	if (hitPolyDim1.HitNum >= 1) {
+	hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
+		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -99999.f, 0)));
+	hitPoly2 = MV1CollCheck_Line(BalanceHandle, 4,
+		VAdd(lka->vPos, VGet(0, lka->_colSubY, 0)), VAdd(lka->vPos, VGet(0, -99999.f, 0)));
+	hitPoly3 = MV1CollCheck_Line(BalanceHandle, 3,
+		VAdd(lka->vPos, VGet(0, lka->_colSubY, 0)), VAdd(lka->vPos, VGet(0, -99999.f, 0)));
+	hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
+		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -99999.f, 0)));
+
+	if (hitPoly1.HitFlag) {
 		SanHitFlag = true;
-		float MaxY = GetPolyMaxY(hitPolyDim1.Dim, hitPolyDim1.HitNum);
-		san->vPos.y = hitPolyDim1.Dim->HitPosition.y - 0.01;
+		san->vPos.y = hitPoly1.HitPosition.y - 0.01;
+		san->throughtime = 0;
 	}
 	//hitPolyDim1.Dim->HitPosition.y
 	else {
 		SanHitFlag = false;
 	}
 
-	if (hitPolyDim2.HitNum >= 1) {
+	if (hitPoly2.HitFlag) {
 		LkaHitFlag = true;
-		lka->vPos = lka->oldPos;
+		lka->vPos.y = hitPoly2.HitPosition.y - 0.01;
+		lka->throughtime = 0;
 	}
 	else {
 		LkaHitFlag = false;
 	}
 
-	if (hitPolyDim3.HitNum >= 1) {
-		LkaHitFlag = true;
-		lka->vPos = lka->oldPos;
+	if (hitPoly3.HitFlag) {
+		SanHitFlag = true;
+		lka->vPos.y = hitPoly3.HitPosition.y - 0.01;
+		lka->throughtime = 0;
 	}
 	else {
-		LkaHitFlag = false;
+		SanHitFlag = false;
 	}
 
-	if (hitPolyDim4.HitNum >= 1) {
+	if (hitPoly4.HitFlag) {
 		LkaHitFlag = true;
-		san->vPos = san->oldPos;
+		san->vPos.y = hitPoly4.HitPosition.y - 0.01;
+		san->throughtime = 0;
 	}
 	else {
 		LkaHitFlag = false;
@@ -189,10 +204,10 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	
 
-	MV1CollResultPolyDimTerminate(hitPolyDim1);
+	/*MV1CollResultPolyDimTerminate(hitPolyDim1);
 	MV1CollResultPolyDimTerminate(hitPolyDim2);
 	MV1CollResultPolyDimTerminate(hitPolyDim3);
-	MV1CollResultPolyDimTerminate(hitPolyDim4);
+	MV1CollResultPolyDimTerminate(hitPolyDim4);*/
 }
 
 float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
@@ -210,5 +225,5 @@ float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
 void Gimmick::Render() {
 	
 	MV1DrawModel(BalanceHandle);
-	DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
+	//DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
 }

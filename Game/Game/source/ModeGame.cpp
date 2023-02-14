@@ -181,8 +181,8 @@ bool ModeGame::Render() {
 	//SetLightEnable(FALSE);
 	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
 
-	LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
-	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));
+	/*LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
+	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));*/
 
 #endif
 #if 0	// ポイントライト
