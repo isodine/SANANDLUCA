@@ -1,6 +1,7 @@
 #pragma once
 #include"Player.h"
 
+//class Gimmick;
 class SAN:public Player
 {
 public:
@@ -12,4 +13,6 @@ public:
 	void Input();
 	void Jump(Camera& cam);
 	void freeFall(Camera& cam);
+
+	//Gimmick gimmick;
 };
