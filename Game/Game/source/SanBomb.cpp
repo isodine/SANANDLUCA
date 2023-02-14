@@ -88,6 +88,7 @@ void SanBomb::Throw(SAN* san)
 void PlayerBomb::BombReset()
 {
 	bomblive = false;
+	firstdir = false;
 	sphereSize = 0.f;
 	situation = PlayerBomb::None;
 }
