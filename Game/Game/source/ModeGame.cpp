@@ -177,7 +177,7 @@ bool ModeGame::Render() {
 	SetUseLighting(TRUE);
 #if 1	// ïΩçsÉâÉCÉg
 	SetGlobalAmbientLight(GetColorF(0.1f, 0.1f, 0.1f, 0.f));
-	ChangeLightTypeDir(VGet(0, -1, -1));
+	ChangeLightTypeDir(VGet(0, -1, 1));
 	//SetLightEnable(FALSE);
 	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
 

@@ -12,4 +12,10 @@ public:
 	void Move();
 	void Throw(SAN* san);
 
+private:
+	int _effectResourceHandle;
+	int _sanEffectHandle;
+	int oldcount;
+	int _isthrow;
+	int _isEffect;
 };

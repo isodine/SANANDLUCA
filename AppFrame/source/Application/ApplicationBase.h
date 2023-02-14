@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "../Mode//ModeServer.h"
+#include "EffekseerForDXLib.h"
 
 class ApplicationBase
 {

@@ -81,11 +81,11 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
 		if (sanB.situation == None) { attack = Attack::None; }
-		if (key & PAD_INPUT_3 && (attack == Attack::None)) { 
+		if (key & PAD_INPUT_6 && (attack == Attack::None)) { 
 			attack = Attack::Pop;
 		}
 		if (sanB.situation == Keep) { attack = Attack::Keep; }
-		if (key & PAD_INPUT_3 && (attack == Attack::Keep)) { attack = Attack::Throw; }
+		if (key & PAD_INPUT_6 && (attack == Attack::Keep)) { attack = Attack::Throw; }
 		if (_status == STATUS::JUMP) { Jump(cam); }
 		// v‚ðrad•ª‰ñ“]‚³‚¹‚é
 		float length = 0.f;
