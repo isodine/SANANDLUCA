@@ -137,7 +137,7 @@ void SAN::Update(Camera& cam)
 
 		hitPolyDim = MV1CollCheck_Capsule(_handleMap, frameMapCollisionfloor,
 			VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
-		if (hitPolyDim.HitNum >= 1)
+		if (hitPolyDim.HitNum >= 1 )
 		{
 			// “–‚½‚Á‚½
 			if (vPos.y < hitPolyfloor.HitPosition.y)
@@ -151,7 +151,7 @@ void SAN::Update(Camera& cam)
 				cam._vTarget.y += (vPos.y - minusY) / 2;
 			}
 		}
-		else {
+		else if(!OnBalance) {
 			freeFall(cam);
 		}
 

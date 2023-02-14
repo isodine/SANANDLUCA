@@ -148,7 +148,8 @@ bool ModeGame::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}
-
+	san.SetOnBalance(gimmick.GetSanHitFlag());
+	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	san.Update(_cam);
 	lka.Update(_cam);
 	damage.Process();

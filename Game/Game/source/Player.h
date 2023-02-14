@@ -62,6 +62,9 @@ public:
 
 	bool motionRes = false;
 
+	bool OnBalance;  //天秤に乗っているかどうか
+	void SetOnBalance(bool on) { OnBalance = on; }
+
 	//ジャンプ処理用
 	float throughtime;
 	float height;
