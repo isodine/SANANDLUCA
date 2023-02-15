@@ -3,7 +3,7 @@
 #include "ModeTitle.h"
 //#include "ModeGame.h"
 #include "ModeStage0.h"
-#include "Test.h"
+
 
 ModeTitle::ModeTitle() {
 	titleHandle = LoadGraph("res/title.png");
@@ -34,8 +34,8 @@ bool ModeTitle::Process() {
 	if (Trg & checkKey) {
 		PlaySoundMem(SEcrik, DX_PLAYTYPE_BACK, true);
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
-		//ModeServer::GetInstance()->Add(new Test(), 1, "test");
+		//ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
+		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
 
 	return true;
