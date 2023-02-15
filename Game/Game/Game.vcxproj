@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\ApplicationMain.cpp" />
+    <ClCompile Include="source\Boss.cpp" />
     <ClCompile Include="source\Damage.cpp" />
     <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\Gimmick.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\SanBomb.cpp" />
     <ClCompile Include="source\SANclass.cpp" />
+    <ClCompile Include="source\Slime.cpp" />
     <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -197,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
+    <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\Enemy.h" />
     <ClInclude Include="source\Gimmick.h" />
@@ -222,6 +225,7 @@
     <ClInclude Include="source\PlayerBomb.h" />
     <ClInclude Include="source\SanBomb.h" />
     <ClInclude Include="source\SANclass.h" />
+    <ClInclude Include="source\Slime.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />
   </ItemGroup>

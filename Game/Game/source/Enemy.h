@@ -46,6 +46,8 @@ public:
 	VECTOR lkaPos;
 	VECTOR slimePos;
 
+	std::vector<std::unique_ptr<Enemy>> slime;
+
 protected:
 	enum class STATUS {
 		NONE,
