@@ -171,6 +171,7 @@
     <ClCompile Include="source\ModeStage3.cpp" />
     <ClCompile Include="source\ModeTitle.cpp" />
     <ClCompile Include="source\Player.cpp" />
+    <ClCompile Include="source\sanbomb.cpp" />
     <ClCompile Include="source\SANclass.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +196,7 @@
     <ClInclude Include="source\ModeStage3.h" />
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Player.h" />
+    <ClInclude Include="source\sanbomb.h" />
     <ClInclude Include="source\SANclass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -4,6 +4,7 @@
 #include "SANclass.h"
 #include "LKAclass.h"
 #include "Damage.h"
+#include "Sanbomb.h"
 
 #include <string>
 #include <memory>
@@ -66,28 +67,29 @@ public:
 	float throughtime;
 	float height;
 
-	float _throw;
-	float _hight;
-	int _isthrow = 0;
+	//float _throw;
+	//float _hight;
+	//int _isthrow = 0;
 public:
 	std::vector<std::unique_ptr<Player>> sanlka;
 	Player player;
 	SAN san;
 	LKA lka;
 	Damage damage;
+	Sanbomb sanbomb;
 
-//エフェクシア
-protected:
-	int		_effectResourceHandle;		// エフェクトファイルをロードするハンドル
-	int		_playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
-	int oldcount;
-	float PlayTime = 0.0f;
-	int   _gKeyEf, _gTrgEf,_KeyEf,_TrgEf;
-	int _isEffect = 0;
-
-	// エフェクト位置
-	float _position_x;
-	float _position_y;
-	float _position_z;
+////エフェクシア
+//protected:
+//	int		_effectResourceHandle;		// エフェクトファイルをロードするハンドル
+//	int		_playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
+//	int oldcount;
+//	float PlayTime = 0.0f;
+ int   _gKeyEf, _gTrgEf,_KeyEf,_TrgEf;
+//	int _isEffect = 0;
+//
+//	// エフェクト位置
+//	float _position_x;
+//	float _position_y;
+//	float _position_z;
 
 };

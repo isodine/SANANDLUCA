@@ -58,6 +58,9 @@
     <ClCompile Include="ModeEffekseer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="source\sanbomb.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ModeGame.h">
@@ -89,5 +92,6 @@
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Include.h" />
     <ClInclude Include="ModeEffekseer.h" />
+    <ClInclude Include="source\sanbomb.h" />
   </ItemGroup>
 </Project>
