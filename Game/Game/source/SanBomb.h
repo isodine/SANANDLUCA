@@ -7,10 +7,10 @@ public:
 	SanBomb();
 	~SanBomb();
 	void Initialize(SAN& san);
-	void Update(SAN* san);
+	void Update(SAN& san);
 	void Render();
 	void Move();
-	void Throw(SAN* san);
+	void Throw(SAN& san);
 
 private:
 	int _effectResourceHandle;

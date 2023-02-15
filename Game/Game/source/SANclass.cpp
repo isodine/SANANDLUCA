@@ -173,7 +173,7 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 
 
 
-		sanB.Update(this);         //ボムの更新
+		//sanB.Update(this);         //ボムの更新
 
 
 
@@ -281,7 +281,7 @@ void SAN::Render(SanBomb& sanB,Damage& damage)
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
 
 	}
-	sanB.Render();
+	//sanB.Render();
 	//DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vPos.x, vPos.y, vPos.z);
 }
 void SAN::Jump(Camera& cam)

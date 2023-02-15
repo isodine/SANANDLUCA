@@ -149,10 +149,11 @@ bool ModeGame::Process() {
 
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
-	//}
+	//}-
+	sanbomb.Update(san);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	san.Update(_cam, sanbomb);
+	san.Update(_cam,sanbomb);
 	lka.Update(_cam);
 	damage.Process();
 	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
@@ -221,17 +222,14 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		san.Render(sanbomb);
-		lka.Render();
 		gimmick.Render();
 		enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画
 		//if (_bViewCollision) {
 		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 		//}
-
 	}
-
+	sanbomb.Render();
 	// マップモデルを描画する
 	{
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
@@ -240,7 +238,8 @@ bool ModeGame::Render() {
 		MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
-
+	san.Render(sanbomb, damage);
+	lka.Render();
 	// デバッグ表示
 	{
 		int x = 0, y = 0, size = 16;
@@ -280,7 +279,6 @@ bool ModeGame::Render() {
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
 		}
-
 	}
 	damage.Render();
 	return true;

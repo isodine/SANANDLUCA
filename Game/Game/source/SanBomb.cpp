@@ -20,23 +20,24 @@ void SanBomb::Initialize(SAN& san)
 	situation = PlayerBomb::None;
 }
 
-void SanBomb::Update(SAN* san)
+void SanBomb::Update(SAN& san)
 {
-	int key = san->Key1P;
-	int trg = san->Trg1P;
+	int key = san.Key1P;
+	int trg = san.Trg1P;
 
-	if (san->attack == Pop)
+
+	if (san.attack == Pop)
 	{
 		situation = PlayerBomb::Pop;
 		bomblive = true;
 	}
 
-	if (san->attack == Keep)
+	if (san.attack == Keep)
 	{
 		situation = PlayerBomb::Keep;
 	}
 
-	if (san->attack == PlayerBomb::Throw)
+	if (san.attack == PlayerBomb::Throw)
 	{
 		situation = PlayerBomb::Throw;
 	}
@@ -57,7 +58,7 @@ void SanBomb::Update(SAN* san)
 		}
 		break;
 	case PlayerBomb::Keep:
-		vPos = VGet(san->vPos.x, san->vPos.y + 150, san->vPos.z);
+		vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
 		break;
 	case PlayerBomb::Throw:
 		Throw(san);
@@ -66,9 +67,9 @@ void SanBomb::Update(SAN* san)
 
 	if (_isthrow == 0)
 	{
-		vPos.x = san -> vPos.x;
-		vPos.y = san -> vPos.y + 150;
-		vPos.z = san -> vPos.z;
+		vPos.x = san.vPos.x;
+		vPos.y = san.vPos.y + 150;
+		vPos.z = san.vPos.z;
 	}
 	if (trg & PAD_INPUT_6 && _isEffect == 0)
 	{
@@ -84,30 +85,29 @@ void SanBomb::Update(SAN* san)
 	}
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, vPos.x, vPos.y, vPos.z);
 	UpdateEffekseer3D();
-		if (oldcount > 0)
+	if (oldcount > 0)
+	{
+		auto nowCount = GetNowCount();
+		if (nowCount - oldcount >= 2000)
 		{
-			auto nowCount = GetNowCount();
-			if (nowCount - oldcount >= 2000)
+			if (trg & PAD_INPUT_6 && _isEffect == 1)
 			{
-				if (trg & PAD_INPUT_6 && _isEffect == 1)
-				{
-					_isthrow = 1;
-				}
-				if (_isthrow == 1)
-				{
-					Throw(san);
-				}
-				if (vPos.y <= 0)
-				{
-					_isEffect = 0;
-					_isthrow = 0;
-					oldcount = 0;
-					BombReset();
-					StopEffekseer3DEffect(_playingEffectHandle);
-				}
+				_isthrow = 1;
+			}
+			if (_isthrow == 1)
+			{
+				Throw(san);
+			}
+			if (vPos.y <= 0)
+			{
+				_isEffect = 0;
+				_isthrow = 0;
+				oldcount = 0;
+				BombReset();
+				StopEffekseer3DEffect(_playingEffectHandle);
 			}
 		}
-
+	}
 
 	/*if (vPos.y <= 0)
 	{
@@ -132,12 +132,12 @@ void SanBomb::Render()
 
 }
 
-void SanBomb::Throw(SAN* san)
+void SanBomb::Throw(SAN& san)
 {
 	if (!firstdir)
 	{
 		vDir = VGet(0.f, 0.f, 0.f);
-		vDir = VAdd(vDir, san->vDir);
+		vDir = VAdd(vDir, san.vDir);
 		vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
 		firstdir = true;
 	}
