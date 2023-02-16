@@ -80,4 +80,6 @@ public:
 	bool motionRes = false;
 	int HP;
 
+
+	void Landing(float HitYPos);
 };

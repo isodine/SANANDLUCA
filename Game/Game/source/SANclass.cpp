@@ -143,13 +143,9 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 		if (hitPolyDim.HitNum >= 1)
 		{
 			// “–‚½‚Á‚½
-			if (vPos.y < hitPolyfloor.HitPosition.y)
+			if (vPos.y < hitPolyfloor.HitPosition.y )
 			{
-				_status = STATUS::WAIT;
-				throughtime = 0.0f;
-				float minusY = vPos.y;
-				// “–‚½‚Á‚½YˆÊ’u‚ðƒLƒƒƒ‰À•W‚É‚·‚é
-				vPos.y = hitPolyfloor.HitPosition.y - 0.5f;
+				Landing(hitPolyfloor.HitPosition.y);
 			}
 		}
 		else {

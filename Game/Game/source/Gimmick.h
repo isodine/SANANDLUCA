@@ -54,9 +54,38 @@ protected:
 		NONE
 	};
 
+	enum class San {
+		NONE,
+		WAIT,
+		WALK,
+		JUMP,
+		DAMAGE,
+		CHARGE,
+		ATTACK,
+		DOWN,
+		_EOT_
+	};
+
+	San San;
+
+	enum class Lka {
+		NONE,
+		WAIT,
+		WALK,
+		JUMP,
+		DAMAGE,
+		CHARGE,
+		ATTACK,
+		DOWN,
+		_EOT_
+	};
+
+	Lka Lka;
+
 	BALANCE balance;
 	BALANCE OldBalance;
 private:
 	SAN* san;
 	LKA* lka;
+	Player* player;
 };
