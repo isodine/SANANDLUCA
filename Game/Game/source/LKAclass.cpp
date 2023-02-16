@@ -6,6 +6,7 @@
 LKA::LKA()
 	:Player()
 {
+	SetType(false);
 }
 
 LKA::~LKA()
@@ -14,7 +15,7 @@ LKA::~LKA()
 
 void LKA::Initialize()
 {
-	Player::Initialize(mypH);
+	Player::Initialize();
 
 	// モデルデータのロード（テクスチャも読み込まれる）
 	Mhandle = MV1LoadModel("res/Lka_2023_0131/Lka_Fullmotion_2023_0131.mv1");
@@ -33,19 +34,19 @@ void LKA::Input()
 	Trg2P = (Key2P ^ keyold2P) & Key2P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 
-void LKA::Update(Camera& cam)
+void LKA::Update()
 {
 	Input();
 	int key = Key2P;
 	int trg = Trg2P;
 
-	Player::Update(mypH);
+	Player::Update();
 
 	// 処理前のステータスを保存しておく
 	STATUS oldStatus = _status;
 	// カメラの向いている角度を取得
-	float sx = cam._vPos.x - cam._vTarget.x;
-	float sz = cam._vPos.z - cam._vTarget.z;
+	float sx = _camera->_vPos.x - _camera->_vTarget.x;
+	float sz = _camera->_vPos.z - _camera->_vTarget.z;
 	float camrad = atan2(sz, sx);
 
 	// 移動方向を決める
@@ -59,7 +60,7 @@ void LKA::Update(Camera& cam)
 	if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) { _status = STATUS::JUMP;
 	PlaySoundMem(SEjump, DX_PLAYTYPE_BACK, true);}
 
-	if (_status == STATUS::JUMP) { Jump(cam); }
+	if (_status == STATUS::JUMP) { Jump(); }
 	// vをrad分回転させる
 	float length = 0.f;
 	if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -124,7 +125,7 @@ void LKA::Update(Camera& cam)
 		}
 	}
 	else if (!OnBalance) {
-		freeFall(cam);
+		freeFall();
 	}
 
 
@@ -190,7 +191,7 @@ void LKA::Update(Camera& cam)
 
 void LKA::Render()
 {
-	Player::Render(mypH);
+	Player::Render();
 
 	// 再生時間をセットする
 	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
@@ -229,13 +230,13 @@ void LKA::Render()
 		break;
 	}
 }
-void LKA::Jump(Camera& cam)
+void LKA::Jump()
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
 }
 
-void LKA::freeFall(Camera& cam)
+void LKA::freeFall()
 {
 	vPos.y -= throughtime;
 	throughtime += 0.5f;

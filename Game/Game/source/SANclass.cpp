@@ -6,6 +6,7 @@
 SAN::SAN()
 	:Player()
 {
+	SetType(true);
 }
 
 SAN::~SAN()
@@ -14,7 +15,7 @@ SAN::~SAN()
 
 void SAN::Initialize()
 {
-	Player::Initialize(mypH);
+	Player::Initialize();
 	sanfrask = LoadGraph("res/pH_gauge/pHgauge_SL_flask.png");
 	sangauge = LoadGraph("res/pH_gauge/ゲージ（中）/酸/pHgauge_strongacid.png");
 	sanicon = LoadGraph("res/pH_gauge/アイコン表情差分/サン/pHgauge_Sun_Emotions_Normal.png");
@@ -37,37 +38,37 @@ void SAN::Input()
 	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 
-void SAN::Update(Camera& cam, SanBomb& sanB)
+void SAN::Update()
 {
 	Input();
 	int key = Key1P;
 	int trg = Trg1P;
 
-	Player::Update(mypH);
+	Player::Update();
 
 	if (key & PAD_INPUT_5) {	//多分L1ボタン
 		// 角度変更
 		// Y軸回転
-		float sx = cam._vPos.x - cam._vTarget.x;
-		float sz = cam._vPos.z - cam._vTarget.z;
+		float sx = _camera->_vPos.x - _camera->_vTarget.x;
+		float sz = _camera->_vPos.z - _camera->_vTarget.z;
 		float rad = atan2(sz, sx);
 		float length = sqrt(sz * sz + sx * sx);
 		if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
 		if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-		cam._vPos.x = cam._vTarget.x + cos(rad) * length;
-		cam._vPos.z = cam._vTarget.z + sin(rad) * length;
+		_camera->_vPos.x = _camera->_vTarget.x + cos(rad) * length;
+		_camera->_vPos.z = _camera->_vTarget.z + sin(rad) * length;
 
 		// Y位置
-		if (key & PAD_INPUT_DOWN) { cam._vPos.y -= 5.f; }
-		if (key & PAD_INPUT_UP) { cam._vPos.y += 5.f; }
+		if (key & PAD_INPUT_DOWN) { _camera->_vPos.y -= 5.f; }
+		if (key & PAD_INPUT_UP) { _camera->_vPos.y += 5.f; }
 	}
 	else {
 
 		// 処理前のステータスを保存しておく
 		STATUS oldStatus = _status;
 		// カメラの向いている角度を取得
-		float sx = cam._vPos.x - cam._vTarget.x;
-		float sz = cam._vPos.z - cam._vTarget.z;
+		float sx = _camera->_vPos.x - _camera->_vTarget.x;
+		float sz = _camera->_vPos.z - _camera->_vTarget.z;
 		float camrad = atan2(sz, sx);
 
 		// 移動方向を決める
@@ -83,13 +84,13 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 		//if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
-		if (sanB.situation == None) { attack = Attack::None; }
+		if (_bomb->situation == None) { attack = Attack::None; }
 		if (trg & PAD_INPUT_6 && (attack == Attack::None)) {
 			attack = Attack::Pop;
 		}
-		if (sanB.situation == Keep) { attack = Attack::Keep; }
+		if (_bomb->situation == Keep) { attack = Attack::Keep; }
 		if (trg & PAD_INPUT_6 && (attack == Attack::Keep)) { attack = Attack::Throw; }
-		if (_status == STATUS::JUMP) { Jump(cam); }
+		if (_status == STATUS::JUMP) { Jump(); }
 		// vをrad分回転させる
 		float length = 0.f;
 		if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -149,7 +150,7 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 			}
 		}
 		else {
-			freeFall(cam);
+			freeFall();
 		}
 
 
@@ -239,12 +240,12 @@ void SAN::Update(Camera& cam, SanBomb& sanB)
 	}
 }
 
-void SAN::Render(SanBomb& sanB,Damage& damage)
+void SAN::Render()//(SanBomb& sanB,Damage& damage)
 {
-	Player::Render(mypH);
+	Player::Render();
 	DrawGraph(0, 470, sanfrask, TRUE);
 	DrawGraph(0, 470, sanicon, TRUE);
-	HPgauge = 610 - int((610 / damage.MaxSanHP) * damage.SanHP);
+	HPgauge = 610 - int((610 / _damage->MaxSanHP) * _damage->SanHP);
 	DrawRectGraph(0, 470, 0, 0, 220, 610 - HPgauge, sangauge, true, false);
 	/*DrawGraph(0,470,sangauge,TRUE);*/
 	DrawGraph(0, 470, sanframememori, TRUE);
@@ -280,14 +281,14 @@ void SAN::Render(SanBomb& sanB,Damage& damage)
 	//sanB.Render();
 	//DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vPos.x, vPos.y, vPos.z);
 }
-void SAN::Jump(Camera& cam)
+void SAN::Jump()
 {
 	if (throughtime == 0.f) { height = 10.f; }
 	vPos.y += height;
 
 }
 
-void SAN::freeFall(Camera& cam)
+void SAN::freeFall()
 {
 	vPos.y -= throughtime;
 	throughtime += 0.5f;

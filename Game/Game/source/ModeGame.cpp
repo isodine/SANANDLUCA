@@ -16,6 +16,11 @@ std::vector<std::string> splitme(std::string& input, char delimiter)
 	return result;
 }
 
+ModeGame::ModeGame() : ModeBase()
+{
+
+}
+
 bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
@@ -71,7 +76,16 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
+	san.SetCamera(&_cam);
+	san.SetBomb(&sanbomb);
+	san.SetDamage(&damage);
+
 	san.Initialize();
+
+	lka.SetCamera(&_cam);
+	lka.SetBomb(&sanbomb);
+	lka.SetDamage(&damage);
+
 	lka.Initialize();
 	damage.Initialize(&san, &lka);
 	enemy.Initialize();
@@ -153,8 +167,8 @@ bool ModeGame::Process() {
 	sanbomb.Update(san);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	san.Update(_cam,sanbomb);
-	lka.Update(_cam);
+	san.Update();
+	lka.Update();
 	damage.Process();
 	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
 	gimmick.Balance(san.vPos, lka.vPos);
@@ -238,7 +252,7 @@ bool ModeGame::Render() {
 		MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
-	san.Render(sanbomb, damage);
+	san.Render();
 	lka.Render();
 	// デバッグ表示
 	{

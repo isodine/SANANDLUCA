@@ -9,12 +9,16 @@ class SAN :public Player
 public:
 	SAN();
 	~SAN();
-	void Initialize();
-	void Update(Camera& cam, SanBomb& sanB);
-	void Render(SanBomb& sanB, Damage& damage);
+	void Initialize() override;
+	void Update() override;
+	void Render() override;
+
+	//void Initialize();
+	//void Update(Camera& cam, SanBomb& sanB);
+	//void Render(SanBomb& sanB, Damage& damage);
 	void Input();
-	void Jump(Camera& cam);
-	void freeFall(Camera& cam);
+	void Jump();
+	void freeFall();
 
 
 

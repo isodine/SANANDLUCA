@@ -15,7 +15,35 @@ Player::~Player()
 {
 }
 
-void Player::Initialize(Type myph)
+void Player::SetBomb(PlayerBomb* bomb)
+{
+	_bomb = bomb;
+}
+void Player::SetCamera(Camera* camera)
+{
+	_camera = camera;
+
+}
+
+void Player::SetDamage(Damage* damage)
+{
+	_damage = damage;
+}
+
+void Player::SetType(bool isSan)
+{
+	if (isSan)
+	{
+		mypH = San;
+	}
+	else
+	{
+		mypH = Lka;
+	}
+}
+
+
+void Player::Initialize()
 {
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
@@ -28,9 +56,9 @@ void Player::Initialize(Type myph)
 	SEjump = LoadSoundMem("res/06_Sound/03_SE/ani_ta_biyon02.mp3");
 }
 
-void Player::Update(Type mypH){}
+void Player::Update() {}
 
-void Player::Render(Type mypH){}
+void Player::Render() {}
 
 void Player::charJump() {
 	height += 10.0f - throughtime;

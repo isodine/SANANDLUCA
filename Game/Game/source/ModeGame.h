@@ -40,6 +40,7 @@ class ModeGame : public ModeBase
 {
 	typedef ModeBase base;
 public:
+	ModeGame();
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
@@ -47,7 +48,7 @@ public:
 	void charJump();
 
 	// ƒJƒƒ‰
-	Camera	_cam;
+	Camera _cam;
 	
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
