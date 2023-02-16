@@ -24,6 +24,7 @@ public:
 
 	bool GetSanHitFlag() { return SanHitFlag; }
 	bool GetLkaHitFlag() { return LkaHitFlag; }
+	bool EnumFlag;  //天秤のステータスが変わったかどうか
 
 	int BalanceHandle;
 
@@ -54,7 +55,7 @@ protected:
 	};
 
 	BALANCE balance;
-
+	BALANCE OldBalance;
 private:
 	SAN* san;
 	LKA* lka;

@@ -10,14 +10,18 @@ void Boss::Terminate() {
 }
 
 void Boss::Process() {
-	LeftHandPos = MV1GetFramePosition(BossHandle, 4);
-	RightHandPos = MV1GetFramePosition(BossHandle, 5);
 	HandPos = MV1GetFramePosition(BossHandle, 3);
 }
 
+void Boss::Walk() {
+	
+}
+
 void Boss::Render() {
-	MV1SetRotationXYZ(BossHandle, VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
-	MV1SetPosition(BossHandle, BossPos);
-	MV1DrawModel(BossHandle);
-	DrawSphere3D(VSub(BossPos, HandPos), 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+	{
+		//MV1SetRotationXYZ(BossHandle, VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
+		MV1SetPosition(BossHandle, BossPos);
+		MV1DrawModel(BossHandle);
+		//DrawSphere3D(VSub(BossPos, HandPos), 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+	}
 }
