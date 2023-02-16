@@ -67,7 +67,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			san->Landing(hitPoly1.HitPosition.y);
 		}
 		else {
-			SanHitFlag = false;
+			SanHitFlag = true;
 			lka->Landing(hitPoly3.HitPosition.y);
 		}
 	}
@@ -81,13 +81,13 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			lka->Landing(hitPoly2.HitPosition.y);
 		}
 		else {
-			LkaHitFlag = false;
+			LkaHitFlag = true;
 			san->Landing(hitPoly4.HitPosition.y);
 		}
 	}
-	/*else {
+	else {
 		LkaHitFlag = false;
-	}*/
+	}
 
 	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true) && OldBalance == oldBalance) {
 		balance = BALANCE::EQUAL;
