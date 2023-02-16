@@ -10,7 +10,7 @@ public:
 	void Initialize() override;
 	void Update() override;
 	void Render() override;
-	void Input();
+	void Input() override;
 	void Jump();
 	void freeFall();
 };

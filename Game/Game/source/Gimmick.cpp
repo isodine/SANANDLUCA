@@ -61,15 +61,14 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
 		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -1.f, 0)));
 	//toDoプレイヤーが浮くバグあり
-	/*if (hitPoly1.HitFlag || hitPoly3.HitFlag) {
+	if (hitPoly1.HitFlag || hitPoly3.HitFlag) {
 		if (hitPoly1.HitFlag) {
 			SanHitFlag = true;
 			san->Landing(hitPoly1.HitPosition.y);
 		}
 		else {
 			SanHitFlag = false;
-			lka->vPos.y = hitPoly3.HitPosition.y - 0.01;
-			lka->throughtime = 0;
+			lka->Landing(hitPoly3.HitPosition.y);
 		}
 	}
 	else {
@@ -79,16 +78,14 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	if (hitPoly2.HitFlag || hitPoly4.HitFlag) {
 		if (hitPoly2.HitFlag) {
 			LkaHitFlag = true;
-			lka->vPos.y = hitPoly2.HitPosition.y - 0.01;
-			lka->throughtime = 0;
+			lka->Landing(hitPoly2.HitPosition.y);
 		}
 		else {
 			LkaHitFlag = false;
-			san->vPos.y = hitPoly4.HitPosition.y - 0.01;
-			san->throughtime = 0;
+			san->Landing(hitPoly4.HitPosition.y);
 		}
 	}
-	else {
+	/*else {
 		LkaHitFlag = false;
 	}*/
 

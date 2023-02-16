@@ -16,7 +16,7 @@ public:
 	//void Initialize();
 	//void Update(Camera& cam, SanBomb& sanB);
 	//void Render(SanBomb& sanB, Damage& damage);
-	void Input();
+	void Input() override;
 	void Jump();
 	void freeFall();
 

@@ -31,7 +31,13 @@ public:
 	virtual void Initialize();
 	virtual void Update();
 	virtual void Render();
+	virtual void Jump();
+	virtual void freeFall();
 	void charJump();
+	virtual void Input();
+
+	int key;
+	int trg;
 
 public:
 
