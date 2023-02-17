@@ -19,7 +19,8 @@ std::vector<std::string> splitme(std::string& input, char delimiter)
 bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
-	//// モデルデータのロード（テクスチャも読み込まれる）
+	//// モデルデータのロード（
+	// も読み込まれる）
 	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
 	//_attach_index = -1;		// アニメーションアタッチはされていない
 
@@ -77,7 +78,7 @@ bool ModeGame::Initialize() {
 	enemy.Initialize();
 	gimmick.Initialize();
 	gimmick.SetSanLka(&san, &lka);
-	sanbomb.Initialize(san);
+	ef.Initialize(san);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -151,7 +152,7 @@ bool ModeGame::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}-
-	sanbomb.Update(san);
+	ef.Update(san);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	san.Update(_cam,sanbomb);
@@ -223,7 +224,7 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		sanbomb.Render();
+		ef.Render();
 		gimmick.Render();
 		enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画

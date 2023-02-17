@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="source\ApplicationMain.cpp" />
     <ClCompile Include="source\Damage.cpp" />
+    <ClCompile Include="source\ef.cpp" />
     <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\Gimmick.cpp" />
     <ClCompile Include="source\LkaBomb.cpp" />
@@ -198,6 +199,7 @@
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Damage.h" />
+    <ClInclude Include="source\ef.h" />
     <ClInclude Include="source\Enemy.h" />
     <ClInclude Include="source\Gimmick.h" />
     <ClInclude Include="source\Include.h" />
