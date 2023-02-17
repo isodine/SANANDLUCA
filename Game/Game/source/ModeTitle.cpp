@@ -34,8 +34,8 @@ bool ModeTitle::Process() {
 	if (Trg & checkKey) {
 		PlaySoundMem(SEcrik, DX_PLAYTYPE_BACK, true);
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
-		//ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
+		//ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
+		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
 
 	return true;

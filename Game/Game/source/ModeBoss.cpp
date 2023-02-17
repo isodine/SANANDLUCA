@@ -19,7 +19,7 @@ bool ModeBoss::Terminate() {
 
 bool ModeBoss::Process() {
 	base::Process();
-
+	boss.Process();
 
 
 	/*if (CheckHitKey(KEY_INPUT_SPACE)) {
