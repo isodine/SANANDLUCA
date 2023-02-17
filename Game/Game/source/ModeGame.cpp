@@ -78,7 +78,7 @@ bool ModeGame::Initialize() {
 	enemy.Initialize();
 	gimmick.Initialize();
 	gimmick.SetSanLka(&san, &lka);
-	ef.Initialize(san);
+	sanbomb.Initialize(san);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -152,7 +152,7 @@ bool ModeGame::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}-
-	ef.Update(san);
+	sanbomb.Update(san);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	san.Update(_cam,sanbomb);
@@ -224,7 +224,7 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		ef.Render();
+		sanbomb.Render();
 		gimmick.Render();
 		enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画

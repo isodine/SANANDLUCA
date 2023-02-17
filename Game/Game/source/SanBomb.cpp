@@ -3,7 +3,7 @@ PlayerBomb::~PlayerBomb() {}
 
 SanBomb::SanBomb() :PlayerBomb()
 {
-	//_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_loop_01.efkefc", 10.0f);
+	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_loop_01.efkefc", 10.0f);
 }
 
 SanBomb::~SanBomb() {

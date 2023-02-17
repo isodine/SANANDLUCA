@@ -7,7 +7,6 @@
 #include "timer.h"
 #include "gimmick.h"
 #include "Enemy.h"
-#include "ef.h"
 
 #include <string>
 #include <memory>
@@ -81,5 +80,4 @@ public:
 	Damage damage;
 	Gimmick gimmick;
 	Enemy enemy;
-	Ef ef;
 };
