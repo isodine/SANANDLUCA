@@ -183,7 +183,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	}
 	else if (balance == BALANCE::SAN) {
 		if (BlendRate <= 1) {
-
+			san->Landing(hitPoly1.HitPosition.y);
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
 			BlendRate += 0.01f;
