@@ -3,7 +3,7 @@ PlayerBomb::~PlayerBomb() {}
 
 SanBomb::SanBomb() :PlayerBomb()
 {
-	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_charge_01.efkefc", 10.0f);
+	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_loop_01.efkefc", 10.0f);
 }
 
 SanBomb::~SanBomb() {
@@ -120,15 +120,8 @@ void SanBomb::Render()
 	DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 
 	Effekseer_Sync3DSetting();
+	DrawEffekseer3D();
 
-	DrawEffekseer3D_Begin();
-	DrawEffekseer3D_Draw(_playingEffectHandle);
-	DrawEffekseer3D_End();
-
-	//if (_isEffect == 0)
-	//{
-	//	StopEffekseer3DEffect(_playingEffectHandle);
-	//}
 
 }
 

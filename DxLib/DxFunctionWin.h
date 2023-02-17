@@ -2,7 +2,7 @@
 // 
 // 		ＤＸライブラリ		Windows専用関数プロトタイプ宣言用ヘッダファイル
 // 
-// 				Ver 3.24 
+// 				Ver 3.23 
 // 
 // -------------------------------------------------------------------------------
 
@@ -480,9 +480,7 @@ extern	int			SetEnableXAudioFlag(                 int Flag ) ;																		
 extern	int			SetEnableWASAPIFlag(                 int Flag, int IsExclusive DEFAULTPARAM( = TRUE ) , int DevicePeriod DEFAULTPARAM( = -1 ) , int SamplePerSec DEFAULTPARAM( = 44100 ) ) ;		// サウンドの再生にWASAPIを使用するかどうかを設定する( Flag  TRUE:使用する  FALSE:使用しない( デフォルト ), IsExclusive  TRUE:排他モードを使用する  FALSE:排他モードを使用しない, DevicePeriod 再生遅延時間、100ナノ秒単位( 100000 で 10ミリ秒 )、-1でデフォルト値, SamplePerSec サンプリングレート )
 #ifndef DX_NON_ASIO
 extern	int			SetEnableASIOFlag(                   int Flag, int BufferSize DEFAULTPARAM( = -1 ) , int SamplePerSec DEFAULTPARAM( = 44100 ) ) ;													// サウンドの再生にASIOを使用するかどうかを設定する( Flag  TRUE:使用する  FALSE:使用しない( デフォルト ), BufferSize 再生バッファのサイズ、小さいほど遅延が少なくなりますが、処理が間に合わずにブツブツノイズが発生する可能性も高くなります( -1 でデフォルト値 ), SamplePerSec サンプリングレート )
-extern	int			SetUseASIODriverIndex(               int Index ) ;																																	// サウンドの再生に使用するASIOドライバーの番号を設定する( デフォルトでは 0 )
 #endif // DX_NON_ASIO
-extern	int			SetEnableMMEwaveOutFlag(             int Flag, int BufferSamples DEFAULTPARAM( = -1 ) , int SamplePerSec DEFAULTPARAM( = 44100 ) ) ;												// サウンドの再生にマルチメディアAPIの waveOut を使用するかどうかを設定する( Flag  TRUE:使用する  FALSE:使用しない( デフォルト ), BufferSamples 再生バッファのサイズ、小さいほど遅延が少なくなりますが、処理が間に合わずにブツブツノイズが発生する可能性も高くなります( -1 でデフォルト値 ), SamplePerSec サンプリングレート )
 
 // 情報取得系関数
 extern	const void*	GetDSoundObj(                        void ) ;	/* 戻り値を IDirectSound * にキャストして下さい */																					// ＤＸライブラリが使用している DirectSound オブジェクトを取得する
