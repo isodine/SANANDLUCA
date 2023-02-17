@@ -181,7 +181,7 @@
     <ClCompile Include="source\ModeStage3.cpp" />
     <ClCompile Include="source\ModeTitle.cpp" />
     <ClCompile Include="source\Player.cpp" />
-    <ClCompile Include="source\SanBomb.cpp" />
+    <ClCompile Include="source\sanbomb.cpp" />
     <ClCompile Include="source\SANclass.cpp" />
     <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -220,7 +220,7 @@
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\PlayerBomb.h" />
-    <ClInclude Include="source\SanBomb.h" />
+    <ClInclude Include="source\sanbomb.h" />
     <ClInclude Include="source\SANclass.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />

@@ -231,7 +231,7 @@ bool ModeGame::Render() {
 		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 		//}
 	}
-	// マップモデルを描画する
+	 //マップモデルを描画する
 	{
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
 		MV1DrawModel(_handleSkySphere);

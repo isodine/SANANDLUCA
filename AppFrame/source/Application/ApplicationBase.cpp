@@ -1,6 +1,5 @@
 
 #include "ApplicationBase.h"
-#include "EffekseerForDXLib.h"
 
 ApplicationBase	*ApplicationBase::_lpInstance = NULL;
 
