@@ -48,7 +48,7 @@ bool modelManager::weponAttach(const char* dir, modelInf* MI, int attachFrameNum
 	return true;
 }
 
-//モデルハンドル、使用するクラスのポインタ？、ループするか、ブレンドするか、オーバーライドするか
+//アニメーション番号、modelInfのポインタ、ループするか、ブレンドするか、オーバーライドするか(実質TRUE)
 bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend, bool isOverride)
 {
 	if (MI->animHandleOld == _animHandle && !isOverride) { return false; }
@@ -67,7 +67,7 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 	return true;
 }
 
-//モデルハンドル、使用するクラスのポインタ？、ループするか、ブレンドするか
+//モデルハンドル、modelInfのポインタ、ループするか、ブレンドするか
 bool modelManager::setNextAnim(int _animHandle, modelInf* MI, bool isLoop, bool isBlend)
 {
 	MI->isBrendingNext = isBlend;

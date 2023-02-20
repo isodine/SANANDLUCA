@@ -4,8 +4,8 @@ void Boss::Initialize() {
 	BossHandle = MV1LoadModel("res/Boss/beaker_robot_All220203.mv1");
 	BossPos = VGet(1000, 500, 0);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	BossOldDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	BossSetDir = VGet(0, 90 * DX_PI_F / 180.0f, 0);
+	StopDir = 0.1;
 	rotateFlag = true;
 	type = BOSSTYPE::NONE;
 }
@@ -16,24 +16,24 @@ void Boss::Terminate() {
 
 void Boss::Process() {
 	HandPos = MV1GetFramePosition(BossHandle, 3);
-	Rotation();
-
 	BOSSTYPE oldtype = type;
 
+	Rotation();
 	if (oldtype == type) {
 		// 再生時間を進める
 		PlayTime += 0.5f;
+		if (PlayTime >= TotalTime1)
+		{
+			PlayTime = 0.0f;
+		}
 	}
 	else {
 		// アニメーションがアタッチされていたら、デタッチする
-		if (AttachAnim1 != -1 || AttachAnim2 != -1 || AttachAnim3 != -1) {
+		if (AttachAnim1 != -1) {
 			MV1DetachAnim(BossHandle, AttachAnim1);
-			MV1DetachAnim(BossHandle, AttachAnim2);
-			MV1DetachAnim(BossHandle, AttachAnim3);
 			AttachAnim1 = -1;
-			AttachAnim2 = -1;
-			AttachAnim3 = -1;
 		}
+	
 	switch (type) {
 	case BOSSTYPE::RUSH:
 		AttachAnim1 = MV1AttachAnim(BossHandle, 8, -1, FALSE);//突進前モーションをアタッチする
@@ -59,28 +59,26 @@ void Boss::Process() {
 		AttachAnim1 = MV1AttachAnim(BossHandle, 6, -1, FALSE);//ダウンモーションをアタッチする
 		break;
 	}
-
-	TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
-	TotalTime2 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim2);
-	TotalTime3 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim3);
-	// 再生時間を初期化
-	PlayTime = 0.0f;
 }
-	if (PlayTime >= TotalTime1 || PlayTime >= TotalTime2 || PlayTime >= TotalTime3)
-	{
-		PlayTime = 0.0f;
-	}
+	TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
+	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);
+	/*TotalTime2 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim2);
+	TotalTime3 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim3);*/
+	// 再生時間を初期化
+	//PlayTime = 0.0f;
+
+	
 }
 
 void Boss::Rotation() {
 	if (rotateFlag) {
 		randomNum = GetRand(359);
 		BossDir = VGet(0, randomNum * DX_PI_F / 180.0f, 0);
-		BossOldDir = BossDir;
 		rotateFlag = false;
 	}
-	if ((int)BossDir.y != (int)BossSetDir.y) {
-		BossSetDir = VAdd(BossSetDir, VScale(BossDir, 0.002));
+	if (StopDir < abs(BossSetDir.y-BossDir.y)) {
+		BossSetDir = VAdd(BossSetDir, VGet(0, 0.01, 0));
+		BossSetDir.y = std::fmod(BossSetDir.y,2 * DX_PI_F);
 		type = BOSSTYPE::ROTATION;
 	}
 }
@@ -95,5 +93,8 @@ void Boss::Render() {
 		MV1SetPosition(BossHandle, BossPos);
 		MV1DrawModel(BossHandle);
 		DrawSphere3D(VSub(BossPos, HandPos), 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+
+		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir = %f", BossDir.y);
+		DrawFormatString(0, 100, GetColor(255, 0, 0), "BossSetDir = %f", BossSetDir.y);
 	}
 }

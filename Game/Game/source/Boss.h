@@ -1,5 +1,7 @@
 #pragma once
 
+class modelInf;
+
 class Boss {
 public:
 	void Initialize();
@@ -18,7 +20,6 @@ public:
 	VECTOR BossPos;
 	VECTOR BossSetDir;
 	VECTOR BossDir;
-	VECTOR BossOldDir;
 	VECTOR RightHandPos;
 	VECTOR LeftHandPos;
 	VECTOR HandPos;
@@ -45,8 +46,12 @@ public:
 	float PlayTime;
 	int randomNum;
 
+	float StopDir;
+
 	bool rotateFlag;
 
 	SAN* san;
 	LKA* lka;
+	modelInf* model;
+	modelManager* manager;
 };

@@ -13,7 +13,7 @@ void Enemy::Initialize() {
 	slimeSerch = false;
 	slimeHitFlag = false;
 	MV1SetupCollInfo(slimeHandle, 2, 8, 8, 8);
-	slimeHandle = MV1LoadModel("res/slime_multimotion.mv1");
+	slimeHandle = MV1LoadModel("res/slime/slime_multimotion.mv1");
 }
 
 void Enemy::Terminate() {
