@@ -45,10 +45,12 @@ public:
 	float TotalTime3;
 	float PlayTime;
 	int randomNum;
+	int walkRand;
 
 	float StopDir;
 
 	bool rotateFlag;
+	bool walkFlag;
 
 	SAN* san;
 	LKA* lka;

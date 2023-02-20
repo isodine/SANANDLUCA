@@ -7,6 +7,8 @@ void Boss::Initialize() {
 	BossSetDir = VGet(0, 180 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.1;
 	rotateFlag = true;
+	walkFlag = false;
+	walkRand = 0;
 	type = BOSSTYPE::NONE;
 }
 
@@ -19,6 +21,7 @@ void Boss::Process() {
 	BOSSTYPE oldtype = type;
 
 	Rotation();
+	Walk();
 	if (oldtype == type) {
 		// Ä¶ŽžŠÔ‚ði‚ß‚é
 		PlayTime += 0.5f;
@@ -88,10 +91,21 @@ void Boss::Rotation() {
 		BossSetDir.y = std::fmod(BossSetDir.y, 2 * DX_PI_F);
 		type = BOSSTYPE::ROTATION;
 	}
+	else {
+		walkFlag = true;
+	}
 }
 
 void Boss::Walk() {
-	
+	if (walkFlag) {
+		type = BOSSTYPE::WALK;
+		BossPos = VAdd(VNorm(BossSetDir), VScale(VNorm(BossPos), 0.01));
+		walkRand = GetRand(1000000);
+		if (walkRand > 999000) {
+			walkFlag = false;
+			rotateFlag = true;
+		}
+	}
 }
 
 void Boss::Render() {
