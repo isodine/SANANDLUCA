@@ -4,7 +4,7 @@ void Boss::Initialize() {
 	BossHandle = MV1LoadModel("res/Boss/beaker_robot_All220203.mv1");
 	BossPos = VGet(1000, 500, 0);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	BossSetDir = VGet(0, 90 * DX_PI_F / 180.0f, 0);
+	BossSetDir = VGet(0, 180 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.1;
 	rotateFlag = true;
 	type = BOSSTYPE::NONE;
