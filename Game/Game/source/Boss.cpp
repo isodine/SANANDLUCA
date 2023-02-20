@@ -71,14 +71,21 @@ void Boss::Process() {
 }
 
 void Boss::Rotation() {
+	float rotate;
 	if (rotateFlag) {
 		randomNum = GetRand(359);
 		BossDir = VGet(0, randomNum * DX_PI_F / 180.0f, 0);
 		rotateFlag = false;
 	}
 	if (StopDir < abs(BossSetDir.y-BossDir.y)) {
-		BossSetDir = VAdd(BossSetDir, VGet(0, 0.01, 0));
-		BossSetDir.y = std::fmod(BossSetDir.y,2 * DX_PI_F);
+		if (BossSetDir.y - BossDir.y > 0) {
+			rotate = -0.01;
+		}
+		else {
+			rotate = 0.01;
+		}
+		BossSetDir = VAdd(BossSetDir, VGet(0, rotate, 0));
+		BossSetDir.y = std::fmod(BossSetDir.y, 2 * DX_PI_F);
 		type = BOSSTYPE::ROTATION;
 	}
 }
