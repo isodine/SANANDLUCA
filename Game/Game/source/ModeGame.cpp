@@ -165,6 +165,10 @@ bool ModeGame::Process() {
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san);
+	lkacircle.Update(lka);
+	sanheal.Update(san);
+	lkaheal.Update(lka);
+	
 	//if (_gTrgEf & PAD_INPUT_9 && oldcount == 0)
 	//{
 	//	old
@@ -349,6 +353,9 @@ bool ModeGame::Render() {
 	sanbomb.Render();
 	lkabomb.Render();
 	sancircle.Render();
+	lkacircle.Render();
+	sanheal.Render();
+	lkaheal.Render();
 	//int AttachIndex;
 	//float TotalTime;
 	//MV1SetMaterialDrawBlendParam(san.Mhandle, 0, 125);

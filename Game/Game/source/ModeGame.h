@@ -7,6 +7,10 @@
 #include "Sanbomb.h"
 #include "Lkabomb.h"
 #include "sancircle.h"
+#include "lkacircle.h"
+#include "sanheal.h"
+#include "lkaheal.h"
+
 
 #include <string>
 #include <memory>
@@ -81,6 +85,9 @@ public:
 	Sanbomb sanbomb;
 	Lkabomb lkabomb;
 	Sancircle sancircle;
+	Lkacircle lkacircle;
+	Sanheal sanheal;
+	Lkaheal lkaheal;
 
 ////エフェクシア
 //protected:
