@@ -76,9 +76,7 @@ void Sanbomb::Render()
 {
 	Effekseer_Sync3DSetting();
 
-	DrawEffekseer3D_Begin();
-	DrawEffekseer3D_Draw(_playingEffectHandle);
-	DrawEffekseer3D_End();
+	DrawEffekseer3D();
 	if (_isEffect == 0)
 	{
 		StopEffekseer3DEffect(_playingEffectHandle);

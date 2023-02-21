@@ -61,6 +61,12 @@
     <ClCompile Include="source\sanbomb.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="source\lkabomb.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\sancircle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ModeGame.h">
@@ -93,5 +99,7 @@
     <ClInclude Include="source\Include.h" />
     <ClInclude Include="ModeEffekseer.h" />
     <ClInclude Include="source\sanbomb.h" />
+    <ClInclude Include="source\lkabomb.h" />
+    <ClInclude Include="source\sancircle.h" />
   </ItemGroup>
 </Project>

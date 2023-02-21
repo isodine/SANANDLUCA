@@ -5,6 +5,8 @@
 #include "LKAclass.h"
 #include "Damage.h"
 #include "Sanbomb.h"
+#include "Lkabomb.h"
+#include "sancircle.h"
 
 #include <string>
 #include <memory>
@@ -77,6 +79,8 @@ public:
 	LKA lka;
 	Damage damage;
 	Sanbomb sanbomb;
+	Lkabomb lkabomb;
+	Sancircle sancircle;
 
 ////エフェクシア
 //protected:

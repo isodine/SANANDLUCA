@@ -154,6 +154,7 @@
     <ClCompile Include="ModeEffekseer.cpp" />
     <ClCompile Include="source\ApplicationMain.cpp" />
     <ClCompile Include="source\Damage.cpp" />
+    <ClCompile Include="source\lkabomb.cpp" />
     <ClCompile Include="source\LKAclass.cpp" />
     <ClCompile Include="source\ModeBoss.cpp" />
     <ClCompile Include="source\ModeEnding.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="source\ModeTitle.cpp" />
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\sanbomb.cpp" />
+    <ClCompile Include="source\sancircle.cpp" />
     <ClCompile Include="source\SANclass.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +181,7 @@
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\Include.h" />
+    <ClInclude Include="source\lkabomb.h" />
     <ClInclude Include="source\LKAclass.h" />
     <ClInclude Include="source\ModeBoss.h" />
     <ClInclude Include="source\ModeEnding.h" />
@@ -197,6 +200,7 @@
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\sanbomb.h" />
+    <ClInclude Include="source\sancircle.h" />
     <ClInclude Include="source\SANclass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

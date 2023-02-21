@@ -163,7 +163,8 @@ bool ModeGame::Process() {
 		if (_gKeyEf & PAD_INPUT_UP) { _cam._vPos.y += 5.f; }
 	}
 	sanbomb.Update(san);
-
+	lkabomb.Update(lka);
+	sancircle.Update(san);
 	//if (_gTrgEf & PAD_INPUT_9 && oldcount == 0)
 	//{
 	//	old
@@ -346,6 +347,8 @@ bool ModeGame::Render() {
 	}
 	damage.Render();
 	sanbomb.Render();
+	lkabomb.Render();
+	sancircle.Render();
 	//int AttachIndex;
 	//float TotalTime;
 	//MV1SetMaterialDrawBlendParam(san.Mhandle, 0, 125);
