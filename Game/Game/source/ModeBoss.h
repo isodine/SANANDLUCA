@@ -2,6 +2,9 @@
 #include "appframe.h"
 #include "Boss.h"
 
+class SAN;
+class LKA;
+
 class ModeBoss : public ModeBase {
 	typedef ModeBase base;
 public:
@@ -22,9 +25,11 @@ public:
 	int SanLka;  //サンとルカのどちらをターゲットにするか
 	int WalkCount;  //歩いて追いかけた回数
 
+	int StageHandle;
+
 
 protected:
 	Boss boss;
-	SAN* san;
-	LKA* lka;
+	SAN san;
+	LKA lka;
 };

@@ -24,6 +24,9 @@ public:
 	VECTOR LeftHandPos;
 	VECTOR HandPos;
 
+	MATRIX rotationMatrix;
+	VECTOR forward;
+
 	enum class BOSSTYPE {
 		NONE,
 		RUSH,

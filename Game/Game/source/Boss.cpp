@@ -2,7 +2,7 @@
 
 void Boss::Initialize() {
 	BossHandle = MV1LoadModel("res/Boss/beaker_robot_All220203.mv1");
-	BossPos = VGet(1000, 500, 0);
+	BossPos = VGet(1000, 0, 1000);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	BossSetDir = VGet(0, 180 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.1;
@@ -19,6 +19,9 @@ void Boss::Terminate() {
 void Boss::Process() {
 	HandPos = MV1GetFramePosition(BossHandle, 3);
 	BOSSTYPE oldtype = type;
+
+	rotationMatrix = MMult(MMult(MGetRotX(BossSetDir.x), MGetRotY(BossSetDir.y)), MGetRotZ(BossSetDir.z));
+	forward = VTransform({0.0f,0.0f,-1.0f},rotationMatrix);
 
 	Rotation();
 	Walk();
@@ -99,9 +102,9 @@ void Boss::Rotation() {
 void Boss::Walk() {
 	if (walkFlag) {
 		type = BOSSTYPE::WALK;
-		BossPos = VAdd(VNorm(BossSetDir), VScale(VNorm(BossPos), 0.01));
-		walkRand = GetRand(1000000);
-		if (walkRand > 999000) {
+		BossPos = VAdd(VScale(forward, 1.f), BossPos);
+		walkRand = GetRand(10000);
+		if (walkRand > 9900) {
 			walkFlag = false;
 			rotateFlag = true;
 		}
