@@ -9,6 +9,7 @@ bool ModeBoss::Initialize() {
 	if (!base::Initialize()) { return false; }
 	boss.Initialize();
 	StageHandle = MV1LoadModel("res/07_stage_map/Boss_Stage/04_Stage_Boss.mv1");
+	
 	return true;
 }
 
@@ -21,6 +22,8 @@ bool ModeBoss::Terminate() {
 bool ModeBoss::Process() {
 	base::Process();
 	boss.Process();
+
+	
 	//san.Update();
 	//lka.Update();
 
@@ -38,9 +41,18 @@ bool ModeBoss::Process() {
 }
 
 bool ModeBoss::Render() {
+
+	SetUseLighting(TRUE);
+	SetGlobalAmbientLight(GetColorF(0.1f, 0.1f, 0.1f, 0.f));
+	ChangeLightTypeDir(VGet(0, -1, 1));
+
 	DrawString(0, 0, "É{ÉX", GetColor(255, 255, 255));
 	MV1SetPosition(StageHandle, VGet(1000,0,1000));
 	MV1DrawModel(StageHandle);
+
+	SetCameraPositionAndTarget_UpVecY(VGet(1000, 1000, 100), VGet(1000, 0, 1000));
+	SetCameraNearFar(10, 2000);
+ 
 	boss.Render();
 	//san.Render();
 	//lka.Render();
