@@ -83,6 +83,7 @@ void SanBomb::Update(SAN& san)
 
 		oldcount = GetNowCount();
 	}
+	Effekseer_Sync3DSetting();
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, vPos.x, vPos.y, vPos.z);
 	UpdateEffekseer3D();
 	if (oldcount > 0)
@@ -112,8 +113,7 @@ void SanBomb::Update(SAN& san)
 
 void SanBomb::Render()
 {
-	Effekseer_Sync3DSetting();
-	DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
+	//DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 	DrawEffekseer3D();
 }
 

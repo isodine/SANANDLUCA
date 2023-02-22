@@ -19,8 +19,7 @@ std::vector<std::string> splitme(std::string& input, char delimiter)
 bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
-	//// モデルデータのロード（
-	// も読み込まれる）
+	//// モデルデータのロード（テクスチャも読み込まれる）
 	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
 	//_attach_index = -1;		// アニメーションアタッチはされていない
 

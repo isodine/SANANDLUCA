@@ -22,7 +22,6 @@
     <ClCompile Include="source\SANclass.cpp" />
     <ClCompile Include="source\stdafx.cpp" />
     <ClCompile Include="source\timer.cpp" />
-    <ClCompile Include="source\ef.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
@@ -48,6 +47,5 @@
     <ClInclude Include="source\SANclass.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />
-    <ClInclude Include="source\ef.h" />
   </ItemGroup>
 </Project>
