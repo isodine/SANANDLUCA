@@ -60,6 +60,9 @@ bool ModeGame::Initialize() {
 	_cam._clipNear = 2.f;
 	_cam._clipFar = 20000.f;
 
+	//シャドウマップ用変数たちの初期化
+	ShadowMapUpVec = VGet(-500.f, -1000.f, -500.f);     //サン側想定
+	ShadowMapDownVec = VGet(500.f, 1000.f, 500.f);      //ルカ側想定
 
 	//フォグを使ってみる
 	//SetFogEnable(TRUE);
@@ -148,6 +151,23 @@ bool ModeGame::Initialize() {
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
 
+	ShadowMapHandle = MakeShadowMap(1024, 1024);
+
+	SetShadowMapLightDirection(ShadowMapHandle, VGet(0, -1, 0));
+
+	// シャドウマップへの描画の準備
+	ShadowMap_DrawSetup(ShadowMapHandle);
+
+	// シャドウマップへステージモデルの描画
+	MV1DrawModel(_handleMap);
+
+	// シャドウマップへキャラクターモデルの描画
+	MV1DrawModel(san.Mhandle);
+	MV1DrawModel(lka.Mhandle);
+
+	// シャドウマップへの描画を終了
+	ShadowMap_DrawEnd();
+
 	PlayMusic("res/06_Sound/01_BGM/Confectioner.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;
@@ -175,7 +195,12 @@ bool ModeGame::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
+		//BGM停止
 		StopMusic();
+
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
+
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 	}
@@ -246,14 +271,38 @@ bool ModeGame::Render() {
 	sanbomb.Render();
 	// マップモデルを描画する
 	{
+		// シャドウマップへの描画の準備
+		ShadowMap_DrawSetup(ShadowMapHandle);
+
+		// シャドウマップへキャラクターモデルの描画
+		MV1DrawModel(san.Mhandle);
+		MV1DrawModel(lka.Mhandle);
+
+		// シャドウマップへの描画を終了
+		ShadowMap_DrawEnd();
+
+		SetShadowMapDrawArea(ShadowMapHandle, VAdd(san.vPos, ShadowMapUpVec), VAdd(lka.vPos, ShadowMapDownVec));
+
+		SetUseShadowMap(0, ShadowMapHandle);
+
+		// ステージモデルの描画
+		MV1DrawModel(_handleMap);
+
+		// キャラクターモデルの描画
+		san.Render();
+		lka.Render();
+
+		// 描画に使用するシャドウマップの設定を解除
+		SetUseShadowMap(0, -1);
+
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
 		MV1DrawModel(_handleSkySphere);
 
-		MV1DrawModel(_handleMap);
+		//MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
-	san.Render();
-	lka.Render();
+	//san.Render();
+	//lka.Render();
 	// デバッグ表示
 	{
 		int x = 0, y = 0, size = 16;

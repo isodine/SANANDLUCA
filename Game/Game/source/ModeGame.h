@@ -70,7 +70,12 @@ public:
 	float throughtime;
 	float height;
 
-	//音楽、音関係用
+	//シャドウマップ用
+
+	int ShadowMapHandle;
+
+	VECTOR ShadowMapUpVec;
+	VECTOR ShadowMapDownVec;
 
 public:
 	std::vector<std::unique_ptr<Player>> sanlka;

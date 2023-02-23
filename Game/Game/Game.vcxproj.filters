@@ -24,6 +24,7 @@
     <ClCompile Include="source\timer.cpp" />
     <ClCompile Include="source\Slime.cpp" />
     <ClCompile Include="source\Boss.cpp" />
+    <ClCompile Include="PlayerBomb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
