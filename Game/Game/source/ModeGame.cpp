@@ -61,8 +61,8 @@ bool ModeGame::Initialize() {
 	_cam._clipFar = 20000.f;
 
 	//シャドウマップ用変数たちの初期化
-	ShadowMapUpVec = VGet(-500.f, -1000.f, -500.f);     //サン側想定
-	ShadowMapDownVec = VGet(500.f, 1000.f, 500.f);      //ルカ側想定
+	ShadowMapUpVec = VGet(-500.f, -1000.f, -1000.f);     //サン側想定
+	ShadowMapDownVec = VGet(500.f, 1000.f, 1000.f);      //ルカ側想定
 
 	//フォグを使ってみる
 	//SetFogEnable(TRUE);
