@@ -57,6 +57,6 @@ public:
 
 	SAN* san;
 	LKA* lka;
-	modelInf* model;
+	modelInf model;
 	modelManager* manager;
 };

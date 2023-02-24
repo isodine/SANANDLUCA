@@ -48,7 +48,7 @@ bool modelManager::weponAttach(const char* dir, modelInf* MI, int attachFrameNum
 	return true;
 }
 
-//アニメーション番号、modelInfのポインタ、ループするか、ブレンドするか、オーバーライドするか(実質TRUE)
+//アニメーション番号、modelInfのポインタ、ループするか、ブレンドするか、オーバーライドするか(連続するモーションはFALSE、単発はTRUE)
 bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend, bool isOverride)
 {
 	if (MI->animHandleOld == _animHandle && !isOverride) { return false; }
@@ -106,13 +106,14 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 		}
 	}
 
+	//モーションブレンド
 	MV1SetAttachAnimBlendRate(MI->modelHandle, MI->attachIndexOld, 1.0f - MI->rate);
 	MV1SetAttachAnimBlendRate(MI->modelHandle, MI->attachIndex, MI->rate);
 
 	MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndex, MI->playTime);
 
 	MV1SetPosition(MI->modelHandle, VAdd(MI->pos, MI->addPos));
-	MV1SetRotationXYZ(MI->modelHandle, VScale(MI->dir, (DX_PI_F / 180.0f)));
+	MV1SetRotationXYZ(MI->modelHandle, MI->dir);// VScale(, (DX_PI_F / 180.0f)));
 	MV1DrawModel(MI->modelHandle);
 
 	for (auto _weponInf : MI->wepons)
