@@ -14,7 +14,7 @@ ModeBase::ModeBase() {
 	_tmPauseBase = 0;
 	_tmPauseStep = 0;
 	_tmOldFrame = 0;
-
+	GameMode = 0;
 	SetCallPerFrame(1);
 	SetCallOfCount(1);
 }

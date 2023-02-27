@@ -1,7 +1,6 @@
 #pragma once
 
-class modelInf;
-
+#include "appframe.h"
 class Boss {
 public:
 	void Initialize();
@@ -9,12 +8,12 @@ public:
 	void Process();
 	void Render();
 
-	void Rush();
-	void Capture();
+	void Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
+	//void Capture();
 	void Rotation();
 	void Walk();
-	void Crush();
-	void Down();
+	//void Crush();
+	//void Down();
 
 	int Target;
 	VECTOR BossPos;
@@ -23,6 +22,7 @@ public:
 	VECTOR RightHandPos;
 	VECTOR LeftHandPos;
 	VECTOR HandPos;
+	VECTOR AddPos;
 
 	MATRIX rotationMatrix;
 	VECTOR forward;
@@ -49,11 +49,19 @@ public:
 	float PlayTime;
 	int randomNum;
 	int walkRand;
+	int walkTime0;
+	int walkTime1;
+	int walkTime2;
+	int WalkTime;
+	int walkTimeCount;
 
 	float StopDir;
 
 	bool rotateFlag;
 	bool walkFlag;
+	bool rushFlag;
+	bool targetFlag;
+	bool target;
 
 	SAN* san;
 	LKA* lka;

@@ -73,6 +73,8 @@ bool ModeGame::Initialize() {
 	// ‚»‚Ì‘¼‰Šú‰»
 	_bViewCollision = FALSE;
 
+	GameMode = 1;
+
 	throughtime = 0.0f;
 	height = 0.0f;
 

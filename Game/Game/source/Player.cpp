@@ -80,18 +80,38 @@ void Player::Update()
 	if (key & PAD_INPUT_5) {	//多分L1ボタン
 		// 角度変更
 		// Y軸回転
-		float sx = _camera->_vPos.x - _camera->_vTarget.x;
-		float sz = _camera->_vPos.z - _camera->_vTarget.z;
-		float rad = atan2(sz, sx);
-		float length = sqrt(sz * sz + sx * sx);
-		if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
-		if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-		_camera->_vPos.x = _camera->_vTarget.x + cos(rad) * length;
-		_camera->_vPos.z = _camera->_vTarget.z + sin(rad) * length;
+		if (base->GameMode == 1) {
+			float sx = _camera->_vPos.x - _camera->_vTarget.x;
+			float sz = _camera->_vPos.z - _camera->_vTarget.z;
+			float rad = atan2(sz, sx);
+			float length = sqrt(sz * sz + sx * sx);
+			if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
+			if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
+			_camera->_vPos.x = _camera->_vTarget.x + cos(rad) * length;
+			_camera->_vPos.z = _camera->_vTarget.z + sin(rad) * length;
 
-		// Y位置
-		if (key & PAD_INPUT_DOWN) { _camera->_vPos.y -= 5.f; }
-		if (key & PAD_INPUT_UP) { _camera->_vPos.y += 5.f; }
+			// Y位置
+			if (key & PAD_INPUT_DOWN) { _camera->_vPos.y -= 5.f; }
+			if (key & PAD_INPUT_UP) { _camera->_vPos.y += 5.f; }
+		}
+		else if (base->GameMode == 2) {
+
+		}
+		else if (base->GameMode == 3) {
+			float sx = boss._vPos.x - boss._vTarget.x;
+			float sz = boss._vPos.z - boss._vTarget.z;
+			float rad = atan2(sz, sx);
+			float length = sqrt(sz * sz + sx * sx);
+			if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
+			if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
+			boss._vPos.x = boss._vTarget.x + cos(rad) * length;
+			boss._vPos.z = boss._vTarget.z + sin(rad) * length;
+
+			// Y位置
+			if (key & PAD_INPUT_DOWN) { boss._vPos.y -= 5.f; }
+			if (key & PAD_INPUT_UP) { boss._vPos.y += 5.f; }
+		}
+		
 	}
 	else {
 
@@ -154,35 +174,102 @@ void Player::Update()
 		MV1_COLL_RESULT_POLY hitPolyfloor;
 		MV1_COLL_RESULT_POLY hitPolywall;
 
-		hitPolywall = MV1CollCheck_Line(_handleMap, frameMapCollisionwall,
-			VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-		if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
-		{
-			float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
-			float subX = vPos.x - oldvPos.x;
-			float subZ = vPos.z - oldvPos.z;
-			vPos.x = oldvPos.x;
-			vPos.z = oldvPos.z;
 
-			v = { 0,0,0 };
-		}
-
-		// 主人公の腰位置から下方向への直線
-		hitPolyfloor = MV1CollCheck_Line(_handleMap, frameMapCollisionfloor,
-			VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-
-		hitPolyDim = MV1CollCheck_Capsule(_handleMap, frameMapCollisionfloor,
-			VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
-		if (hitPolyDim.HitNum >= 1)
-		{
-			// 当たった
-			if (vPos.y < hitPolyfloor.HitPosition.y)
+		if (base->GameMode == 1) {
+			hitPolywall = MV1CollCheck_Line(_handleMap, frameMapCollisionwall,
+				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+			if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
 			{
-				Landing(hitPolyfloor.HitPosition.y);
+				float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
+				float subX = vPos.x - oldvPos.x;
+				float subZ = vPos.z - oldvPos.z;
+				vPos.x = oldvPos.x;
+				vPos.z = oldvPos.z;
+
+				v = { 0,0,0 };
+			}
+
+			// 主人公の腰位置から下方向への直線
+			hitPolyfloor = MV1CollCheck_Line(_handleMap, frameMapCollisionfloor,
+				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+
+			hitPolyDim = MV1CollCheck_Capsule(_handleMap, frameMapCollisionfloor,
+				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+			if (hitPolyDim.HitNum >= 1)
+			{
+				// 当たった
+				if (vPos.y < hitPolyfloor.HitPosition.y)
+				{
+					Landing(hitPolyfloor.HitPosition.y);
+				}
+			}
+			else {
+				freeFall();
 			}
 		}
-		else {
-			freeFall();
+		else if (base->GameMode == 2) {
+			hitPolywall = MV1CollCheck_Line(_handleMap, frameMapCollisionwall,
+				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+			if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
+			{
+				float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
+				float subX = vPos.x - oldvPos.x;
+				float subZ = vPos.z - oldvPos.z;
+				vPos.x = oldvPos.x;
+				vPos.z = oldvPos.z;
+
+				v = { 0,0,0 };
+			}
+
+			// 主人公の腰位置から下方向への直線
+			hitPolyfloor = MV1CollCheck_Line(_handleMap, frameMapCollisionfloor,
+				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+
+			hitPolyDim = MV1CollCheck_Capsule(_handleMap, frameMapCollisionfloor,
+				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+			if (hitPolyDim.HitNum >= 1)
+			{
+				// 当たった
+				if (vPos.y < hitPolyfloor.HitPosition.y)
+				{
+					Landing(hitPolyfloor.HitPosition.y);
+				}
+			}
+			else {
+				freeFall();
+			}
+		}
+		else if (base->GameMode == 3) {
+			hitPolywall = MV1CollCheck_Line(boss.StageHandle, boss.frameMapCollisionwall,
+				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+			if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
+			{
+				float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
+				float subX = vPos.x - oldvPos.x;
+				float subZ = vPos.z - oldvPos.z;
+				vPos.x = oldvPos.x;
+				vPos.z = oldvPos.z;
+
+				v = { 0,0,0 };
+			}
+
+			// 主人公の腰位置から下方向への直線
+			hitPolyfloor = MV1CollCheck_Line(boss.StageHandle, boss.frameMapCollisionfloor,
+				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+
+			hitPolyDim = MV1CollCheck_Capsule(boss.StageHandle, boss.frameMapCollisionfloor,
+				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+			if (hitPolyDim.HitNum >= 1)
+			{
+				// 当たった
+				if (vPos.y < hitPolyfloor.HitPosition.y)
+				{
+					Landing(hitPolyfloor.HitPosition.y);
+				}
+			}
+			else {
+				freeFall();
+			}
 		}
 
 
