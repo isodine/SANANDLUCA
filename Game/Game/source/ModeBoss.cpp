@@ -83,7 +83,7 @@ bool ModeBoss::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
-	//san.SetCamera(&_cam);
+	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
 
