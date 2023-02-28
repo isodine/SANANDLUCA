@@ -1,36 +1,84 @@
 #pragma once
 #include "appframe.h"
-#include "Boss.h"
+#include "Player.h"
+#include "SANclass.h"
+#include "LKAclass.h"
+#include "Damage.h"
+#include "timer.h"
+#include "gimmick.h"
+#include "Enemy.h"
 
-class SAN;
-class LKA;
+#include <string>
+#include <memory>
+#include <vector>
 
-class ModeBoss : public ModeBase {
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+// 計算用マクロ
+#define	PI	(3.1415926535897932386f)
+#define	DEG2RAD(x)			( ((x) / 180.0f ) * PI )
+#define	RAD2DEG(x)			( ((x) * 180.0f ) / PI )
+
+	// マップ用
+extern int _handleMap;
+extern int _handleSkySphere;
+extern int frameMapCollisionfloor;
+extern int frameMapCollisionwall;
+
+// カメラ
+class Camera {
+public:
+	VECTOR	_vPos;					// 位置
+	VECTOR	_vTarget;				// 距離
+	float	_clipNear, _clipFar;	// クリップ
+};
+
+// モード
+class ModeBoss : public ModeBase
+{
 	typedef ModeBase base;
 public:
+	ModeBoss();
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
+	void charJump();
 
-	VECTOR TargetPos;  //ターゲットのポジション
-	VECTOR TargetDir;  //ターゲットの向き
-	int SanLka;  //サンとルカのどちらをターゲットにするか
-	int WalkCount;  //歩いて追いかけた回数
+	// カメラ
+	Camera _cam;
 
-	int StageHandle;
-	int frameMapCollisionwall;
-	int frameMapCollisionfloor;
-	
-	VECTOR	_vPos;					// 位置
-	VECTOR	_vTarget;				// 距離
-	float	_clipNear, _clipFar;	// クリップ
 
-protected:
-	Boss boss;
+	// 3Dモデル描画用
+	int _handle;
+	int _attach_index;
+	float _total_time;
+	float _play_time;
+	VECTOR _vPos;	// 位置
+	VECTOR _vDir;	// 向き
+	float _colSubY;	// コリジョン判定時のY補正(腰位置）
+
+	int LightHandle;
+	int MaskHandle;
+
+	// デバッグ用
+	bool	_bViewCollision;
+
+	//ジャンプ処理用
+	float throughtime;
+	float height;
+
+	//音楽、音関係用
+
+public:
+	std::vector<std::unique_ptr<Player>> sanlka;
+	Player player;
 	SAN san;
 	LKA lka;
-	Camera _cam;
 	SanBomb sanbomb;
 	Damage damage;
+	Gimmick gimmick;
+	Enemy enemy;
 };
