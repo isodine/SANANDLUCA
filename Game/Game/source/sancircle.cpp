@@ -24,12 +24,13 @@ void Sancircle::Update(SAN& san)
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y, san.vPos.z);
-	UpdateEffekseer3D();
+	//UpdateEffekseer3D();
 }
 
 void Sancircle::Render()
 {
 	Effekseer_Sync3DSetting();
-
-	DrawEffekseer3D();
+	DrawEffekseer3D_Begin();
+	DrawEffekseer3D_Draw(_playingEffectHandle);
+	DrawEffekseer3D_End();
 }

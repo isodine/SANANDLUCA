@@ -44,7 +44,7 @@ void Lkabomb::Update(LKA& lka)
 
 	}
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, _position_y, _position_z);
-	UpdateEffekseer3D();
+	//UpdateEffekseer3D();
 
 
 	if (oldcount > 0)

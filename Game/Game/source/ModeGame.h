@@ -56,6 +56,7 @@ public:
 
 	// 3Dモデル描画用
 	int _handle;
+	float _UVScroll_U, _UVScroll_V;
 	int _model;
 	int _attach_index;
 	float _total_time;
@@ -63,6 +64,7 @@ public:
 	VECTOR _vPos;	// 位置
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
+	int p;
 
 	int LightHandle;
 

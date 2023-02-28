@@ -24,7 +24,7 @@ void Sanheal::Update(SAN& san)
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y, san.vPos.z);
-	UpdateEffekseer3D();
+	//UpdateEffekseer3D();
 }
 
 void Sanheal::Render()

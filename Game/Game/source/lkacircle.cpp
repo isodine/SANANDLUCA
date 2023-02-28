@@ -24,7 +24,7 @@ void Lkacircle::Update(LKA& lka)
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y, lka.vPos.z);
-	UpdateEffekseer3D();
+	//UpdateEffekseer3D();
 }
 
 void Lkacircle::Render()

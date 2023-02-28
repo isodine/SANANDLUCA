@@ -32,7 +32,8 @@ bool ModeGame::Initialize() {
 	_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 	//oldcount = 0;
 	// マップ
-	_handleMap = MV1LoadModel("res/0.3.mv1");
+	//_handleMap = MV1LoadModel("res/0.3.mv1");
+	_handleMap = MV1LoadModel("res/wave_01.mv1");
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
@@ -40,6 +41,7 @@ bool ModeGame::Initialize() {
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
+	p = LoadGraph("res/cursor.png");
 	// 腰位置の設定
 	_colSubY = 60.f;
 
@@ -168,7 +170,7 @@ bool ModeGame::Process() {
 	lkacircle.Update(lka);
 	sanheal.Update(san);
 	lkaheal.Update(lka);
-	
+	//
 	//if (_gTrgEf & PAD_INPUT_9 && oldcount == 0)
 	//{
 	//	old
@@ -249,7 +251,7 @@ bool ModeGame::Process() {
 	//	}
 	//}
 
-
+	MV1SetFrameVisible(_handleMap, 1, FALSE);
 
 	return true;
 
@@ -328,6 +330,16 @@ bool ModeGame::Render() {
 		}
 
 	}
+	_UVScroll_U += 0.0002f;
+	//	_UVScroll_V += 0.01f;
+	MV1SetFrameTextureAddressTransform(
+		_handleMap		// モデルハンドル
+		, 0				// UV操作するフレーム番号
+		, _UVScroll_U, _UVScroll_V		// UV加算値(def:0.f, 0.f～1.f ループ)
+		, 1.0f, 1.0f					// UV乗算値(def:1.f)
+		, 0.0f, 0.0f					// UV回転中心値
+		, 0.0f							// UV回転度数（ラジアンで指定）
+	);
 
 	// マップモデルを描画する
 	{
@@ -387,7 +399,11 @@ bool ModeGame::Render() {
 			StopEffekseer3DEffect(_playingEffectHandle);
 		}*/
 
-
+	VECTOR v = ConvWorldPosToScreenPos(san.vPos);
+	if (0.f <= v.z && v.z < 1.f)
+	{
+		DrawGraph(v.x,v.y,p,true);
+	}
 	return true;
 }
 
