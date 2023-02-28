@@ -1,51 +1,15 @@
 #pragma once
-#include "appframe.h"
-#include "Player.h"
-#include "SANclass.h"
-#include "LKAclass.h"
-#include "Damage.h"
-#include "timer.h"
-#include "gimmick.h"
-#include "Enemy.h"
 
-#include <string>
-#include <memory>
-#include <vector>
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
-// 計算用マクロ
-#define	PI	(3.1415926535897932386f)
-#define	DEG2RAD(x)			( ((x) / 180.0f ) * PI )
-#define	RAD2DEG(x)			( ((x) * 180.0f ) / PI )
-
-	// マップ用
-extern int _handleMap;
-extern int _handleSkySphere;
-extern int frameMapCollisionfloor;
-extern int frameMapCollisionwall;
-
-// カメラ
-class Camera {
-public:
-	VECTOR	_vPos;					// 位置
-	VECTOR	_vTarget;				// 距離
-	float	_clipNear, _clipFar;	// クリップ
-};
-
-// モード
 class ModeBoss : public ModeBase
 {
-	typedef ModeBase base;
+	//typedef ModeBase base;
 public:
 	ModeBoss();
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
-	void charJump();
+	//void charJump();
 
 	// カメラ
 	Camera _cam;
@@ -59,6 +23,11 @@ public:
 	VECTOR _vPos;	// 位置
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
+
+	int _handleMap;
+	int _handleSkySphere;
+	int frameMapCollisionfloor;
+	int frameMapCollisionwall;
 
 	int LightHandle;
 	int MaskHandle;

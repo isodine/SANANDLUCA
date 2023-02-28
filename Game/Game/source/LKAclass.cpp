@@ -22,7 +22,7 @@ void LKA::Initialize()
 
 	// ˆÊ’u,Œü‚«‚Ì‰Šú‰»
 	vPos = VGet(60, 20, 0);
-
+	//vPos = VGet(-60, 300, 0);
 	// ˜ˆÊ’u‚Ìİ’è
 	_colSubY = 45.f;
 }

@@ -1,11 +1,11 @@
 #include "Player.h"
 //#include "ModeGame.h"
-#include "Include.h"
+#include "ModeBoss.h"
 
-int _handleMap;
-int _handleSkySphere;
-int frameMapCollisionfloor;
-int frameMapCollisionwall;
+//extern int _handleMap;
+//extern int _handleSkySphere;
+//extern int frameMapCollisionfloor;
+//extern int frameMapCollisionwall;
 
 Player::Player()
 {
@@ -69,6 +69,7 @@ void Player::Initialize()
 
 	// 腰位置の設定
 	_colSubY = 45.f;
+
 }
 
 void Player::Update()
@@ -80,7 +81,7 @@ void Player::Update()
 	if (key & PAD_INPUT_5) {	//多分L1ボタン
 		// 角度変更
 		// Y軸回転
-		if (base->GameMode == 1) {
+		
 			float sx = _camera->_vPos.x - _camera->_vTarget.x;
 			float sz = _camera->_vPos.z - _camera->_vTarget.z;
 			float rad = atan2(sz, sx);
@@ -93,24 +94,6 @@ void Player::Update()
 			// Y位置
 			if (key & PAD_INPUT_DOWN) { _camera->_vPos.y -= 5.f; }
 			if (key & PAD_INPUT_UP) { _camera->_vPos.y += 5.f; }
-		}
-		else if (base->GameMode == 2) {
-
-		}
-		else if (base->GameMode == 3) {
-			float sx = boss._vPos.x - boss._vTarget.x;
-			float sz = boss._vPos.z - boss._vTarget.z;
-			float rad = atan2(sz, sx);
-			float length = sqrt(sz * sz + sx * sx);
-			if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
-			if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-			boss._vPos.x = boss._vTarget.x + cos(rad) * length;
-			boss._vPos.z = boss._vTarget.z + sin(rad) * length;
-
-			// Y位置
-			if (key & PAD_INPUT_DOWN) { boss._vPos.y -= 5.f; }
-			if (key & PAD_INPUT_UP) { boss._vPos.y += 5.f; }
-		}
 		
 	}
 	else {
@@ -172,15 +155,26 @@ void Player::Update()
 		// 移動した先でコリジョン判定
 		MV1_COLL_RESULT_POLY_DIM hitPolyDim;
 		MV1_COLL_RESULT_POLY hitPolyfloor;
-		MV1_COLL_RESULT_POLY hitPolywall;
+		MV1_COLL_RESULT_POLY hitPolywallback;
+		MV1_COLL_RESULT_POLY hitPolywallside;
 
-
-		if (base->GameMode == 1) {
-			hitPolywall = MV1CollCheck_Line(_handleMap, frameMapCollisionwall,
+		
+			hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
 				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-			if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
-			{
-				float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
+			if (hitPolywallback.HitFlag && (vPos.z + 30 >= hitPolywallback.HitPosition.z)){
+				float backwidth = hitPolywallback.HitPosition.z - vPos.z + 30;
+				float subX = vPos.x - oldvPos.x;
+				float subZ = vPos.z - oldvPos.z;
+				vPos.x = oldvPos.x;
+				vPos.z = oldvPos.z;
+
+				v = { 0,0,0 };
+			}
+
+			hitPolywallside = MV1CollCheck_Line(stageHandle, wallCol,
+				VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
+			if (hitPolywallside.HitFlag && (vPos.x + 30 >= hitPolywallside.HitPosition.x)) {
+				float sidewidth = hitPolywallside.HitPosition.x - vPos.x + 30;
 				float subX = vPos.x - oldvPos.x;
 				float subZ = vPos.z - oldvPos.z;
 				vPos.x = oldvPos.x;
@@ -190,10 +184,10 @@ void Player::Update()
 			}
 
 			// 主人公の腰位置から下方向への直線
-			hitPolyfloor = MV1CollCheck_Line(_handleMap, frameMapCollisionfloor,
+			hitPolyfloor = MV1CollCheck_Line(stageHandle, floorCol,
 				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
 
-			hitPolyDim = MV1CollCheck_Capsule(_handleMap, frameMapCollisionfloor,
+			hitPolyDim = MV1CollCheck_Capsule(stageHandle, floorCol,
 				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
 			if (hitPolyDim.HitNum >= 1)
 			{
@@ -206,71 +200,8 @@ void Player::Update()
 			else {
 				freeFall();
 			}
-		}
-		else if (base->GameMode == 2) {
-			hitPolywall = MV1CollCheck_Line(_handleMap, frameMapCollisionwall,
-				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-			if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
-			{
-				float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
-				float subX = vPos.x - oldvPos.x;
-				float subZ = vPos.z - oldvPos.z;
-				vPos.x = oldvPos.x;
-				vPos.z = oldvPos.z;
+		
 
-				v = { 0,0,0 };
-			}
-
-			// 主人公の腰位置から下方向への直線
-			hitPolyfloor = MV1CollCheck_Line(_handleMap, frameMapCollisionfloor,
-				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-
-			hitPolyDim = MV1CollCheck_Capsule(_handleMap, frameMapCollisionfloor,
-				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
-			if (hitPolyDim.HitNum >= 1)
-			{
-				// 当たった
-				if (vPos.y < hitPolyfloor.HitPosition.y)
-				{
-					Landing(hitPolyfloor.HitPosition.y);
-				}
-			}
-			else {
-				freeFall();
-			}
-		}
-		else if (base->GameMode == 3) {
-			hitPolywall = MV1CollCheck_Line(boss.StageHandle, boss.frameMapCollisionwall,
-				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-			if (hitPolywall.HitFlag && (vPos.z + 30 >= hitPolywall.HitPosition.z))
-			{
-				float backwidth = hitPolywall.HitPosition.z - vPos.z + 30;
-				float subX = vPos.x - oldvPos.x;
-				float subZ = vPos.z - oldvPos.z;
-				vPos.x = oldvPos.x;
-				vPos.z = oldvPos.z;
-
-				v = { 0,0,0 };
-			}
-
-			// 主人公の腰位置から下方向への直線
-			hitPolyfloor = MV1CollCheck_Line(boss.StageHandle, boss.frameMapCollisionfloor,
-				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-
-			hitPolyDim = MV1CollCheck_Capsule(boss.StageHandle, boss.frameMapCollisionfloor,
-				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
-			if (hitPolyDim.HitNum >= 1)
-			{
-				// 当たった
-				if (vPos.y < hitPolyfloor.HitPosition.y)
-				{
-					Landing(hitPolyfloor.HitPosition.y);
-				}
-			}
-			else {
-				freeFall();
-			}
-		}
 
 
 
@@ -340,7 +271,7 @@ void Player::Update()
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "down"), -1, FALSE);
 				break;
 			}
-
+	
 			// アタッチしたアニメーションの総再生時間を取得する
 			Mtotal_time = MV1GetAttachAnimTotalTime(Mhandle, Mattach_index);
 			// 再生時間を初期化

@@ -4,16 +4,18 @@
 //#include "ModeGame.h"
 #include "ModeGameOver.h"
 
-std::vector<std::string> splitme(std::string& input, char delimiter)
-{
-	std::istringstream stream(input);
-	std::string field;
-	std::vector<std::string> result;
-	char del = ',';
-	while (std::getline(stream, field, delimiter)) {
-		result.push_back(field);
+namespace {
+	std::vector<std::string> splitme(std::string& input, char delimiter)
+	{
+		std::istringstream stream(input);
+		std::string field;
+		std::vector<std::string> result;
+		char del = ',';
+		while (std::getline(stream, field, delimiter)) {
+			result.push_back(field);
+		}
+		return result;
 	}
-	return result;
 }
 
 ModeGame::ModeGame() : ModeBase()
@@ -83,13 +85,21 @@ bool ModeGame::Initialize() {
 	san.SetDamage(&damage);
 
 	san.Initialize();
+	san.floorCol = frameMapCollisionfloor;
+	san.wallCol = frameMapCollisionwall;
+	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&sanbomb);
 	lka.SetDamage(&damage);
 
 	lka.Initialize();
+	lka.floorCol = frameMapCollisionfloor;
+	lka.wallCol = frameMapCollisionwall;
+	lka.stageHandle = _handleMap;
+
 	damage.Initialize(&san, &lka);
+	damage.stageHandle = _handleMap;
 	enemy.Initialize();
 	gimmick.Initialize();
 	gimmick.SetSanLka(&san, &lka);

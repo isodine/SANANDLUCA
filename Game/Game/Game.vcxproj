@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="source\ApplicationMain.cpp" />
     <ClCompile Include="source\Boss.cpp" />
+    <ClCompile Include="source\Camera.cpp" />
     <ClCompile Include="source\Damage.cpp" />
     <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\Gimmick.cpp" />
@@ -200,6 +201,7 @@
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
+    <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\Enemy.h" />
     <ClInclude Include="source\Gimmick.h" />

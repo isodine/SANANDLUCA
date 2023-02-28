@@ -3,17 +3,20 @@
 //#include "ModeGame.h"
 #include "ModeGameOver.h"
 
-std::vector<std::string> splitme(std::string& input, char delimiter)
-{
-	std::istringstream stream(input);
-	std::string field;
-	std::vector<std::string> result;
-	char del = ',';
-	while (std::getline(stream, field, delimiter)) {
-		result.push_back(field);
+namespace {
+	std::vector<std::string> splitme(std::string& input, char delimiter)
+	{
+		std::istringstream stream(input);
+		std::string field;
+		std::vector<std::string> result;
+		char del = ',';
+		while (std::getline(stream, field, delimiter)) {
+			result.push_back(field);
+		}
+		return result;
 	}
-	return result;
 }
+
 
 ModeBoss::ModeBoss() : ModeBase()
 {
@@ -21,7 +24,7 @@ ModeBoss::ModeBoss() : ModeBase()
 }
 
 bool ModeBoss::Initialize() {
-	if (!base::Initialize()) { return false; }
+	if (!ModeBase::Initialize()) { return false; }
 
 	//// モデルデータのロード（テクスチャも読み込まれる）
 	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
@@ -33,21 +36,24 @@ bool ModeBoss::Initialize() {
 	//// 位置,向きの初期化
 	//_vPos = VGet(0, 0, 0);
 	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
+	//カメラ設定
+	_cam._vTarget = VGet(0,0,0);
+	_cam._vPos = VGet(0,1000,-300);
 
 	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/map_0125.fbm/a_map02.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/04_Stage_Boss.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "Con_bot_pPlane6");
-	frameMapCollisionwall = MV1SearchFrame(_handleMap, "Con_tate_pPlane3");
+	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "coStage_floor1");
+	frameMapCollisionwall = MV1SearchFrame(_handleMap, "coStage_wall1");
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
-	MV1SetFrameVisible(_handleMap, 2, FALSE);
-	MV1SetFrameVisible(_handleMap, 3, FALSE);
+	/*MV1SetFrameVisible(_handleMap, 0, FALSE);
+	MV1SetFrameVisible(_handleMap, 1, FALSE);*/
 
 	//マスクの試験運用
 	MaskHandle = LoadMask("res/San_Lka_Mask.png");
@@ -77,21 +83,29 @@ bool ModeBoss::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
-	san.SetCamera(&_cam);
+	//san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
 
 	san.Initialize();
+	san.floorCol = frameMapCollisionfloor;
+	san.wallCol = frameMapCollisionwall;
+	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&sanbomb);
 	lka.SetDamage(&damage);
 
 	lka.Initialize();
+	lka.floorCol = frameMapCollisionfloor;
+	lka.wallCol = frameMapCollisionwall;
+	lka.stageHandle = _handleMap;
+
 	damage.Initialize(&san, &lka);
-	enemy.Initialize();
-	gimmick.Initialize();
-	gimmick.SetSanLka(&san, &lka);
+	damage.stageFlag = false;
+	//enemy.Initialize();
+	//gimmick.Initialize();
+	//gimmick.SetSanLka(&san, &lka);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -155,12 +169,12 @@ bool ModeBoss::Initialize() {
 }
 
 bool ModeBoss::Terminate() {
-	base::Terminate();
+	ModeBase::Terminate();
 	return true;
 }
 
 bool ModeBoss::Process() {
-	base::Process();
+	ModeBase::Process();
 
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
@@ -171,8 +185,8 @@ bool ModeBoss::Process() {
 	san.Update();
 	lka.Update();
 	damage.Process();
-	enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
-	gimmick.Balance(san.vPos, lka.vPos);
+	//enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
+	//gimmick.Balance(san.vPos, lka.vPos);
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
@@ -185,7 +199,7 @@ bool ModeBoss::Process() {
 }
 
 bool ModeBoss::Render() {
-	base::Render();
+	ModeBase::Render();
 
 	// 3D基本設定
 	SetUseZBuffer3D(TRUE);
@@ -210,8 +224,7 @@ bool ModeBoss::Render() {
 #endif
 
 	// カメラ設定更新
-	_cam._vTarget = VScale(VAdd(san.vPos, lka.vPos), 0.5);
-	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 240, -400));
+	
 	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
 	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
 
@@ -237,8 +250,8 @@ bool ModeBoss::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		gimmick.Render();
-		enemy.SlimeRender(enemy.slimePos);
+		//gimmick.Render();
+		//enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画
 		//if (_bViewCollision) {
 		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
