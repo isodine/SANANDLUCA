@@ -91,7 +91,7 @@ bool ModeGame::Initialize() {
 
 	lka.Initialize();
 	damage.Initialize(&san, &lka);
-	slime.Initialize();
+	//slime.Initialize();
 	gimmick.Initialize();
 	gimmick.SetSanLka(&san, &lka);
 	sanbomb.Initialize(san);
@@ -140,7 +140,7 @@ bool ModeGame::Initialize() {
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
 
-	auto Slime1 = std::make_unique<Slime>(*this);
+	auto Slime1 = std::make_unique<Slime>();
 	Slime1->Initialize();
 	slimes.emplace_back(std::move(Slime1));
 
@@ -185,7 +185,7 @@ bool ModeGame::Process() {
 	san.Update();
 	lka.Update();
 	damage.Process();
-	slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
+	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
 	gimmick.Balance(san.vPos, lka.vPos);
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
@@ -258,7 +258,7 @@ bool ModeGame::Render() {
 	{
 		sanbomb.Render();
 		gimmick.Render();
-		slime.SlimeRender(slime.slimePos);
+		//slime.SlimeRender(slime.slimePos);
 		// コリジョン判定用ラインの描画
 		//if (_bViewCollision) {
 		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));

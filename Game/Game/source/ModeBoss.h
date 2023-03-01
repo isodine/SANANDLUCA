@@ -51,6 +51,6 @@ public:
 	SanBomb sanbomb;
 	Damage damage;
 	Gimmick gimmick;
-	Enemy enemy;
+	//Slime slime;
 	Boss boss;
 };

@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Damage.h"
 #include "Boss.h"
+#include "Slime.h"
 #include "timer.h"
 #include "PlayerBomb.h"
 #include "SanBomb.h"
