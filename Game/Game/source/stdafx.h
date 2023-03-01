@@ -20,6 +20,7 @@
 #include "ModeStage3.h"
 #include "ModeTitle.h"
 #include "Boss.h"
+#include "Slime.h"
 
 #include <string>
 #include <memory>

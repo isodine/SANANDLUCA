@@ -5,7 +5,11 @@ class PlayerBomb
 public:
 	PlayerBomb();
 	~PlayerBomb();
+	//virtual void Initialize();
+	//virtual void Update();
+	//virtual void Render();
 	void BombReset();
+	void SetSan(SAN& San);
 
 	enum BombType
 	{
@@ -41,4 +45,5 @@ public:
 	};
 	Situation situation;
 
+	SAN san;
 };
