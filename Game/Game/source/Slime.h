@@ -5,22 +5,18 @@
 class SANclass;
 class LKAclass;
 
-class Enemy {
+class Slime {
 public:
 	void Initialize();
 	void Terminate();
-	void Process();
-	void Render();
+	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
+	void Render(VECTOR Pos);
 
-	void Slime(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
-	void Spider(VECTOR SanPos, VECTOR LkaPos, VECTOR SpiderPos, int Handle, float speed);
-	void Boss(VECTOR SanPos, VECTOR LkaPos, VECTOR BossPos, int Handle, float speed);
+	void SlimeU(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
 
 	void SlimeJump();
 
 	void SlimeRender(VECTOR Pos);
-	void SpiderRender(VECTOR Pos, int Handle);
-	void BossRender(VECTOR Pos, int Handle);
 
 	float sanDistance;
 	float lkaDistance;
@@ -45,6 +41,8 @@ public:
 	VECTOR sanPos;
 	VECTOR lkaPos;
 	VECTOR slimePos;
+
+	//std::vector<std::unique_ptr<Slime>> slime;
 
 protected:
 	enum class STATUS {

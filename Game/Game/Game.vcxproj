@@ -159,9 +159,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\PlayerBomb.cpp" />
     <ClCompile Include="source\ApplicationMain.cpp" />
+    <ClCompile Include="source\Boss.cpp" />
     <ClCompile Include="source\Damage.cpp" />
-    <ClCompile Include="source\Enemy.cpp" />
+    <ClCompile Include="source\Slime.cpp" />
     <ClCompile Include="source\Gimmick.cpp" />
     <ClCompile Include="source\LkaBomb.cpp" />
     <ClCompile Include="source\LKAclass.cpp" />
@@ -197,8 +199,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
+    <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Damage.h" />
-    <ClInclude Include="source\Enemy.h" />
+    <ClInclude Include="source\Slime.h" />
     <ClInclude Include="source\Gimmick.h" />
     <ClInclude Include="source\Include.h" />
     <ClInclude Include="source\LkaBomb.h" />

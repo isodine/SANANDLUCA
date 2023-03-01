@@ -7,10 +7,10 @@ class LKA:public Player, public Gimmick
 public:
 	LKA();
 	~LKA();
-	void Initialize();
-	void Update(Camera& cam);
-	void Render();
-	void Input();
-	void Jump(Camera& cam);
-	void freeFall(Camera& cam);
+	void Initialize() override;
+	void Update() override;
+	void Render() override;
+	void Input() override;
+	void Jump();
+	void freeFall();
 };

@@ -6,3 +6,4 @@
 #include "Application/ApplicationBase.h"
 #include "CFile/CFile.h"
 #include "ResourceServer/ResourceServer.h"
+#include "modelManager/modelManager.h"

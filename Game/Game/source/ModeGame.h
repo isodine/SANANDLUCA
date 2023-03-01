@@ -6,7 +6,7 @@
 #include "Damage.h"
 #include "timer.h"
 #include "gimmick.h"
-#include "Enemy.h"
+#include "Slime.h"
 
 #include <string>
 #include <memory>
@@ -40,6 +40,7 @@ class ModeGame : public ModeBase
 {
 	typedef ModeBase base;
 public:
+	ModeGame();
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
@@ -47,7 +48,7 @@ public:
 	void charJump();
 
 	// カメラ
-	Camera	_cam;
+	Camera _cam;
 	
 
 	// 3Dモデル描画用
@@ -69,15 +70,20 @@ public:
 	float throughtime;
 	float height;
 
-	//音楽、音関係用
+	//シャドウマップ用
+
+	int ShadowMapHandle;
+
+	VECTOR ShadowMapUpVec;
+	VECTOR ShadowMapDownVec;
 
 public:
-	std::vector<std::unique_ptr<Player>> sanlka;
 	Player player;
 	SAN san;
 	LKA lka;
 	SanBomb sanbomb;
 	Damage damage;
 	Gimmick gimmick;
-	Enemy enemy;
+	Slime slime;
+	std::vector<std::unique_ptr<Slime>> slimes;
 };

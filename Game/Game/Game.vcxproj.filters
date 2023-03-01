@@ -3,7 +3,7 @@
   <ItemGroup>
     <ClCompile Include="source\ApplicationMain.cpp" />
     <ClCompile Include="source\Damage.cpp" />
-    <ClCompile Include="source\Enemy.cpp" />
+    <ClCompile Include="source\Slime.cpp" />
     <ClCompile Include="source\Gimmick.cpp" />
     <ClCompile Include="source\LkaBomb.cpp" />
     <ClCompile Include="source\LKAclass.cpp" />
@@ -18,15 +18,17 @@
     <ClCompile Include="source\ModeStage3.cpp" />
     <ClCompile Include="source\ModeTitle.cpp" />
     <ClCompile Include="source\Player.cpp" />
-    <ClCompile Include="source\sanbomb.cpp" />
+    <ClCompile Include="source\SanBomb.cpp" />
     <ClCompile Include="source\SANclass.cpp" />
     <ClCompile Include="source\stdafx.cpp" />
     <ClCompile Include="source\timer.cpp" />
+    <ClCompile Include="source\Boss.cpp" />
+    <ClCompile Include="source\PlayerBomb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Damage.h" />
-    <ClInclude Include="source\Enemy.h" />
+    <ClInclude Include="source\Slime.h" />
     <ClInclude Include="source\Gimmick.h" />
     <ClInclude Include="source\Include.h" />
     <ClInclude Include="source\LkaBomb.h" />
@@ -43,9 +45,10 @@
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\PlayerBomb.h" />
-    <ClInclude Include="source\sanbomb.h" />
+    <ClInclude Include="source\SanBomb.h" />
     <ClInclude Include="source\SANclass.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />
+    <ClInclude Include="source\Boss.h" />
   </ItemGroup>
 </Project>

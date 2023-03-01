@@ -4,7 +4,9 @@
 
 #include "appframe.h"
 
+class PlayerBomb;
 class Camera;
+class Damage;
 
 class Player
 {
@@ -15,13 +17,27 @@ public:
 		Lka
 	};
 	Type mypH;
+	PlayerBomb* _bomb;
+	Camera* _camera;
+	Damage* _damage;
 
+	void SetBomb(PlayerBomb* bomb);
+	void SetCamera(Camera* camera);
+	void SetDamage(Damage* damage);
+	void SetType(bool isSan);
+	
 	Player();
 	~Player();
-	virtual void Initialize(Type mypH);
-	virtual void Update(Type mypH);
-	virtual void Render(Type mypH);
+	virtual void Initialize();
+	virtual void Update();
+	virtual void Render();
+	virtual void Jump();
+	virtual void freeFall();
 	void charJump();
+	virtual void Input();
+
+	int key;
+	int trg;
 
 public:
 
@@ -80,4 +96,6 @@ public:
 	bool motionRes = false;
 	int HP;
 
+
+	void Landing(float HitYPos);
 };

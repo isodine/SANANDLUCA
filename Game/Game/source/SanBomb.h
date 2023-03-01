@@ -11,11 +11,4 @@ public:
 	void Render();
 	void Move();
 	void Throw(SAN& san);
-
-private:
-	int _effectResourceHandle;
-	int _playingEffectHandle;
-	int oldcount;
-	int _isthrow;
-	int _isEffect;
 };
