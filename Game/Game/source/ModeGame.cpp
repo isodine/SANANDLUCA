@@ -84,12 +84,19 @@ bool ModeGame::Initialize() {
 	san.SetDamage(&damage);
 
 	san.Initialize();
+	san.floorCol = frameMapCollisionfloor;
+	san.wallCol = frameMapCollisionwall;
+	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&sanbomb);
 	lka.SetDamage(&damage);
 
 	lka.Initialize();
+	lka.floorCol = frameMapCollisionfloor;
+	lka.wallCol = frameMapCollisionwall;
+	lka.stageHandle = _handleMap;
+
 	damage.Initialize(&san, &lka);
 	//slime.Initialize();
 	gimmick.Initialize();
