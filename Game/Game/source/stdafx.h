@@ -7,6 +7,7 @@
 #include "SANclass.h"
 #include "Player.h"
 #include "Damage.h"
+#include "Boss.h"
 #include "timer.h"
 #include "PlayerBomb.h"
 #include "SanBomb.h"
@@ -21,7 +22,7 @@
 #include "ModeStage2.h"
 #include "ModeStage3.h"
 #include "ModeTitle.h"
-#include "Boss.h"
+
 
 #include <string>
 #include <memory>

@@ -1,5 +1,7 @@
 #pragma once
 
+class Boss;
+
 class ModeBoss : public ModeBase
 {
 	//typedef ModeBase base;
@@ -50,4 +52,5 @@ public:
 	Damage damage;
 	Gimmick gimmick;
 	Enemy enemy;
+	Boss boss;
 };

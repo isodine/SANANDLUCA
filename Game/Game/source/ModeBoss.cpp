@@ -38,7 +38,7 @@ bool ModeBoss::Initialize() {
 	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 	//カメラ設定
 	_cam._vTarget = VGet(0,0,0);
-	_cam._vPos = VGet(0,1000,-300);
+	_cam._vPos = VGet(0,1200,-1000);
 
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/04_Stage_Boss.mv1");
@@ -60,8 +60,8 @@ bool ModeBoss::Initialize() {
 	CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
-	_cam._vPos = VGet(0, 300.f, -400.f);
-	_cam._vTarget = VGet(0, 60, 0);
+	/*_cam._vPos = VGet(0, 300.f, -400.f);
+	_cam._vTarget = VGet(0, 60, 0);*/
 	_cam._clipNear = 2.f;
 	_cam._clipFar = 20000.f;
 
@@ -83,7 +83,9 @@ bool ModeBoss::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
-	san.SetCamera(&_cam);
+	boss.Initialize();
+
+	/*san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
 
@@ -102,7 +104,7 @@ bool ModeBoss::Initialize() {
 	lka.stageHandle = _handleMap;
 
 	damage.Initialize(&san, &lka);
-	damage.stageFlag = false;
+	damage.stageFlag = false;*/
 	//enemy.Initialize();
 	//gimmick.Initialize();
 	//gimmick.SetSanLka(&san, &lka);
@@ -179,21 +181,21 @@ bool ModeBoss::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}-
-	sanbomb.Update(san);
+	/*sanbomb.Update(san);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	san.Update();
 	lka.Update();
-	damage.Process();
+	damage.Process();*/
 	//enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
 	//gimmick.Balance(san.vPos, lka.vPos);
-
-	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
+	boss.Process();
+	/*if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
 		StopMusic();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
-	}
+	}*/
 
 	return true;
 }
@@ -266,11 +268,12 @@ bool ModeBoss::Render() {
 		MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
-	san.Render();
-	lka.Render();
+	boss.Render();
+	/*san.Render();
+	lka.Render();*/
 	// デバッグ表示
 	{
-		int x = 0, y = 0, size = 16;
+		/*int x = 0, y = 0, size = 16;
 		SetFontSize(size);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "Camera:"); y += size;
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  target = (%5.2f, %5.2f, %5.2f)", _cam._vTarget.x, _cam._vTarget.y, _cam._vTarget.z); y += size;
@@ -306,8 +309,8 @@ bool ModeBoss::Render() {
 		case Player::STATUS::JUMP:
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
-		}
+		}*/
 	}
-	damage.Render();
+	/*damage.Render();*/
 	return true;
 }

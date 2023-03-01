@@ -9,11 +9,12 @@ public:
 	void Render();
 
 	void Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
-	//void Capture();
+	void Capture();
 	void Rotation();
 	void Walk();
-	//void Crush();
-	//void Down();
+	void Crush();
+	void Down();
+	void Idle();
 
 	int Target;
 	VECTOR BossPos;
@@ -35,6 +36,7 @@ public:
 		WALK,
 		CRUSH,
 		DOWN,
+		IDLE,
 	};
 
 	BOSSTYPE type;
@@ -57,11 +59,12 @@ public:
 
 	float StopDir;
 
-	bool rotateFlag;
-	bool walkFlag;
-	bool rushFlag;
-	bool targetFlag;
-	bool target;
+	bool rotateFlag;//TRUE‚È‚ç‰ñ“]‚·‚é
+	bool walkFlag;//TRUE‚È‚ç•à‚­
+	bool rushFlag;//TRUE‚È‚çUŒ‚€”õ‚©‚çUŒ‚‚ÉˆÚ‚é
+	bool targetFlag;//TRUE‚È‚çUŒ‚‚Ìƒ^[ƒQƒbƒg‚ğŒˆ‚ß‚é
+	bool target;//TRUE‚È‚çƒTƒ“‚ÉUŒ‚
+	bool idleflag;//
 
 	SAN* san;
 	LKA* lka;

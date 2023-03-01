@@ -2,9 +2,9 @@
 
 void Boss::Initialize() {
 	//BossHandle = MV1LoadModel("res/Boss/beaker_robot_All220203.mv1");
-	model.pos = VGet(1000, 0, 1000);
+	model.pos = VGet(0, 0, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	model.dir = VGet(0, 180 * DX_PI_F / 180.0f, 0);
+	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.1;
 	rotateFlag = true;
 	walkFlag = false;
@@ -77,10 +77,12 @@ void Boss::Process() {
 		//AttachAnim1 = MV1AttachAnim(BossHandle, 6, -1, FALSE);//ダウンモーションをアタッチする
 		manager->animChange(6, &model, false, false, true);
 		break;
+	case BOSSTYPE::IDLE:
+		manager->animChange(7, &model, true, false, false);//待機モーションをアタッチする
 	}
 }
-	TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
-	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);
+	/*TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
+	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
 	
 
 
@@ -110,10 +112,10 @@ void Boss::Rotation() {
 	}
 	if (StopDir < abs(model.dir.y-BossDir.y)) {
 		if (model.dir.y - BossDir.y > 0) {
-			rotate = -0.01;
+			rotate = -0.015;
 		}
 		else {
-			rotate = 0.01;
+			rotate = 0.015;
 		}
 		model.dir = VAdd(model.dir, VGet(0, rotate, 0));
 		model.dir.y = std::fmod(model.dir.y, 2 * DX_PI_F);
@@ -127,7 +129,7 @@ void Boss::Rotation() {
 void Boss::Walk() {
 	if (walkFlag) {
 		type = BOSSTYPE::WALK;
-		model.pos = VAdd(VScale(forward, 1.f), model.pos);
+		model.pos = VAdd(VScale(forward, 2.f), model.pos);
 		walkTimeCount += 1;
 		if (walkTimeCount == WalkTime) {
 			int num = GetRand(9);
@@ -140,6 +142,10 @@ void Boss::Walk() {
 			rotateFlag = true;
 		}
 	}
+}
+
+void Boss::Idle() {
+
 }
 
 void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
