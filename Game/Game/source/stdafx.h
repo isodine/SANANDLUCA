@@ -1,15 +1,18 @@
 #pragma once
+
 #include <appframe.h>
+#include "ApplicationMain.h"
+#include "Camera.h"
 #include "LKAclass.h"
 #include "SANclass.h"
 #include "Player.h"
 #include "Damage.h"
+#include "Boss.h"
 #include "timer.h"
 #include "PlayerBomb.h"
 #include "SanBomb.h"
 #include "LkaBomb.h"
 #include "ModeGame.h"
-#include "ApplicationMain.h"
 #include "ModeBoss.h"
 #include "ModeEnding.h"
 #include "ModeGameOver.h"
@@ -19,8 +22,7 @@
 #include "ModeStage2.h"
 #include "ModeStage3.h"
 #include "ModeTitle.h"
-#include "Boss.h"
-#include "Slime.h"
+
 
 #include <string>
 #include <memory>

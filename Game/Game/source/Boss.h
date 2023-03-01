@@ -1,7 +1,6 @@
 #pragma once
 
-class modelInf;
-
+#include "appframe.h"
 class Boss {
 public:
 	void Initialize();
@@ -9,12 +8,13 @@ public:
 	void Process();
 	void Render();
 
-	void Rush();
+	void Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
 	void Capture();
 	void Rotation();
 	void Walk();
 	void Crush();
 	void Down();
+	void Idle();
 
 	int Target;
 	VECTOR BossPos;
@@ -23,6 +23,10 @@ public:
 	VECTOR RightHandPos;
 	VECTOR LeftHandPos;
 	VECTOR HandPos;
+	VECTOR AddPos;
+
+	MATRIX rotationMatrix;
+	VECTOR forward;
 
 	enum class BOSSTYPE {
 		NONE,
@@ -32,6 +36,7 @@ public:
 		WALK,
 		CRUSH,
 		DOWN,
+		IDLE,
 	};
 
 	BOSSTYPE type;
@@ -46,14 +51,23 @@ public:
 	float PlayTime;
 	int randomNum;
 	int walkRand;
+	int walkTime0;
+	int walkTime1;
+	int walkTime2;
+	int WalkTime;
+	int walkTimeCount;
 
 	float StopDir;
 
-	bool rotateFlag;
-	bool walkFlag;
+	bool rotateFlag;//TRUE‚È‚ç‰ñ“]‚·‚é
+	bool walkFlag;//TRUE‚È‚ç•à‚­
+	bool rushFlag;//TRUE‚È‚çUŒ‚€”õ‚©‚çUŒ‚‚ÉˆÚ‚é
+	bool targetFlag;//TRUE‚È‚çUŒ‚‚Ìƒ^[ƒQƒbƒg‚ğŒˆ‚ß‚é
+	bool target;//TRUE‚È‚çƒTƒ“‚ÉUŒ‚
+	bool idleflag;//
 
 	SAN* san;
 	LKA* lka;
-	modelInf* model;
+	modelInf model;
 	modelManager* manager;
 };

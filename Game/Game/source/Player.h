@@ -7,6 +7,7 @@
 class PlayerBomb;
 class Camera;
 class Damage;
+//class ModeBoss;
 
 class Player
 {
@@ -20,6 +21,7 @@ public:
 	PlayerBomb* _bomb;
 	Camera* _camera;
 	Damage* _damage;
+	ModeBase* base;
 
 	void SetBomb(PlayerBomb* bomb);
 	void SetCamera(Camera* camera);
@@ -38,6 +40,9 @@ public:
 
 	int key;
 	int trg;
+	int stageHandle;
+	int floorCol;
+	int wallCol;
 
 public:
 
@@ -98,4 +103,7 @@ public:
 
 
 	void Landing(float HitYPos);
+
+
+	//ModeBoss* boss;
 };

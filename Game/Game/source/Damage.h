@@ -23,7 +23,11 @@ public:
 	bool SanHitFlag;
 	bool LkaHitFlag;
 
+	bool stageFlag;//true‚Ì‚Éƒ_ƒ[ƒW°‚Ì”»’è‚ªON‚É‚È‚é
+
 	float Distance;
+
+	int stageHandle;
 
 protected:
 	SAN* San;

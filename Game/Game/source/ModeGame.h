@@ -1,3 +1,4 @@
+#pragma once
 
 #include "appframe.h"
 #include "Player.h"
@@ -21,19 +22,9 @@
 #define	DEG2RAD(x)			( ((x) / 180.0f ) * PI )
 #define	RAD2DEG(x)			( ((x) * 180.0f ) / PI )
 
-	// マップ用
-extern int _handleMap;
-extern int _handleSkySphere;
-extern int frameMapCollisionfloor;
-extern int frameMapCollisionwall;
+	
 
-// カメラ
-class Camera {
-public:
-	VECTOR	_vPos;					// 位置
-	VECTOR	_vTarget;				// 距離
-	float	_clipNear, _clipFar;	// クリップ
-};
+
 
 // モード
 class ModeGame : public ModeBase
@@ -59,6 +50,12 @@ public:
 	VECTOR _vPos;	// 位置
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
+
+	// マップ用
+	int _handleMap;
+	int _handleSkySphere;
+	int frameMapCollisionfloor;
+	int frameMapCollisionwall;
 
 	int LightHandle;
 	int MaskHandle;
