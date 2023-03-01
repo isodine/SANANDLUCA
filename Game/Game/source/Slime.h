@@ -7,7 +7,7 @@ class LKAclass;
 
 class Slime {
 public:
-	void Initialize();
+	void Initialize(float x, float y, float z);
 	void Terminate();
 	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
 	void Render(VECTOR Pos);

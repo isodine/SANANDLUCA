@@ -123,7 +123,8 @@ bool ModeGame::Initialize() {
 				intresult.push_back(readInteger);
 				if (i == 1) { x = readInteger; }
 				if (i == 2) { y = readInteger; }
-				if (i == 3) { z = readInteger;
+				if (i == 3) {
+					z = readInteger;
 
 					if (cnt == 1) { san.vPos = VGet(x, y, z); }
 					else if (cnt == 2) { lka.vPos = VGet(x, y, z); }
@@ -148,8 +149,12 @@ bool ModeGame::Initialize() {
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
 
 	auto Slime1 = std::make_unique<Slime>();
-	Slime1->Initialize();
+	Slime1->Initialize(0.0f, 25.0f, 1000.0f);
 	slimes.emplace_back(std::move(Slime1));
+
+	auto Slime2 = std::make_unique<Slime>();
+	Slime2->Initialize(60.0f, 25.0f, 1100.0f);
+	slimes.emplace_back(std::move(Slime2));
 
 
 	//シャドウマップの生成
@@ -194,6 +199,9 @@ bool ModeGame::Process() {
 	damage.Process();
 	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
 	gimmick.Balance(san.vPos, lka.vPos);
+	for (auto&& Slimes : slimes) {
+		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);
+	}
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
@@ -265,13 +273,16 @@ bool ModeGame::Render() {
 	{
 		sanbomb.Render();
 		gimmick.Render();
+		for (auto&& Slimes : slimes) {
+			Slimes->Render(Slimes->slimePos);
+		}
 		//slime.SlimeRender(slime.slimePos);
 		// コリジョン判定用ラインの描画
 		//if (_bViewCollision) {
 		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 		//}
 	}
-	 //マップモデルを描画する
+	//マップモデルを描画する
 	{
 		// シャドウマップへの描画の準備
 		ShadowMap_DrawSetup(ShadowMapHandle);
