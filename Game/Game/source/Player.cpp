@@ -294,7 +294,7 @@ void Player::Update()
 
 void Player::Jump()
 {
-	if (throughtime == 0.f) { height = 5.f; }
+	if (throughtime == 0.f) { height = 6.5f; }
 	vPos.y += height;
 }
 
