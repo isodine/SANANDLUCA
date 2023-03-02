@@ -24,6 +24,7 @@ void SAN::Initialize()
 	// 再生時間の初期化
 	Mtotal_time = 0.f;
 	Mplay_time = 0.0f;
+	hpootd = false;
 	// 位置,向きの初期化
 	vPos = VGet(-60, 0, 0);
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
@@ -39,7 +40,7 @@ void SAN::Input()
 	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 
-void SAN::Update(Camera& cam) 
+void SAN::Update(Camera& cam,Damage& damage)
 {
 	Input();
 	//int key = ApplicationMain::GetInstance()->GetKey1P();
@@ -166,6 +167,10 @@ void SAN::Update(Camera& cam)
 	if (Mplay_time >= Mtotal_time) {
 		Mplay_time = 0.0f;
 	}
+	if (damage.SanHP < 10)
+	{
+		hpootd = true;
+	}
 }
 
 void SAN::Render()
@@ -195,7 +200,14 @@ void SAN::Render()
 		VECTOR v = ConvWorldPosToScreenPos(vPos);
 		if (0.f <= v.z && v.z < 1.f)
 		{
-			DrawGraph(v.x, v.y, hphandle[0], true);
+			if (hpootd == false)
+			{
+				DrawGraph(v.x, v.y, hphandle[0], true);
+			}
+			if (hpootd == true)
+			{
+				DrawGraph(v.x, v.y, hphandle[1], true);
+			}
 		}
 
 	}

@@ -7,9 +7,10 @@ public:
 	SAN();
 	~SAN();
 	void Initialize()override;
-	void Update(Camera& cam);
+	void Update(Camera& cam,Damage& damage);
 	void Render()override;
 	void Input();
 
-	int hphandle[1];
+	int hphandle[2];
+	bool hpootd;
 };

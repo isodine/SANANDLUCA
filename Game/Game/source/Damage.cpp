@@ -17,8 +17,8 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
   
-	SanHP = 100;
-	LkaHP = 100;
+	SanHP = 10;
+	LkaHP = 10;
 
 	Distance = 1000;
 

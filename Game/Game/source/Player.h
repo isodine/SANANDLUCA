@@ -5,6 +5,7 @@
 #include "appframe.h"
 
 class Camera;
+class Damage;
 
 class Player
 {

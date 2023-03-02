@@ -134,7 +134,7 @@ bool ModeGame::Process() {
 	//	SanLka->Update();
 	//}
 
-	san.Update(_cam);
+	san.Update(_cam,damage);
 	lka.Update(_cam);
 	damage.Process();
 	//int key = ApplicationMain::GetInstance()->GetKey2P();
