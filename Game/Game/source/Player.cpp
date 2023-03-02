@@ -292,16 +292,16 @@ void Player::Update()
 	}
 }
 
-void Player::Jump() 
+void Player::Jump()
 {
-	if (throughtime == 0.f) { height = 10.f; }
+	if (throughtime == 0.f) { height = 5.f; }
 	vPos.y += height;
 }
 
 void Player::freeFall()
 {
 	vPos.y -= throughtime;
-	throughtime += 0.5f;
+	throughtime += 0.25f;
 }
 
 void Player::Render()
@@ -347,7 +347,7 @@ void Player::Render()
 
 void Player::charJump() {
 	height += 10.0f - throughtime;
-	throughtime += 0.5f;
+	throughtime += 0.25f;
 }
 
 void Player::Landing(float HitYPos) {

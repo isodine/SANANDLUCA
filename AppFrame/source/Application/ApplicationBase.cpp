@@ -21,7 +21,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance) {
 
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 
-	if ((DxLib_Init() == -1)|| CheckHitKey(KEY_INPUT_ESCAPE))
+	if ((DxLib_Init() == -1))
 	{	// エラーが起きたら直ちに終了
 		return false;
 	}

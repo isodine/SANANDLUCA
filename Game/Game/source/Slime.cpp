@@ -1,7 +1,8 @@
-void Slime::Initialize(float x, float y, float z) {
+void Slime::Initialize(float x, float y, float z,int pH) {
 	PlayTime = 0.0f;
 	slimePos = VGet(x, y, z);
 	slimeDir = VGet(0, 0, 0);
+	mypH = pH;
 	_status = STATUS::NONE;
 	AttachAnim = -1;
 	height = 5.0;

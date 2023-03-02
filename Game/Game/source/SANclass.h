@@ -13,8 +13,8 @@ public:
 	void Update() override;
 	void Render() override;
 	void Input() override;
-	void Jump();
-	void freeFall();
+	//void Jump();
+	//void freeFall();
 
 
 

@@ -31,8 +31,8 @@ bool ModeGameOver::Process() {
 
 	if (Trg & PAD_INPUT_5) {
 		ModeServer::GetInstance()->Del(this);
-		//ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
-		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
+		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
+		//ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
 	return true;
 }

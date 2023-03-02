@@ -55,7 +55,7 @@ bool ModeGame::Initialize() {
 	CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
-	_cam._vPos = VGet(0, 300.f, -400.f);
+	_cam._vPos = VGet(0, 700.f, -900.f);
 	_cam._vTarget = VGet(0, 60, 0);
 	_cam._clipNear = 2.f;
 	_cam._clipFar = 20000.f;
@@ -109,7 +109,7 @@ bool ModeGame::Initialize() {
 	std::string line;
 	std::vector<std::string> strresult;
 	std::vector<int> intresult;
-	int x, y, z;
+	int x, y, z, pH;
 	int cnt = 0;
 	while (std::getline(ifs, line)) {
 
@@ -121,13 +121,26 @@ bool ModeGame::Initialize() {
 			{
 				std::cout << readInteger << "\n";
 				intresult.push_back(readInteger);
-				if (i == 1) { x = readInteger; }
-				if (i == 2) { y = readInteger; }
-				if (i == 3) {
-					z = readInteger;
+				if (i == 1) { x  = readInteger; }
+				if (i == 2) { y  = readInteger; }
+				if (i == 3) { z  = readInteger; }
+				if (i == 4) { pH = readInteger;
 
-					if (cnt == 1) { san.vPos = VGet(x, y, z); }
-					else if (cnt == 2) { lka.vPos = VGet(x, y, z); }
+				if (cnt == 1) { san.vPos = VGet(x, y, z); pH == 1 ? san.SetType(true) : san.SetType(false); }
+					else if (cnt == 2) { lka.vPos = VGet(x, y, z); pH == 1 ? lka.SetType(true) : lka.SetType(false); }
+
+					else if (cnt == 3) 
+					{
+						auto Slime1 = std::make_unique<Slime>();
+						Slime1->Initialize(x, y, z, pH);
+						slimes.emplace_back(std::move(Slime1));
+					}
+					else if (cnt == 4)
+					{
+						auto Slime2 = std::make_unique<Slime>();
+						Slime2->Initialize(x, y, z, pH);
+						slimes.emplace_back(std::move(Slime2));
+					}
 
 				}
 			}
@@ -147,14 +160,6 @@ bool ModeGame::Initialize() {
 	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
-
-	auto Slime1 = std::make_unique<Slime>();
-	Slime1->Initialize(0.0f, 25.0f, 1000.0f);
-	slimes.emplace_back(std::move(Slime1));
-
-	auto Slime2 = std::make_unique<Slime>();
-	Slime2->Initialize(60.0f, 25.0f, 1100.0f);
-	slimes.emplace_back(std::move(Slime2));
 
 
 	//シャドウマップの生成
@@ -245,7 +250,7 @@ bool ModeGame::Render() {
 
 	// カメラ設定更新
 	_cam._vTarget = VScale(VAdd(san.vPos, lka.vPos), 0.5);
-	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 240, -400));
+	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 400.f, -500.f));
 	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
 	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
 

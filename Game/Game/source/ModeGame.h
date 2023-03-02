@@ -38,8 +38,9 @@ public:
 	virtual bool Render();
 	void charJump();
 
-	// カメラ
+	// カメラ関連
 	Camera _cam;
+	//VECTOR 
 	
 
 	// 3Dモデル描画用
