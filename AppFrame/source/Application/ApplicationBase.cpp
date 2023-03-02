@@ -21,12 +21,14 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance) {
 
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 
-	if ((DxLib_Init() == -1)|| CheckHitKey(KEY_INPUT_ESCAPE))
+	if (DxLib_Init() == -1)
 	{	// エラーが起きたら直ちに終了
 		return false;
 	}
 	SetDrawScreen(DX_SCREEN_BACK);		// 描画先画面を裏画面にセット
 
+	// Effekseerを初期化する。
+	// 引数には画面に表示する最大パーティクル数を設定する。
 	if (Effekseer_Init(8000) == -1)
 	{
 		DxLib_End();
@@ -56,6 +58,7 @@ bool ApplicationBase::Terminate() {
 
 	// Effekseerを終了する。
 	Effkseer_End();
+
 	// DXライブラリ開放
 	DxLib_End();
 
@@ -71,6 +74,9 @@ bool ApplicationBase::Input() {
 	int keyold2P = _gKey2P;
 	_gKey2P = GetJoypadInputState(DX_INPUT_PAD2);
 	_gTrg2P = (_gKey2P ^ keyold2P) & _gKey2P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	int keyoldEf = _gTrgEf;
+	_gKeyEf = GetJoypadInputState(DX_INPUT_KEY);
+	_gTrgEf = (_gKeyEf ^ keyoldEf) & _gKeyEf;
 
 	return true;
 }
