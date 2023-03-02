@@ -16,6 +16,8 @@ void SAN::Initialize()
 {
 	// モデルデータのロード（テクスチャも読み込まれる)
 	Mhandle = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1");
+	hphandle[0] = LoadGraph("res/UI_san_v6.png");
+	hphandle[1] = LoadGraph("res/UI_san_v5.png");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -189,6 +191,12 @@ void SAN::Render()
 
 		// コリジョン判定用ラインの描画
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
+
+		VECTOR v = ConvWorldPosToScreenPos(vPos);
+		if (0.f <= v.z && v.z < 1.f)
+		{
+			DrawGraph(v.x, v.y, hphandle[0], true);
+		}
 
 	}
 	//DrawFormatString(0, 260, GetColor(255, 255, 255), "%f, %f, %f", vPos.x, vPos.y, vPos.z);

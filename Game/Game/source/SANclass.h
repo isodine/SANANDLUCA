@@ -11,4 +11,5 @@ public:
 	void Render()override;
 	void Input();
 
+	int hphandle[1];
 };

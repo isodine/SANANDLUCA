@@ -41,7 +41,6 @@ bool ModeGame::Initialize() {
 	MV1SetupCollInfo(_handleMap, _frameMapCollision, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
-	p = LoadGraph("res/cursor.png");
 	// 腰位置の設定
 	_colSubY = 60.f;
 
@@ -166,10 +165,10 @@ bool ModeGame::Process() {
 	}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
-	sancircle.Update(san);
-	lkacircle.Update(lka);
-	sanheal.Update(san);
-	lkaheal.Update(lka);
+	//sancircle.Update(san);
+	//lkacircle.Update(lka);
+	//sanheal.Update(san);
+	//lkaheal.Update(lka);
 	//
 	//if (_gTrgEf & PAD_INPUT_9 && oldcount == 0)
 	//{
@@ -320,8 +319,6 @@ bool ModeGame::Render() {
 		//	SanLka->Render();
 		//}
 
-		san.Render();
-		lka.Render();
 
 
 		// コリジョン判定用ラインの描画
@@ -361,13 +358,16 @@ bool ModeGame::Render() {
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 	}
+	san.Render();
+	lka.Render();
+
 	damage.Render();
 	sanbomb.Render();
 	lkabomb.Render();
-	sancircle.Render();
-	lkacircle.Render();
-	sanheal.Render();
-	lkaheal.Render();
+	//sancircle.Render();
+	//lkacircle.Render();
+	//sanheal.Render();
+	//lkaheal.Render();
 	//int AttachIndex;
 	//float TotalTime;
 	//MV1SetMaterialDrawBlendParam(san.Mhandle, 0, 125);
@@ -399,11 +399,6 @@ bool ModeGame::Render() {
 			StopEffekseer3DEffect(_playingEffectHandle);
 		}*/
 
-	VECTOR v = ConvWorldPosToScreenPos(san.vPos);
-	if (0.f <= v.z && v.z < 1.f)
-	{
-		DrawGraph(v.x,v.y,p,true);
-	}
 	return true;
 }
 
