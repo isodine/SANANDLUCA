@@ -23,6 +23,8 @@
 #include "ModeStage2.h"
 #include "ModeStage3.h"
 #include "ModeTitle.h"
+#include "sanbomb.h"
+
 
 
 #include <string>

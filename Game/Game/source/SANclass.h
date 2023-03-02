@@ -1,7 +1,7 @@
 #pragma once
 #include"Player.h"
 
-class SanBomb;
+class Sanbomb;
 class Damage;
 
 class SAN :public Player

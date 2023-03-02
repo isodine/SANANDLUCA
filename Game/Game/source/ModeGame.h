@@ -78,7 +78,8 @@ public:
 	Player player;
 	SAN san;
 	LKA lka;
-	SanBomb sanbomb;
+	PlayerBomb playerbomb;
+	Sanbomb sanbomb;
 	Damage damage;
 	Gimmick gimmick;
 	Slime slime;

@@ -48,7 +48,7 @@ public:
 	Player player;
 	SAN san;
 	LKA lka;
-	SanBomb sanbomb;
+	Sanbomb sanbomb;
 	Damage damage;
 	Gimmick gimmick;
 	//Slime slime;

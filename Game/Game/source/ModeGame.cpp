@@ -80,7 +80,7 @@ bool ModeGame::Initialize() {
 	height = 0.0f;
 
 	san.SetCamera(&_cam);
-	san.SetBomb(&sanbomb);
+	san.SetBomb(&playerbomb);
 	san.SetDamage(&damage);
 
 	san.Initialize();
@@ -89,7 +89,7 @@ bool ModeGame::Initialize() {
 	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
-	lka.SetBomb(&sanbomb);
+	lka.SetBomb(&playerbomb);
 	lka.SetDamage(&damage);
 
 	lka.Initialize();
@@ -101,7 +101,7 @@ bool ModeGame::Initialize() {
 	//slime.Initialize();
 	gimmick.Initialize();
 	gimmick.SetSanLka(&san, &lka);
-	sanbomb.Initialize(san);
+	sanbomb.Init();
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
