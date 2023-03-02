@@ -28,7 +28,7 @@ void SAN::Initialize()
 	// 位置,向きの初期化
 	vPos = VGet(-60, 0, 0);
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
-
+	oldcount = GetNowCount();
 	// 腰位置の設定
 	_colSubY = 60.f;
 }
@@ -167,13 +167,10 @@ void SAN::Update(Camera& cam,Damage& damage)
 	if (Mplay_time >= Mtotal_time) {
 		Mplay_time = 0.0f;
 	}
-	if (damage.SanHP == 10)
-	{
-		oldcount = GetNowCount();
-	}
-	if (damage.SanHP < 10)
+	if (hpootd == false&&damage.SanHP == 9)
 	{
 		hpootd = true;
+		oldcount = GetNowCount();
 	}
 }
 
@@ -206,7 +203,11 @@ void SAN::Render()
 		{
 			if (hpootd == false)
 			{
-				DrawGraph(v.x, v.y, hphandle[0], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x, v.y, hphandle[0], true);
+				}
 			}
 			if (hpootd == true)
 			{

@@ -14,4 +14,5 @@ public:
 	int hphandle[2];
 	float oldcount;
 	bool hpootd;
+	bool _isflag;
 };
