@@ -84,18 +84,18 @@ void Player::Update()
 		// Šp“x•ÏX
 		// YŽ²‰ñ“]
 		
-			float sx = _camera->_vPos.x - _camera->_vTarget.x;
-			float sz = _camera->_vPos.z - _camera->_vTarget.z;
-			float rad = atan2(sz, sx);
-			float length = sqrt(sz * sz + sx * sx);
-			if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
-			if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-			_camera->_vPos.x = _camera->_vTarget.x + cos(rad) * length;
-			_camera->_vPos.z = _camera->_vTarget.z + sin(rad) * length;
+			//float sx = _camera->_vPos.x - _camera->_vTarget.x;
+			//float sz = _camera->_vPos.z - _camera->_vTarget.z;
+			//float rad = atan2(sz, sx);
+			//float length = sqrt(sz * sz + sx * sx);
+			//if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
+			//if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
+			//_camera->_vPos.x = _camera->_vTarget.x + cos(rad) * length;
+			//_camera->_vPos.z = _camera->_vTarget.z + sin(rad) * length;
 
-			// YˆÊ’u
-			if (key & PAD_INPUT_DOWN) { _camera->_vPos.y -= 5.f; }
-			if (key & PAD_INPUT_UP) { _camera->_vPos.y += 5.f; }
+			//// YˆÊ’u
+			//if (key & PAD_INPUT_DOWN) { _camera->_vPos.y -= 5.f; }
+			//if (key & PAD_INPUT_UP) { _camera->_vPos.y += 5.f; }
 		
 	}
 	else {

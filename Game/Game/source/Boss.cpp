@@ -5,13 +5,15 @@ void Boss::Initialize() {
 	model.pos = VGet(0, 0, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	StopDir = 0.1;
+	StopDir = 0.01;
+	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
+	rotate = 0;
 	rotateFlag = true;
 	walkFlag = false;
 	walkTimeCount = 0;
-	walkTime0 = 180;
-	walkTime1 = 210;
-	walkTime2 = 240;
+	walkTime0 = 90;
+	walkTime1 = 120;
+	walkTime2 = 150;
 	walkRand = 0;
 	rushFlag = false;
 	targetFlag = false;
@@ -35,8 +37,9 @@ void Boss::Process() {
 	rotationMatrix = MMult(MMult(MGetRotX(model.dir.x), MGetRotY(model.dir.y)), MGetRotZ(model.dir.z));
 	forward = VTransform({0.0f,0.0f,-1.0f},rotationMatrix);
 
-	Rotation();
+	Rotation(san.vPos, lka.vPos, san.vDir, lka.vDir);
 	Walk();
+	Rush(san.vPos, lka.vPos, san.vDir, lka.vDir);
 	if (oldtype == type) {
 		// 再生時間を進める
 		PlayTime += 0.5f;
@@ -54,13 +57,15 @@ void Boss::Process() {
 	
 	switch (type) {
 	case BOSSTYPE::RUSH:
-		AttachAnim1 = MV1AttachAnim(BossHandle, 8, -1, FALSE);//突進前モーションをアタッチする
-		AttachAnim2 = MV1AttachAnim(BossHandle, 9, -1, FALSE);//突進モーションをアタッチする
+		manager->animChange(8, &model, false, false, false);//突進前モーションをアタッチする
+		manager->setNextAnim(9, &model, true, false);//突進モーションをアタッチする
 		break;
 	case BOSSTYPE::CAPTURE:
-		AttachAnim1 = MV1AttachAnim(BossHandle, 2, -1, FALSE);//捕まえるモーションをアタッチする
-		AttachAnim2 = MV1AttachAnim(BossHandle, 1, -1, FALSE);//ループモーションをアタッチする
-		AttachAnim3 = MV1AttachAnim(BossHandle, 0, -1, FALSE);//離す前モーションをアタッチする
+		manager->animChange(2, &model, false, false, false);//捕まえるモーションをアタッチする
+		manager->setNextAnim(1, &model, true, false);//ループモーションをアタッチする
+		break;
+	case BOSSTYPE::CAPTUREEND:
+		manager->animChange(0, &model, true, false, false);//離す前モーションをアタッチする
 		break;
 	case BOSSTYPE::ROTATION:
 		manager->animChange(10, &model, true, false, false);//回転モーションをアタッチする
@@ -69,9 +74,11 @@ void Boss::Process() {
 		manager->animChange(11, &model, true, false, false);//歩きモーションをアタッチする
 		break;
 	case BOSSTYPE::CRUSH:
-		AttachAnim1 = MV1AttachAnim(BossHandle, 5, -1, FALSE);//刺さるモーションをアタッチする
-		AttachAnim2 = MV1AttachAnim(BossHandle, 4, -1, FALSE);//じたばたモーションをアタッチする
-		AttachAnim3 = MV1AttachAnim(BossHandle, 3, -1, FALSE);//離れるモーションをアタッチする
+		manager->animChange(5, &model, false, false, false);//刺さるモーションをアタッチする
+		manager->setNextAnim(4, &model, true, false);//じたばたモーションをアタッチする
+		break;
+	case BOSSTYPE::PULL:
+		manager->animChange(3, &model, true, false, false);//離れるモーションをアタッチする
 		break;
 	case BOSSTYPE::DOWN:
 		//AttachAnim1 = MV1AttachAnim(BossHandle, 6, -1, FALSE);//ダウンモーションをアタッチする
@@ -83,47 +90,30 @@ void Boss::Process() {
 }
 	/*TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
 	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
-	
-
-
 	// 再生時間を初期化
-	//PlayTime = 0.0f;
-
-	
+	//PlayTime = 0.0f;	
 }
 
-void Boss::Rotation() {
-	float rotate;
-	if (rotateFlag) {
-		randomNum = GetRand(359);
-		BossDir = VGet(0, randomNum * DX_PI_F / 180.0f, 0);
-		walkRand = GetRand(2);
-		if (walkRand == 0) {
-			WalkTime = walkTime0;
-		}
-		else if (walkRand == 1) {
-			WalkTime = walkTime1;
-		}
-		else if (walkRand == 2) {
-			WalkTime = walkTime2;
-		}
-		walkTimeCount = 0;
-		rotateFlag = false;
+void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
+	
+	if (rotateCount <= 90) {
+		//model.dir.y = atan2(sanPos.x * -1, sanPos.z * -1);
+		BossDir = VNorm(VSub(sanDir, model.dir));
+		//model.dir.y = model.dir.y,VScale(BossDir,0.01);
 	}
-	if (StopDir < abs(model.dir.y-BossDir.y)) {
-		if (model.dir.y - BossDir.y > 0) {
-			rotate = -0.015;
-		}
-		else {
-			rotate = 0.015;
-		}
-		model.dir = VAdd(model.dir, VGet(0, rotate, 0));
-		model.dir.y = std::fmod(model.dir.y, 2 * DX_PI_F);
-		type = BOSSTYPE::ROTATION;
+	else if (rotateCount >= 180 && rotateCount > 90) {
+		//model.dir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
+		BossDir = VNorm(VSub(lkaDir, model.dir));
+		//model.dir.y = model.dir.y + BossDir.y * 0.01;
 	}
-	else {
-		walkFlag = true;
+	model.dir.y = model.dir.y + BossDir.y * 0.01;
+	//model.dir.y = std::fmod(model.dir.y, 2 * DX_PI_F);
+	type = BOSSTYPE::ROTATION;
+	rotateCount += 1;
+	if (rotateCount > 180) {
+		rotateCount = 0;
 	}
+	
 }
 
 void Boss::Walk() {
@@ -132,11 +122,12 @@ void Boss::Walk() {
 		model.pos = VAdd(VScale(forward, 2.f), model.pos);
 		walkTimeCount += 1;
 		if (walkTimeCount == WalkTime) {
-			int num = GetRand(9);
+			int num = GetRand(3);
 			if (num == 0) {
 				rotateFlag = true;
 				rushFlag = true;
 				targetFlag = true;
+				rushFlag = true;
 			}
 			walkFlag = false;
 			rotateFlag = true;
@@ -160,17 +151,31 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
 			targetFlag = false;
 			if (SanDir <= LkaDir) {
 				target = true;
+				BossDir = SanPos;
 			}
 			else {
 				target = false;
+				BossDir.y = LkaPos.y;
 			}
 		}
-		if (target == true) {
-			BossSetDir.y = atan2(sanPos.x * -1, sanPos.z * -1);
+		if (StopDir > abs(model.dir.y - BossDir.y)) {
+			rotate = 0.15;
+			if (target) {
+				//model.dir.y = atan2(sanPos.x * -1, sanPos.z * -1);
+				model.dir = VAdd(model.dir, VGet(0, rotate, 0));
+				model.dir.y = std::fmod(model.dir.y, 2 * DX_PI_F);
+			}
+			else {
+				//model.dir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
+				model.dir = VAdd(model.dir, VGet(0, rotate, 0));
+				model.dir.y = std::fmod(model.dir.y, 2 * DX_PI_F);
+			}
+			TargetDir = VNorm(VGet(BossDir.x, model.dir.y * DX_PI_F / 180.0f, BossDir.z));
 		}
 		else {
-			BossSetDir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
+			model.pos = VAdd(VScale(forward, 5.f), TargetDir);
 		}
+		
 
 	}
 	

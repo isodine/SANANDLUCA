@@ -15,7 +15,7 @@ public:
 
 	// ƒJƒƒ‰
 	Camera _cam;
-
+	Camera _bossCam;
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int _handle;
@@ -30,6 +30,8 @@ public:
 	int _handleSkySphere;
 	int frameMapCollisionfloor;
 	int frameMapCollisionwall;
+
+	int Count;//‰¼
 
 	int LightHandle;
 	int MaskHandle;
@@ -50,7 +52,5 @@ public:
 	LKA lka;
 	SanBomb sanbomb;
 	Damage damage;
-	Gimmick gimmick;
-	//Slime slime;
 	Boss boss;
 };

@@ -303,8 +303,8 @@ bool ModeGame::Render() {
 		//MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
-	//san.Render();
-	//lka.Render();
+	san.Render();
+	lka.Render();
 	// デバッグ表示
 	{
 		int x = 0, y = 0, size = 16;
