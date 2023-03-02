@@ -12,5 +12,6 @@ public:
 	void Input();
 
 	int hphandle[2];
+	float oldcount;
 	bool hpootd;
 };

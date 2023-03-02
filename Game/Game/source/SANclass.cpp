@@ -167,6 +167,10 @@ void SAN::Update(Camera& cam,Damage& damage)
 	if (Mplay_time >= Mtotal_time) {
 		Mplay_time = 0.0f;
 	}
+	if (damage.SanHP == 10)
+	{
+		oldcount = GetNowCount();
+	}
 	if (damage.SanHP < 10)
 	{
 		hpootd = true;
@@ -206,7 +210,11 @@ void SAN::Render()
 			}
 			if (hpootd == true)
 			{
-				DrawGraph(v.x, v.y, hphandle[1], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x, v.y, hphandle[1], true);
+				}
 			}
 		}
 
