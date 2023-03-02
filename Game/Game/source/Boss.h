@@ -8,6 +8,7 @@ public:
 	void Process();
 	void Render();
 
+	void Targeting(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
 	void Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
 	void Capture();
 	void Rotation(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
@@ -49,6 +50,7 @@ public:
 	int AttachAnim2;
 	int AttachAnim3;
 	int rotateCount;
+	int waitTime;
 	float TotalTime1;
 	float TotalTime2;
 	float TotalTime3;

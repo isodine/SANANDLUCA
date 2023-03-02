@@ -8,6 +8,7 @@ void Boss::Initialize() {
 	StopDir = 0.01;
 	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	rotate = 0;
+	waitTime = 0;
 	rotateFlag = true;
 	walkFlag = false;
 	walkTimeCount = 0;
@@ -37,9 +38,45 @@ void Boss::Process() {
 	rotationMatrix = MMult(MMult(MGetRotX(model.dir.x), MGetRotY(model.dir.y)), MGetRotZ(model.dir.z));
 	forward = VTransform({0.0f,0.0f,-1.0f},rotationMatrix);
 
-	Rotation(san.vPos, lka.vPos, san.vDir, lka.vDir);
+	switch (type) {
+	case BOSSTYPE::NONE:
+		type = BOSSTYPE::ROTATION;
+		break;
+	case BOSSTYPE::RUSH:
+		Rush(san.vPos, lka.vPos, san.vDir, lka.vDir);
+		break;
+	case BOSSTYPE::CAPTURE:
+		
+		break;
+	case BOSSTYPE::CAPTUREEND:
+		
+		break;
+	case BOSSTYPE::ROTATION:
+		Rotation(san.vPos, lka.vPos, san.vDir, lka.vDir);
+		break;
+	case BOSSTYPE::WALK:
+		Walk();
+		break;
+	case BOSSTYPE::CRUSH:
+		
+		break;
+	case BOSSTYPE::PULL:
+		
+		break;
+	case BOSSTYPE::DOWN:
+		
+		break;
+	case BOSSTYPE::IDLE:
+		Idle();
+		break;
+	}
+
+
+
+
+	/*Rotation(san.vPos, lka.vPos, san.vDir, lka.vDir);
 	Walk();
-	Rush(san.vPos, lka.vPos, san.vDir, lka.vDir);
+	Rush(san.vPos, lka.vPos, san.vDir, lka.vDir);*/
 	if (oldtype == type) {
 		// 再生時間を進める
 		PlayTime += 0.5f;
@@ -95,25 +132,47 @@ void Boss::Process() {
 }
 
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
+	if (rotateFlag) {
+		if (rotateCount <= 90) {
+			BossDir = VNorm(VSub(sanDir, model.dir));
+		}
+		else if (rotateCount >= 180 && rotateCount > 90) {
+			BossDir = VNorm(VSub(lkaDir, model.dir));
+		}
+		model.dir.y = model.dir.y + BossDir.y * 0.01;
+		type = BOSSTYPE::ROTATION;
+		rotateCount += 1;
+		if (rotateCount > 180) {
+			rotateCount = 0;
+			rotateFlag = false;
+			targetFlag = true;
+		}
+	}
+	else {
+		Targeting(san.vPos, lka.vPos, san.vDir, lka.vDir);
+	}
+}
+
+void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
+	if (targetFlag) {
+		float San = VSize(VSub(sanPos, model.pos));
+		float Lka = VSize(VSub(lkaPos, model.pos));
+		if (San <= Lka) {
+			target = true;
+			BossDir = VNorm(VSub(sanDir, model.dir));
+		}
+		else {
+			target = false;
+			BossDir = VNorm(VSub(lkaDir, model.dir));
+		}
+		targetFlag = false;
+	}
+		model.dir.y = model.dir.y + BossDir.y * 0.01;
 	
-	if (rotateCount <= 90) {
-		//model.dir.y = atan2(sanPos.x * -1, sanPos.z * -1);
-		BossDir = VNorm(VSub(sanDir, model.dir));
-		//model.dir.y = model.dir.y,VScale(BossDir,0.01);
+	if (StopDir > abs(model.dir.y - BossDir.y)) {
+		rushFlag = true;
+		type = BOSSTYPE::RUSH;
 	}
-	else if (rotateCount >= 180 && rotateCount > 90) {
-		//model.dir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
-		BossDir = VNorm(VSub(lkaDir, model.dir));
-		//model.dir.y = model.dir.y + BossDir.y * 0.01;
-	}
-	model.dir.y = model.dir.y + BossDir.y * 0.01;
-	//model.dir.y = std::fmod(model.dir.y, 2 * DX_PI_F);
-	type = BOSSTYPE::ROTATION;
-	rotateCount += 1;
-	if (rotateCount > 180) {
-		rotateCount = 0;
-	}
-	
 }
 
 void Boss::Walk() {
@@ -141,43 +200,16 @@ void Boss::Idle() {
 
 void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
 	if (rushFlag == true) {
-		//一度だけターゲットを決める
-		if (targetFlag == true) {
-			VECTOR LkaPos = VSub(lkaPos, model.pos);
-			VECTOR SanPos = VSub(sanPos, model.pos);
-
-			float SanDir = VSize(SanPos);
-			float LkaDir = VSize(LkaPos);
-			targetFlag = false;
-			if (SanDir <= LkaDir) {
-				target = true;
-				BossDir = SanPos;
-			}
-			else {
-				target = false;
-				BossDir.y = LkaPos.y;
-			}
+		waitTime += 1;
+		if (waitTime == 120) {
+			waitTime = 0;
+			rushFlag = false;
 		}
-		if (StopDir > abs(model.dir.y - BossDir.y)) {
-			rotate = 0.15;
-			if (target) {
-				//model.dir.y = atan2(sanPos.x * -1, sanPos.z * -1);
-				model.dir = VAdd(model.dir, VGet(0, rotate, 0));
-				model.dir.y = std::fmod(model.dir.y, 2 * DX_PI_F);
-			}
-			else {
-				//model.dir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
-				model.dir = VAdd(model.dir, VGet(0, rotate, 0));
-				model.dir.y = std::fmod(model.dir.y, 2 * DX_PI_F);
-			}
-			TargetDir = VNorm(VGet(BossDir.x, model.dir.y * DX_PI_F / 180.0f, BossDir.z));
-		}
-		else {
-			model.pos = VAdd(VScale(forward, 5.f), TargetDir);
-		}
-		
-
 	}
+	else {
+		model.pos = VAdd(VScale(forward, 8.f), model.pos);
+	}
+
 	
 
 }
