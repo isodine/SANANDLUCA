@@ -13,10 +13,11 @@ public:
 	void Process();
 	void Render();
 
-	void Targeting(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
-	void Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir, int SanHandle, int LkaHandle, int MapHandle);
+	void Targeting(VECTOR sanPos, VECTOR lkaPos);
+	void Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int MapHandle);
 	void Capture();
-	void Rotation(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
+	void CaptureEnd();
+	void Rotation(VECTOR sanPos, VECTOR lkaPos);
 	void Walk();
 	void Crush();
 	void Down();
@@ -52,15 +53,14 @@ public:
 
 	BOSSTYPE type;
 	
-	int BossHandle;
-	int AttachAnim1;
-	int AttachAnim2;
-	int AttachAnim3;
 	int RotateCount;//回転する時間
 	int WaitCount;//ため攻撃のモーションのカウント
 	int PullCount;//抜けるまでの秒数
 	int CrushCount;//じたばたする時間
 	int IdleCount;//休憩する時間
+	int CaptureCount;//捕まえている時間
+	int EndCount;//捕まえた後の時間
+	int BossHP;//ボスの体力
 	float TotalTime1;
 	float TotalTime2;
 	float TotalTime3;
@@ -85,6 +85,7 @@ public:
 	bool SanCatchFlag;//TRUEならサンを捕まえた
 	bool LkaCatchFlag;//TRUEならルカを捕まえた
 	bool crushFlag;//TRUEならTYPEをCrashにする
+	bool AttackedFlag;//TRUEなら攻撃された
 	
 
 	SAN* san;

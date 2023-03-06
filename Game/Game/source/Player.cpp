@@ -71,7 +71,7 @@ void Player::Initialize()
 	// ˜ˆÊ’u‚Ìİ’è
 	_colSubY = 45.f;
 
-
+	HP = 3;
 }
 
 void Player::Update()

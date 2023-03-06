@@ -20,6 +20,9 @@ void Boss::Initialize() {
 	PullCount = 0;
 	WaitCount = 0;
 	IdleCount = 0;
+	CaptureCount = 0;
+	EndCount = 0;
+	BossHP = 3;
 	/*rotateFlag = false;
 	walkFlag = false;
 	rushFlag = false;
@@ -56,16 +59,16 @@ void Boss::Process() {
 		type = BOSSTYPE::ROTATION;
 		break;
 	case BOSSTYPE::RUSH:
-		Rush(san->vPos, lka->vPos, san->vDir, lka->vDir, san->Mhandle, lka->Mhandle, modeboss->_handleMap);
+		Rush(san->vPos, lka->vPos, san->Mhandle, lka->Mhandle, modeboss->_handleMap);
 		break;
 	case BOSSTYPE::CAPTURE:
-		
+		Capture();
 		break;
 	case BOSSTYPE::CAPTUREEND:
-		
+		CaptureEnd();
 		break;
 	case BOSSTYPE::ROTATION:
-		Rotation(san->vPos, lka->vPos, san->vDir, lka->vDir);
+		Rotation(san->vPos, lka->vPos);
 		break;
 	case BOSSTYPE::WALK:
 		Walk();
@@ -100,10 +103,10 @@ void Boss::Process() {
 	}
 	else {
 		// アニメーションがアタッチされていたら、デタッチする
-		if (AttachAnim1 != -1) {
+		/*if (AttachAnim1 != -1) {
 			MV1DetachAnim(BossHandle, AttachAnim1);
 			AttachAnim1 = -1;
-		}
+		}*/
 	
 	switch (type) {
 	case BOSSTYPE::RUSH:
@@ -131,8 +134,7 @@ void Boss::Process() {
 		manager->animChange(3, &model, true, false, false);//離れるモーションをアタッチする
 		break;
 	case BOSSTYPE::DOWN:
-		//AttachAnim1 = MV1AttachAnim(BossHandle, 6, -1, FALSE);//ダウンモーションをアタッチする
-		manager->animChange(6, &model, false, false, true);
+		manager->animChange(6, &model, false, false, true);//ダウンモーションをアタッチする
 		break;
 	case BOSSTYPE::IDLE:
 		manager->animChange(7, &model, true, false, false);//待機モーションをアタッチする
@@ -144,7 +146,7 @@ void Boss::Process() {
 	//PlayTime = 0.0f;	
 }
 
-void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
+void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
 	if (rotateFlag) {
 		if (RotateCount <= 90) {
 			BossDir = VNorm(VSub(sanPos, model.pos));
@@ -167,11 +169,11 @@ void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) 
 		}
 	}
 	else {
-		Targeting(san->vPos, lka->vPos, san->vDir, lka->vDir);
+		Targeting(san->vPos, lka->vPos);
 	}
 }
 
-void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
+void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 	if (targetFlag) {
 		float San = VSize(VSub(sanPos, model.pos));
 		float Lka = VSize(VSub(lkaPos, model.pos));
@@ -230,7 +232,7 @@ void Boss::Idle() {
 	}
 }
 
-void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir, int SanHandle, int LkaHandle, int MapHandle) {
+void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int MapHandle) {
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimWall;
@@ -244,17 +246,21 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir, int 
 	else {
 		model.pos = VAdd(VScale(forward, 10.f), model.pos);
 		MV1RefreshCollInfo(SanHandle, 3);
-		MV1RefreshCollInfo(LkaHandle, 3);
+		MV1RefreshCollInfo(LkaHandle, 8);
 		hitPolyDimSan = MV1CollCheck_Sphere(SanHandle, 3, SphereCenter, 60);
-		hitPolyDimLka = MV1CollCheck_Sphere(LkaHandle, 3, SphereCenter, 60);
+		hitPolyDimLka = MV1CollCheck_Sphere(LkaHandle, 8, SphereCenter, 60);
 		hitPolyDimWall = MV1CollCheck_Sphere(MapHandle, 1, SphereCenter, 60);
 
 		if (hitPolyDimSan.HitNum >= 1) {
-			san->vPos = SphereCenter;
+			san->vPos.x = SphereCenter.x;
+			san->vPos.y = 0;
+			san->vPos.z = SphereCenter.z;
 			SanCatchFlag = true;
 		}
 		else if (hitPolyDimLka.HitNum >= 1) {
-			lka->vPos = SphereCenter;
+			lka->vPos.x = SphereCenter.x;
+			lka->vPos.y = 0;
+			lka->vPos.z = SphereCenter.z;
 			LkaCatchFlag = true;
 		}
 		if (hitPolyDimWall.HitNum >= 1) {
@@ -284,11 +290,62 @@ void Boss::Crush() {
 
 void Boss::Pull() {
 	PullCount += 1;
-	if (PullCount == 60) {
-		model.pos = VAdd(model.pos, VScale(forward, -10));
+	if (PullCount > 60) {
+		model.pos = VAdd(model.pos, VScale(forward, -3));
 	}
 	if (PullCount == 78) {
 		PullCount = 0;
+		type = BOSSTYPE::IDLE;
+	}
+}
+
+void Boss::Capture() {
+	if (SanCatchFlag) {
+		san->vPos.x = SphereCenter.x;
+		san->vPos.y = 0;
+		san->vPos.z = SphereCenter.z;
+	}
+	if(LkaCatchFlag) {
+		lka->vPos.x = SphereCenter.x;
+		lka->vPos.y = 0;
+		lka->vPos.z = SphereCenter.z;
+	}
+	CaptureCount += 1;
+
+	if (CaptureCount == 120) {
+		if (SanCatchFlag) {
+			san->HP -= 1;
+		}
+		if (LkaCatchFlag) {
+			lka->HP -= 1;
+		}
+	}
+
+	if (CaptureCount == 180) {
+		CaptureCount = 0;
+		SanCatchFlag = false;
+		LkaCatchFlag = false;
+		type = BOSSTYPE::CAPTUREEND;
+	}
+	if (AttackedFlag) {
+		AttackedFlag = false;
+		BossHP -= 1;
+		SanCatchFlag = false;
+		LkaCatchFlag = false;
+		type = BOSSTYPE::CAPTUREEND;
+		if (BossHP == 0) {
+			type = BOSSTYPE::DOWN;
+		}
+	}
+}
+
+void Boss::CaptureEnd() {
+	EndCount += 1;
+	if (EndCount > 45) {
+		model.pos = VAdd(model.pos, VScale(forward, -3));
+	}
+	if (EndCount == 64) {
+		EndCount = 0;
 		type = BOSSTYPE::IDLE;
 	}
 }
