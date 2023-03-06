@@ -5,7 +5,8 @@
 
 bool ModeLogo::Initialize() {
 	if (!base::Initialize()) { return false; }
-
+	LoadGraph("res/00_logo/01_AMG-LOGO.png");
+	LoadGraph("res/00_logo/02_Game_Logo.png");
 	return true;
 }
 
