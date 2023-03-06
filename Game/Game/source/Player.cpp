@@ -42,7 +42,8 @@ void Player::SetType(bool isSan)
 	}
 }
 
-void Player::Input() {
+void Player::Input()
+{
 
 }
 
@@ -62,8 +63,6 @@ void Player::Initialize()
 	sanicon = LoadGraph("res/pH_gauge/アイコン表情差分/サン/pHgauge_Sun_Emotions_Normal.png");
 	sanframememori = LoadGraph("res/pH_gauge/フレーム/サン/pHgauge_Sun_background_memori.png");*/
 
-	// モデルデータのロード（テクスチャも読み込まれる)
-	Mhandle = MV1LoadModel("res/San_2023_0130/San_Fullmotion_2023_0203.mv1");
 
 	// 位置,向きの初期化
 	vPos = VGet(-60, 20, 0);
@@ -110,7 +109,8 @@ void Player::Update()
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
 		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP))
 		{
-			_status = STATUS::JUMP; PlaySoundMem(SEjump, DX_PLAYTYPE_BACK, true);
+			_status = STATUS::JUMP;
+			mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
 		}
 		//if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE)) { _status = STATUS::CHARGE; }
 		//if (key & PAD_INPUT_3 && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
@@ -122,7 +122,11 @@ void Player::Update()
 			attack = Attack::Pop;
 		}
 		if (_bomb->situation == Keep) { attack = Attack::Keep; }
-		if (trg & PAD_INPUT_6 && (attack == Attack::Keep)) { attack = Attack::Throw; }
+		if (trg & PAD_INPUT_6 && (attack == Attack::Keep)) 
+		{
+			attack = Attack::Throw;
+			mypH == San ? PlaySoundMem(VOICEthrowBombSAN[GetRand(2)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEthrowBombLKA[GetRand(2)], DX_PLAYTYPE_BACK, true);
+		}
 		if (_status == STATUS::JUMP) { Jump(); }
 		// vをrad分回転させる
 		float length = 0.f;

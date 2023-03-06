@@ -40,7 +40,6 @@ public:
 
 	// カメラ関連
 	Camera _cam;
-	//VECTOR 
 	
 
 	// 3Dモデル描画用
@@ -74,6 +73,9 @@ public:
 
 	VECTOR ShadowMapUpVec;
 	VECTOR ShadowMapDownVec;
+
+	//VOICE用
+	bool modeStart = false;
 
 public:
 	Player player;

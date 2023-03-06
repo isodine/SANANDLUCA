@@ -92,7 +92,41 @@ public:
 	void SetOnBalance(bool on) { OnBalance = on; }
 
 	//SE用
+	//アウトゲーム
+	int VOICEtitleSAN;
+	int VOICEtitleLKA;
+
+	int VOICEplaySAN;
+	int VOICEplayLKA;
+
+	int VOICEtutorialSAN;
+	int VOICEtutorialLKA;
+
+	int VOICEposeSAN;
+	int VOICEposeLKA;
+
+	int VOICEquitSAN;
+	int VOICEquitLKA;
+
+	//インゲーム
 	int SEjump;
+
+	int VOICEjumpSAN[4];
+	int VOICEjumpLKA[4];
+
+	int VOICEthrowBombSAN[3];
+	int VOICEthrowBombLKA[3];
+
+	int VOICEdamageSAN[2];
+	int VOICEdamageLKA[2];
+
+	int VOICEdeathSAN;
+	int VOICEdeathLKA;
+
+	int VOICEclearSAN;
+	int VOICEclearLKA;
+
+	int VOICEstartSANLKA[6];
 
 	//ジャンプ処理用
 	float throughtime;

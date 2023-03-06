@@ -194,9 +194,12 @@ bool ModeGame::Terminate() {
 bool ModeGame::Process() {
 	base::Process();
 
-	//for (auto&& SanLka : sanlka) {
-	//	SanLka->Update();
-	//}-
+	if (!modeStart)
+	{
+		PlaySoundMem(san.VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
+		modeStart = true;
+	}
+
 	sanbomb.Update(san);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
@@ -216,6 +219,11 @@ bool ModeGame::Process() {
 
 		// シャドウマップの削除
 		DeleteShadowMap(ShadowMapHandle);
+
+		ChangePanSoundMem(255, san.VOICEdeathSAN);
+		ChangePanSoundMem(-255, lka.VOICEdeathLKA);
+		PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
 
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");

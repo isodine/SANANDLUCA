@@ -25,6 +25,12 @@ bool ModeTitle::Terminate() {
 
 bool ModeTitle::Process() {
 	base::Process();
+
+	if (!modeStart)
+	{
+		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
+		modeStart = true;
+	}
 	int Trg;
 	int keyold = Key;
 	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);

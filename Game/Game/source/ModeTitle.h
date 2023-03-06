@@ -14,4 +14,7 @@ public:
 	int titlelogohandle;
 	int pushlogo;
 	int SEcrik;
+
+	//VOICE—p
+	bool modeStart = false;
 };
