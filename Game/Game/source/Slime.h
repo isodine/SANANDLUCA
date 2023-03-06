@@ -7,7 +7,7 @@ class LKAclass;
 
 class Slime {
 public:
-	void Initialize();
+	void Initialize(float x, float y, float z, int pH);
 	void Terminate();
 	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
 	void Render(VECTOR Pos);
@@ -41,6 +41,8 @@ public:
 	VECTOR sanPos;
 	VECTOR lkaPos;
 	VECTOR slimePos;
+
+	int mypH = 0;     //‚P_«A‚QƒAƒ‹ƒJƒŠ«
 
 	//std::vector<std::unique_ptr<Slime>> slime;
 

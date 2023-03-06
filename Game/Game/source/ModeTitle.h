@@ -11,5 +11,7 @@ public:
 	virtual bool Render();
 	
 	int titleHandle;
+	int titlelogohandle;
+	int pushlogo;
 	int SEcrik;
 };

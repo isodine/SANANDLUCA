@@ -50,12 +50,12 @@ bool ModeGame::Initialize() {
 	MV1SetFrameVisible(_handleMap, 2, FALSE);
 	MV1SetFrameVisible(_handleMap, 3, FALSE);
 
-	////マスクの試験運用
-	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	//CreateMaskScreen();
+	//マスクの試験運用
+	MaskHandle = LoadMask("res/San_Lka_Mask.png");
+	CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
-	_cam._vPos = VGet(0, 300.f, -400.f);
+	_cam._vPos = VGet(0, 700.f, -900.f);
 	_cam._vTarget = VGet(0, 60, 0);
 	_cam._clipNear = 2.f;
 	_cam._clipFar = 20000.f;
@@ -109,7 +109,7 @@ bool ModeGame::Initialize() {
 	std::string line;
 	std::vector<std::string> strresult;
 	std::vector<int> intresult;
-	int x, y, z;
+	int x, y, z, pH;
 	int cnt = 0;
 	while (std::getline(ifs, line)) {
 
@@ -121,12 +121,26 @@ bool ModeGame::Initialize() {
 			{
 				std::cout << readInteger << "\n";
 				intresult.push_back(readInteger);
-				if (i == 1) { x = readInteger; }
-				if (i == 2) { y = readInteger; }
-				if (i == 3) { z = readInteger;
+				if (i == 1) { x  = readInteger; }
+				if (i == 2) { y  = readInteger; }
+				if (i == 3) { z  = readInteger; }
+				if (i == 4) { pH = readInteger;
 
-					if (cnt == 1) { san.vPos = VGet(x, y, z); }
-					else if (cnt == 2) { lka.vPos = VGet(x, y, z); }
+				if (cnt == 1) { san.vPos = VGet(x, y, z); pH == 1 ? san.SetType(true) : san.SetType(false); }
+					else if (cnt == 2) { lka.vPos = VGet(x, y, z); pH == 1 ? lka.SetType(true) : lka.SetType(false); }
+
+					else if (cnt == 3) 
+					{
+						auto Slime1 = std::make_unique<Slime>();
+						Slime1->Initialize(x, y, z, pH);
+						slimes.emplace_back(std::move(Slime1));
+					}
+					else if (cnt == 4)
+					{
+						auto Slime2 = std::make_unique<Slime>();
+						Slime2->Initialize(x, y, z, pH);
+						slimes.emplace_back(std::move(Slime2));
+					}
 
 				}
 			}
@@ -146,10 +160,6 @@ bool ModeGame::Initialize() {
 	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
-
-	auto Slime1 = std::make_unique<Slime>();
-	Slime1->Initialize();
-	slimes.emplace_back(std::move(Slime1));
 
 
 	//シャドウマップの生成
@@ -194,6 +204,9 @@ bool ModeGame::Process() {
 	damage.Process();
 	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
 	gimmick.Balance(san.vPos, lka.vPos);
+	for (auto&& Slimes : slimes) {
+		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);
+	}
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
@@ -237,7 +250,7 @@ bool ModeGame::Render() {
 
 	// カメラ設定更新
 	_cam._vTarget = VScale(VAdd(san.vPos, lka.vPos), 0.5);
-	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 240, -400));
+	_cam._vPos = VAdd(_cam._vTarget, VGet(0, 400.f, -500.f));
 	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
 	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
 
@@ -264,13 +277,16 @@ bool ModeGame::Render() {
 
 	{
 		gimmick.Render();
+		for (auto&& Slimes : slimes) {
+			Slimes->Render(Slimes->slimePos);
+		}
 		//slime.SlimeRender(slime.slimePos);
 		// コリジョン判定用ラインの描画
 		//if (_bViewCollision) {
 		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 		//}
 	}
-	 //マップモデルを描画する
+	//マップモデルを描画する
 	{
 		// シャドウマップへの描画の準備
 		ShadowMap_DrawSetup(ShadowMapHandle);
@@ -288,10 +304,6 @@ bool ModeGame::Render() {
 
 		// ステージモデルの描画
 		MV1DrawModel(_handleMap);
-
-		// キャラクターモデルの描画
-		san.Render();
-		lka.Render();
 
 		// 描画に使用するシャドウマップの設定を解除
 		SetUseShadowMap(0, -1);
@@ -344,6 +356,9 @@ bool ModeGame::Render() {
 			break;
 		}
 	}
+	// キャラクターモデルの描画
+	san.Render();
+	lka.Render();
 	damage.Render();
 	sanbomb.Render();
 	return true;
