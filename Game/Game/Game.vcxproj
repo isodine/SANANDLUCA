@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\ModeRule.cpp" />
     <ClCompile Include="source\PlayerBomb.cpp" />
     <ClCompile Include="source\ApplicationMain.cpp" />
     <ClCompile Include="source\Boss.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Damage.h" />
+    <ClInclude Include="source\ModeRule.h" />
     <ClInclude Include="source\Slime.h" />
     <ClInclude Include="source\Gimmick.h" />
     <ClInclude Include="source\Include.h" />

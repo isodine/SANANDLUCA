@@ -306,10 +306,6 @@ bool ModeGame::Render() {
 		// ステージモデルの描画
 		MV1DrawModel(_handleMap);
 
-		// キャラクターモデルの描画
-		san.Render();
-		lka.Render();
-
 		// 描画に使用するシャドウマップの設定を解除
 		SetUseShadowMap(0, -1);
 
@@ -361,6 +357,9 @@ bool ModeGame::Render() {
 			break;
 		}
 	}
+	// キャラクターモデルの描画
+	san.Render();
+	lka.Render();
 	damage.Render();
 	return true;
 }

@@ -24,6 +24,8 @@
     <ClCompile Include="source\timer.cpp" />
     <ClCompile Include="source\Boss.cpp" />
     <ClCompile Include="source\PlayerBomb.cpp" />
+    <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\ModeRule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\ApplicationMain.h" />
@@ -50,5 +52,7 @@
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />
     <ClInclude Include="source\Boss.h" />
+    <ClInclude Include="source\Camera.h" />
+    <ClInclude Include="source\ModeRule.h" />
   </ItemGroup>
 </Project>

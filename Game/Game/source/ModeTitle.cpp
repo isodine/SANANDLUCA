@@ -3,10 +3,13 @@
 #include "ModeTitle.h"
 //#include "ModeGame.h"
 #include "ModeStage0.h"
+#include "ModeRule.h"
 
 
 ModeTitle::ModeTitle() {
-	titleHandle = LoadGraph("res/title.png");
+	titleHandle = LoadGraph("res/01_Tittle/Tittle.png");
+	titlelogohandle = LoadGraph("res/01_Tittle/logo.png");
+	pushlogo = LoadGraph("res/01_Tittle/text.png");
 	SEcrik = LoadSoundMem("res/06_Sound/03_SE/決定ボタンを押す24.mp3");
 }
 
@@ -34,7 +37,7 @@ bool ModeTitle::Process() {
 	if (Trg & checkKey) {
 		PlaySoundMem(SEcrik, DX_PLAYTYPE_BACK, true);
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
+		ModeServer::GetInstance()->Add(new ModeRule(), 1, "Rule");
 		//ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
 
@@ -45,5 +48,7 @@ bool ModeTitle::Render() {
 	//DrawString(320, 240, "タイトル画面", GetColor(255, 255, 255));
 
 	DrawGraph(0, 0, titleHandle, true);
+	DrawGraph(410, 0, titlelogohandle, true);
+	DrawGraph(617, 812, pushlogo, true);
 	return true;
 }

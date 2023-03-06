@@ -8,4 +8,7 @@ public:
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
+	void ChangeMode();
+private:
+	int logohandle, teamlogohandle;
 };

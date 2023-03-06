@@ -1,17 +1,16 @@
 #pragma once
+#pragma once
 #include "appframe.h"
 
-class ModeTitle : public ModeBase {
+class ModeRule : public ModeBase {
 	typedef ModeBase base;
 public:
-	ModeTitle();
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
-	
-	int titleHandle;
-	int titlelogohandle;
-	int pushlogo;
-	int SEcrik;
+	void ChangeMode();
+private:
+	int Rulehandle[5];
+	int pushbutton;
 };
