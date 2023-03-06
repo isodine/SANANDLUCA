@@ -18,12 +18,12 @@ void Sancircle::Update(SAN& san)
 	{
 		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y + 150, san.vPos.z);
+		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y, san.vPos.z);
 		//_position_x += 0.2f;
-		//SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.75f, 0.75f, 0.75f);
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y, san.vPos.z);
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y + 45, san.vPos.z);
 	//UpdateEffekseer3D();
 }
 

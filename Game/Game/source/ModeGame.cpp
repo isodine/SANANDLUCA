@@ -165,7 +165,7 @@ bool ModeGame::Process() {
 	}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
-	//sancircle.Update(san);
+	sancircle.Update(san);
 	//lkacircle.Update(lka);
 	//sanheal.Update(san);
 	//lkaheal.Update(lka);
@@ -364,7 +364,7 @@ bool ModeGame::Render() {
 	damage.Render();
 	sanbomb.Render();
 	lkabomb.Render();
-	//sancircle.Render();
+	sancircle.Render();
 	//lkacircle.Render();
 	//sanheal.Render();
 	//lkaheal.Render();
