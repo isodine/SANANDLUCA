@@ -42,7 +42,7 @@ bool ModeLogo::Render() {
 
     DrawGraph(335, 480, logohandle, true);  //描画
 
-    logo++;                                  //cをカウントアップ
+    logo+=4;                                  //cをカウントアップ
 
     if (logo == 400 + 256) 
     {
@@ -63,7 +63,7 @@ bool ModeLogo::Render() {
 
     DrawGraph(0, 0, teamlogohandle, true);  //描画
 
-    teamlogo++;                                  //cをカウントアップ
+    teamlogo+=4;                                  //cをカウントアップ
 
     if (teamlogo == 400 + 256)
     {
