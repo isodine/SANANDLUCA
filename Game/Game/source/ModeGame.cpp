@@ -50,9 +50,9 @@ bool ModeGame::Initialize() {
 	MV1SetFrameVisible(_handleMap, 2, FALSE);
 	MV1SetFrameVisible(_handleMap, 3, FALSE);
 
-	//マスクの試験運用
-	MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	CreateMaskScreen();
+	////マスクの試験運用
+	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
+	//CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
 	_cam._vPos = VGet(0, 300.f, -400.f);
@@ -263,7 +263,6 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		sanbomb.Render();
 		gimmick.Render();
 		//slime.SlimeRender(slime.slimePos);
 		// コリジョン判定用ラインの描画
@@ -346,5 +345,6 @@ bool ModeGame::Render() {
 		}
 	}
 	damage.Render();
+	sanbomb.Render();
 	return true;
 }
