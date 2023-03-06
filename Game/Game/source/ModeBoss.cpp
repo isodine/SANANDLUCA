@@ -43,6 +43,10 @@ bool ModeBoss::Initialize() {
 		_bossCam._clipFar = 20000.f;
 
 		Count = 0;
+
+		boss.modeboss = this;
+		boss.san = &san;
+		boss.lka = &lka;
 	
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/04_Stage_Boss.mv1");
@@ -53,6 +57,7 @@ bool ModeBoss::Initialize() {
 	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "coStage_floor1");
 	frameMapCollisionwall = MV1SearchFrame(_handleMap, "coStage_wall1");
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
+	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);

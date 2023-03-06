@@ -1,14 +1,14 @@
-//#include "Boss.h"
+#include "SANclass.h"
+#include "LKAclass.h"
 
 void Boss::Initialize() {
 	//BossHandle = MV1LoadModel("res/Boss/beaker_robot_All220203.mv1");
 	model.pos = VGet(0, 0, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	StopDir = 0.01;
+	StopDir = 0.05;
 	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	rotate = 0;
-	waitTime = 0;
 	rotateFlag = true;
 	walkFlag = false;
 	walkTimeCount = 0;
@@ -16,11 +16,23 @@ void Boss::Initialize() {
 	walkTime1 = 120;
 	walkTime2 = 150;
 	walkRand = 0;
+	CrushCount = 0;
+	PullCount = 0;
+	WaitCount = 0;
+	IdleCount = 0;
+	/*rotateFlag = false;
+	walkFlag = false;
 	rushFlag = false;
 	targetFlag = false;
+	target = false;
+	idleFlag = false;
+	SanCatchFlag = false;
+	LkaCatchFlag = false;
+	crashFlag = false;*/
+	
 	type = BOSSTYPE::NONE;
 	//ƒ‚ƒfƒ‹‚ðƒƒ‚ƒŠ‚É“Ç‚Ýž‚ñ‚Å‚¢‚é
-	manager->modelImport("res/Boss/beaker_robot_All220203.mv1", 1.f, &model);
+	manager->modelImport("res/Boss/beaker_robot_All220217.mv1", 1.f, &model);
 	//Šg‘å—¦‚Ì“K—p
 	manager->changeScale(&model);
 
@@ -32,7 +44,8 @@ void Boss::Terminate() {
 
 void Boss::Process() {
 	HandPos = MV1GetFramePosition(model.modelHandle, 3);
-	AddPos = VNorm(VSub(HandPos, MV1GetFramePosition(model.modelHandle, 1)));
+	AddPos = VNorm(VSub(MV1GetFramePosition(model.modelHandle, 5), HandPos));
+	SphereCenter = VAdd(HandPos, VScale(AddPos, 90));
 	BOSSTYPE oldtype = type;
 
 	rotationMatrix = MMult(MMult(MGetRotX(model.dir.x), MGetRotY(model.dir.y)), MGetRotZ(model.dir.z));
@@ -43,7 +56,7 @@ void Boss::Process() {
 		type = BOSSTYPE::ROTATION;
 		break;
 	case BOSSTYPE::RUSH:
-		Rush(san.vPos, lka.vPos, san.vDir, lka.vDir);
+		Rush(san->vPos, lka->vPos, san->vDir, lka->vDir, san->Mhandle, lka->Mhandle, modeboss->_handleMap);
 		break;
 	case BOSSTYPE::CAPTURE:
 		
@@ -52,16 +65,16 @@ void Boss::Process() {
 		
 		break;
 	case BOSSTYPE::ROTATION:
-		Rotation(san.vPos, lka.vPos, san.vDir, lka.vDir);
+		Rotation(san->vPos, lka->vPos, san->vDir, lka->vDir);
 		break;
 	case BOSSTYPE::WALK:
 		Walk();
 		break;
 	case BOSSTYPE::CRUSH:
-		
+		Crush();
 		break;
 	case BOSSTYPE::PULL:
-		
+		Pull();
 		break;
 	case BOSSTYPE::DOWN:
 		
@@ -133,23 +146,28 @@ void Boss::Process() {
 
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
 	if (rotateFlag) {
-		if (rotateCount <= 90) {
-			BossDir = VNorm(VSub(sanDir, model.dir));
+		if (RotateCount <= 90) {
+			BossDir = VNorm(VSub(sanPos, model.pos));
 		}
-		else if (rotateCount >= 180 && rotateCount > 90) {
-			BossDir = VNorm(VSub(lkaDir, model.dir));
+		else if (RotateCount <= 180 && RotateCount > 90) {
+			BossDir = VNorm(VSub(lkaPos, model.pos));
 		}
-		model.dir.y = model.dir.y + BossDir.y * 0.01;
+		float dir{ 1.0f };
+		if (VCross(forward, BossDir).y < 0) {
+			dir = -1.0f;
+		}
+		model.dir.y += 0.02f * dir;
+		//model.dir.y = fmod(model.dir.y, 2 * DX_PI);//ˆêŽü‚µ‚½‚çdir.y‚ð0‚É–ß‚·
 		type = BOSSTYPE::ROTATION;
-		rotateCount += 1;
-		if (rotateCount > 180) {
-			rotateCount = 0;
+		RotateCount += 1;
+		if (RotateCount > 180) {
+			RotateCount = 0;
 			rotateFlag = false;
 			targetFlag = true;
 		}
 	}
 	else {
-		Targeting(san.vPos, lka.vPos, san.vDir, lka.vDir);
+		Targeting(san->vPos, lka->vPos, san->vDir, lka->vDir);
 	}
 }
 
@@ -159,17 +177,26 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir)
 		float Lka = VSize(VSub(lkaPos, model.pos));
 		if (San <= Lka) {
 			target = true;
-			BossDir = VNorm(VSub(sanDir, model.dir));
 		}
 		else {
 			target = false;
-			BossDir = VNorm(VSub(lkaDir, model.dir));
 		}
+		//BossDir.y = atan2(BossDir.z, BossDir.x);
 		targetFlag = false;
 	}
-		model.dir.y = model.dir.y + BossDir.y * 0.01;
-	
-	if (StopDir > abs(model.dir.y - BossDir.y)) {
+	if (target) {
+		BossDir = VNorm(VSub(sanPos, model.pos));
+	}
+	else {
+		BossDir = VNorm(VSub(lkaPos, model.pos));
+	}
+	float dir{ 1.0f };
+	if (VCross(forward, BossDir).y < 0) {
+		dir = -1.0f;
+	}
+	model.dir.y += 0.02f * dir;
+	//model.dir.y = fmod(model.dir.y, 2 * DX_PI);//ˆêŽü‚µ‚½‚çdir.y‚ð0‚É–ß‚·
+	if (StopDir > VCross(forward, BossDir).y) {
 		rushFlag = true;
 		type = BOSSTYPE::RUSH;
 	}
@@ -195,23 +222,75 @@ void Boss::Walk() {
 }
 
 void Boss::Idle() {
-
+	IdleCount += 1;
+	if (IdleCount == 240) {
+		type = BOSSTYPE::ROTATION;
+		rotateFlag = true;
+		IdleCount = 0;
+	}
 }
 
-void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir) {
+void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir, int SanHandle, int LkaHandle, int MapHandle) {
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimWall;
 	if (rushFlag == true) {
-		waitTime += 1;
-		if (waitTime == 120) {
-			waitTime = 0;
+		WaitCount += 1;
+		if (WaitCount == 120) {
+			WaitCount = 0;
 			rushFlag = false;
 		}
 	}
 	else {
-		model.pos = VAdd(VScale(forward, 8.f), model.pos);
+		model.pos = VAdd(VScale(forward, 10.f), model.pos);
+		MV1RefreshCollInfo(SanHandle, 3);
+		MV1RefreshCollInfo(LkaHandle, 3);
+		hitPolyDimSan = MV1CollCheck_Sphere(SanHandle, 3, SphereCenter, 60);
+		hitPolyDimLka = MV1CollCheck_Sphere(LkaHandle, 3, SphereCenter, 60);
+		hitPolyDimWall = MV1CollCheck_Sphere(MapHandle, 1, SphereCenter, 60);
+
+		if (hitPolyDimSan.HitNum >= 1) {
+			san->vPos = SphereCenter;
+			SanCatchFlag = true;
+		}
+		else if (hitPolyDimLka.HitNum >= 1) {
+			lka->vPos = SphereCenter;
+			LkaCatchFlag = true;
+		}
+		if (hitPolyDimWall.HitNum >= 1) {
+			crushFlag = true;
+		}
+
+		
+	}
+	if ((SanCatchFlag && crushFlag) || (LkaCatchFlag && crushFlag)) {
+		type = BOSSTYPE::CAPTURE;
+		crushFlag = false;
+	}
+	else if ((!SanCatchFlag && crushFlag) || (!LkaCatchFlag && crushFlag)) {
+		type = BOSSTYPE::CRUSH;
+		crushFlag = false;
 	}
 
-	
+}
 
+void Boss::Crush() {
+	CrushCount += 1;
+	if (CrushCount >= 240) {
+		CrushCount = 0;
+		type = BOSSTYPE::PULL;
+	}
+}
+
+void Boss::Pull() {
+	PullCount += 1;
+	if (PullCount == 60) {
+		model.pos = VAdd(model.pos, VScale(forward, -10));
+	}
+	if (PullCount == 78) {
+		PullCount = 0;
+		type = BOSSTYPE::IDLE;
+	}
 }
 
 void Boss::Render() {
@@ -220,10 +299,10 @@ void Boss::Render() {
 		MV1SetPosition(BossHandle, model.pos);
 		MV1DrawModel(BossHandle);*/
 		manager->modelRender(&model, 1.f, 1.f);
-		DrawSphere3D(VAdd(HandPos, VScale(AddPos,50)), 40, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		DrawSphere3D(SphereCenter, 60, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
-		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir = %f", BossDir.y);
-		DrawFormatString(0, 50, GetColor(255, 0, 0), "BossSetDir = %f", model.dir.y);
+		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
+		DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
 		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
 		DrawFormatString(0, 150, GetColor(255, 0, 0), "WalkTime = %d", WalkTime);
 	}

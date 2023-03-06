@@ -1,6 +1,11 @@
 #pragma once
 
 #include "appframe.h"
+
+class ModeBoss;
+class SAN;
+class LKA;
+
 class Boss {
 public:
 	void Initialize();
@@ -9,13 +14,14 @@ public:
 	void Render();
 
 	void Targeting(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
-	void Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
+	void Rush(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir, int SanHandle, int LkaHandle, int MapHandle);
 	void Capture();
 	void Rotation(VECTOR sanPos, VECTOR lkaPos, VECTOR sanDir, VECTOR lkaDir);
 	void Walk();
 	void Crush();
 	void Down();
 	void Idle();
+	void Pull();
 
 	int Target;
 	VECTOR BossPos;
@@ -26,6 +32,7 @@ public:
 	VECTOR HandPos;
 	VECTOR AddPos;
 	VECTOR TargetDir;
+	VECTOR SphereCenter;
 
 	MATRIX rotationMatrix;
 	VECTOR forward;
@@ -49,8 +56,11 @@ public:
 	int AttachAnim1;
 	int AttachAnim2;
 	int AttachAnim3;
-	int rotateCount;
-	int waitTime;
+	int RotateCount;//回転する時間
+	int WaitCount;//ため攻撃のモーションのカウント
+	int PullCount;//抜けるまでの秒数
+	int CrushCount;//じたばたする時間
+	int IdleCount;//休憩する時間
 	float TotalTime1;
 	float TotalTime2;
 	float TotalTime3;
@@ -71,11 +81,15 @@ public:
 	bool rushFlag;//TRUEなら攻撃準備から攻撃に移る
 	bool targetFlag;//TRUEなら攻撃のターゲットを決める
 	bool target;//TRUEならサンに攻撃
-	bool idleflag;//TRUEならアイドルモーション
+	bool idleFlag;//TRUEならアイドルモーション
+	bool SanCatchFlag;//TRUEならサンを捕まえた
+	bool LkaCatchFlag;//TRUEならルカを捕まえた
+	bool crushFlag;//TRUEならTYPEをCrashにする
 	
 
-	SAN san;
-	LKA lka;
+	SAN* san;
+	LKA* lka;
+	ModeBoss* modeboss;
 	modelInf model;
 	modelManager* manager;
 };

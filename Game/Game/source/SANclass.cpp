@@ -22,7 +22,6 @@ void SAN::Initialize()
 	sanframememori = LoadGraph("res/pH_gauge/フレーム/サン/pHgauge_Sun_background_memori.png");
 	// モデルデータのロード（テクスチャも読み込まれる)
 	Mhandle = MV1LoadModel("res/San_2023_0130/San_Fullmotion_2023_0203.mv1");
-
 	// 位置,向きの初期化
 	vPos = VGet(-60, 20, 0);
 	//vPos = VGet(-60, 300, 0);

@@ -47,7 +47,6 @@ public:
 
 public:
 	std::vector<std::unique_ptr<Player>> sanlka;
-	Player player;
 	SAN san;
 	LKA lka;
 	SanBomb sanbomb;

@@ -1,8 +1,10 @@
 #pragma once
 #include"Player.h"
+#include "Boss.h"
 
 class SanBomb;
 class Damage;
+class Boss;
 
 class SAN :public Player
 {
