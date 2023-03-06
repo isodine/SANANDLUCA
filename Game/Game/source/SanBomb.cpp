@@ -17,6 +17,7 @@ Sanbomb::~Sanbomb()
 void Sanbomb::Init()
 {
 }
+
 void Sanbomb::Update(SAN& san)
 {
 	int keyoldEf = _KeyEf;
