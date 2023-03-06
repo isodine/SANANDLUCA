@@ -358,7 +358,7 @@ bool ModeGame::Render() {
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 	}
-	san.Render();
+	san.Render(damage);
 	lka.Render();
 
 	damage.Render();
