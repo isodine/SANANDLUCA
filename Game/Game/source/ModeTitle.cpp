@@ -15,7 +15,6 @@ ModeTitle::ModeTitle() {
 
 bool ModeTitle::Initialize() {
 	if (!base::Initialize()) { return false; }
-
 }
 
 bool ModeTitle::Terminate() {

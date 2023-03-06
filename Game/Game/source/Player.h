@@ -105,5 +105,8 @@ public:
 	void Landing(float HitYPos);
 
 
-	//ModeBoss* boss;
+	//デバッグ表示用
+	bool debagMode = false;
+	bool viewCollision = false;
+	bool viewValue = false;
 };

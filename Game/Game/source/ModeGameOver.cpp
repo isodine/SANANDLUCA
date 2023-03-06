@@ -29,7 +29,7 @@ bool ModeGameOver::Process() {
 	Key = GetJoypadInputState(DX_INPUT_PAD1);
 	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 
-	if (Trg & PAD_INPUT_5) {
+	if (Trg & PAD_INPUT_1) {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
 		//ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");

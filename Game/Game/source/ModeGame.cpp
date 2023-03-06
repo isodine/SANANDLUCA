@@ -41,8 +41,8 @@ bool ModeGame::Initialize() {
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "Con_bot_pPlane6");
-	frameMapCollisionwall = MV1SearchFrame(_handleMap, "Con_tate_pPlane3");
+	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
+	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
@@ -121,15 +121,16 @@ bool ModeGame::Initialize() {
 			{
 				std::cout << readInteger << "\n";
 				intresult.push_back(readInteger);
-				if (i == 1) { x  = readInteger; }
-				if (i == 2) { y  = readInteger; }
-				if (i == 3) { z  = readInteger; }
-				if (i == 4) { pH = readInteger;
+				if (i == 1) { x = readInteger; }
+				if (i == 2) { y = readInteger; }
+				if (i == 3) { z = readInteger; }
+				if (i == 4) {
+					pH = readInteger;
 
-				if (cnt == 1) { san.vPos = VGet(x, y, z); pH == 1 ? san.SetType(true) : san.SetType(false); }
+					if (cnt == 1) { san.vPos = VGet(x, y, z); pH == 1 ? san.SetType(true) : san.SetType(false); }
 					else if (cnt == 2) { lka.vPos = VGet(x, y, z); pH == 1 ? lka.SetType(true) : lka.SetType(false); }
 
-					else if (cnt == 3) 
+					else if (cnt == 3)
 					{
 						auto Slime1 = std::make_unique<Slime>();
 						Slime1->Initialize(x, y, z, pH);
@@ -180,7 +181,7 @@ bool ModeGame::Initialize() {
 	// シャドウマップへの描画を終了
 	ShadowMap_DrawEnd();
 
-	PlayMusic("res/06_Sound/01_BGM/Confectioner.mp3", DX_PLAYTYPE_LOOP);
+	PlayMusic("res/06_Sound/01_BGM/Stage/Confectioner.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;
 }
@@ -281,11 +282,6 @@ bool ModeGame::Render() {
 		for (auto&& Slimes : slimes) {
 			Slimes->Render(Slimes->slimePos);
 		}
-		//slime.SlimeRender(slime.slimePos);
-		// コリジョン判定用ラインの描画
-		//if (_bViewCollision) {
-		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
-		//}
 	}
 	//マップモデルを描画する
 	{
@@ -315,9 +311,12 @@ bool ModeGame::Render() {
 		//MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
-	//san.Render();
-	//lka.Render();
+	// キャラクターモデルの描画
+	san.Render();
+	lka.Render();
+
 	// デバッグ表示
+	if (san.debagMode || lka.debagMode)
 	{
 		int x = 0, y = 0, size = 16;
 		SetFontSize(size);
@@ -356,10 +355,9 @@ bool ModeGame::Render() {
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
 		}
+		damage.Render();
 	}
-	// キャラクターモデルの描画
-	san.Render();
-	lka.Render();
-	damage.Render();
+
+
 	return true;
 }
