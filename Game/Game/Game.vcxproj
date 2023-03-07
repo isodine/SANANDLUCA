@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModeEffekseer.h" />
+    <ClInclude Include="sanbomb.h" />
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\Include.h" />
@@ -204,7 +205,6 @@
     <ClInclude Include="source\ModeStage3.h" />
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Player.h" />
-    <ClInclude Include="source\sanbomb.h" />
     <ClInclude Include="source\sancircle.h" />
     <ClInclude Include="source\SANclass.h" />
     <ClInclude Include="source\sanheal.h" />
