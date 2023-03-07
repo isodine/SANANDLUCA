@@ -5,7 +5,7 @@
 
 Sancircle::Sancircle()
 {
-	_effectResourceHandle = LoadEffekseerEffect("res/sun_heal/sun_heal_end_.efkefc", 10.0f);
+	_effectResourceHandle = LoadEffekseerEffect("res/sun_heal/sun_heal_start_.efkefc", 10.0f);
 }
 
 Sancircle::~Sancircle()
