@@ -24,16 +24,6 @@ ModeGame::ModeGame() : ModeBase()
 bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
-	//// モデルデータのロード（テクスチャも読み込まれる）
-	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
-	//_attach_index = -1;		// アニメーションアタッチはされていない
-
-	//// 再生時間の初期化
-	//_total_time = 0.f;
-	//_play_time = 0.0f;
-	//// 位置,向きの初期化
-	//_vPos = VGet(0, 0, 0);
-	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/map_0125.fbm/a_map02.mv1");
@@ -41,8 +31,8 @@ bool ModeGame::Initialize() {
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "Con_bot_pPlane6");
-	frameMapCollisionwall = MV1SearchFrame(_handleMap, "Con_tate_pPlane3");
+	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
+	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
@@ -121,15 +111,16 @@ bool ModeGame::Initialize() {
 			{
 				std::cout << readInteger << "\n";
 				intresult.push_back(readInteger);
-				if (i == 1) { x  = readInteger; }
-				if (i == 2) { y  = readInteger; }
-				if (i == 3) { z  = readInteger; }
-				if (i == 4) { pH = readInteger;
+				if (i == 1) { x = readInteger; }
+				if (i == 2) { y = readInteger; }
+				if (i == 3) { z = readInteger; }
+				if (i == 4) {
+					pH = readInteger;
 
-				if (cnt == 1) { san.vPos = VGet(x, y, z); pH == 1 ? san.SetType(true) : san.SetType(false); }
+					if (cnt == 1) { san.vPos = VGet(x, y, z); pH == 1 ? san.SetType(true) : san.SetType(false); }
 					else if (cnt == 2) { lka.vPos = VGet(x, y, z); pH == 1 ? lka.SetType(true) : lka.SetType(false); }
 
-					else if (cnt == 3) 
+					else if (cnt == 3)
 					{
 						auto Slime1 = std::make_unique<Slime>();
 						Slime1->Initialize(x, y, z, pH);
@@ -180,7 +171,7 @@ bool ModeGame::Initialize() {
 	// シャドウマップへの描画を終了
 	ShadowMap_DrawEnd();
 
-	PlayMusic("res/06_Sound/01_BGM/Confectioner.mp3", DX_PLAYTYPE_LOOP);
+	PlayMusic("res/06_Sound/01_BGM/Stage/Confectioner.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;
 }
@@ -193,9 +184,12 @@ bool ModeGame::Terminate() {
 bool ModeGame::Process() {
 	base::Process();
 
-	//for (auto&& SanLka : sanlka) {
-	//	SanLka->Update();
-	//}-
+	if (!modeStart)
+	{
+		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
+		modeStart = true;
+	}
+
 	sanbomb.Update(san);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
@@ -215,6 +209,11 @@ bool ModeGame::Process() {
 
 		// シャドウマップの削除
 		DeleteShadowMap(ShadowMapHandle);
+
+		ChangePanSoundMem(255, san.VOICEdeathSAN);
+		ChangePanSoundMem(-255, lka.VOICEdeathLKA);
+		PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
 
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
@@ -280,11 +279,6 @@ bool ModeGame::Render() {
 		for (auto&& Slimes : slimes) {
 			Slimes->Render(Slimes->slimePos);
 		}
-		//slime.SlimeRender(slime.slimePos);
-		// コリジョン判定用ラインの描画
-		//if (_bViewCollision) {
-		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
-		//}
 	}
 	//マップモデルを描画する
 	{
@@ -317,6 +311,7 @@ bool ModeGame::Render() {
 	san.Render();
 	lka.Render();
 	// デバッグ表示
+	if (san.debagMode || lka.debagMode)
 	{
 		int x = 0, y = 0, size = 16;
 		SetFontSize(size);
@@ -356,10 +351,8 @@ bool ModeGame::Render() {
 			break;
 		}
 	}
-	// キャラクターモデルの描画
-	san.Render();
-	lka.Render();
-	damage.Render();
-	sanbomb.Render();
+	}
+
+
 	return true;
 }

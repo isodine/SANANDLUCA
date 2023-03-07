@@ -42,7 +42,8 @@ void Player::SetType(bool isSan)
 	}
 }
 
-void Player::Input() {
+void Player::Input()
+{
 
 }
 
@@ -62,8 +63,6 @@ void Player::Initialize()
 	sanicon = LoadGraph("res/pH_gauge/アイコン表情差分/サン/pHgauge_Sun_Emotions_Normal.png");
 	sanframememori = LoadGraph("res/pH_gauge/フレーム/サン/pHgauge_Sun_background_memori.png");*/
 
-	// モデルデータのロード（テクスチャも読み込まれる)
-	Mhandle = MV1LoadModel("res/San_2023_0130/San_Fullmotion_2023_0203.mv1");
 
 	// 位置,向きの初期化
 	vPos = VGet(-60, 20, 0);
@@ -71,32 +70,27 @@ void Player::Initialize()
 	// 腰位置の設定
 	_colSubY = 45.f;
 
-	//HP = 3;
+
 }
 
 void Player::Update()
 {
 	Input();
-	/*int key = Key1P;
-	int trg = Trg1P;*/
+
+
+	if (debagMode && trg & PAD_INPUT_9)
+	{
+		debagMode = false;
+	}
+	else if (!debagMode && trg & PAD_INPUT_9)
+	{
+		debagMode = true;
+	}
+	else {}
 
 	if (key & PAD_INPUT_5) {	//多分L1ボタン
-		// 角度変更
-		// Y軸回転
-		
-			//float sx = _camera->_vPos.x - _camera->_vTarget.x;
-			//float sz = _camera->_vPos.z - _camera->_vTarget.z;
-			//float rad = atan2(sz, sx);
-			//float length = sqrt(sz * sz + sx * sx);
-			//if (key & PAD_INPUT_LEFT) { rad -= 0.05f; }
-			//if (key & PAD_INPUT_RIGHT) { rad += 0.05f; }
-			//_camera->_vPos.x = _camera->_vTarget.x + cos(rad) * length;
-			//_camera->_vPos.z = _camera->_vTarget.z + sin(rad) * length;
-
-			//// Y位置
-			//if (key & PAD_INPUT_DOWN) { _camera->_vPos.y -= 5.f; }
-			//if (key & PAD_INPUT_UP) { _camera->_vPos.y += 5.f; }
-		
+		PlaySoundMem(VOICEpose[GetRand(1)], DX_PLAYTYPE_BACK, true);
+		WaitKey();
 	}
 	else {
 
@@ -114,8 +108,11 @@ void Player::Update()
 		if (key & PAD_INPUT_UP) { v.x = -1; }
 		if (key & PAD_INPUT_LEFT) { v.z = -1; }
 		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP)) 
-		{ _status = STATUS::JUMP; PlaySoundMem(SEjump, DX_PLAYTYPE_BACK, true); }
+		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP))
+		{
+			_status = STATUS::JUMP;
+			mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
+		}
 		//if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE)) { _status = STATUS::CHARGE; }
 		//if (key & PAD_INPUT_3 && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
 		//if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
@@ -128,7 +125,8 @@ void Player::Update()
 		if (_bomb->situation == Keep) { attack = Attack::Keep; }
 		if (trg & PAD_INPUT_6 && (attack == Attack::Keep)) 
 		{
-			attack = Attack::Throw; 
+			attack = Attack::Throw;
+			mypH == San ? PlaySoundMem(VOICEthrowBombSAN[GetRand(2)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEthrowBombLKA[GetRand(2)], DX_PLAYTYPE_BACK, true);
 		}
 		if (_status == STATUS::JUMP) { Jump(); }
 		// vをrad分回転させる
@@ -163,49 +161,49 @@ void Player::Update()
 		MV1_COLL_RESULT_POLY hitPolywallback;
 		MV1_COLL_RESULT_POLY hitPolywallside;
 
-		
-			hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
-				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-			if (hitPolywallback.HitFlag && (vPos.z + 30 >= hitPolywallback.HitPosition.z)){
-				float backwidth = hitPolywallback.HitPosition.z - vPos.z + 30;
-				float subX = vPos.x - oldvPos.x;
-				float subZ = vPos.z - oldvPos.z;
-				vPos.x = oldvPos.x;
-				vPos.z = oldvPos.z;
 
-				v = { 0,0,0 };
-			}
+		hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
+			VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+		if (hitPolywallback.HitFlag && (vPos.z + 30 >= hitPolywallback.HitPosition.z)) {
+			float backwidth = hitPolywallback.HitPosition.z - vPos.z + 30;
+			float subX = vPos.x - oldvPos.x;
+			float subZ = vPos.z - oldvPos.z;
+			vPos.x = oldvPos.x;
+			vPos.z = oldvPos.z;
 
-			hitPolywallside = MV1CollCheck_Line(stageHandle, wallCol,
-				VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
-			if (hitPolywallside.HitFlag && (vPos.x + 30 >= hitPolywallside.HitPosition.x)) {
-				float sidewidth = hitPolywallside.HitPosition.x - vPos.x + 30;
-				float subX = vPos.x - oldvPos.x;
-				float subZ = vPos.z - oldvPos.z;
-				vPos.x = oldvPos.x;
-				vPos.z = oldvPos.z;
+			v = { 0,0,0 };
+		}
 
-				v = { 0,0,0 };
-			}
+		hitPolywallside = MV1CollCheck_Line(stageHandle, wallCol,
+			VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
+		if (hitPolywallside.HitFlag && (vPos.x + 30 >= hitPolywallside.HitPosition.x)) {
+			float sidewidth = hitPolywallside.HitPosition.x - vPos.x + 30;
+			float subX = vPos.x - oldvPos.x;
+			float subZ = vPos.z - oldvPos.z;
+			vPos.x = oldvPos.x;
+			vPos.z = oldvPos.z;
 
-			// 主人公の腰位置から下方向への直線
-			hitPolyfloor = MV1CollCheck_Line(stageHandle, floorCol,
-				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+			v = { 0,0,0 };
+		}
 
-			hitPolyDim = MV1CollCheck_Capsule(stageHandle, floorCol,
-				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
-			if (hitPolyDim.HitNum >= 1)
+		// 主人公の腰位置から下方向への直線
+		hitPolyfloor = MV1CollCheck_Line(stageHandle, floorCol,
+			VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+
+		hitPolyDim = MV1CollCheck_Capsule(stageHandle, floorCol,
+			VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+		if (hitPolyDim.HitNum >= 1)
+		{
+			// 当たった
+			if (vPos.y < hitPolyfloor.HitPosition.y)
 			{
-				// 当たった
-				if (vPos.y < hitPolyfloor.HitPosition.y)
-				{
-					Landing(hitPolyfloor.HitPosition.y);
-				}
+				Landing(hitPolyfloor.HitPosition.y);
 			}
-			else {
-				freeFall();
-			}
-		
+		}
+		else {
+			freeFall();
+		}
+
 
 
 
@@ -228,19 +226,6 @@ void Player::Update()
 		//sanB.Update(this);         //ボムの更新
 
 
-
-		// デバッグ機能
-		//if (trg & PAD_INPUT_2) {
-		//	_bViewCollision = !_bViewCollision;
-		//}
-		//if (_bViewCollision) {
-		//	MV1SetFrameVisible(_handleMap, _frameMapCollision, TRUE);
-		//}
-		//else {
-		//	MV1SetFrameVisible(_handleMap, _frameMapCollision, FALSE);
-		//}
-
-
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {
 			// 再生時間を進める
@@ -253,7 +238,8 @@ void Player::Update()
 				Mattach_index = -1;
 			}
 			// ステータスに合わせてアニメーションのアタッチ
-			switch (_status) {
+			switch (_status)
+			{
 			case STATUS::WAIT:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "idle"), -1, FALSE);
 				break;
@@ -276,7 +262,7 @@ void Player::Update()
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "down"), -1, FALSE);
 				break;
 			}
-	
+
 			// アタッチしたアニメーションの総再生時間を取得する
 			Mtotal_time = MV1GetAttachAnimTotalTime(Mhandle, Mattach_index);
 			// 再生時間を初期化
@@ -288,7 +274,7 @@ void Player::Update()
 		}
 
 		// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
-		if (Mplay_time >= Mtotal_time)
+		if (!(_status == STATUS::JUMP) && Mplay_time >= Mtotal_time)
 		{
 			Mplay_time = 0.0f;
 		}
@@ -323,28 +309,19 @@ void Player::Render()
 		// 描画
 		MV1DrawModel(Mhandle);
 
-		//ダメージ判定の描画
-		DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
-		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
+		if (debagMode)
+		{
+			//ダメージ判定の描画
+			DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
+			//DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 
-		// コリジョン判定用ラインの描画
-		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
+			// コリジョン判定用ラインの描画
+			DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
+			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 6, GetColor(0, 0, 255), GetColor(0, 0, 255), FALSE);
+		}
+		
 
 	}
-	int x = 0, y = 106, size = 16;
-	SetFontSize(size);
-	/*switch (_status)
-	{
-	case Player::STATUS::WAIT:
-		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = WAIT");
-		break;
-	case Player::STATUS::WALK:
-		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = WALK");
-		break;
-	case Player::STATUS::JUMP:
-		DrawFormatString(x, y, GetColor(255, 0, 0), "Lka states = JUMP");
-		break;
-	}*/
 }
 
 

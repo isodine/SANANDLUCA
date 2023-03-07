@@ -11,11 +11,13 @@ ModeTitle::ModeTitle() {
 	titlelogohandle = LoadGraph("res/01_Tittle/logo.png");
 	pushlogo = LoadGraph("res/01_Tittle/text.png");
 	SEcrik = LoadSoundMem("res/06_Sound/03_SE/Œˆ’èƒ{ƒ^ƒ“‚ð‰Ÿ‚·24.mp3");
+
+	//VOICE—p
+	modeStart = false;
 }
 
 bool ModeTitle::Initialize() {
 	if (!base::Initialize()) { return false; }
-
 }
 
 bool ModeTitle::Terminate() {
@@ -26,6 +28,12 @@ bool ModeTitle::Terminate() {
 
 bool ModeTitle::Process() {
 	base::Process();
+
+	if (!modeStart)
+	{
+		PlaySoundMem(VOICEtitle[GetRand(3)], DX_PLAYTYPE_BACK, true);
+		modeStart = true;
+	}
 	int Trg;
 	int keyold = Key;
 	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);

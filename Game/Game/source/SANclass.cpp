@@ -21,7 +21,7 @@ void SAN::Initialize()
 	sanicon = LoadGraph("res/pH_gauge/アイコン表情差分/サン/pHgauge_Sun_Emotions_Normal.png");
 	sanframememori = LoadGraph("res/pH_gauge/フレーム/サン/pHgauge_Sun_background_memori.png");
 	// モデルデータのロード（テクスチャも読み込まれる)
-	Mhandle = MV1LoadModel("res/San_2023_0222/San_Fullmotion_2023_0203.mv1");
+	Mhandle = MV1LoadModel("res/01_Character_Model/San_2023_0222/San_Fullmotion.mv1");
 
 	// 位置,向きの初期化
 	vPos = VGet(-60, 20, 0);

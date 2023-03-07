@@ -17,7 +17,7 @@ void LKA::Initialize()
 {
 	Player::Initialize();
 	// モデルデータのロード（テクスチャも読み込まれる）
-	Mhandle = MV1LoadModel("res/Lka_2023_0222/Lka_Fullmotion.mv1");
+	Mhandle = MV1LoadModel("res/01_Character_Model/Lka_2023_0222/Lka_Fullmotion.mv1");
 
 	// 位置,向きの初期化
 	vPos = VGet(60, 20, 0);

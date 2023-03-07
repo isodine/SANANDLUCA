@@ -74,6 +74,15 @@ public:
 	VECTOR ShadowMapUpVec;
 	VECTOR ShadowMapDownVec;
 
+	//VOICE—p
+	bool modeStart = false;
+	int VOICEstartSANLKA[6] = { LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_01.wav"),
+	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_02.wav"), 
+	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_03.wav"), 
+	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_01.wav"), 
+	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_02.wav"), 
+	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_03.wav")};
+
 public:
 	Player player;
 	SAN san;
