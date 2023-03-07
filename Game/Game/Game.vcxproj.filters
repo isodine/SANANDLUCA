@@ -56,12 +56,12 @@
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\sancircle.h" />
     <ClInclude Include="source\PlayerBomb.h" />
-    <ClInclude Include="source\sanbomb.h" />
     <ClInclude Include="source\SANclass.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />
     <ClInclude Include="source\sanheal.h" />
     <ClInclude Include="source\lkacircle.h" />
     <ClInclude Include="source\lkaheal.h" />
+    <ClInclude Include="source\sanbomb.h" />
   </ItemGroup>
 </Project>

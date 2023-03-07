@@ -40,9 +40,9 @@ bool ModeGame::Initialize() {
 	MV1SetFrameVisible(_handleMap, 2, FALSE);
 	MV1SetFrameVisible(_handleMap, 3, FALSE);
 
-	//マスクの試験運用
-	MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	CreateMaskScreen();
+	////マスクの試験運用
+	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
+	//CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
 	_cam._vPos = VGet(0, 700.f, -900.f);

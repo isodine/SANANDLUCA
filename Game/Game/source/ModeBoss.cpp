@@ -67,9 +67,9 @@ bool ModeBoss::Initialize() {
 	/*MV1SetFrameVisible(_handleMap, 0, FALSE);
 	MV1SetFrameVisible(_handleMap, 1, FALSE);*/
 
-	//マスクの試験運用
-	MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	CreateMaskScreen();
+	////マスクの試験運用
+	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
+	//CreateMaskScreen();
 
 
 	//フォグを使ってみる

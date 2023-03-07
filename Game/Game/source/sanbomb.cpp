@@ -10,6 +10,7 @@ SanBomb::~SanBomb()
 
 void SanBomb::Initialize(SAN& san)
 {
+	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_loop_01.efkefc");
 	vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
 	
 	mypH = San;
@@ -25,7 +26,7 @@ void SanBomb::Update(SAN& san)
 	if (san.attack == Pop)
 	{
 		situation = PlayerBomb::Pop;
-		bomblive = true;
+		//bomblive = true;
 	}
 
 	if (san.attack == Keep)
@@ -44,6 +45,13 @@ void SanBomb::Update(SAN& san)
 		break;
 	case PlayerBomb::Pop:
 		vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
+		if(bomblive == false)
+		{
+			_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
+			// 再生中のエフェクトを移動する。
+			SetPosPlayingEffekseer3DEffect(_playingEffectHandle, vPos.x, vPos.y, vPos.z);
+			//_position_x += 0.2f;
+		}
 		bomblive = true;
 		if (sphereSize <= sphereMax)
 		{
@@ -61,12 +69,17 @@ void SanBomb::Update(SAN& san)
 		Throw(san);
 		break;
 	}
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, vPos.x, vPos.y, vPos.z);
+	if (vPos.y == 0)
+	{
+		StopEffekseer3DEffect(_playingEffectHandle);
+	}
 }
 
 void SanBomb::Render()
 {
 	DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
-
+	DrawEffekseer3D();
 }
 
 void SanBomb::Throw(SAN& san)
