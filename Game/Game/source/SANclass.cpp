@@ -16,15 +16,24 @@ void SAN::Initialize()
 {
 	// モデルデータのロード（テクスチャも読み込まれる)
 	Mhandle = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1");
-	hphandle[0] = LoadGraph("res/UI_san_v6.png");
-	hphandle[1] = LoadGraph("res/UI_san_v5.png");
+	hpgaugehandle[0] = LoadGraph("res/san/HP_san_6.png");
+	hpgaugehandle[1] = LoadGraph("res/san/HP_san_5.png");
+	hpgaugehandle[2] = LoadGraph("res/san/HP_san_4.png");
+	hpgaugehandle[3] = LoadGraph("res/san/HP_san_3.png");
+	hpgaugehandle[4] = LoadGraph("res/san/HP_san_2.png");
+	hpgaugehandle[5] = LoadGraph("res/san/HP_san_1.png");
+	hphandle[0] = LoadGraph("res/san_v2/UI_san_v6.png");
+	hphandle[1] = LoadGraph("res/san_v2/UI_san_v5.png");
+	hphandle[2] = LoadGraph("res/san_v2/UI_san_v4.png");
+	hphandle[3] = LoadGraph("res/san_v2/UI_san_v3.png");
+	hphandle[4] = LoadGraph("res/san_v2/UI_san_v2.png");
+	hphandle[5] = LoadGraph("res/san_v2/UI_san_v1.png");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
 	// 再生時間の初期化
 	Mtotal_time = 0.f;
 	Mplay_time = 0.0f;
-	hpootd = false;
 	// 位置,向きの初期化
 	vPos = VGet(-60, 0, 0);
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
@@ -167,14 +176,10 @@ void SAN::Update(Camera& cam,Damage& damage)
 	if (Mplay_time >= Mtotal_time) {
 		Mplay_time = 0.0f;
 	}
-	if (hpootd == false&&damage.SanHP == 9)
-	{
-		hpootd = true;
-		oldcount = GetNowCount();
-	}
+	if (damage.SanHitFlag == true) { oldcount = GetNowCount(); }
 }
 
-void SAN::Render()
+void SAN::Render(Damage& damage)
 {
 	// 再生時間をセットする
 	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
@@ -201,20 +206,58 @@ void SAN::Render()
 		VECTOR v = ConvWorldPosToScreenPos(vPos);
 		if (0.f <= v.z && v.z < 1.f)
 		{
-			if (hpootd == false)
+			if (damage.SanHP == 6)
 			{
+				DrawGraph(0, 880, hpgaugehandle[0], true);
 				auto nowcount = GetNowCount();
 				if (nowcount - oldcount < 2000)
 				{
-					DrawGraph(v.x, v.y, hphandle[0], true);
+					DrawGraph(v.x -125, v.y, hphandle[0], true);
 				}
 			}
-			if (hpootd == true)
+			if (damage.SanHP == 5)
 			{
+				DrawGraph(0, 880, hpgaugehandle[1], true);
 				auto nowcount = GetNowCount();
 				if (nowcount - oldcount < 2000)
 				{
-					DrawGraph(v.x, v.y, hphandle[1], true);
+					DrawGraph(v.x -125, v.y, hphandle[1], true);
+				}
+			}
+			if (damage.SanHP == 4)
+			{
+				DrawGraph(0, 880, hpgaugehandle[2], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[2], true);
+				}
+			}
+			if (damage.SanHP == 3)
+			{
+				DrawGraph(0, 880, hpgaugehandle[3], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[3], true);
+				}
+			}
+			if (damage.SanHP == 2)
+			{
+				DrawGraph(0, 880, hpgaugehandle[4], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[4], true);
+				}
+			}
+			if (damage.SanHP == 1)
+			{
+				DrawGraph(0, 880, hpgaugehandle[5], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[5], true);
 				}
 			}
 		}

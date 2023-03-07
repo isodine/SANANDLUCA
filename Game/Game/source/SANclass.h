@@ -8,11 +8,11 @@ public:
 	~SAN();
 	void Initialize()override;
 	void Update(Camera& cam,Damage& damage);
-	void Render()override;
+	void Render(Damage& damage);
 	void Input();
 
-	int hphandle[2];
+	int hpgaugehandle[6];
+	int hphandle[6];
 	float oldcount;
-	bool hpootd;
 	bool _isflag;
 };

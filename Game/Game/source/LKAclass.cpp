@@ -18,6 +18,18 @@ void LKA::Initialize()
 {
 	// モデルデータのロード（テクスチャも読み込まれる）
 	Mhandle = MV1LoadModel("res/Lka/Lka multimotion.mv1");
+	hpgaugehandle[0] = LoadGraph("res/Lka/HP_lka_6.png");
+	hpgaugehandle[1] = LoadGraph("res/Lka/HP_lka_5.png");
+	hpgaugehandle[2] = LoadGraph("res/Lka/HP_lka_4.png");
+	hpgaugehandle[3] = LoadGraph("res/Lka/HP_lka_3.png");
+	hpgaugehandle[4] = LoadGraph("res/Lka/HP_lka_2.png");
+	hpgaugehandle[5] = LoadGraph("res/Lka/HP_lka_1.png");
+	hphandle[0] = LoadGraph("res/lka_v2/UI_lka_v6.png");
+	hphandle[1] = LoadGraph("res/lka_v2/UI_lka_v5.png");
+	hphandle[2] = LoadGraph("res/lka_v2/UI_lka_v4.png");
+	hphandle[3] = LoadGraph("res/lka_v2/UI_lka_v3.png");
+	hphandle[4] = LoadGraph("res/lka_v2/UI_lka_v2.png");
+	hphandle[5] = LoadGraph("res/lka_v2/UI_lka_v1.png");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -30,6 +42,7 @@ void LKA::Initialize()
 
 	// 腰位置の設定
 	_colSubY = 60.f;
+	oldcount = GetNowCount();
 
 }
 
@@ -41,7 +54,7 @@ void LKA::Input()
 	Trg2P = (Key2P ^ keyold2P) & Key2P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 }
 
-void LKA::Update(Camera& cam)
+void LKA::Update(Camera& cam,Damage& damage)
 {
 	Input();
 	//int key = ApplicationMain::GetInstance()->GetKey1P();
@@ -168,9 +181,10 @@ void LKA::Update(Camera& cam)
 	if (Mplay_time >= Mtotal_time) {
 		Mplay_time = 0.0f;
 	}
+	if (damage.SanHitFlag == true) { oldcount = GetNowCount(); }
 }
 
-void LKA::Render() {
+void LKA::Render(Damage& damage) {
 	// 再生時間をセットする
 	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
 
@@ -191,6 +205,63 @@ void LKA::Render() {
 
 		// コリジョン判定用ラインの描画
 		DrawLine3D(VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
-
+		VECTOR v = ConvWorldPosToScreenPos(vPos);
+		if (0.f <= v.z && v.z < 1.f)
+		{
+			if (damage.LkaHP == 6)
+			{
+				DrawGraph(0, 880, hpgaugehandle[0], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[0], true);
+				}
+			}
+			if (damage.LkaHP == 5)
+			{
+				DrawGraph(0, 880, hpgaugehandle[1], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[1], true);
+				}
+			}
+			if (damage.LkaHP == 4)
+			{
+				DrawGraph(0, 880, hpgaugehandle[2], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[2], true);
+				}
+			}
+			if (damage.LkaHP == 3)
+			{
+				DrawGraph(0, 880, hpgaugehandle[3], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[3], true);
+				}
+			}
+			if (damage.LkaHP == 2)
+			{
+				DrawGraph(0, 880, hpgaugehandle[4], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[4], true);
+				}
+			}
+			if (damage.LkaHP == 1)
+			{
+				DrawGraph(0, 880, hpgaugehandle[5], true);
+				auto nowcount = GetNowCount();
+				if (nowcount - oldcount < 2000)
+				{
+					DrawGraph(v.x - 125, v.y, hphandle[5], true);
+				}
+			}
+		}
 	}
 }

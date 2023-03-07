@@ -135,7 +135,7 @@ bool ModeGame::Process() {
 	//}
 
 	san.Update(_cam,damage);
-	lka.Update(_cam);
+	lka.Update(_cam,damage);
 	damage.Process();
 	//int key = ApplicationMain::GetInstance()->GetKey2P();
 	//int trg = ApplicationMain::GetInstance()->GetTrg2P();
@@ -358,8 +358,8 @@ bool ModeGame::Render() {
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 	}
-	san.Render();
-	lka.Render();
+	san.Render(damage);
+	lka.Render(damage);
 
 	damage.Render();
 	sanbomb.Render();
