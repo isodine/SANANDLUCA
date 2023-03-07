@@ -10,7 +10,7 @@ public:
 	//virtual void Render();
 	void BombReset();
 	void SetSan(SAN& San);
-
+	void SetLka(LKA& Lka);
 	enum BombType
 	{
 		San,
@@ -46,4 +46,5 @@ public:
 	Situation situation;
 
 	SAN san;
+	LKA lka;
 };

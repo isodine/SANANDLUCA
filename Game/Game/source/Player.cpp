@@ -71,7 +71,7 @@ void Player::Initialize()
 	// ˜ˆÊ’u‚ÌÝ’è
 	_colSubY = 45.f;
 
-	HP = 3;
+	//HP = 3;
 }
 
 void Player::Update()
@@ -126,7 +126,10 @@ void Player::Update()
 			attack = Attack::Pop;
 		}
 		if (_bomb->situation == Keep) { attack = Attack::Keep; }
-		if (trg & PAD_INPUT_6 && (attack == Attack::Keep)) { attack = Attack::Throw; }
+		if (trg & PAD_INPUT_6 && (attack == Attack::Keep)) 
+		{
+			attack = Attack::Throw; 
+		}
 		if (_status == STATUS::JUMP) { Jump(); }
 		// v‚ðrad•ª‰ñ“]‚³‚¹‚é
 		float length = 0.f;

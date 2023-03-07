@@ -11,7 +11,7 @@ SanBomb::~SanBomb()
 void SanBomb::Initialize(SAN& san)
 {
 	vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
-
+	
 	mypH = San;
 	situation = PlayerBomb::None;
 }
@@ -43,6 +43,7 @@ void SanBomb::Update(SAN& san)
 	case PlayerBomb::None:
 		break;
 	case PlayerBomb::Pop:
+		vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
 		bomblive = true;
 		if (sphereSize <= sphereMax)
 		{
@@ -81,6 +82,9 @@ void SanBomb::Throw(SAN& san)
 	vPos.y -= count;
 	vPos.y += decrement;
 	count += 0.5f;
+	if (vPos.y < 0) {
+		BombReset();
+	}
 }
 
 void PlayerBomb::BombReset()

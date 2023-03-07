@@ -5,6 +5,8 @@
 class ModeBoss;
 class SAN;
 class LKA;
+class SanBomb;
+class LkaBomb;
 
 class Boss {
 public:
@@ -90,6 +92,8 @@ public:
 
 	SAN* san;
 	LKA* lka;
+	SanBomb* sanB;
+	LkaBomb* lkaB;
 	ModeBoss* modeboss;
 	modelInf model;
 	modelManager* manager;

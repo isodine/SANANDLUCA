@@ -79,6 +79,7 @@ public:
 	SAN san;
 	LKA lka;
 	SanBomb sanbomb;
+	LkaBomb lkabomb;
 	Damage damage;
 	Gimmick gimmick;
 	Slime slime;

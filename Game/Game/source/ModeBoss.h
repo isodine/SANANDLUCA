@@ -50,6 +50,7 @@ public:
 	SAN san;
 	LKA lka;
 	SanBomb sanbomb;
+	LkaBomb lkabomb;
 	Damage damage;
 	Boss boss;
 };

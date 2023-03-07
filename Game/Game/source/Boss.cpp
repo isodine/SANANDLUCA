@@ -34,7 +34,7 @@ void Boss::Initialize() {
 	SanCatchFlag = false;
 	LkaCatchFlag = false;
 	crashFlag = false;*/
-	
+	MV1SetupCollInfo(model.modelHandle, 1, 8, 8, 8);
 	type = BOSSTYPE::NONE;
 	//ƒ‚ƒfƒ‹‚ðƒƒ‚ƒŠ‚É“Ç‚Ýž‚ñ‚Å‚¢‚é
 	manager->modelImport("res/Boss/beaker_robot_All220217.mv1", 1.f, &model);
@@ -235,6 +235,7 @@ void Boss::Idle() {
 }
 
 void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int MapHandle) {
+	MV1RefreshCollInfo(model.modelHandle, 1);
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimWall;
@@ -283,10 +284,25 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 }
 
 void Boss::Crush() {
+	MV1RefreshCollInfo(model.modelHandle, 1);
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
+	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
+	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
+
+	if (hitPolyDimSan.HitNum >= 1 || hitPolyDimLka.HitNum >= 1) {
+		AttackedFlag = true;
+		BossHP -= 1;
+	}
+
 	CrushCount += 1;
-	if (CrushCount >= 240) {
+	if (CrushCount >= 240 || AttackedFlag) {
 		CrushCount = 0;
+		AttackedFlag = false;
 		type = BOSSTYPE::PULL;
+	}
+	if (BossHP == 0) {
+		type = BOSSTYPE::DOWN;
 	}
 }
 
@@ -315,6 +331,16 @@ void Boss::Capture() {
 	}
 	CaptureCount += 1;
 
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
+	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
+	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
+
+	if (hitPolyDimSan.HitNum >= 1 || hitPolyDimLka.HitNum >= 1) {
+		AttackedFlag = true;
+		BossHP -= 1;
+	}
+
 	if (CaptureCount == 120) {
 		if (SanCatchFlag) {
 			san->HP -= 1;
@@ -329,8 +355,8 @@ void Boss::Capture() {
 		type = BOSSTYPE::CAPTUREEND;
 	}
 	if (AttackedFlag) {
+		CaptureCount = 0;
 		AttackedFlag = false;
-		BossHP -= 1;
 		type = BOSSTYPE::CAPTUREEND;
 	}
 	if (BossHP == 0) {
@@ -374,5 +400,6 @@ void Boss::Render() {
 		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
 		DrawFormatString(0, 150, GetColor(255, 0, 0), "WalkTime = %d", WalkTime);
 		DrawFormatString(0, 200, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
+		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossHP = %d", BossHP);
 	}
 }

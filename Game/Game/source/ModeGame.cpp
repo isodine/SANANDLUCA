@@ -89,7 +89,7 @@ bool ModeGame::Initialize() {
 	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
-	lka.SetBomb(&sanbomb);
+	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
 
 	lka.Initialize();

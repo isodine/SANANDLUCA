@@ -47,6 +47,9 @@ bool ModeBoss::Initialize() {
 		boss.modeboss = this;
 		boss.san = &san;
 		boss.lka = &lka;
+
+		boss.sanB = &sanbomb;
+		boss.lkaB = &lkabomb;
 	
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/04_Stage_Boss.mv1");
@@ -81,7 +84,8 @@ bool ModeBoss::Initialize() {
 	// その他初期化
 	_bViewCollision = FALSE;
 
-	
+	sanbomb.Initialize(san);
+	lkabomb.Initialize(lka);
 
 	throughtime = 0.0f;
 	height = 0.0f;
@@ -98,7 +102,7 @@ bool ModeBoss::Initialize() {
 	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_bossCam);
-	lka.SetBomb(&sanbomb);
+	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
 
 	lka.Initialize();
@@ -175,6 +179,7 @@ bool ModeBoss::Process() {
 	//	SanLka->Update();
 	//}-
 	sanbomb.Update(san);
+	lkabomb.Update(lka);
 	/*san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());*/
 	san.Update();
@@ -195,12 +200,12 @@ bool ModeBoss::Process() {
 		ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
 	}
 
-	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
+	/*if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
 		StopMusic();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
-	}
+	}*/
 
 	return true;
 }
@@ -261,6 +266,7 @@ bool ModeBoss::Render() {
 		//}
 	}
 	sanbomb.Render();
+	lkabomb.Render();
 	// マップモデルを描画する
 	{
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
