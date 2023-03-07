@@ -46,14 +46,14 @@ void Damage::Process() {
 	Distance = VSize(VSub(VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z), VGet(San->vPos.x, San->vPos.y + 50, San->vPos.z)));
 
 	if (Distance < 85 && SanHitFlag == false && LkaHitFlag == false) {
-		SanHP -= 2;
-		LkaHP -= 2;
+		San->HP -= 2;
+		Lka->HP -= 2;
 		SanHitFlag = true;
 		LkaHitFlag = true;
 	}
 	else if (Distance < 110 && Distance >= 85 && SanHitFlag == false && LkaHitFlag == false) {
-		SanHP -= 1;
-		LkaHP -= 1;
+		San->HP -= 1;
+		Lka->HP -= 1;
 		SanHitFlag = true;
 		LkaHitFlag = true;
 	}
@@ -66,12 +66,12 @@ void Damage::Process() {
 		HitPolyLka = MV1CollCheck_Capsule(stageHandle, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
 
 		if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
-			SanHP -= 1;
+			San->HP -= 1;
 			SanHitFlag = true;
 		}
 
 		if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
-			LkaHP -= 1;
+			Lka->HP -= 1;
 			LkaHitFlag = true;
 		}
 	}

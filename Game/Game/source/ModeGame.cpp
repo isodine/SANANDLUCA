@@ -195,7 +195,7 @@ bool ModeGame::Process() {
 	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
 	gimmick.Balance(san.vPos, lka.vPos);
 
-	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
+	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
 		//BGM’âŽ~
 		StopMusic();

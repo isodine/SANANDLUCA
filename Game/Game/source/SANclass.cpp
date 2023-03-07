@@ -27,7 +27,7 @@ void SAN::Initialize()
 	//vPos = VGet(-60, 300, 0);
 	// ˜ˆÊ’u‚Ìİ’è
 	_colSubY = 45.f;
-
+	HP = 6;
 }
 
 void SAN::Input()
