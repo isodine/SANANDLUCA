@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sancircle.cpp" />
     <ClCompile Include="source\ModeRule.cpp" />
     <ClCompile Include="source\PlayerBomb.cpp" />
     <ClCompile Include="source\ApplicationMain.cpp" />
@@ -200,6 +201,7 @@
     <ClCompile Include="source\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sancircle.h" />
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Camera.h" />
