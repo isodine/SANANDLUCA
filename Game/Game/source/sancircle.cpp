@@ -19,7 +19,7 @@ void Sancircle::Update(SAN& san,LKA& lka)
 	ChIt = VSub(san.vPos, lka.vPos);
 	ChIt.y = 0.0f;
 	LE = VSize(ChIt);
-	if (LE <= 120.0f && IsPlaying == -1)
+	if (LE <= 130.0f && IsPlaying == -1)
 	{
 		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 		// 再生中のエフェクトを移動する。
@@ -30,6 +30,7 @@ void Sancircle::Update(SAN& san,LKA& lka)
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y + 45, san.vPos.z);
+	UpdateEffekseer3D();
 }
 
 void Sancircle::Render()

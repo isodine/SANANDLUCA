@@ -57,72 +57,70 @@ void LKA::Input()
 	trg = Trg2P;
 }
 
-void LKA::Update()
+void LKA::Update(Damage& damage)
 {
 	Player::Update();
+	if (damage.LkaHitFlag == true) { oldcount = GetNowCount(); }
 }
 
-void LKA::Render()
+void LKA::Render(Damage& damage)
 {
 	Player::Render();
-}
-
-		VECTOR v = ConvWorldPosToScreenPos(vPos);
-		if (0.f <= v.z && v.z < 1.f)
+	VECTOR v = ConvWorldPosToScreenPos(vPos);
+	if (0.f <= v.z && v.z < 1.f)
+	{
+		if (Player::HP == 6)
 		{
-			if (damage.LkaHP == 6)
+			DrawGraph(1120, 880, hpgaugehandle[0], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(0, 880, hpgaugehandle[0], true);
-				auto nowcount = GetNowCount();
-				if (nowcount - oldcount < 2000)
-				{
-					DrawGraph(v.x - 125, v.y, hphandle[0], true);
-				}
+				DrawGraph(v.x - 125, v.y, hphandle[0], true);
 			}
-			if (damage.LkaHP == 5)
+		}
+		if (Player::HP == 5)
+		{
+			DrawGraph(1120, 880, hpgaugehandle[1], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(0, 880, hpgaugehandle[1], true);
-				auto nowcount = GetNowCount();
-				if (nowcount - oldcount < 2000)
-				{
-					DrawGraph(v.x - 125, v.y, hphandle[1], true);
-				}
+				DrawGraph(v.x - 125, v.y, hphandle[1], true);
 			}
-			if (damage.LkaHP == 4)
+		}
+		if (Player::HP == 4)
+		{
+			DrawGraph(1120, 880, hpgaugehandle[2], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(0, 880, hpgaugehandle[2], true);
-				auto nowcount = GetNowCount();
-				if (nowcount - oldcount < 2000)
-				{
-					DrawGraph(v.x - 125, v.y, hphandle[2], true);
-				}
+				DrawGraph(v.x - 125, v.y, hphandle[2], true);
 			}
-			if (damage.LkaHP == 3)
+		}
+		if (Player::HP == 3)
+		{
+			DrawGraph(1120, 880, hpgaugehandle[3], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(0, 880, hpgaugehandle[3], true);
-				auto nowcount = GetNowCount();
-				if (nowcount - oldcount < 2000)
-				{
-					DrawGraph(v.x - 125, v.y, hphandle[3], true);
-				}
+				DrawGraph(v.x - 125, v.y, hphandle[3], true);
 			}
-			if (damage.LkaHP == 2)
+		}
+		if (Player::HP == 2)
+		{
+			DrawGraph(1120, 880, hpgaugehandle[4], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(0, 880, hpgaugehandle[4], true);
-				auto nowcount = GetNowCount();
-				if (nowcount - oldcount < 2000)
-				{
-					DrawGraph(v.x - 125, v.y, hphandle[4], true);
-				}
+				DrawGraph(v.x - 125, v.y, hphandle[4], true);
 			}
-			if (damage.LkaHP == 1)
+		}
+		if (Player::HP == 1)
+		{
+			DrawGraph(1120, 880, hpgaugehandle[5], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(0, 880, hpgaugehandle[5], true);
-				auto nowcount = GetNowCount();
-				if (nowcount - oldcount < 2000)
-				{
-					DrawGraph(v.x - 125, v.y, hphandle[5], true);
-				}
+				DrawGraph(v.x - 125, v.y, hphandle[5], true);
 			}
 		}
 	}

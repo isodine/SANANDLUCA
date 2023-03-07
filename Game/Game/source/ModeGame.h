@@ -8,6 +8,10 @@
 #include "timer.h"
 #include "gimmick.h"
 #include "Slime.h"
+#include "sancircle.h"
+#include "lkacircle.h"
+#include "sanheal.h"
+#include "lkacircle.h"
 
 #include <string>
 #include <memory>
@@ -89,6 +93,8 @@ public:
 	LKA lka;
 	SanBomb sanbomb;
 	LkaBomb lkabomb;
+	Sancircle sancircle;
+	Lkacircle lkacircle;
 	Damage damage;
 	Gimmick gimmick;
 	Slime slime;

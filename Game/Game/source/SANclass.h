@@ -12,8 +12,8 @@ public:
 	SAN();
 	~SAN();
 	void Initialize() override;
-	void Update() override;
-	void Render() override;
+	void Update(Damage& damage);
+	void Render(Damage& damage);
 	void Input() override;
 	//void Jump();
 	//void freeFall();

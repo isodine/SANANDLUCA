@@ -16,12 +16,8 @@ SAN::~SAN()
 void SAN::Initialize()
 {
 	Player::Initialize();
-	sanfrask = LoadGraph("res/pH_gauge/pHgauge_SL_flask.png");
-	sangauge = LoadGraph("res/pH_gauge/ゲージ（中）/酸/pHgauge_strongacid.png");
-	sanicon = LoadGraph("res/pH_gauge/アイコン表情差分/サン/pHgauge_Sun_Emotions_Normal.png");
-	sanframememori = LoadGraph("res/pH_gauge/フレーム/サン/pHgauge_Sun_background_memori.png");
 	// モデルデータのロード（テクスチャも読み込まれる)
-	Mhandle = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1");
+	Mhandle = MV1LoadModel("res/01_Character_Model/San_2023_0222/San_Fullmotion.mv1");
 	hpgaugehandle[0] = LoadGraph("res/san/HP_san_6.png");
 	hpgaugehandle[1] = LoadGraph("res/san/HP_san_5.png");
 	hpgaugehandle[2] = LoadGraph("res/san/HP_san_4.png");
@@ -58,33 +54,73 @@ void SAN::Input()
 	trg = Trg1P;
 }
 
-void SAN::Update()
+void SAN::Update(Damage& damage)
 {
 	
 	Player::Update();
-	
+	if (damage.SanHitFlag == true) { oldcount = GetNowCount();}
 }
 
-void SAN::Render()//(SanBomb& sanB,Damage& damage)
+void SAN::Render(Damage& damage)//(SanBomb& sanB,Damage& damage)
 {
 	Player::Render();
-	DrawGraph(0, 470, sanfrask, TRUE);
-	DrawGraph(0, 470, sanicon, TRUE);
-	HPgauge = 610 - int((610 / _damage->MaxSanHP) * _damage->SanHP);
-	DrawRectGraph(0, 470, 0, 0, 220, 610 - HPgauge, sangauge, true, false);
-	/*DrawGraph(0,470,sangauge,TRUE);*/
-	DrawGraph(0, 470, sanframememori, TRUE);
+	VECTOR v = ConvWorldPosToScreenPos(vPos);
+	if (0.f <= v.z && v.z < 1.f)
+	{
+		if (Player::HP == 6)
+		{
+			DrawGraph(0, 880, hpgaugehandle[0], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
+			{
+				DrawGraph(v.x - 125, v.y, hphandle[0], true);
+			}
+		}
+		if (Player::HP == 5)
+		{
+			DrawGraph(0, 880, hpgaugehandle[1], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
+			{
+				DrawGraph(v.x - 125, v.y, hphandle[1], true);
+			}
+		}
+		if (Player::HP == 4)
+		{
+			DrawGraph(0, 880, hpgaugehandle[2], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
+			{
+				DrawGraph(v.x - 125, v.y, hphandle[2], true);
+			}
+		}
+		if (Player::HP == 3)
+		{
+			DrawGraph(0, 880, hpgaugehandle[3], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
+			{
+				DrawGraph(v.x - 125, v.y, hphandle[3], true);
+			}
+		}
+		if (Player::HP == 2)
+		{
+			DrawGraph(0, 880, hpgaugehandle[4], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
+			{
+				DrawGraph(v.x - 125, v.y, hphandle[4], true);
+			}
+		}
+		if (Player::HP == 1)
+		{
+			DrawGraph(0, 880, hpgaugehandle[5], true);
+			auto nowcount = GetNowCount();
+			if (nowcount - oldcount < 2000)
+			{
+				DrawGraph(v.x - 125, v.y, hphandle[5], true);
+			}
+		}
+	}
 	
 }
-//void SAN::Jump()
-//{
-//	if (throughtime == 0.f) { height = 10.f; }
-//	vPos.y += height;
-//
-//}
-//
-//void SAN::freeFall()
-//{
-//	vPos.y -= throughtime;
-//	throughtime += 0.5f;
-//}

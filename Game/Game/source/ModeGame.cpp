@@ -190,13 +190,10 @@ bool ModeGame::Process() {
 		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
 		modeStart = true;
 	}
-
-	sanbomb.Update(san);
-	lkabomb.Update(lka);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	san.Update();
-	lka.Update();
+	san.Update(damage);
+	lka.Update(damage);
 	damage.Process();
 	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
 	gimmick.Balance(san.vPos, lka.vPos);
@@ -304,8 +301,6 @@ bool ModeGame::Render() {
 			Slimes->Render(Slimes->slimePos);
 		}
 	}
-	sanbomb.Render();
-	lkabomb.Render();
 	//マップモデルを描画する
 	{
 		// シャドウマップへの描画の準備
@@ -334,8 +329,6 @@ bool ModeGame::Render() {
 		//MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
-	san.Render();
-	lka.Render();
 	// デバッグ表示
 	if (san.debagMode || lka.debagMode)
 	{
@@ -377,7 +370,11 @@ bool ModeGame::Render() {
 			break;
 		}
 	}
-
-
+	lka.Render(damage);
+	san.Render(damage);
+	sanbomb.Render();
+	lkabomb.Render();
+	sancircle.Render();
+	lkacircle.Render();
 	return true;
 }

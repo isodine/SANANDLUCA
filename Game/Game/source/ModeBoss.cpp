@@ -182,8 +182,8 @@ bool ModeBoss::Process() {
 	lkabomb.Update(lka);
 	/*san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());*/
-	san.Update();
-	lka.Update();
+	san.Update(damage);
+	lka.Update(damage);
 	damage.Process();
 	boss.Process();
 
@@ -276,8 +276,8 @@ bool ModeBoss::Render() {
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
 	boss.Render();
-	san.Render();
-	lka.Render();
+	san.Render(damage);
+	lka.Render(damage);
 	// デバッグ表示
 	{
 		/*int x = 0, y = 0, size = 16;
