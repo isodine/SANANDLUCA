@@ -1,90 +1,89 @@
-#include"lkabomb.h"
-#include "AppFrame.h"
-#include "ApplicationMain.h"
-#include "ModeGame.h"
-
-Lkabomb::Lkabomb()
+LkaBomb::LkaBomb() :PlayerBomb()
 {
-	_effectResourceHandle = LoadEffekseerEffect("res/Lka_bomb_1.6_2/Lka_bomb_loop_01.efkefc", 10.0f);
-	oldcount = 0;
+
 }
 
-Lkabomb::~Lkabomb()
+LkaBomb::~LkaBomb()
 {
-	DeleteEffekseerEffect(_effectResourceHandle);
+
 }
 
-void Lkabomb::Init()
+void LkaBomb::Initialize(LKA& lka)
 {
-}
-void Lkabomb::Update(LKA& lka)
-{
-	int keyoldEf = _KeyEf;
-	_KeyEf = GetJoypadInputState(DX_INPUT_PAD2);
-	_TrgEf = (_KeyEf ^ keyoldEf) & _KeyEf;
+	vPos = VGet(lka.vPos.x, lka.vPos.y + 150, lka.vPos.z);
 
-	if (_isthrow == 0)
+	mypH = Lka;
+	situation = PlayerBomb::None;
+}
+
+void LkaBomb::Update(LKA& lka)
+{
+	int key = lka.Key2P;
+	int trg = lka.Trg2P;
+
+
+	if (lka.attack == Pop)
 	{
-		_position_x = lka.vPos.x;
-		_position_y = lka.vPos.y + 150;
-		_position_z = lka.vPos.z;
+		situation = PlayerBomb::Pop;
+		bomblive = true;
 	}
-	if (_TrgEf & PAD_INPUT_6 && _isEffect == 0)
+
+	if (lka.attack == Keep)
 	{
-		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
-		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, _position_y, _position_z);
-		//_position_x += 0.2f;
-		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
-
-		_isEffect = 1;
-
-		oldcount = GetNowCount();
-
-
+		situation = PlayerBomb::Keep;
 	}
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, _position_y, _position_z);
-	//UpdateEffekseer3D();
 
-
-	if (oldcount > 0)
+	if (lka.attack == PlayerBomb::Throw)
 	{
-		auto nowCount = GetNowCount();
-		if (nowCount - oldcount >= 2000)
+		situation = PlayerBomb::Throw;
+	}
+
+	switch (situation)
+	{
+	case PlayerBomb::None:
+		break;
+	case PlayerBomb::Pop:
+		vPos = VGet(lka.vPos.x, lka.vPos.y + 150, lka.vPos.z);
+		bomblive = true;
+		if (sphereSize <= sphereMax)
 		{
-			if (_TrgEf & PAD_INPUT_6 && _isEffect == 1)
-			{
-				_isthrow = 1;
-			}
-			if (_isthrow == 1)
-			{
-				bombthrow();
-			}
-			_position_y += _hight;
-			if (_position_y <= 0)
-			{
-				_hight = 0.0f;
-				_isEffect = 0;
-				_isthrow = 0;
-				oldcount = 0;
-			}
+			sphereSize += 2;
 		}
+		else
+		{
+			situation = PlayerBomb::Keep;
+		}
+		break;
+	case PlayerBomb::Keep:
+		vPos = VGet(lka.vPos.x, lka.vPos.y + 150, lka.vPos.z);
+		break;
+	case PlayerBomb::Throw:
+		Throw(lka);
+		break;
 	}
 }
 
-void Lkabomb::Render()
+void LkaBomb::Render()
 {
-	Effekseer_Sync3DSetting();
+	DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 
-	DrawEffekseer3D();
-	if (_isEffect == 0)
+}
+
+void LkaBomb::Throw(LKA& lka)
+{
+	if (!firstdir)
 	{
-		StopEffekseer3DEffect(_playingEffectHandle);
+		vDir = VGet(0.f, 0.f, 0.f);
+		vDir = VAdd(vDir, lka.vDir);
+		vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
+		firstdir = true;
+	}
+	vPos = VAdd(vPos, vDir);
+	vPos.y -= count;
+	vPos.y += decrement;
+	count += 0.5f;
+	if (vPos.y < 0) {
+		BombReset();
 	}
 }
 
-void Lkabomb::bombthrow()
-{
-	_hight += 1.0f - _throw;
-	_throw += 0.5f;
-}

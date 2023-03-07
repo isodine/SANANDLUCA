@@ -1,92 +1,97 @@
-#include"sanbomb.h"
-#include "AppFrame.h"
-#include "ApplicationMain.h"
-#include "ModeGame.h"
-
-Sanbomb::Sanbomb()
+SanBomb::SanBomb() :PlayerBomb()
 {
-	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_loop_01.efkefc", 10.0f);
-	oldcount = 0;
+
 }
 
-Sanbomb::~Sanbomb()
+SanBomb::~SanBomb() 
 {
-	DeleteEffekseerEffect(_effectResourceHandle);
+
 }
 
-void Sanbomb::Init()
+void SanBomb::Initialize(SAN& san)
 {
+	vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
+	
+	mypH = San;
+	situation = PlayerBomb::None;
 }
 
-void Sanbomb::Update(SAN& san)
+void SanBomb::Update(SAN& san)
 {
-	int keyoldEf = _KeyEf;
-	_KeyEf = GetJoypadInputState(DX_INPUT_PAD1);
-	_TrgEf = (_KeyEf ^ keyoldEf) & _KeyEf;
+	int key = san.Key1P;
+	int trg = san.Trg1P;
 
-	if (_isthrow == 0)
+
+	if (san.attack == Pop)
 	{
-		_position_x = san.vPos.x;
-		_position_y = san.vPos.y + 150;
-		_position_z = san.vPos.z;
+		situation = PlayerBomb::Pop;
+		bomblive = true;
 	}
-	if (_TrgEf & PAD_INPUT_6 && _isEffect == 0)
+
+	if (san.attack == Keep)
 	{
-		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
-		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, _position_y, _position_z);
-		//_position_x += 0.2f;
-		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
-
-		_isEffect = 1;
-
-		oldcount = GetNowCount();
-
-
+		situation = PlayerBomb::Keep;
 	}
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, _position_x, _position_y, _position_z);
-	UpdateEffekseer3D();
- 
 
-
-	if (oldcount > 0)
+	if (san.attack == PlayerBomb::Throw)
 	{
-		auto nowCount = GetNowCount();
-		if (nowCount - oldcount >= 2000)
+		situation = PlayerBomb::Throw;
+	}
+
+	switch (situation)
+	{
+	case PlayerBomb::None:
+		break;
+	case PlayerBomb::Pop:
+		vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
+		bomblive = true;
+		if (sphereSize <= sphereMax)
 		{
-			if (_TrgEf & PAD_INPUT_6 && _isEffect == 1)
-			{
-				_isthrow = 1;
-			}
-			if (_isthrow == 1)
-			{
-				bombthrow();
-			}
-			_position_y += _hight;
-			if (_position_y <= 0)
-			{
-				_hight = 0.0f;
-				_isEffect = 0;
-				_isthrow = 0;
-				oldcount = 0;
-			}
+			sphereSize += 2;
 		}
+		else
+		{
+			situation = PlayerBomb::Keep;
+		}
+		break;
+	case PlayerBomb::Keep:
+		vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
+		break;
+	case PlayerBomb::Throw:
+		Throw(san);
+		break;
 	}
 }
 
-void Sanbomb::Render()
+void SanBomb::Render()
 {
-	Effekseer_Sync3DSetting();
+	DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 
-	DrawEffekseer3D();
-	if (_isEffect == 0)
+}
+
+void SanBomb::Throw(SAN& san)
+{
+	if (!firstdir)
 	{
-		StopEffekseer3DEffect(_playingEffectHandle);
+		vDir = VGet(0.f, 0.f, 0.f);
+		vDir = VAdd(vDir, san.vDir);
+		vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
+		firstdir = true;
+	}
+	vPos = VAdd(vPos, vDir);
+	vPos.y -= count;
+	vPos.y += decrement;
+	count += 0.5f;
+	if (vPos.y < 0) {
+		BombReset();
 	}
 }
 
-void Sanbomb::bombthrow()
+void PlayerBomb::BombReset()
 {
-	_hight += 1.0f - _throw;
-	_throw += 0.5f;
+	bomblive = false;
+	firstdir = false;
+	sphereSize = 0.f;
+	situation = PlayerBomb::None;
+	count = 0.f;
 }
