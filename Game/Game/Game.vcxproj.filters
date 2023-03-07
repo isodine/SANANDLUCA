@@ -143,12 +143,15 @@
 =======
     <ClInclude Include="source\Include.h" />
     <ClInclude Include="ModeEffekseer.h" />
-    <ClInclude Include="source\sanbomb.h" />
     <ClInclude Include="source\lkabomb.h" />
     <ClInclude Include="source\sancircle.h" />
     <ClInclude Include="source\sanheal.h" />
     <ClInclude Include="source\lkaheal.h" />
     <ClInclude Include="source\lkacircle.h" />
+<<<<<<< HEAD
+>>>>>>> エフェクト
+=======
+    <ClInclude Include="source\sanbomb.h" />
 >>>>>>> エフェクト
   </ItemGroup>
 </Project>

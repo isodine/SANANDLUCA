@@ -27,4 +27,8 @@ private:
 	int  sanfrask;
 	int HPgauge = 0;
 
+	int hpgaugehandle[6];
+	int hphandle[6];
+	float oldcount;
+	bool _isflag;
 };

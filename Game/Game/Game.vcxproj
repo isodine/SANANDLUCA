@@ -200,6 +200,8 @@
     <ClCompile Include="source\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ModeEffekseer.h" />
+    <ClInclude Include="sanbomb.h" />
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Camera.h" />
@@ -226,6 +228,7 @@
     <ClInclude Include="source\ModeStage3.h" />
     <ClInclude Include="source\ModeTitle.h" />
     <ClInclude Include="source\Player.h" />
+    <ClInclude Include="source\sancircle.h" />
     <ClInclude Include="source\PlayerBomb.h" />
     <ClInclude Include="source\sanbomb.h" />
     <ClInclude Include="source\SANclass.h" />

@@ -220,6 +220,16 @@ bool ModeGame::Process() {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 	}
+	sanbomb.Update(san);
+	lkabomb.Update(lka);
+	sancircle.Update(san,lka);
+	lkacircle.Update(san,lka);
+	//sanheal.Update(san);
+	//lkaheal.Update(lka);
+	//
+	//if (_gTrgEf & PAD_INPUT_9 && oldcount == 0)
+	//{
+	//	old
 
 	//‰¼
 	int Trg;

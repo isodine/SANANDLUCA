@@ -17,11 +17,12 @@ Damage::~Damage() {
 void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
+  
+	SanHP = 6;
+	LkaHP = 6;
 
-	SanHP = 3;
-	LkaHP = 3;
-	MaxSanHP = 7;
-	MaxLkaHP = 7;
+	MaxSanHP = 6;
+	MaxLkaHP = 6;
 
 	Distance = 1000;
 

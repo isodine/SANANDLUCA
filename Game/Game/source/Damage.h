@@ -12,10 +12,8 @@ public:
 	virtual void Process();
 	virtual void Render();
 
-	int SanHP;
-	int LkaHP;
-	int MaxSanHP;
-	int MaxLkaHP;
+	int MaxSanHP,SanHP;
+	int MaxLkaHP,LkaHP;
 
 	float SanCoolTime;
 	float LkaCoolTime;

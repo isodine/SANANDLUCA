@@ -1,13 +1,13 @@
 #pragma once
 class SAN;
+class LKA;
 class Sancircle
 {
 public:
 	Sancircle();
 	~Sancircle();
 
-	void Init();
-	void Update(SAN& san);
+	void Update(SAN& san,LKA& lka);
 	void Render();
 private:
 	int		_effectResourceHandle;		// エフェクトファイルをロードするハンドル

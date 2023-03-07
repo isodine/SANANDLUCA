@@ -21,11 +21,29 @@ void SAN::Initialize()
 	sanicon = LoadGraph("res/pH_gauge/アイコン表情差分/サン/pHgauge_Sun_Emotions_Normal.png");
 	sanframememori = LoadGraph("res/pH_gauge/フレーム/サン/pHgauge_Sun_background_memori.png");
 	// モデルデータのロード（テクスチャも読み込まれる)
-	Mhandle = MV1LoadModel("res/01_Character_Model/San_2023_0222/San_Fullmotion.mv1");
-
+	Mhandle = MV1LoadModel("res/Sun/モデル（テクスチャ込み）/sun multimotion2.mv1");
+	hpgaugehandle[0] = LoadGraph("res/san/HP_san_6.png");
+	hpgaugehandle[1] = LoadGraph("res/san/HP_san_5.png");
+	hpgaugehandle[2] = LoadGraph("res/san/HP_san_4.png");
+	hpgaugehandle[3] = LoadGraph("res/san/HP_san_3.png");
+	hpgaugehandle[4] = LoadGraph("res/san/HP_san_2.png");
+	hpgaugehandle[5] = LoadGraph("res/san/HP_san_1.png");
+	hphandle[0] = LoadGraph("res/san_v2/UI_san_v6.png");
+	hphandle[1] = LoadGraph("res/san_v2/UI_san_v5.png");
+	hphandle[2] = LoadGraph("res/san_v2/UI_san_v4.png");
+	hphandle[3] = LoadGraph("res/san_v2/UI_san_v3.png");
+	hphandle[4] = LoadGraph("res/san_v2/UI_san_v2.png");
+	hphandle[5] = LoadGraph("res/san_v2/UI_san_v1.png");
+	Mattach_index = -1;		// アニメーションアタッチはされていない
+	// ステータスを「無し」に設定
+	_status = STATUS::NONE;
+	// 再生時間の初期化
+	Mtotal_time = 0.f;
+	Mplay_time = 0.0f;
 	// 位置,向きの初期化
-	vPos = VGet(-60, 20, 0);
-	//vPos = VGet(-60, 300, 0);
+	vPos = VGet(-60, 0, 0);
+	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
+	oldcount = GetNowCount();
 	// 腰位置の設定
 	_colSubY = 45.f;
 	HP = 6;
