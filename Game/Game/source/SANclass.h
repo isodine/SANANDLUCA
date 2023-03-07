@@ -8,7 +8,7 @@ public:
 	~SAN();
 	void Initialize()override;
 	void Update(Camera& cam,Damage& damage);
-	void Render(Damage& damage);
+	void Render()override;
 	void Input();
 
 	int hphandle[2];

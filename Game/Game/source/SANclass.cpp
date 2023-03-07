@@ -167,18 +167,14 @@ void SAN::Update(Camera& cam,Damage& damage)
 	if (Mplay_time >= Mtotal_time) {
 		Mplay_time = 0.0f;
 	}
-	if (damage.SanHP == 6)
-	{
-		hpootd = false;
-	}
-	if (hpootd == false && damage.SanHP == 5)
+	if (hpootd == false&&damage.SanHP == 9)
 	{
 		hpootd = true;
 		oldcount = GetNowCount();
 	}
 }
 
-void SAN::Render(Damage& damage)
+void SAN::Render()
 {
 	// Ä¶ŠÔ‚ğƒZƒbƒg‚·‚é
 	MV1SetAttachAnimTime(Mhandle, Mattach_index, Mplay_time);
@@ -205,7 +201,7 @@ void SAN::Render(Damage& damage)
 		VECTOR v = ConvWorldPosToScreenPos(vPos);
 		if (0.f <= v.z && v.z < 1.f)
 		{
-			if (damage.SanHP == 6)
+			if (hpootd == false)
 			{
 				auto nowcount = GetNowCount();
 				if (nowcount - oldcount < 2000)
@@ -213,7 +209,7 @@ void SAN::Render(Damage& damage)
 					DrawGraph(v.x, v.y, hphandle[0], true);
 				}
 			}
-			if (damage.SanHP == 5)
+			if (hpootd == true)
 			{
 				auto nowcount = GetNowCount();
 				if (nowcount - oldcount < 2000)
