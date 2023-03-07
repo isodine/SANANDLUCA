@@ -11,6 +11,9 @@ ModeTitle::ModeTitle() {
 	titlelogohandle = LoadGraph("res/01_Tittle/logo.png");
 	pushlogo = LoadGraph("res/01_Tittle/text.png");
 	SEcrik = LoadSoundMem("res/06_Sound/03_SE/Œˆ’èƒ{ƒ^ƒ“‚ð‰Ÿ‚·24.mp3");
+
+	//VOICE—p
+	modeStart = false;
 }
 
 bool ModeTitle::Initialize() {
@@ -28,7 +31,7 @@ bool ModeTitle::Process() {
 
 	if (!modeStart)
 	{
-		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(VOICEtitle[GetRand(3)], DX_PLAYTYPE_BACK, true);
 		modeStart = true;
 	}
 	int Trg;

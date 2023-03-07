@@ -50,16 +50,16 @@ void Damage::Process() {
 		LkaHP -= 2;
 		SanHitFlag = true;
 		LkaHitFlag = true;
-		PlaySoundMem(San->VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
-		PlaySoundMem(Lka->VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 	else if (Distance < 110 && Distance >= 85 && SanHitFlag == false && LkaHitFlag == false) {
 		SanHP -= 1;
 		LkaHP -= 1;
 		SanHitFlag = true;
 		LkaHitFlag = true;
-		PlaySoundMem(San->VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
-		PlaySoundMem(Lka->VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
 
@@ -72,13 +72,13 @@ void Damage::Process() {
 		if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
 			SanHP -= 1;
 			SanHitFlag = true;
-			PlaySoundMem(San->VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
+			PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		}
 
 		if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
 			LkaHP -= 1;
 			LkaHitFlag = true;
-			PlaySoundMem(Lka->VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+			PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		}
 	}
 	

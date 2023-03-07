@@ -89,6 +89,7 @@ void Player::Update()
 	else {}
 
 	if (key & PAD_INPUT_5) {	//‘½•ªL1ƒ{ƒ^ƒ“
+		PlaySoundMem(VOICEpose[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		WaitKey();
 	}
 	else {

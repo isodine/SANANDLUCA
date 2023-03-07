@@ -24,16 +24,6 @@ ModeGame::ModeGame() : ModeBase()
 bool ModeGame::Initialize() {
 	if (!base::Initialize()) { return false; }
 
-	//// モデルデータのロード（テクスチャも読み込まれる）
-	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
-	//_attach_index = -1;		// アニメーションアタッチはされていない
-
-	//// 再生時間の初期化
-	//_total_time = 0.f;
-	//_play_time = 0.0f;
-	//// 位置,向きの初期化
-	//_vPos = VGet(0, 0, 0);
-	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/map_0125.fbm/a_map02.mv1");
@@ -196,7 +186,7 @@ bool ModeGame::Process() {
 
 	if (!modeStart)
 	{
-		PlaySoundMem(san.VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
 		modeStart = true;
 	}
 
