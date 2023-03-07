@@ -29,9 +29,9 @@ bool ModeRule::Process() {
 
   if (Trg & PAD_INPUT_1){pushbutton--;}
   if (Trg & PAD_INPUT_2) { pushbutton++; }
-  if (pushbutton > 4){pushbutton = 4;}
+  if (pushbutton > 6){pushbutton = 5;}
   if (pushbutton < 0) { pushbutton = 0; }
-  if (Trg & PAD_INPUT_2 && pushbutton == 4)
+  if (Trg & PAD_INPUT_2 && pushbutton == 5)
   {
     ModeServer::GetInstance()->Del(this);
     ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");

@@ -70,7 +70,7 @@ bool ModeGame::Initialize() {
 	height = 0.0f;
 
 	san.SetCamera(&_cam);
-	san.SetBomb(&playerbomb);
+	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
 
 	san.Initialize();
@@ -91,7 +91,8 @@ bool ModeGame::Initialize() {
 	//slime.Initialize();
 	gimmick.Initialize();
 	gimmick.SetSanLka(&san, &lka);
-	sanbomb.Init();
+	sanbomb.Initialize(san);
+	lkabomb.Initialize(lka);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -191,6 +192,7 @@ bool ModeGame::Process() {
 	}
 
 	sanbomb.Update(san);
+	lkabomb.Update(lka);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	san.Update();
@@ -217,6 +219,18 @@ bool ModeGame::Process() {
 
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
+	}
+
+	//仮
+	int Trg;
+	int keyold = Key;
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+
+	int checkKey = PAD_INPUT_10;
+	if (Trg & checkKey) {
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
 
 	return true;
@@ -280,6 +294,8 @@ bool ModeGame::Render() {
 			Slimes->Render(Slimes->slimePos);
 		}
 	}
+	sanbomb.Render();
+	lkabomb.Render();
 	//マップモデルを描画する
 	{
 		// シャドウマップへの描画の準備
@@ -350,7 +366,6 @@ bool ModeGame::Render() {
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
 		}
-	}
 	}
 
 
