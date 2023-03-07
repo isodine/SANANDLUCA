@@ -6,11 +6,13 @@ void Boss::Initialize() {
 	model.pos = VGet(0, 0, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	StopDir = 0.05;
+	StopDir = 0.01;
 	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	rotate = 0;
 	rotateFlag = true;
 	walkFlag = false;
+	SanCatchFlag = false;
+	LkaCatchFlag = false;
 	walkTimeCount = 0;
 	walkTime0 = 90;
 	walkTime1 = 120;
@@ -48,7 +50,7 @@ void Boss::Terminate() {
 void Boss::Process() {
 	HandPos = MV1GetFramePosition(model.modelHandle, 3);
 	AddPos = VNorm(VSub(MV1GetFramePosition(model.modelHandle, 5), HandPos));
-	SphereCenter = VAdd(HandPos, VScale(AddPos, 90));
+	SphereCenter = VAdd(HandPos, VScale(AddPos, 80));
 	BOSSTYPE oldtype = type;
 
 	rotationMatrix = MMult(MMult(MGetRotX(model.dir.x), MGetRotY(model.dir.y)), MGetRotZ(model.dir.z));
@@ -244,12 +246,12 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 		}
 	}
 	else {
-		model.pos = VAdd(VScale(forward, 10.f), model.pos);
+		model.pos = VAdd(VScale(forward, 15.f), model.pos);
 		MV1RefreshCollInfo(SanHandle, 3);
 		MV1RefreshCollInfo(LkaHandle, 8);
-		hitPolyDimSan = MV1CollCheck_Sphere(SanHandle, 3, SphereCenter, 60);
-		hitPolyDimLka = MV1CollCheck_Sphere(LkaHandle, 8, SphereCenter, 60);
-		hitPolyDimWall = MV1CollCheck_Sphere(MapHandle, 1, SphereCenter, 60);
+		hitPolyDimSan = MV1CollCheck_Sphere(SanHandle, 3, SphereCenter, 50);
+		hitPolyDimLka = MV1CollCheck_Sphere(LkaHandle, 8, SphereCenter, 50);
+		hitPolyDimWall = MV1CollCheck_Sphere(MapHandle, 1, SphereCenter, 50);
 
 		if (hitPolyDimSan.HitNum >= 1) {
 			san->vPos.x = SphereCenter.x;
@@ -292,6 +294,7 @@ void Boss::Pull() {
 	PullCount += 1;
 	if (PullCount > 60) {
 		model.pos = VAdd(model.pos, VScale(forward, -3));
+		
 	}
 	if (PullCount == 78) {
 		PullCount = 0;
@@ -323,19 +326,15 @@ void Boss::Capture() {
 
 	if (CaptureCount == 180) {
 		CaptureCount = 0;
-		SanCatchFlag = false;
-		LkaCatchFlag = false;
 		type = BOSSTYPE::CAPTUREEND;
 	}
 	if (AttackedFlag) {
 		AttackedFlag = false;
 		BossHP -= 1;
-		SanCatchFlag = false;
-		LkaCatchFlag = false;
 		type = BOSSTYPE::CAPTUREEND;
-		if (BossHP == 0) {
-			type = BOSSTYPE::DOWN;
-		}
+	}
+	if (BossHP == 0) {
+		type = BOSSTYPE::DOWN;
 	}
 }
 
@@ -343,9 +342,21 @@ void Boss::CaptureEnd() {
 	EndCount += 1;
 	if (EndCount > 45) {
 		model.pos = VAdd(model.pos, VScale(forward, -3));
+		if (SanCatchFlag) {
+			san->vPos.x = SphereCenter.x;
+			san->vPos.y = 0;
+			san->vPos.z = SphereCenter.z;
+		}
+		else if (LkaCatchFlag) {
+			lka->vPos.x = SphereCenter.x;
+			lka->vPos.y = 0;
+			lka->vPos.z = SphereCenter.z;
+		}
 	}
 	if (EndCount == 64) {
 		EndCount = 0;
+		SanCatchFlag = false;
+		LkaCatchFlag = false;
 		type = BOSSTYPE::IDLE;
 	}
 }
@@ -356,11 +367,12 @@ void Boss::Render() {
 		MV1SetPosition(BossHandle, model.pos);
 		MV1DrawModel(BossHandle);*/
 		manager->modelRender(&model, 1.f, 1.f);
-		DrawSphere3D(SphereCenter, 60, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
 		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 		DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
 		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
 		DrawFormatString(0, 150, GetColor(255, 0, 0), "WalkTime = %d", WalkTime);
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
 	}
 }

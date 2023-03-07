@@ -183,10 +183,17 @@ bool ModeBoss::Process() {
 	boss.Process();
 
 	//仮
-	/*if (Count == 300) {
+	int Trg;
+	int keyold = Key;
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+
+	int checkKey = PAD_INPUT_2;
+
+	if (Trg & checkKey) {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
-	}*/
+	}
 
 	/*if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
 	{
