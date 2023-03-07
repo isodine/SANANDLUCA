@@ -12,18 +12,23 @@ Lkacircle::~Lkacircle()
 {
 }
 
-void Lkacircle::Update(LKA& lka)
+void Lkacircle::Update(SAN& san,LKA& lka)
 {
-	if (IsPlaying == -1)
+	VECTOR ChIt;
+	float LE;
+	ChIt = VSub(san.vPos, lka.vPos);
+	ChIt.y = 0.0f;
+	LE = VSize(ChIt);
+	if (LE <= 120.0f &&IsPlaying == -1)
 	{
 		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y + 150, lka.vPos.z);
+		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y + 45, lka.vPos.z);
 		//_position_x += 0.2f;
-		//SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.1f, 0.1f, 0.1f);
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.75f, 0.75f, 0.75f);
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y, lka.vPos.z);
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y + 45, lka.vPos.z);
 	//UpdateEffekseer3D();
 }
 

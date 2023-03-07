@@ -165,8 +165,8 @@ bool ModeGame::Process() {
 	}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
-	//sancircle.Update(san);
-	//lkacircle.Update(lka);
+	sancircle.Update(san,lka);
+	lkacircle.Update(san,lka);
 	//sanheal.Update(san);
 	//lkaheal.Update(lka);
 	//
@@ -358,14 +358,14 @@ bool ModeGame::Render() {
 		float deg = RAD2DEG(rad);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  len = %5.2f, rad = %5.2f, deg = %5.2f", length, rad, deg); y += size;
 	}
-	san.Render(damage);
+	san.Render();
 	lka.Render();
 
 	damage.Render();
 	sanbomb.Render();
 	lkabomb.Render();
-	//sancircle.Render();
-	//lkacircle.Render();
+	sancircle.Render();
+	lkacircle.Render();
 	//sanheal.Render();
 	//lkaheal.Render();
 	//int AttachIndex;

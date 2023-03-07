@@ -1,14 +1,13 @@
 #pragma once
-class SAN;
 class LKA;
-class Sanbomb
+class Lkabomb
 {
 public:
-	Sanbomb();
-	~Sanbomb();
+	Lkabomb();
+	~Lkabomb();
 
 	void Init();
-	void Update(SAN& san);
+	void Update(LKA& lka);
 	void Render();
 	void bombthrow();
 private:

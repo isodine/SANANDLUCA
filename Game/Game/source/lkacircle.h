@@ -1,5 +1,6 @@
 #pragma once
 class LKA;
+class SAN;
 class Lkacircle
 {
 public:
@@ -7,7 +8,7 @@ public:
 	~Lkacircle();
 
 	void Init();
-	void Update(LKA& lka);
+	void Update(SAN& san,LKA& lka);
 	void Render();
 private:
 	int		_effectResourceHandle;		// エフェクトファイルをロードするハンドル

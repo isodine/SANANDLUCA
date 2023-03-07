@@ -112,5 +112,6 @@
     <ClInclude Include="source\sanheal.h" />
     <ClInclude Include="source\lkaheal.h" />
     <ClInclude Include="source\lkacircle.h" />
+    <ClInclude Include="source\sanbomb.h" />
   </ItemGroup>
 </Project>
