@@ -25,7 +25,7 @@ ModeBoss::ModeBoss() : ModeBase()
 
 bool ModeBoss::Initialize() {
 	if (!ModeBase::Initialize()) { return false; }
-
+	GameMode = 3;
 	//// モデルデータのロード（テクスチャも読み込まれる）
 	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
 	//_attach_index = -1;		// アニメーションアタッチはされていない
@@ -37,9 +37,20 @@ bool ModeBoss::Initialize() {
 	//_vPos = VGet(0, 0, 0);
 	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 	//カメラ設定
-	_cam._vTarget = VGet(0,0,0);
-	_cam._vPos = VGet(0,1200,-1000);
+		_bossCam._vTarget = VGet(0, 0, 600);
+		_bossCam._vPos = VGet(0, 1000, -250);
+		_bossCam._clipNear = 2.f;
+		_bossCam._clipFar = 20000.f;
 
+		Count = 0;
+
+		boss.modeboss = this;
+		boss.san = &san;
+		boss.lka = &lka;
+
+		boss.sanB = &sanbomb;
+		boss.lkaB = &lkabomb;
+	
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/04_Stage_Boss.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
@@ -49,6 +60,7 @@ bool ModeBoss::Initialize() {
 	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "coStage_floor1");
 	frameMapCollisionwall = MV1SearchFrame(_handleMap, "coStage_wall1");
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
+	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
@@ -58,12 +70,6 @@ bool ModeBoss::Initialize() {
 	//マスクの試験運用
 	MaskHandle = LoadMask("res/San_Lka_Mask.png");
 	CreateMaskScreen();
-
-	// カメラの設定（わかりやすい位置に）
-	/*_cam._vPos = VGet(0, 300.f, -400.f);
-	_cam._vTarget = VGet(0, 60, 0);*/
-	_cam._clipNear = 2.f;
-	_cam._clipFar = 20000.f;
 
 
 	//フォグを使ってみる
@@ -78,14 +84,15 @@ bool ModeBoss::Initialize() {
 	// その他初期化
 	_bViewCollision = FALSE;
 
-	GameMode = 1;
+	sanbomb.Initialize(san);
+	lkabomb.Initialize(lka);
 
 	throughtime = 0.0f;
 	height = 0.0f;
 
 	boss.Initialize();
 
-	/*san.SetCamera(&_cam);
+	san.SetCamera(&_bossCam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
 
@@ -94,8 +101,8 @@ bool ModeBoss::Initialize() {
 	san.wallCol = frameMapCollisionwall;
 	san.stageHandle = _handleMap;
 
-	lka.SetCamera(&_cam);
-	lka.SetBomb(&sanbomb);
+	lka.SetCamera(&_bossCam);
+	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
 
 	lka.Initialize();
@@ -104,10 +111,8 @@ bool ModeBoss::Initialize() {
 	lka.stageHandle = _handleMap;
 
 	damage.Initialize(&san, &lka);
-	damage.stageFlag = false;*/
+	damage.stageFlag = false;
 	//enemy.Initialize();
-	//gimmick.Initialize();
-	//gimmick.SetSanLka(&san, &lka);
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -157,14 +162,6 @@ bool ModeBoss::Initialize() {
 		cnt++;
 	}
 
-	//CSVの調整にカメラを追いつかせる
-	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
-	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
-	_cam._vPos.z += (san.vPos.z + lka.vPos.z) / 2.f;
-	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
-	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
-	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
-
 	PlayMusic("res/06_Sound/01_BGM/Confectioner.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;
@@ -177,20 +174,33 @@ bool ModeBoss::Terminate() {
 
 bool ModeBoss::Process() {
 	ModeBase::Process();
-
+	Count += 1;
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}-
-	/*sanbomb.Update(san);
-	san.SetOnBalance(gimmick.GetSanHitFlag());
-	lka.SetOnBalance(gimmick.GetLkaHitFlag());
+	sanbomb.Update(san);
+	lkabomb.Update(lka);
+	/*san.SetOnBalance(gimmick.GetSanHitFlag());
+	lka.SetOnBalance(gimmick.GetLkaHitFlag());*/
 	san.Update();
 	lka.Update();
-	damage.Process();*/
-	//enemy.Slime(san.vPos, lka.vPos, _handleMap, 1.0f);
-	//gimmick.Balance(san.vPos, lka.vPos);
+	damage.Process();
 	boss.Process();
-	/*if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (damage.SanHP <= 0) || (damage.LkaHP <= 0))
+
+	//仮
+	int Trg;
+	int keyold = Key;
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+
+	int checkKey = PAD_INPUT_2;
+
+	if (Trg & checkKey) {
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
+	}
+
+	/*if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
 		StopMusic();
 		ModeServer::GetInstance()->Del(this);
@@ -213,8 +223,6 @@ bool ModeBoss::Render() {
 #if 1	// 平行ライト
 	SetGlobalAmbientLight(GetColorF(0.1f, 0.1f, 0.1f, 0.f));
 	ChangeLightTypeDir(VGet(0, -1, 1));
-	//SetLightEnable(FALSE);
-	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
 
 	/*LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
 	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));*/
@@ -226,9 +234,9 @@ bool ModeBoss::Render() {
 #endif
 
 	// カメラ設定更新
+		SetCameraPositionAndTarget_UpVecY(_bossCam._vPos, _bossCam._vTarget);
+		SetCameraNearFar(_bossCam._clipNear, _bossCam._clipFar);
 	
-	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
-	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
 
 	// 0,0,0を中心に線を引く
 	{
@@ -252,14 +260,13 @@ bool ModeBoss::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		//gimmick.Render();
-		//enemy.SlimeRender(enemy.slimePos);
 		// コリジョン判定用ラインの描画
 		//if (_bViewCollision) {
 		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 		//}
 	}
 	sanbomb.Render();
+	lkabomb.Render();
 	// マップモデルを描画する
 	{
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
@@ -269,8 +276,8 @@ bool ModeBoss::Render() {
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
 	boss.Render();
-	/*san.Render();
-	lka.Render();*/
+	san.Render();
+	lka.Render();
 	// デバッグ表示
 	{
 		/*int x = 0, y = 0, size = 16;

@@ -16,7 +16,6 @@ LKA::~LKA()
 void LKA::Initialize()
 {
 	Player::Initialize();
-
 	// モデルデータのロード（テクスチャも読み込まれる）
 	Mhandle = MV1LoadModel("res/Lka_2023_0222/Lka_Fullmotion.mv1");
 
@@ -25,6 +24,7 @@ void LKA::Initialize()
 	//vPos = VGet(-60, 300, 0);
 	// 腰位置の設定
 	_colSubY = 45.f;
+	HP = 6;
 }
 
 void LKA::Input()

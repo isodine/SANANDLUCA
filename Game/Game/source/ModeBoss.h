@@ -15,7 +15,7 @@ public:
 
 	// ƒJƒƒ‰
 	Camera _cam;
-
+	Camera _bossCam;
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int _handle;
@@ -31,6 +31,8 @@ public:
 	int frameMapCollisionfloor;
 	int frameMapCollisionwall;
 
+	int Count;//‰¼
+
 	int LightHandle;
 	int MaskHandle;
 
@@ -45,12 +47,10 @@ public:
 
 public:
 	std::vector<std::unique_ptr<Player>> sanlka;
-	Player player;
 	SAN san;
 	LKA lka;
-	Sanbomb sanbomb;
+	SanBomb sanbomb;
+	LkaBomb lkabomb;
 	Damage damage;
-	Gimmick gimmick;
-	//Slime slime;
 	Boss boss;
 };

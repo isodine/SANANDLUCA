@@ -38,9 +38,8 @@ public:
 	virtual bool Render();
 	void charJump();
 
-	// カメラ関連
+	// カメラ
 	Camera _cam;
-	//VECTOR 
 	
 
 	// 3Dモデル描画用
@@ -79,8 +78,8 @@ public:
 	Player player;
 	SAN san;
 	LKA lka;
-	PlayerBomb playerbomb;
-	Sanbomb sanbomb;
+	SanBomb sanbomb;
+	LkaBomb lkabomb;
 	Damage damage;
 	Gimmick gimmick;
 	Slime slime;

@@ -1,6 +1,9 @@
 #pragma once
 #include"Player.h"
 #include "Gimmick.h"
+#include "Boss.h"
+
+class Boss;
 
 class LKA:public Player, public Gimmick
 {
@@ -11,6 +14,7 @@ public:
 	void Update() override;
 	void Render() override;
 	void Input() override;
-	//void Jump();
-	//void freeFall();
+	void Jump();
+	void freeFall();
+
 };
