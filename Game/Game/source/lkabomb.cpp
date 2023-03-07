@@ -1,4 +1,4 @@
-#include"lkabomb.h"
+#include"Lkabomb.h"
 #include "AppFrame.h"
 #include "ApplicationMain.h"
 #include "ModeGame.h"
