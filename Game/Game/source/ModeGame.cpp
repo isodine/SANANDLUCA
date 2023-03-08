@@ -26,13 +26,15 @@ bool ModeGame::Initialize() {
 
 
 	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/map_0125.fbm/a_map02.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01/Stage_01.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
 	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
 	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
+	frameMapCollisiongoalSAN = 4;
+	frameMapCollisiongoalLKA = 5;
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
@@ -76,6 +78,7 @@ bool ModeGame::Initialize() {
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
 	san.wallCol = frameMapCollisionwall;
+	san.goalColSAN = frameMapCollisiongoalSAN;
 	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
@@ -85,6 +88,7 @@ bool ModeGame::Initialize() {
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
 	lka.wallCol = frameMapCollisionwall;
+	lka.goalColLKA = frameMapCollisiongoalLKA;
 	lka.stageHandle = _handleMap;
 
 	damage.Initialize(&san, &lka);
@@ -219,8 +223,8 @@ bool ModeGame::Process() {
 	}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
-	sancircle.Update(san,lka);
-	lkacircle.Update(san,lka);
+	sancircle.Update(san, lka);
+	lkacircle.Update(san, lka);
 	//sanheal.Update(san);
 	//lkaheal.Update(lka);
 	//
@@ -235,7 +239,13 @@ bool ModeGame::Process() {
 	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 
 	int checkKey = PAD_INPUT_10;
-	if (Trg & checkKey) {
+	if (Trg & checkKey || (san.goal && lka.goal)) {
+		//BGM停止
+		StopMusic();
+
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
+
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}

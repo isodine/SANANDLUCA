@@ -123,7 +123,7 @@ void Player::Update()
 			attack = Attack::Pop;
 		}
 		if (_bomb->situation == Keep) { attack = Attack::Keep; }
-		if (trg & PAD_INPUT_6 && (attack == Attack::Keep)) 
+		if (trg & PAD_INPUT_6 && (attack == Attack::Keep))
 		{
 			attack = Attack::Throw;
 			mypH == San ? PlaySoundMem(VOICEthrowBombSAN[GetRand(2)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEthrowBombLKA[GetRand(2)], DX_PLAYTYPE_BACK, true);
@@ -160,6 +160,8 @@ void Player::Update()
 		MV1_COLL_RESULT_POLY hitPolyfloor;
 		MV1_COLL_RESULT_POLY hitPolywallback;
 		MV1_COLL_RESULT_POLY hitPolywallside;
+		MV1_COLL_RESULT_POLY hitPolygoalSAN;
+		MV1_COLL_RESULT_POLY hitPolygoalLKA;
 
 
 		hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
@@ -204,6 +206,28 @@ void Player::Update()
 			freeFall();
 		}
 
+
+		if (mypH == San && !goal)
+		{
+			hitPolygoalSAN = MV1CollCheck_Line(stageHandle, floorCol,
+				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+			if (hitPolygoalSAN.HitFlag)
+			{
+				// “–‚½‚Á‚½
+				goal = true;
+			}
+		}
+		else if (mypH == Lka && !goal)
+		{
+			hitPolygoalLKA = MV1CollCheck_Line(stageHandle, floorCol,
+				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+			if (hitPolygoalLKA.HitFlag)
+			{
+				// “–‚½‚Á‚½
+				goal = true;
+			}
+		}
+		else {}
 
 
 
@@ -319,7 +343,7 @@ void Player::Render()
 			DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
 			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 6, GetColor(0, 0, 255), GetColor(0, 0, 255), FALSE);
 		}
-		
+
 
 	}
 }

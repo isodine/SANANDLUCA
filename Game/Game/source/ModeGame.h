@@ -60,6 +60,8 @@ public:
 	int _handleSkySphere;
 	int frameMapCollisionfloor;
 	int frameMapCollisionwall;
+	int frameMapCollisiongoalSAN;
+	int frameMapCollisiongoalLKA;
 
 	int LightHandle;
 	int MaskHandle;

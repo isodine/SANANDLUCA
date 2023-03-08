@@ -43,6 +43,8 @@ public:
 	int stageHandle;
 	int floorCol;
 	int wallCol;
+	int goalColSAN;
+	int goalColLKA;
 
 public:
 
@@ -136,6 +138,7 @@ public:
 
 	bool motionRes = false;
 	int HP;
+	bool goal = false;
 
 
 	void Landing(float HitYPos);
