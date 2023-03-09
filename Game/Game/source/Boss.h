@@ -22,6 +22,7 @@ public:
 	void Rotation(VECTOR sanPos, VECTOR lkaPos);
 	void Walk();
 	void Crush();
+	void Search();
 	void Down();
 	void Idle();
 	void Pull();
@@ -36,6 +37,10 @@ public:
 	VECTOR AddPos;
 	VECTOR TargetDir;
 	VECTOR SphereCenter;
+	VECTOR BossPosition0;
+	VECTOR BossPosition1;
+	VECTOR BossPosition2;
+	VECTOR BossPosition3;
 
 	MATRIX rotationMatrix;
 	VECTOR forward;
@@ -48,6 +53,7 @@ public:
 		ROTATION,
 		WALK,
 		CRUSH,
+		SEARCH,
 		PULL,
 		DOWN,
 		IDLE,
@@ -63,19 +69,14 @@ public:
 	int CaptureCount;//•ß‚Ü‚¦‚Ä‚¢‚éŠÔ
 	int EndCount;//•ß‚Ü‚¦‚½Œã‚ÌŠÔ
 	int BossHP;//ƒ{ƒX‚Ì‘Ì—Í
-	float TotalTime1;
-	float TotalTime2;
-	float TotalTime3;
+	
 	float PlayTime;
 	int randomNum;
 	int walkRand;
-	int walkTime0;
-	int walkTime1;
-	int walkTime2;
-	int WalkTime;
 	int walkTimeCount;
 
-	float StopDir;
+	float StopDir;//‰ñ“]‚ª~‚Ü‚éŒë·
+	float StopPos;//~‚Ü‚éêŠ‚ÌŒë·
 	float rotate;//‰ñ“]‚·‚é‘¬“x
 
 	bool rotateFlag;//TRUE‚È‚ç‰ñ“]‚·‚é
@@ -88,7 +89,7 @@ public:
 	bool LkaCatchFlag;//TRUE‚È‚çƒ‹ƒJ‚ğ•ß‚Ü‚¦‚½
 	bool crushFlag;//TRUE‚È‚çTYPE‚ğCrash‚É‚·‚é
 	bool AttackedFlag;//TRUE‚È‚çUŒ‚‚³‚ê‚½
-
+	bool searchFlag;//TRUE‚È‚ç’èˆÊ’u‚ğŒˆ‚ß‚é
 
 	
 

@@ -283,6 +283,10 @@ bool ModeBoss::Render() {
 	DrawFormatString(0, 30, GetColor(255, 0, 0), "sanPos(%f,%f,%f)", san.vPos.x, san.vPos.y, san.vPos.z);
 	// デバッグ表示
 	{
+		DrawSphere3D(boss.BossPosition0, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		DrawSphere3D(boss.BossPosition1, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		DrawSphere3D(boss.BossPosition2, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		DrawSphere3D(boss.BossPosition3, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 		/*int x = 0, y = 0, size = 16;
 		SetFontSize(size);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "Camera:"); y += size;

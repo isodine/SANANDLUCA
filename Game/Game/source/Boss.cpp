@@ -6,17 +6,16 @@ void Boss::Initialize() {
 	model.pos = VGet(0, 20, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	StopDir = 0.01;
+	StopDir = 0.1;
+	StopPos = 20.f;
 	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	rotate = 0;
 	rotateFlag = true;
 	walkFlag = false;
 	SanCatchFlag = false;
 	LkaCatchFlag = false;
+	searchFlag = false;
 	walkTimeCount = 0;
-	walkTime0 = 90;
-	walkTime1 = 120;
-	walkTime2 = 150;
 	walkRand = 0;
 	CrushCount = 0;
 	PullCount = 0;
@@ -25,6 +24,11 @@ void Boss::Initialize() {
 	CaptureCount = 0;
 	EndCount = 0;
 	BossHP = 3;
+	BossPosition0 = VGet(41, 37, 274);
+	BossPosition1 = VGet(-327, 37, 673);
+	BossPosition2 = VGet(41, 37, 1013);
+	BossPosition3 = VGet(327, 37, 673);
+
 	/*rotateFlag = false;
 	walkFlag = false;
 	rushFlag = false;
@@ -78,6 +82,9 @@ void Boss::Process() {
 	case BOSSTYPE::CRUSH:
 		Crush();
 		break;
+	case BOSSTYPE::SEARCH:
+		Search();
+		break;
 	case BOSSTYPE::PULL:
 		Pull();
 		break;
@@ -89,26 +96,15 @@ void Boss::Process() {
 		break;
 	}
 
-
-
-
-	/*Rotation(san.vPos, lka.vPos, san.vDir, lka.vDir);
-	Walk();
-	Rush(san.vPos, lka.vPos, san.vDir, lka.vDir);*/
 	if (oldtype == type) {
-		// 再生時間を進める
-		PlayTime += 0.5f;
-		if (PlayTime >= TotalTime1)
-		{
-			PlayTime = 0.0f;
-		}
+		//// 再生時間を進める
+		//PlayTime += 0.5f;
+		//if (PlayTime >= TotalTime1)
+		//{
+		//	PlayTime = 0.0f;
+		//}
 	}
 	else {
-		// アニメーションがアタッチされていたら、デタッチする
-		/*if (AttachAnim1 != -1) {
-			MV1DetachAnim(BossHandle, AttachAnim1);
-			AttachAnim1 = -1;
-		}*/
 	
 	switch (type) {
 	case BOSSTYPE::RUSH:
@@ -131,6 +127,9 @@ void Boss::Process() {
 	case BOSSTYPE::CRUSH:
 		manager->animChange(5, &model, false, false, false);//刺さるモーションをアタッチする
 		manager->setNextAnim(4, &model, true, false);//じたばたモーションをアタッチする
+		break;
+	case BOSSTYPE::SEARCH:
+		manager->animChange(10, &model, true, false, false);//回転モーションをアタッチする
 		break;
 	case BOSSTYPE::PULL:
 		manager->animChange(3, &model, true, false, false);//離れるモーションをアタッチする
@@ -207,22 +206,12 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 }
 
 void Boss::Walk() {
-	if (walkFlag) {
-		type = BOSSTYPE::WALK;
 		model.pos = VAdd(VScale(forward, 2.f), model.pos);
-		walkTimeCount += 1;
-		if (walkTimeCount == WalkTime) {
-			int num = GetRand(3);
-			if (num == 0) {
-				rotateFlag = true;
-				rushFlag = true;
-				targetFlag = true;
-				rushFlag = true;
-			}
-			walkFlag = false;
-			rotateFlag = true;
-		}
+		//type = BOSSTYPE::WALK;
+		if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
+			type = BOSSTYPE::IDLE;
 	}
+
 }
 
 void Boss::Idle() {
@@ -306,6 +295,44 @@ void Boss::Crush() {
 	}
 }
 
+void Boss::Search() {
+	int num;
+	if (searchFlag) {
+		num = GetRand(3);
+		searchFlag = false;
+		switch (num) {
+		case 0:
+			BossDir = BossPosition0;
+			BossSetDir = BossPosition0;
+			break;
+		case 1:
+			BossDir = BossPosition1;
+			BossSetDir = BossPosition1;
+			break;
+		case 2:
+			BossDir = BossPosition2;
+			BossSetDir = BossPosition2;
+			break;
+		case 3:
+			BossDir = BossPosition3;
+			BossSetDir = BossPosition3;
+			break;
+		}
+		BossDir = VNorm(VSub(BossDir, model.pos));
+	}
+	
+	float dir{ 1.0f };
+	if (VCross(forward, BossDir).y < 0) {
+		dir = -1.0f;
+	}
+	VECTOR modeldir = VNorm(model.dir);
+	model.dir.y += 0.02f * dir;
+	if (StopDir > (abs(BossDir.y - modeldir.y))) {
+		type = BOSSTYPE::WALK;
+	}
+
+}
+
 void Boss::Pull() {
 	PullCount += 1;
 	if (PullCount > 60) {
@@ -314,7 +341,8 @@ void Boss::Pull() {
 	}
 	if (PullCount == 78) {
 		PullCount = 0;
-		type = BOSSTYPE::IDLE;
+		searchFlag = true;
+		type = BOSSTYPE::SEARCH;
 	}
 }
 
@@ -398,8 +426,8 @@ void Boss::Render() {
 		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 		DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
 		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
-		DrawFormatString(0, 150, GetColor(255, 0, 0), "WalkTime = %d", WalkTime);
-		DrawFormatString(0, 200, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
-		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		DrawFormatString(0, 150, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		//DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 	}
 }
