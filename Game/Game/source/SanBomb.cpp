@@ -70,7 +70,7 @@ void SanBomb::Update(SAN& san)
 		break;
 	}
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, vPos.x, vPos.y, vPos.z);
-	if (vPos.y == 0)
+	if (vPos.y <= 0)
 	{
 		StopEffekseer3DEffect(_playingEffectHandle);
 	}
@@ -78,7 +78,7 @@ void SanBomb::Update(SAN& san)
 
 void SanBomb::Render()
 {
-	DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
+	//DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 	DrawEffekseer3D();
 }
 
