@@ -88,6 +88,8 @@ public:
 	bool LkaCatchFlag;//TRUE‚È‚çƒ‹ƒJ‚ğ•ß‚Ü‚¦‚½
 	bool crushFlag;//TRUE‚È‚çTYPE‚ğCrash‚É‚·‚é
 	bool AttackedFlag;//TRUE‚È‚çUŒ‚‚³‚ê‚½
+
+
 	
 
 	SAN* san;

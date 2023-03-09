@@ -202,6 +202,7 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="source\Swamp.cpp" />
     <ClCompile Include="source\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -240,6 +241,7 @@
     <ClInclude Include="source\PlayerBomb.h" />
     <ClInclude Include="source\SANclass.h" />
     <ClInclude Include="source\stdafx.h" />
+    <ClInclude Include="source\Swamp.h" />
     <ClInclude Include="source\timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

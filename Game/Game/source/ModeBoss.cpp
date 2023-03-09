@@ -37,8 +37,8 @@ bool ModeBoss::Initialize() {
 	//_vPos = VGet(0, 0, 0);
 	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 	//カメラ設定
-		_bossCam._vTarget = VGet(0, 0, 600);
-		_bossCam._vPos = VGet(0, 1000, -250);
+		_bossCam._vTarget = VGet(0, 0, 650);
+		_bossCam._vPos = VGet(0, 1100, 0);
 		_bossCam._clipNear = 2.f;
 		_bossCam._clipFar = 20000.f;
 
@@ -52,17 +52,19 @@ bool ModeBoss::Initialize() {
 		boss.lkaB = &lkabomb;
 	
 	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/04_Stage_Boss.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/Boss_Stage.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
-	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "coStage_floor1");
-	frameMapCollisionwall = MV1SearchFrame(_handleMap, "coStage_wall1");
+	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor1");
+	frameMapCollisionwall = MV1SearchFrame(_handleMap, "wall");
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
 	/*MV1SetFrameVisible(_handleMap, 0, FALSE);
 	MV1SetFrameVisible(_handleMap, 1, FALSE);*/
@@ -278,6 +280,7 @@ bool ModeBoss::Render() {
 	boss.Render();
 	san.Render(damage);
 	lka.Render(damage);
+	DrawFormatString(0, 30, GetColor(255, 0, 0), "sanPos(%f,%f,%f)", san.vPos.x, san.vPos.y, san.vPos.z);
 	// デバッグ表示
 	{
 		/*int x = 0, y = 0, size = 16;

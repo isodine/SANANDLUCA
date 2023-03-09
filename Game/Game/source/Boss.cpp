@@ -3,7 +3,7 @@
 
 void Boss::Initialize() {
 	//BossHandle = MV1LoadModel("res/Boss/beaker_robot_All220203.mv1");
-	model.pos = VGet(0, 0, 750);
+	model.pos = VGet(0, 20, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.01;
