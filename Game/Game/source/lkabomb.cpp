@@ -10,6 +10,7 @@ LkaBomb::~LkaBomb()
 
 void LkaBomb::Initialize(LKA& lka)
 {
+	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_loop_01.efkefc");
 	vPos = VGet(lka.vPos.x, lka.vPos.y + 150, lka.vPos.z);
 
 	mypH = Lka;
