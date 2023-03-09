@@ -12,9 +12,11 @@ public:
 	void Move();
 	void Throw(LKA& lka);
 	void bombthrow();
+	void BombReset();
+	void Bombdead();
 private:
-	int _effectResourceHandle;		// エフェクトファイルをロードするハンドル
-	int _playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
+	int _effectResourceHandle[2];		// エフェクトファイルをロードするハンドル
+	int _playingEffectHandle[2];		// ロードしたエフェクトファイルから、エフェクトを生成したもの
 	int oldcount;
 	float PlayTime = 0.0f;
 	int _isEffect = 0;
@@ -22,11 +24,7 @@ private:
 	int IsPlaying = -1;
 	int _KeyEf, _TrgEf;
 	float _hight, _throw;
-
-
-	float _position_x;
-	float _position_y;
-	float _position_z;
-
+	float _position_x,_position_y, _position_z;
+	bool Isbombdead;
 
 };
