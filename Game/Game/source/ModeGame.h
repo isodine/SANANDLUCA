@@ -58,10 +58,14 @@ public:
 	// マップ用
 	int _handleMap;
 	int _handleSkySphere;
+	int _handleIronDoor;
+	int _handleIronMeltDoor;
+	int _handleDoor;
 	int frameMapCollisionfloor;
 	int frameMapCollisionwall;
 	int frameMapCollisiongoalSAN;
 	int frameMapCollisiongoalLKA;
+	int frameCollisionDoor;
 
 	int LightHandle;
 	int MaskHandle;
@@ -100,5 +104,6 @@ public:
 	Damage damage;
 	Gimmick gimmick;
 	Slime slime;
+	IronDoor irondoor;
 	std::vector<std::unique_ptr<Slime>> slimes;
 };

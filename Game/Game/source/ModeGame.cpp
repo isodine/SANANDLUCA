@@ -26,9 +26,15 @@ bool ModeGame::Initialize() {
 
 
 	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01/Stage_01.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01.fbm/Stage_01.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
+
+	//ステージオブジェクト
+	_handleIronDoor = MV1LoadModel("res/02_Object_Model/Door/Iron/Iron/Irondoor.mv1");
+	_handleIronMeltDoor = MV1LoadModel("res/02_Object_Model/Door/Iron/Iron_melt/Irondoor_melt.mv1");
+	//_handleDoor = _handleIronDoor;
+	MV1SetPosition(_handleDoor, VGet(50.0f, 70.0f, 1200.0f));
 
 	// コリジョン情報の生成
 	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
@@ -36,6 +42,11 @@ bool ModeGame::Initialize() {
 	frameMapCollisiongoalSAN = 4;
 	frameMapCollisiongoalLKA = 5;
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
+	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
+
+	frameCollisionDoor = 0;
+	MV1SetupCollInfo(_handleDoor, frameCollisionDoor, 16, 16, 16);
+
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
@@ -80,6 +91,8 @@ bool ModeGame::Initialize() {
 	san.wallCol = frameMapCollisionwall;
 	san.goalColSAN = frameMapCollisiongoalSAN;
 	san.stageHandle = _handleMap;
+	san.ironDoorHandle = _handleDoor;
+	san.ironDoorCol = frameCollisionDoor;
 
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&lkabomb);
@@ -90,6 +103,8 @@ bool ModeGame::Initialize() {
 	lka.wallCol = frameMapCollisionwall;
 	lka.goalColLKA = frameMapCollisiongoalLKA;
 	lka.stageHandle = _handleMap;
+	lka.ironDoorHandle = _handleDoor;
+	lka.ironDoorCol = frameCollisionDoor;
 
 	damage.Initialize(&san, &lka);
 	//slime.Initialize();
@@ -127,15 +142,15 @@ bool ModeGame::Initialize() {
 
 					else if (cnt == 3)
 					{
-						auto Slime1 = std::make_unique<Slime>();
-						Slime1->Initialize(x, y, z, pH);
-						slimes.emplace_back(std::move(Slime1));
+						//auto Slime1 = std::make_unique<Slime>();
+						//Slime1->Initialize(x, y, z, pH);
+						//slimes.emplace_back(std::move(Slime1));
 					}
 					else if (cnt == 4)
 					{
-						auto Slime2 = std::make_unique<Slime>();
-						Slime2->Initialize(x, y, z, pH);
-						slimes.emplace_back(std::move(Slime2));
+						//auto Slime2 = std::make_unique<Slime>();
+						//Slime2->Initialize(x, y, z, pH);
+						//slimes.emplace_back(std::move(Slime2));
 					}
 
 				}
@@ -335,6 +350,7 @@ bool ModeGame::Render() {
 
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
 		MV1DrawModel(_handleSkySphere);
+		MV1DrawModel(_handleDoor);
 
 		//MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
@@ -379,6 +395,8 @@ bool ModeGame::Render() {
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
 		}
+		//DrawCapsule3D(VGet(san.vPos.x, san.vPos.y + 30, san.vPos.z), VGet(san.vPos.x, san.vPos.y + 75, san.vPos.z), 30.0f, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
+		//DrawCapsule3D(VGet(lka.vPos.x, lka.vPos.y + 30, lka.vPos.z), VGet(lka.vPos.x, lka.vPos.y + 75, lka.vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
 	}
 	lka.Render(damage);
 	san.Render(damage);

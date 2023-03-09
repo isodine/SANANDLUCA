@@ -41,10 +41,12 @@ public:
 	int key;
 	int trg;
 	int stageHandle;
+	int ironDoorHandle;
 	int floorCol;
 	int wallCol;
 	int goalColSAN;
 	int goalColLKA;
+	
 
 public:
 

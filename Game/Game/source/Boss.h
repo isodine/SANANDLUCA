@@ -63,6 +63,7 @@ public:
 	int CaptureCount;//捕まえている時間
 	int EndCount;//捕まえた後の時間
 	int BossHP;//ボスの体力
+	int DownCount;//倒れた時の時間
 	float TotalTime1;
 	float TotalTime2;
 	float TotalTime3;
@@ -88,7 +89,7 @@ public:
 	bool LkaCatchFlag;//TRUEならルカを捕まえた
 	bool crushFlag;//TRUEならTYPEをCrashにする
 	bool AttackedFlag;//TRUEなら攻撃された
-	
+	bool downFlag;//TRUEならダウンモーション終了
 
 	SAN* san;
 	LKA* lka;

@@ -154,81 +154,97 @@ void Player::Update()
 		// vの分移動
 		vPos = VAdd(vPos, v);
 
-
-		// 移動した先でコリジョン判定
-		MV1_COLL_RESULT_POLY_DIM hitPolyDim;
-		MV1_COLL_RESULT_POLY hitPolyfloor;
-		MV1_COLL_RESULT_POLY hitPolywallback;
-		MV1_COLL_RESULT_POLY hitPolywallside;
-		MV1_COLL_RESULT_POLY hitPolygoalSAN;
-		MV1_COLL_RESULT_POLY hitPolygoalLKA;
-
-
-		hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
-			VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-		if (hitPolywallback.HitFlag && (vPos.z + 30 >= hitPolywallback.HitPosition.z)) {
-			float backwidth = hitPolywallback.HitPosition.z - vPos.z + 30;
-			float subX = vPos.x - oldvPos.x;
-			float subZ = vPos.z - oldvPos.z;
-			vPos.x = oldvPos.x;
-			vPos.z = oldvPos.z;
-
-			v = { 0,0,0 };
-		}
-
-		hitPolywallside = MV1CollCheck_Line(stageHandle, wallCol,
-			VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
-		if (hitPolywallside.HitFlag && (vPos.x + 30 >= hitPolywallside.HitPosition.x)) {
-			float sidewidth = hitPolywallside.HitPosition.x - vPos.x + 30;
-			float subX = vPos.x - oldvPos.x;
-			float subZ = vPos.z - oldvPos.z;
-			vPos.x = oldvPos.x;
-			vPos.z = oldvPos.z;
-
-			v = { 0,0,0 };
-		}
-
-		// 主人公の腰位置から下方向への直線
-		hitPolyfloor = MV1CollCheck_Line(stageHandle, floorCol,
-			VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-
-		hitPolyDim = MV1CollCheck_Capsule(stageHandle, floorCol,
-			VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
-		if (hitPolyDim.HitNum >= 1)
 		{
-			// 当たった
-			if (vPos.y < hitPolyfloor.HitPosition.y)
-			{
-				Landing(hitPolyfloor.HitPosition.y);
+
+			// 移動した先でコリジョン判定
+			MV1_COLL_RESULT_POLY_DIM hitPolyDim;
+			MV1_COLL_RESULT_POLY hitPolyfloor;
+			MV1_COLL_RESULT_POLY hitPolywallback;
+			MV1_COLL_RESULT_POLY hitPolywallside;
+			MV1_COLL_RESULT_POLY hitPolygoalSAN;
+			MV1_COLL_RESULT_POLY hitPolygoalLKA;
+			MV1_COLL_RESULT_POLY hitPolyIronDoor;
+
+
+			//前方向の壁判定
+			hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
+				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+			if (hitPolywallback.HitFlag && (vPos.z + 30 >= hitPolywallback.HitPosition.z)) {
+				float backwidth = hitPolywallback.HitPosition.z - vPos.z + 30;
+				float subX = vPos.x - oldvPos.x;
+				float subZ = vPos.z - oldvPos.z;
+				vPos.x = oldvPos.x;
+				vPos.z = oldvPos.z;
+
+				v = { 0,0,0 };
 			}
-		}
-		else {
-			freeFall();
-		}
 
 
-		if (mypH == San && !goal)
-		{
-			hitPolygoalSAN = MV1CollCheck_Line(stageHandle, floorCol,
+			hitPolywallside = MV1CollCheck_Line(stageHandle, wallCol,
+				VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
+			if (hitPolywallside.HitFlag && (vPos.x + 30 >= hitPolywallside.HitPosition.x)) {
+				float sidewidth = hitPolywallside.HitPosition.x - vPos.x + 30;
+				float subX = vPos.x - oldvPos.x;
+				float subZ = vPos.z - oldvPos.z;
+				vPos.x = oldvPos.x;
+				vPos.z = oldvPos.z;
+
+				v = { 0,0,0 };
+			}
+
+			// 主人公の腰位置から下方向への直線
+			hitPolyfloor = MV1CollCheck_Line(stageHandle, floorCol,
 				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-			if (hitPolygoalSAN.HitFlag)
+
+			hitPolyDim = MV1CollCheck_Capsule(stageHandle, floorCol,
+				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+			if (hitPolyDim.HitNum >= 1)
 			{
 				// 当たった
-				goal = true;
+				if (vPos.y < hitPolyfloor.HitPosition.y)
+				{
+					Landing(hitPolyfloor.HitPosition.y);
+				}
 			}
-		}
-		else if (mypH == Lka && !goal)
-		{
-			hitPolygoalLKA = MV1CollCheck_Line(stageHandle, floorCol,
-				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
-			if (hitPolygoalLKA.HitFlag)
-			{
-				// 当たった
-				goal = true;
+			else {
+				freeFall();
 			}
-		}
-		else {}
 
+
+			if (mypH == San && !goal)
+			{
+				hitPolygoalSAN = MV1CollCheck_Line(stageHandle, goalColSAN,
+					VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+				if (hitPolygoalSAN.HitFlag)
+				{
+					// 当たった
+					goal = true;
+				}
+			}
+			else if (mypH == Lka && !goal)
+			{
+				hitPolygoalLKA = MV1CollCheck_Line(stageHandle, goalColLKA,
+					VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+				if (hitPolygoalLKA.HitFlag)
+				{
+					// 当たった
+					goal = true;
+				}
+			}
+			else {}
+
+			hitPolyIronDoor = MV1CollCheck_Line(ironDoorHandle, ironDoorCol,
+				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+			if (hitPolyIronDoor.HitFlag && (vPos.z + 30 >= hitPolyIronDoor.HitPosition.z)) {
+				float subX = vPos.x - oldvPos.x;
+				float subZ = vPos.z - oldvPos.z;
+				vPos.x = oldvPos.x;
+				vPos.z = oldvPos.z;
+
+				v = { 0,0,0 };
+			}
+
+		}
 
 
 

@@ -14,6 +14,7 @@ void Boss::Initialize() {
 	SanCatchFlag = false;
 	LkaCatchFlag = false;
 	walkTimeCount = 0;
+	DownCount = 0;
 	walkTime0 = 90;
 	walkTime1 = 120;
 	walkTime2 = 150;
@@ -34,6 +35,7 @@ void Boss::Initialize() {
 	SanCatchFlag = false;
 	LkaCatchFlag = false;
 	crashFlag = false;*/
+	downFlag = false;
 	MV1SetupCollInfo(model.modelHandle, 1, 8, 8, 8);
 	type = BOSSTYPE::NONE;
 	//ÉÇÉfÉãÇÉÅÉÇÉäÇ…ì«Ç›çûÇÒÇ≈Ç¢ÇÈ
@@ -82,7 +84,10 @@ void Boss::Process() {
 		Pull();
 		break;
 	case BOSSTYPE::DOWN:
-		
+		DownCount += 1;
+		if (DownCount == 339) {
+			downFlag = true;
+		}
 		break;
 	case BOSSTYPE::IDLE:
 		Idle();
@@ -385,6 +390,10 @@ void Boss::CaptureEnd() {
 		LkaCatchFlag = false;
 		type = BOSSTYPE::IDLE;
 	}
+}
+
+void Boss::Down() {
+
 }
 
 void Boss::Render() {
