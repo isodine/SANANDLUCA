@@ -75,7 +75,7 @@ void LkaBomb::Throw(LKA& lka)
 	{
 		vDir = VGet(0.f, 0.f, 0.f);
 		vDir = VAdd(vDir, lka.vDir);
-		vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
+		//vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
 		firstdir = true;
 	}
 	vPos = VAdd(vPos, vDir);

@@ -74,6 +74,8 @@ void SanBomb::Update(SAN& san)
 	{
 		StopEffekseer3DEffect(_playingEffectHandle);
 	}
+
+
 }
 
 void SanBomb::Render()
@@ -88,7 +90,7 @@ void SanBomb::Throw(SAN& san)
 	{
 		vDir = VGet(0.f, 0.f, 0.f);
 		vDir = VAdd(vDir, san.vDir);
-		vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
+		//vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
 		firstdir = true;
 	}
 	vPos = VAdd(vPos, vDir);
