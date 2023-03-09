@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ModeEffekseer.cpp" />
     <ClCompile Include="source\lkacircle.cpp" />
     <ClCompile Include="source\lkaheal.cpp" />
     <ClCompile Include="source\ModeRule.cpp" />

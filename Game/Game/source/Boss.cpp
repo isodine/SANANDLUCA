@@ -272,7 +272,7 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 
 		
 	}
-	if ((SanCatchFlag && crushFlag) || (LkaCatchFlag && crushFlag)) {
+	if (SanCatchFlag || LkaCatchFlag) {
 		type = BOSSTYPE::CAPTURE;
 		crushFlag = false;
 	}
