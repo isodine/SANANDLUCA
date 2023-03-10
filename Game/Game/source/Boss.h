@@ -77,6 +77,7 @@ public:
 	int IdleCount;//休憩する時間
 	int CaptureCount;//捕まえている時間
 	int EndCount;//捕まえた後の時間
+	int DownCount;//やられた時の時間
 	int BossHP;//ボスの体力
 	float PlayTime;
 	int randomNum;
@@ -98,6 +99,7 @@ public:
 	bool crushFlag;//TRUEならTYPEをCrashにする
 	bool AttackedFlag;//TRUEなら攻撃された
 	bool searchFlag;//TRUEなら定位置を決める
+	bool downFlag;//TRUEならやられた
 
 	int acidHandle;//酸性のときのテクスチャ
 	int alcaliHandle;//アルカリ性のときのテクスチャ

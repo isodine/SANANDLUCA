@@ -7,7 +7,7 @@ void Boss::Initialize() {
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.03;
-	StopPos = 150.f;
+	StopPos = 200.f;
 	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	rotate = 0;
 	rotateFlag = true;
@@ -15,6 +15,7 @@ void Boss::Initialize() {
 	SanCatchFlag = false;
 	LkaCatchFlag = false;
 	searchFlag = false;
+	downFlag = false;
 	walkTimeCount = 0;
 	walkRand = 0;
 	CrushCount = 0;
@@ -23,6 +24,7 @@ void Boss::Initialize() {
 	IdleCount = 0;
 	CaptureCount = 0;
 	EndCount = 0;
+	DownCount = 0;
 	BossHP = 3;
 	BossPosition0 = VGet(41, 37, 274);
 	BossPosition1 = VGet(-327, 37, 673);
@@ -93,7 +95,7 @@ void Boss::Process() {
 		Pull();
 		break;
 	case BOSSTYPE::DOWN:
-		
+		Down();
 		break;
 	case BOSSTYPE::IDLE:
 		Idle();
@@ -437,21 +439,34 @@ void Boss::CaptureEnd() {
 	}
 }
 
+void Boss::Down() {
+	DownCount += 1;
+	if (DownCount == 459) {
+		
+		downFlag = true;
+	}
+}
+
 void Boss::Render() {
 	{
 		/*MV1SetRotationXYZ(BossHandle, BossSetDir);
 		MV1SetPosition(BossHandle, model.pos);
 		MV1DrawModel(BossHandle);*/
-		manager->modelRender(&model, 1.f, 1.f);
+		if (!downFlag) {
+			manager->modelRender(&model, 1.f, 1.f);
+		}
 		switch (phType) {
 		case PH::ACID:
 			MV1SetTextureGraphHandle(model.modelHandle, 1, acidHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 2, acidHandle, FALSE);
 			break;
 		case PH::ALCALI:
 			MV1SetTextureGraphHandle(model.modelHandle, 1, alcaliHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 2, alcaliHandle, FALSE);
 			break;
 		case PH::NONE:
 			MV1SetTextureGraphHandle(model.modelHandle, 1, noneHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 2, noneHandle, FALSE);
 			break;
 		}
 
