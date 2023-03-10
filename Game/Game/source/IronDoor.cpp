@@ -19,7 +19,7 @@ void IronDoor::Initialize()
 	MV1SetupCollInfo(handleIronDoor, handleCol, 2, 2, 2);
 }
 
-void IronDoor::Process(SanBomb& sanbomb)
+void IronDoor::Update(SanBomb& sanbomb)
 {
 
 	auto hitPolyDim{ MV1CollCheck_Sphere(handleIronDoor, handleCol, sanbomb.vPos, sanbomb.sphereSize) };

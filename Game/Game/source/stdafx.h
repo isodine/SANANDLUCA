@@ -25,6 +25,7 @@
 #include "ModeTitle.h"
 #include "sanbomb.h"
 #include "IronDoor.h"
+#include "Electrode.h"
 
 
 

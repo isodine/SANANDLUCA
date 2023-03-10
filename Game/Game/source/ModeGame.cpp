@@ -74,6 +74,7 @@ bool ModeGame::Initialize() {
 	height = 0.0f;
 
 	irondoor.Initialize();
+	electrode.Initialize(VGet(200.f, 70.f, 1000.f), true);
 
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
@@ -105,7 +106,7 @@ bool ModeGame::Initialize() {
 	gimmick.SetSanLka(&san, &lka);
 	sanbomb.Initialize(san);
 	lkabomb.Initialize(lka);
-	
+
 
 	//CSVによる初期化（レベルデザイン時に実装）
 
@@ -239,13 +240,14 @@ bool ModeGame::Process() {
 	//lkaheal.Update(lka);
 	if (!(irondoor.melt))
 	{
-		irondoor.Process(sanbomb);
+		irondoor.Update(sanbomb);
 		if (irondoor.melt)
 		{
 			san.ironDoorHandle = irondoor.handle;
 			lka.ironDoorHandle = irondoor.handle;
 		}
 	}
+	electrode.Update(sanbomb, lkabomb);
 
 	//仮
 	int Trg;
@@ -404,5 +406,6 @@ bool ModeGame::Render() {
 	sancircle.Render();
 	lkacircle.Render();
 	irondoor.Render();
+	electrode.Render();
 	return true;
 }

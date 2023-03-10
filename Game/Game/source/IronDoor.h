@@ -5,7 +5,7 @@ public:
 	IronDoor();
 	~IronDoor();
 	void Initialize();
-	void Process(SanBomb& sanbomb);
+	void Update(SanBomb& sanbomb);
 	void Render();
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p

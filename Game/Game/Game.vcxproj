@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\Electrode.cpp" />
     <ClCompile Include="source\IronDoor.cpp" />
     <ClCompile Include="source\lkacircle.cpp" />
     <ClCompile Include="source\lkaheal.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Damage.h" />
+    <ClInclude Include="source\Electrode.h" />
     <ClInclude Include="source\IronDoor.h" />
     <ClInclude Include="source\lkacircle.h" />
     <ClInclude Include="source\lkaheal.h" />

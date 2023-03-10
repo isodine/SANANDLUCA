@@ -13,6 +13,7 @@
 #include "sanheal.h"
 #include "lkacircle.h"
 #include "IronDoor.h"
+#include "Electrode.h"
 
 #include <string>
 #include <memory>
@@ -102,5 +103,6 @@ public:
 	Gimmick gimmick;
 	Slime slime;
 	IronDoor irondoor;
+	Electrode electrode;
 	std::vector<std::unique_ptr<Slime>> slimes;
 };
