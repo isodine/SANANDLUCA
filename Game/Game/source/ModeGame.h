@@ -12,6 +12,7 @@
 #include "lkacircle.h"
 #include "sanheal.h"
 #include "lkacircle.h"
+#include "IronDoor.h"
 
 #include <string>
 #include <memory>
@@ -58,14 +59,10 @@ public:
 	// マップ用
 	int _handleMap;
 	int _handleSkySphere;
-	int _handleIronDoor;
-	int _handleIronMeltDoor;
-	int _handleDoor;
 	int frameMapCollisionfloor;
 	int frameMapCollisionwall;
 	int frameMapCollisiongoalSAN;
 	int frameMapCollisiongoalLKA;
-	int frameCollisionDoor;
 
 	int LightHandle;
 	int MaskHandle;

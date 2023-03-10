@@ -30,12 +30,6 @@ bool ModeGame::Initialize() {
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
-	//ステージオブジェクト
-	_handleIronDoor = MV1LoadModel("res/02_Object_Model/Door/Iron/Iron/Irondoor.mv1");
-	_handleIronMeltDoor = MV1LoadModel("res/02_Object_Model/Door/Iron/Iron_melt/Irondoor_melt.mv1");
-	//_handleDoor = _handleIronDoor;
-	MV1SetPosition(_handleDoor, VGet(50.0f, 70.0f, 1200.0f));
-
 	// コリジョン情報の生成
 	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
 	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
@@ -43,9 +37,6 @@ bool ModeGame::Initialize() {
 	frameMapCollisiongoalLKA = 5;
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
-
-	frameCollisionDoor = 0;
-	MV1SetupCollInfo(_handleDoor, frameCollisionDoor, 16, 16, 16);
 
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
@@ -82,6 +73,8 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
+	irondoor.Initialize();
+
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
@@ -90,9 +83,9 @@ bool ModeGame::Initialize() {
 	san.floorCol = frameMapCollisionfloor;
 	san.wallCol = frameMapCollisionwall;
 	san.goalColSAN = frameMapCollisiongoalSAN;
+	san.ironDoorHandle = irondoor.handle;
+	san.ironDoorCol = irondoor.handleCol;
 	san.stageHandle = _handleMap;
-	san.ironDoorHandle = _handleDoor;
-	san.ironDoorCol = frameCollisionDoor;
 
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&lkabomb);
@@ -102,9 +95,9 @@ bool ModeGame::Initialize() {
 	lka.floorCol = frameMapCollisionfloor;
 	lka.wallCol = frameMapCollisionwall;
 	lka.goalColLKA = frameMapCollisiongoalLKA;
+	lka.ironDoorHandle = irondoor.handle;
+	lka.ironDoorCol = irondoor.handleCol;
 	lka.stageHandle = _handleMap;
-	lka.ironDoorHandle = _handleDoor;
-	lka.ironDoorCol = frameCollisionDoor;
 
 	damage.Initialize(&san, &lka);
 	//slime.Initialize();
@@ -112,6 +105,8 @@ bool ModeGame::Initialize() {
 	gimmick.SetSanLka(&san, &lka);
 	sanbomb.Initialize(san);
 	lkabomb.Initialize(lka);
+	
+
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -242,10 +237,15 @@ bool ModeGame::Process() {
 	lkacircle.Update(san, lka);
 	//sanheal.Update(san);
 	//lkaheal.Update(lka);
-	//
-	//if (_gTrgEf & PAD_INPUT_9 && oldcount == 0)
-	//{
-	//	old
+	if (!(irondoor.melt))
+	{
+		irondoor.Process(sanbomb);
+		if (irondoor.melt)
+		{
+			san.ironDoorHandle = irondoor.handle;
+			lka.ironDoorHandle = irondoor.handle;
+		}
+	}
 
 	//仮
 	int Trg;
@@ -350,7 +350,6 @@ bool ModeGame::Render() {
 
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
 		MV1DrawModel(_handleSkySphere);
-		MV1DrawModel(_handleDoor);
 
 		//MV1DrawModel(_handleMap);
 		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
@@ -404,5 +403,6 @@ bool ModeGame::Render() {
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
+	irondoor.Render();
 	return true;
 }

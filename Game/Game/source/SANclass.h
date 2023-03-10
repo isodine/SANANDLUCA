@@ -2,7 +2,7 @@
 #include"Player.h"
 #include "Boss.h"
 
-class Sanbomb;
+class SanBomb;
 class Damage;
 class Boss;
 

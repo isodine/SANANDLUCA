@@ -5,14 +5,14 @@ public:
 	IronDoor();
 	~IronDoor();
 	void Initialize();
-	void Process();
+	void Process(SanBomb& sanbomb);
 	void Render();
 
 	// 3Dモデル描画用
-	int _handle;
-	VECTOR _vPos;	// 位置
-	int ironDoorCol;
-	int _handleIronDoor;
-	int _handleIronMeltDoor;
+	int handle;
+	VECTOR vPos;	// 位置
+	int handleCol;
+	int handleIronDoor;
+	int handleIronMeltDoor;
 	bool melt = false;
 };

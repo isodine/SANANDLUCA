@@ -46,7 +46,7 @@ public:
 	int wallCol;
 	int goalColSAN;
 	int goalColLKA;
-	
+	int ironDoorCol;
 
 public:
 

@@ -75,7 +75,6 @@ void SanBomb::Update(SAN& san)
 		StopEffekseer3DEffect(_playingEffectHandle);
 	}
 
-
 }
 
 void SanBomb::Render()
