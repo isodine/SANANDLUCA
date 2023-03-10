@@ -370,6 +370,7 @@ bool ModeGame::Render() {
 			break;
 		}
 	}
+	DrawFormatString(0, 300, GetColor(255, 0, 0), "SANDisk(%f,%f,%f)", gimmick.SANDisk.x, gimmick.SANDisk.y, gimmick.SANDisk.z);
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();

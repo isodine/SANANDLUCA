@@ -32,6 +32,9 @@ void Gimmick::Process() {
 
 void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
+	SANDisk = MV1GetFramePosition(BalanceHandle, 26);
+	LKADisk = MV1GetFramePosition(BalanceHandle, 25);
+
 	MV1RefreshCollInfo(BalanceHandle, 3, 8);  //ƒTƒ“‚ÌŽM
 	MV1RefreshCollInfo(BalanceHandle, 4, 8);  //ƒ‹ƒJ‚ÌŽM
 
@@ -64,11 +67,12 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	if (hitPoly1.HitFlag || hitPoly3.HitFlag) {
 		if (hitPoly1.HitFlag) {
 			SanHitFlag = true;
-			san->Landing(hitPoly1.HitPosition.y);
+			//san->Landing(SANDisk.y - 142);
+			san->vPos.y = SANDisk.y - 145;
 		}
 		else {
 			SanHitFlag = true;
-			lka->Landing(hitPoly3.HitPosition.y);
+			//lka->Landing(SANDisk.y - 142);
 		}
 	}
 	else {
@@ -78,11 +82,11 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	if (hitPoly2.HitFlag || hitPoly4.HitFlag) {
 		if (hitPoly2.HitFlag) {
 			LkaHitFlag = true;
-			lka->Landing(hitPoly2.HitPosition.y);
+			//lka->Landing(hitPoly2.HitPosition.y);
 		}
 		else {
 			LkaHitFlag = true;
-			san->Landing(hitPoly4.HitPosition.y);
+			//san->Landing(hitPoly4.HitPosition.y);
 		}
 	}
 	else {
@@ -221,7 +225,7 @@ float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
 }
 
 void Gimmick::Render() {
-
+	
 	MV1DrawModel(BalanceHandle);
 	//DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
 }
