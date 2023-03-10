@@ -6,8 +6,8 @@ void Boss::Initialize() {
 	model.pos = VGet(0, 20, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	StopDir = 0.1;
-	StopPos = 20.f;
+	StopDir = 0.03;
+	StopPos = 150.f;
 	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	rotate = 0;
 	rotateFlag = true;
@@ -28,7 +28,6 @@ void Boss::Initialize() {
 	BossPosition1 = VGet(-327, 37, 673);
 	BossPosition2 = VGet(41, 37, 1013);
 	BossPosition3 = VGet(327, 37, 673);
-
 	/*rotateFlag = false;
 	walkFlag = false;
 	rushFlag = false;
@@ -296,9 +295,9 @@ void Boss::Crush() {
 }
 
 void Boss::Search() {
-	int num;
+	//int num;
 	if (searchFlag) {
-		num = GetRand(3);
+		int num = GetRand(3);
 		searchFlag = false;
 		switch (num) {
 		case 0:
@@ -325,9 +324,10 @@ void Boss::Search() {
 	if (VCross(forward, BossDir).y < 0) {
 		dir = -1.0f;
 	}
-	VECTOR modeldir = VNorm(model.dir);
+	//VECTOR modeldir = VNorm(model.dir);
+	VECTOR Forward = VNorm(forward);
 	model.dir.y += 0.02f * dir;
-	if (StopDir > (abs(BossDir.y - modeldir.y))) {
+	if (StopDir > abs(1 - VDot(forward, BossDir))) {
 		type = BOSSTYPE::WALK;
 	}
 

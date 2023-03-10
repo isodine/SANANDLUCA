@@ -69,7 +69,6 @@ public:
 	int CaptureCount;//•ß‚Ü‚¦‚Ä‚¢‚éŠÔ
 	int EndCount;//•ß‚Ü‚¦‚½Œã‚ÌŠÔ
 	int BossHP;//ƒ{ƒX‚Ì‘Ì—Í
-	
 	float PlayTime;
 	int randomNum;
 	int walkRand;
