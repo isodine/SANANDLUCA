@@ -39,6 +39,11 @@ void Boss::Initialize() {
 	crashFlag = false;*/
 	MV1SetupCollInfo(model.modelHandle, 1, 8, 8, 8);
 	type = BOSSTYPE::NONE;
+	phType = PH::NONE;
+	oldphType = PH::NONE;
+	acidHandle = LoadGraph("res/Boss/robo_acid_tex.png");
+	alcaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
+	noneHandle = LoadGraph("res/Boss/robo_tex.png");
 	//ƒ‚ƒfƒ‹‚ðƒƒ‚ƒŠ‚É“Ç‚Ýž‚ñ‚Å‚¢‚é
 	manager->modelImport("res/Boss/beaker_robot_All220217.mv1", 1.f, &model);
 	//Šg‘å—¦‚Ì“K—p
@@ -282,7 +287,8 @@ void Boss::Crush() {
 		AttackedFlag = true;
 		BossHP -= 1;
 	}
-
+	phType = PH::NONE;
+	oldphType = PH::NONE;
 	CrushCount += 1;
 	if (CrushCount >= 240 || AttackedFlag) {
 		CrushCount = 0;
@@ -352,7 +358,7 @@ void Boss::Capture() {
 		san->vPos.y = 0;
 		san->vPos.z = SphereCenter.z;
 	}
-	if(LkaCatchFlag) {
+	if (LkaCatchFlag) {
 		lka->vPos.x = SphereCenter.x;
 		lka->vPos.y = 0;
 		lka->vPos.z = SphereCenter.z;
@@ -372,25 +378,41 @@ void Boss::Capture() {
 	if (CaptureCount == 120) {
 		if (SanCatchFlag) {
 			san->HP -= 1;
+			phType = PH::ACID;
+			if (oldphType == PH::NONE) {
+				oldphType = PH::ACID;
+			}
+			else if (oldphType == PH::ALCALI) {
+				phType = PH::NONE;
+				oldphType = PH::NONE;
+			}
 		}
 		if (LkaCatchFlag) {
 			lka->HP -= 1;
+			phType = PH::ALCALI;
+			if (oldphType == PH::NONE) {
+				oldphType = PH::ALCALI;
+			}
+			else if (oldphType == PH::ACID) {
+				phType = PH::NONE;
+				oldphType = PH::NONE;
+			}
 		}
 	}
-
-	if (CaptureCount == 180) {
-		CaptureCount = 0;
-		type = BOSSTYPE::CAPTUREEND;
-	}
-	if (AttackedFlag) {
-		CaptureCount = 0;
-		AttackedFlag = false;
-		type = BOSSTYPE::CAPTUREEND;
-	}
-	if (BossHP == 0) {
-		type = BOSSTYPE::DOWN;
-	}
+		if (CaptureCount == 180) {
+			CaptureCount = 0;
+			type = BOSSTYPE::CAPTUREEND;
+		}
+		if (AttackedFlag) {
+			CaptureCount = 0;
+			AttackedFlag = false;
+			type = BOSSTYPE::CAPTUREEND;
+		}
+		if (BossHP == 0) {
+			type = BOSSTYPE::DOWN;
+		}
 }
+
 
 void Boss::CaptureEnd() {
 	EndCount += 1;
@@ -421,6 +443,18 @@ void Boss::Render() {
 		MV1SetPosition(BossHandle, model.pos);
 		MV1DrawModel(BossHandle);*/
 		manager->modelRender(&model, 1.f, 1.f);
+		switch (phType) {
+		case PH::ACID:
+			MV1SetTextureGraphHandle(model.modelHandle, 1, acidHandle, FALSE);
+			break;
+		case PH::ALCALI:
+			MV1SetTextureGraphHandle(model.modelHandle, 1, alcaliHandle, FALSE);
+			break;
+		case PH::NONE:
+			MV1SetTextureGraphHandle(model.modelHandle, 1, noneHandle, FALSE);
+			break;
+		}
+
 		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
 		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);

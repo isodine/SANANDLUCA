@@ -60,6 +60,15 @@ public:
 	};
 
 	BOSSTYPE type;
+
+	enum class PH {
+		ACID,
+		ALCALI,
+		NONE,
+	};
+
+	PH phType;
+	PH oldphType;
 	
 	int RotateCount;//回転する時間
 	int WaitCount;//ため攻撃のモーションのカウント
@@ -90,7 +99,9 @@ public:
 	bool AttackedFlag;//TRUEなら攻撃された
 	bool searchFlag;//TRUEなら定位置を決める
 
-	
+	int acidHandle;//酸性のときのテクスチャ
+	int alcaliHandle;//アルカリ性のときのテクスチャ
+	int noneHandle;//中性の時のテクスチャ
 
 	SAN* san;
 	LKA* lka;
