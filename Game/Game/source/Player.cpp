@@ -70,7 +70,6 @@ void Player::Initialize()
 	// 腰位置の設定
 	_colSubY = 45.f;
 
-
 }
 
 void Player::Update()
@@ -157,13 +156,15 @@ void Player::Update()
 		{
 
 			// 移動した先でコリジョン判定
-			MV1_COLL_RESULT_POLY_DIM hitPolyDim;
+			MV1_COLL_RESULT_POLY_DIM hitPolyDimfloor;
 			MV1_COLL_RESULT_POLY hitPolyfloor;
 			MV1_COLL_RESULT_POLY hitPolywallback;
 			MV1_COLL_RESULT_POLY hitPolywallside;
 			MV1_COLL_RESULT_POLY hitPolygoalSAN;
 			MV1_COLL_RESULT_POLY hitPolygoalLKA;
 			MV1_COLL_RESULT_POLY hitPolyIronDoor;
+			MV1_COLL_RESULT_POLY_DIM hitPolyDimElevator;
+			MV1_COLL_RESULT_POLY hitPolyElevator;
 
 
 			//前方向の壁判定
@@ -192,13 +193,13 @@ void Player::Update()
 				v = { 0,0,0 };
 			}
 
-			// 主人公の腰位置から下方向への直線
+			// 床との当たり判定
 			hitPolyfloor = MV1CollCheck_Line(stageHandle, floorCol,
-				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -99999.f, 0)));
+				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -9999.f, 0)));
 
-			hitPolyDim = MV1CollCheck_Capsule(stageHandle, floorCol,
+			hitPolyDimfloor = MV1CollCheck_Capsule(stageHandle, floorCol,
 				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
-			if (hitPolyDim.HitNum >= 1)
+			if (hitPolyDimfloor.HitNum >= 1)
 			{
 				// 当たった
 				if (vPos.y < hitPolyfloor.HitPosition.y)
@@ -208,6 +209,25 @@ void Player::Update()
 			}
 			else {
 				freeFall();
+			}
+
+			// エレベーターとの当たり判定
+			hitPolyElevator = MV1CollCheck_Line(elevatorHnadle, elevatorCol,
+				VAdd(vPos, VGet(0, _colSubY, 0)), VAdd(vPos, VGet(0, -9999.f, 0)));
+
+			hitPolyDimElevator = MV1CollCheck_Capsule(elevatorHnadle, elevatorCol,
+				VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+
+			if (hitPolyDimElevator.HitNum >= 1)
+			{
+				// 当たった
+				if (vPos.y < hitPolyElevator.HitPosition.y)
+				{
+					Landing(hitPolyElevator.HitPosition.y);
+				}
+			}
+			else {
+				//freeFall();
 			}
 
 

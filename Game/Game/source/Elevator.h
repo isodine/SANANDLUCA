@@ -12,6 +12,7 @@ public:
 
 	// 3Dモデル描画用
 	int handle;
+	int handleCol;
 	VECTOR vPos;		// 位置
 	VECTOR vPosfirst;
 	VECTOR speed = VGet(0.f, 1.0f, 0.f);	//動くスピード

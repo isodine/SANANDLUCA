@@ -76,6 +76,7 @@ bool ModeGame::Initialize() {
 	irondoor.Initialize();
 	electrode.Initialize(VGet(200.f, 70.f, 1000.f), true);
 	elevator.Initialize();
+	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
@@ -87,6 +88,8 @@ bool ModeGame::Initialize() {
 	san.goalColSAN = frameMapCollisiongoalSAN;
 	san.ironDoorHandle = irondoor.handle;
 	san.ironDoorCol = irondoor.handleCol;
+	san.elevatorHnadle = elevator.handle;
+	san.elevatorCol = elevator.handleCol;
 	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
@@ -99,6 +102,8 @@ bool ModeGame::Initialize() {
 	lka.goalColLKA = frameMapCollisiongoalLKA;
 	lka.ironDoorHandle = irondoor.handle;
 	lka.ironDoorCol = irondoor.handleCol;
+	lka.elevatorHnadle = elevator.handle;
+	lka.elevatorCol = elevator.handleCol;
 	lka.stageHandle = _handleMap;
 
 	damage.Initialize(&san, &lka);
@@ -206,6 +211,7 @@ bool ModeGame::Process() {
 		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
 		modeStart = true;
 	}
+	MV1RefreshCollInfo(elevator.handle, elevator.handleCol);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	san.Update(damage);

@@ -42,13 +42,13 @@ public:
 	int trg;
 	int stageHandle;
 	int ironDoorHandle;
+	int elevatorHnadle;
 	int floorCol;
 	int wallCol;
 	int goalColSAN;
 	int goalColLKA;
 	int ironDoorCol;
-
-public:
+	int elevatorCol;
 
 
 	enum class STATUS {
