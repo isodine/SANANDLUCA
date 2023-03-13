@@ -22,6 +22,7 @@ public:
 	void Rotation(VECTOR sanPos, VECTOR lkaPos);
 	void Walk();
 	void Crush();
+	void Search();
 	void Down();
 	void Idle();
 	void Pull();
@@ -36,6 +37,10 @@ public:
 	VECTOR AddPos;
 	VECTOR TargetDir;
 	VECTOR SphereCenter;
+	VECTOR BossPosition0;
+	VECTOR BossPosition1;
+	VECTOR BossPosition2;
+	VECTOR BossPosition3;
 
 	MATRIX rotationMatrix;
 	VECTOR forward;
@@ -48,12 +53,22 @@ public:
 		ROTATION,
 		WALK,
 		CRUSH,
+		SEARCH,
 		PULL,
 		DOWN,
 		IDLE,
 	};
 
 	BOSSTYPE type;
+
+	enum class PH {
+		ACID,
+		ALCALI,
+		NONE,
+	};
+
+	PH phType;
+	PH oldphType;
 	
 	int RotateCount;//回転する時間
 	int WaitCount;//ため攻撃のモーションのカウント
@@ -62,20 +77,15 @@ public:
 	int IdleCount;//休憩する時間
 	int CaptureCount;//捕まえている時間
 	int EndCount;//捕まえた後の時間
+	int DownCount;//やられた時の時間
 	int BossHP;//ボスの体力
-	float TotalTime1;
-	float TotalTime2;
-	float TotalTime3;
 	float PlayTime;
 	int randomNum;
 	int walkRand;
-	int walkTime0;
-	int walkTime1;
-	int walkTime2;
-	int WalkTime;
 	int walkTimeCount;
 
-	float StopDir;
+	float StopDir;//回転が止まる誤差
+	float StopPos;//止まる場所の誤差
 	float rotate;//回転する速度
 
 	bool rotateFlag;//TRUEなら回転する
@@ -88,7 +98,12 @@ public:
 	bool LkaCatchFlag;//TRUEならルカを捕まえた
 	bool crushFlag;//TRUEならTYPEをCrashにする
 	bool AttackedFlag;//TRUEなら攻撃された
-	
+	bool searchFlag;//TRUEなら定位置を決める
+	bool downFlag;//TRUEならやられた
+
+	int acidHandle;//酸性のときのテクスチャ
+	int alcaliHandle;//アルカリ性のときのテクスチャ
+	int noneHandle;//中性の時のテクスチャ
 
 	SAN* san;
 	LKA* lka;

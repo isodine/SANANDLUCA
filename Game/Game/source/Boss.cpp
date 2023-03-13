@@ -3,20 +3,20 @@
 
 void Boss::Initialize() {
 	//BossHandle = MV1LoadModel("res/Boss/beaker_robot_All220203.mv1");
-	model.pos = VGet(0, 0, 750);
+	model.pos = VGet(0, 20, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
-	StopDir = 0.01;
+	StopDir = 0.03;
+	StopPos = 200.f;
 	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	rotate = 0;
 	rotateFlag = true;
 	walkFlag = false;
 	SanCatchFlag = false;
 	LkaCatchFlag = false;
+	searchFlag = false;
+	downFlag = false;
 	walkTimeCount = 0;
-	walkTime0 = 90;
-	walkTime1 = 120;
-	walkTime2 = 150;
 	walkRand = 0;
 	CrushCount = 0;
 	PullCount = 0;
@@ -24,7 +24,12 @@ void Boss::Initialize() {
 	IdleCount = 0;
 	CaptureCount = 0;
 	EndCount = 0;
+	DownCount = 0;
 	BossHP = 3;
+	BossPosition0 = VGet(41, 37, 274);
+	BossPosition1 = VGet(-327, 37, 673);
+	BossPosition2 = VGet(41, 37, 1013);
+	BossPosition3 = VGet(327, 37, 673);
 	/*rotateFlag = false;
 	walkFlag = false;
 	rushFlag = false;
@@ -36,6 +41,11 @@ void Boss::Initialize() {
 	crashFlag = false;*/
 	MV1SetupCollInfo(model.modelHandle, 1, 8, 8, 8);
 	type = BOSSTYPE::NONE;
+	phType = PH::NONE;
+	oldphType = PH::NONE;
+	acidHandle = LoadGraph("res/Boss/robo_acid_tex.png");
+	alcaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
+	noneHandle = LoadGraph("res/Boss/robo_tex.png");
 	//モデルをメモリに読み込んでいる
 	manager->modelImport("res/Boss/beaker_robot_All220217.mv1", 1.f, &model);
 	//拡大率の適用
@@ -78,37 +88,29 @@ void Boss::Process() {
 	case BOSSTYPE::CRUSH:
 		Crush();
 		break;
+	case BOSSTYPE::SEARCH:
+		Search();
+		break;
 	case BOSSTYPE::PULL:
 		Pull();
 		break;
 	case BOSSTYPE::DOWN:
-		
+		Down();
 		break;
 	case BOSSTYPE::IDLE:
 		Idle();
 		break;
 	}
 
-
-
-
-	/*Rotation(san.vPos, lka.vPos, san.vDir, lka.vDir);
-	Walk();
-	Rush(san.vPos, lka.vPos, san.vDir, lka.vDir);*/
 	if (oldtype == type) {
-		// 再生時間を進める
-		PlayTime += 0.5f;
-		if (PlayTime >= TotalTime1)
-		{
-			PlayTime = 0.0f;
-		}
+		//// 再生時間を進める
+		//PlayTime += 0.5f;
+		//if (PlayTime >= TotalTime1)
+		//{
+		//	PlayTime = 0.0f;
+		//}
 	}
 	else {
-		// アニメーションがアタッチされていたら、デタッチする
-		/*if (AttachAnim1 != -1) {
-			MV1DetachAnim(BossHandle, AttachAnim1);
-			AttachAnim1 = -1;
-		}*/
 	
 	switch (type) {
 	case BOSSTYPE::RUSH:
@@ -131,6 +133,9 @@ void Boss::Process() {
 	case BOSSTYPE::CRUSH:
 		manager->animChange(5, &model, false, false, false);//刺さるモーションをアタッチする
 		manager->setNextAnim(4, &model, true, false);//じたばたモーションをアタッチする
+		break;
+	case BOSSTYPE::SEARCH:
+		manager->animChange(10, &model, true, false, false);//回転モーションをアタッチする
 		break;
 	case BOSSTYPE::PULL:
 		manager->animChange(3, &model, true, false, false);//離れるモーションをアタッチする
@@ -207,22 +212,12 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 }
 
 void Boss::Walk() {
-	if (walkFlag) {
-		type = BOSSTYPE::WALK;
 		model.pos = VAdd(VScale(forward, 2.f), model.pos);
-		walkTimeCount += 1;
-		if (walkTimeCount == WalkTime) {
-			int num = GetRand(3);
-			if (num == 0) {
-				rotateFlag = true;
-				rushFlag = true;
-				targetFlag = true;
-				rushFlag = true;
-			}
-			walkFlag = false;
-			rotateFlag = true;
-		}
+		//type = BOSSTYPE::WALK;
+		if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
+			type = BOSSTYPE::IDLE;
 	}
+
 }
 
 void Boss::Idle() {
@@ -272,7 +267,7 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 
 		
 	}
-	if ((SanCatchFlag && crushFlag) || (LkaCatchFlag && crushFlag)) {
+	if (SanCatchFlag || LkaCatchFlag) {
 		type = BOSSTYPE::CAPTURE;
 		crushFlag = false;
 	}
@@ -294,7 +289,8 @@ void Boss::Crush() {
 		AttackedFlag = true;
 		BossHP -= 1;
 	}
-
+	phType = PH::NONE;
+	oldphType = PH::NONE;
 	CrushCount += 1;
 	if (CrushCount >= 240 || AttackedFlag) {
 		CrushCount = 0;
@@ -306,6 +302,45 @@ void Boss::Crush() {
 	}
 }
 
+void Boss::Search() {
+	//int num;
+	if (searchFlag) {
+		int num = GetRand(3);
+		searchFlag = false;
+		switch (num) {
+		case 0:
+			BossDir = BossPosition0;
+			BossSetDir = BossPosition0;
+			break;
+		case 1:
+			BossDir = BossPosition1;
+			BossSetDir = BossPosition1;
+			break;
+		case 2:
+			BossDir = BossPosition2;
+			BossSetDir = BossPosition2;
+			break;
+		case 3:
+			BossDir = BossPosition3;
+			BossSetDir = BossPosition3;
+			break;
+		}
+		BossDir = VNorm(VSub(BossDir, model.pos));
+	}
+	
+	float dir{ 1.0f };
+	if (VCross(forward, BossDir).y < 0) {
+		dir = -1.0f;
+	}
+	//VECTOR modeldir = VNorm(model.dir);
+	VECTOR Forward = VNorm(forward);
+	model.dir.y += 0.02f * dir;
+	if (StopDir > abs(1 - VDot(forward, BossDir))) {
+		type = BOSSTYPE::WALK;
+	}
+
+}
+
 void Boss::Pull() {
 	PullCount += 1;
 	if (PullCount > 60) {
@@ -314,7 +349,8 @@ void Boss::Pull() {
 	}
 	if (PullCount == 78) {
 		PullCount = 0;
-		type = BOSSTYPE::IDLE;
+		searchFlag = true;
+		type = BOSSTYPE::SEARCH;
 	}
 }
 
@@ -324,7 +360,7 @@ void Boss::Capture() {
 		san->vPos.y = 0;
 		san->vPos.z = SphereCenter.z;
 	}
-	if(LkaCatchFlag) {
+	if (LkaCatchFlag) {
 		lka->vPos.x = SphereCenter.x;
 		lka->vPos.y = 0;
 		lka->vPos.z = SphereCenter.z;
@@ -344,25 +380,41 @@ void Boss::Capture() {
 	if (CaptureCount == 120) {
 		if (SanCatchFlag) {
 			san->HP -= 1;
+			phType = PH::ACID;
+			if (oldphType == PH::NONE) {
+				oldphType = PH::ACID;
+			}
+			else if (oldphType == PH::ALCALI) {
+				phType = PH::NONE;
+				oldphType = PH::NONE;
+			}
 		}
 		if (LkaCatchFlag) {
 			lka->HP -= 1;
+			phType = PH::ALCALI;
+			if (oldphType == PH::NONE) {
+				oldphType = PH::ALCALI;
+			}
+			else if (oldphType == PH::ACID) {
+				phType = PH::NONE;
+				oldphType = PH::NONE;
+			}
 		}
 	}
-
-	if (CaptureCount == 180) {
-		CaptureCount = 0;
-		type = BOSSTYPE::CAPTUREEND;
-	}
-	if (AttackedFlag) {
-		CaptureCount = 0;
-		AttackedFlag = false;
-		type = BOSSTYPE::CAPTUREEND;
-	}
-	if (BossHP == 0) {
-		type = BOSSTYPE::DOWN;
-	}
+		if (CaptureCount == 180) {
+			CaptureCount = 0;
+			type = BOSSTYPE::CAPTUREEND;
+		}
+		if (AttackedFlag) {
+			CaptureCount = 0;
+			AttackedFlag = false;
+			type = BOSSTYPE::CAPTUREEND;
+		}
+		if (BossHP == 0) {
+			type = BOSSTYPE::DOWN;
+		}
 }
+
 
 void Boss::CaptureEnd() {
 	EndCount += 1;
@@ -387,19 +439,44 @@ void Boss::CaptureEnd() {
 	}
 }
 
+void Boss::Down() {
+	DownCount += 1;
+	if (DownCount == 459) {
+		
+		downFlag = true;
+	}
+}
+
 void Boss::Render() {
 	{
 		/*MV1SetRotationXYZ(BossHandle, BossSetDir);
 		MV1SetPosition(BossHandle, model.pos);
 		MV1DrawModel(BossHandle);*/
-		manager->modelRender(&model, 1.f, 1.f);
+		if (!downFlag) {
+			manager->modelRender(&model, 1.f, 1.f);
+		}
+		switch (phType) {
+		case PH::ACID:
+			MV1SetTextureGraphHandle(model.modelHandle, 1, acidHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 2, acidHandle, FALSE);
+			break;
+		case PH::ALCALI:
+			MV1SetTextureGraphHandle(model.modelHandle, 1, alcaliHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 2, alcaliHandle, FALSE);
+			break;
+		case PH::NONE:
+			MV1SetTextureGraphHandle(model.modelHandle, 1, noneHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 2, noneHandle, FALSE);
+			break;
+		}
+
 		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
 		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 		DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
 		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
-		DrawFormatString(0, 150, GetColor(255, 0, 0), "WalkTime = %d", WalkTime);
-		DrawFormatString(0, 200, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
-		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		DrawFormatString(0, 150, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		//DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 	}
 }
