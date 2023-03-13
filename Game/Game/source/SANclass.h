@@ -28,7 +28,7 @@ private:
 	int HPgauge = 0;
 
 	int hpgaugehandle[6];
-	int hphandle[6];
+	int hphandle;
 	float oldcount;
 	bool _isflag;
 };

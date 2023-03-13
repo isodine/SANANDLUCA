@@ -71,6 +71,8 @@ public:
 	float throughtime;
 	float height;
 
+	int au[20];
+	int i = 0;
 	//シャドウマップ用
 
 	int ShadowMapHandle;

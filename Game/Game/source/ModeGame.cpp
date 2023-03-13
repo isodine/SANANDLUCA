@@ -29,7 +29,7 @@ bool ModeGame::Initialize() {
 	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/map_0125.fbm/a_map02.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
-
+	LoadDivGraph("res/Gameover_pattern_01_01_sheet.png",20,20,1,1920,1080,au);
 	// ƒRƒŠƒWƒ‡ƒ“î•ñ‚Ì¶¬
 	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
 	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
@@ -376,5 +376,9 @@ bool ModeGame::Render() {
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
+	if (i < 17)DrawGraph(0, 0, au[i], true);
+	else DrawBox(0, 0, 1920, 1080, GetColor(0, 0, 0), true);
+	i++;
+	
 	return true;
 }
