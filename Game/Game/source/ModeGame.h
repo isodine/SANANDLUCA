@@ -14,6 +14,7 @@
 #include "lkacircle.h"
 #include "IronDoor.h"
 #include "Electrode.h"
+#include "Elevator.h"
 
 #include <string>
 #include <memory>
@@ -104,5 +105,6 @@ public:
 	Slime slime;
 	IronDoor irondoor;
 	Electrode electrode;
+	Elevator elevator;
 	std::vector<std::unique_ptr<Slime>> slimes;
 };

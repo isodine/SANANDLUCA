@@ -32,6 +32,7 @@
     <ClCompile Include="source\lkaheal.cpp" />
     <ClCompile Include="source\IronDoor.cpp" />
     <ClCompile Include="source\Electrode.cpp" />
+    <ClCompile Include="source\Elevator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModeEffekseer.h" />
@@ -67,5 +68,6 @@
     <ClInclude Include="source\sanbomb.h" />
     <ClInclude Include="source\IronDoor.h" />
     <ClInclude Include="source\Electrode.h" />
+    <ClInclude Include="source\Elevator.h" />
   </ItemGroup>
 </Project>

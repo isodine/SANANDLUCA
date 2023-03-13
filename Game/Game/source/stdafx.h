@@ -26,7 +26,7 @@
 #include "sanbomb.h"
 #include "IronDoor.h"
 #include "Electrode.h"
-
+#include "Elevator.h"
 
 
 #include <string>

@@ -20,6 +20,7 @@ void Electrode::Initialize(VECTOR Pos, bool is_san)
 
 void Electrode::Update(SanBomb& sanbomb, LkaBomb& lkabomb)
 {
+	bool oldisSan = isSan;
 
 	auto hitPolyDimSan{ MV1CollCheck_Sphere(handleSANelectrode, handleCol, sanbomb.vPos, sanbomb.sphereSize) };
 
@@ -36,6 +37,8 @@ void Electrode::Update(SanBomb& sanbomb, LkaBomb& lkabomb)
 		handle = handleLKAelectrode;
 		isSan = false;
 	}
+
+	oldisSan == isSan ? change = false : change = true;
 
 }
 

@@ -75,6 +75,7 @@ bool ModeGame::Initialize() {
 
 	irondoor.Initialize();
 	electrode.Initialize(VGet(200.f, 70.f, 1000.f), true);
+	elevator.Initialize();
 
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
@@ -248,6 +249,7 @@ bool ModeGame::Process() {
 		}
 	}
 	electrode.Update(sanbomb, lkabomb);
+	elevator.Update(electrode);
 
 	//‰¼
 	int Trg;
@@ -407,5 +409,6 @@ bool ModeGame::Render() {
 	lkacircle.Render();
 	irondoor.Render();
 	electrode.Render();
+	elevator.Render();
 	return true;
 }

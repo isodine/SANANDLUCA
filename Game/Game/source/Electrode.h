@@ -15,4 +15,5 @@ public:
 	int handleSANelectrode;
 	int handleLKAelectrode;
 	bool isSan = true;     //true‚È‚çƒTƒ“Afalse‚È‚çƒ‹ƒJ
+	bool change = false;
 };
