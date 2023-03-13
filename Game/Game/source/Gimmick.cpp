@@ -56,7 +56,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 
 	hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
-		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -1.f, 0)));
+		VAdd(san->vPos, VGet(0, 1000, 0)), VAdd(san->vPos, VGet(0, -1.f, 0)));
 	hitPoly2 = MV1CollCheck_Line(BalanceHandle, 4,
 		VAdd(lka->vPos, VGet(0, lka->_colSubY, 0)), VAdd(lka->vPos, VGet(0, -1.f, 0)));
 	hitPoly3 = MV1CollCheck_Line(BalanceHandle, 3,
@@ -93,15 +93,15 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		LkaHitFlag = false;
 	}
 
-	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true)/* && oldBalance == oldBalance*/) {
+	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true) && BlendRate == 0) {
 		balance = BALANCE::EQUAL;
 		BalanceFlag = true;
 	}
-	else if (SanHitFlag == true && LkaHitFlag == false/* && OldBalance == oldBalance*/) {
+	else if (SanHitFlag == true && LkaHitFlag == false && BlendRate == 0) {
 		balance = BALANCE::SAN;
 		BalanceFlag = true;
 	}
-	else if (SanHitFlag == false && LkaHitFlag == true/* && OldBalance == oldBalance*/) {
+	else if (SanHitFlag == false && LkaHitFlag == true && BlendRate == 0) {
 		balance = BALANCE::LKA;
 		BalanceFlag = true;
 	}
@@ -151,12 +151,11 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (BalanceFlag && BlendRate >= 1) {
 		BlendRate = 0;
-		//BalanceFlag = false;
+		BalanceFlag = false;
 	}
 	else {
-		//BalanceFlag = false;
+		BalanceFlag = false;
 	}
-	if (BalanceFlag) {
 	  if (balance == BALANCE::EQUAL) {
 			if (OldBalance == BALANCE::SAN) {
 				if (BlendRate <= 1) {
@@ -169,6 +168,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 					MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 					MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 				}
+				//todo‚±‚±‚Ìelse‚É“ü‚ç‚È‚¢
 				else {
 					BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
 					BalanceFlag = false;
@@ -194,7 +194,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			}
 		}
 		else if (balance == BALANCE::SAN) {
-			if (BlendRate < 1) {
+			if (BlendRate <= 1) {
 				//san->Landing(hitPoly1.HitPosition.y);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
@@ -203,7 +203,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 				MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 			}
-			else if(BlendRate == 1) {
+			else {
 				BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
 				BalanceFlag = false;
 			}
@@ -223,7 +223,6 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			}
 		}
 	}
-}
 
 float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
 	float MaxY = FLT_MIN;
