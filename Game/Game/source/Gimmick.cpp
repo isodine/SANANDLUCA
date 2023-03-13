@@ -45,7 +45,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	}
 
 	if (EnumFlag) {
-		OldBalance = oldBalance;
+		oldBalance = balance;
 		EnumFlag = false;
 	}
 
@@ -68,7 +68,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		if (hitPoly1.HitFlag) {
 			SanHitFlag = true;
 			//san->Landing(SANDisk.y - 142);
-			san->vPos.y = SANDisk.y - 145;
+			//san->vPos.y = SANDisk.y - 150;
 		}
 		else {
 			SanHitFlag = true;
@@ -93,17 +93,20 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		LkaHitFlag = false;
 	}
 
-	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true) && OldBalance == oldBalance) {
+	if ((SanHitFlag == false && LkaHitFlag == false) || (SanHitFlag == true && LkaHitFlag == true)/* && oldBalance == oldBalance*/) {
 		balance = BALANCE::EQUAL;
 		BalanceFlag = true;
 	}
-	else if (SanHitFlag == true && LkaHitFlag == false && OldBalance == oldBalance) {
+	else if (SanHitFlag == true && LkaHitFlag == false/* && OldBalance == oldBalance*/) {
 		balance = BALANCE::SAN;
 		BalanceFlag = true;
 	}
-	else if (SanHitFlag == false && LkaHitFlag == true && OldBalance == oldBalance) {
+	else if (SanHitFlag == false && LkaHitFlag == true/* && OldBalance == oldBalance*/) {
 		balance = BALANCE::LKA;
 		BalanceFlag = true;
+	}
+	else if (oldBalance != balance && BlendRate == 1) {
+		BalanceFlag = false;
 	}
 
 
@@ -148,66 +151,76 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	if (BalanceFlag && BlendRate >= 1) {
 		BlendRate = 0;
-		BalanceFlag = false;
+		//BalanceFlag = false;
 	}
 	else {
-		BalanceFlag = false;
+		//BalanceFlag = false;
 	}
+	if (BalanceFlag) {
+	  if (balance == BALANCE::EQUAL) {
+			if (OldBalance == BALANCE::SAN) {
+				if (BlendRate <= 1) {
 
-	if (balance == BALANCE::EQUAL) {
+					MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
+					MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
+					san->Landing(SANDisk.y - 284);
+					lka->Landing(SANDisk.y - 284);
+					BlendRate += 0.01f;
+					MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
+					MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
+				}
+				else {
+					BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
+					BalanceFlag = false;
+				}
+			}
+			else if (OldBalance == BALANCE::LKA) {
+				if (BlendRate <= 1) {
+					MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
+					MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
+					san->Landing(SANDisk.y - 284);
+					lka->Landing(SANDisk.y - 284);
+					BlendRate += 0.01f;
+					MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
+					MV1SetAttachAnimTime(BalanceHandle, 2, BlendRate);
+				}
+				else {
+					BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
+					BalanceFlag = false;
+				}
+			}
+			else if (OldBalance == BALANCE::EQUAL) {
 
-		if (OldBalance == BALANCE::SAN) {
-			if (BlendRate <= 1) {
-
-				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
-				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
+			}
+		}
+		else if (balance == BALANCE::SAN) {
+			if (BlendRate < 1) {
+				//san->Landing(hitPoly1.HitPosition.y);
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
+				san->Landing(SANDisk.y - 284);
 				BlendRate += 0.01f;
 				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 				MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
 			}
-			else {
+			else if(BlendRate == 1) {
 				BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
+				BalanceFlag = false;
 			}
 		}
-		else if (OldBalance == BALANCE::LKA) {
+		else if (balance == BALANCE::LKA) {
 			if (BlendRate <= 1) {
-				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
-				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
+				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, BlendRate);
+				lka->Landing(SANDisk.y - 284);
 				BlendRate += 0.01f;
 				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 				MV1SetAttachAnimTime(BalanceHandle, 2, BlendRate);
 			}
 			else {
 				BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
+				BalanceFlag = false;
 			}
-		}
-		else if (OldBalance == BALANCE::EQUAL) {
-
-		}
-	}
-	else if (balance == BALANCE::SAN) {
-		if (BlendRate <= 1) {
-			san->Landing(hitPoly1.HitPosition.y);
-			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
-			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
-			BlendRate += 0.01f;
-			MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
-			MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
-		}
-		else {
-			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
-		}
-	}
-	else if (balance == BALANCE::LKA) {
-		if (BlendRate <= 1) {
-			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
-			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, BlendRate);
-			BlendRate += 0.01f;
-			MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
-			MV1SetAttachAnimTime(BalanceHandle, 2, BlendRate);
-		}
-		else {
-			BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
 		}
 	}
 }
