@@ -56,23 +56,20 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 
 	hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
-		VAdd(san->vPos, VGet(0, 1000, 0)), VAdd(san->vPos, VGet(0, -1.f, 0)));
+		VAdd(san->vPos, VGet(0, 1000, 0)), VAdd(san->vPos, VGet(0, -1000.f, 0)));
 	hitPoly2 = MV1CollCheck_Line(BalanceHandle, 4,
-		VAdd(lka->vPos, VGet(0, lka->_colSubY, 0)), VAdd(lka->vPos, VGet(0, -1.f, 0)));
+		VAdd(lka->vPos, VGet(0, 1000, 0)), VAdd(lka->vPos, VGet(0, -1000.f, 0)));
 	hitPoly3 = MV1CollCheck_Line(BalanceHandle, 3,
-		VAdd(lka->vPos, VGet(0, lka->_colSubY, 0)), VAdd(lka->vPos, VGet(0, -1.f, 0)));
+		VAdd(lka->vPos, VGet(0, 1000, 0)), VAdd(lka->vPos, VGet(0, -1000.f, 0)));
 	hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
-		VAdd(san->vPos, VGet(0, san->_colSubY, 0)), VAdd(san->vPos, VGet(0, -1.f, 0)));
+		VAdd(san->vPos, VGet(0, 1000, 0)), VAdd(san->vPos, VGet(0, -1000.f, 0)));
 	//toDoプレイヤーが浮くバグあり
 	if (hitPoly1.HitFlag || hitPoly3.HitFlag) {
 		if (hitPoly1.HitFlag) {
 			SanHitFlag = true;
-			//san->Landing(SANDisk.y - 142);
-			//san->vPos.y = SANDisk.y - 150;
 		}
 		else {
 			SanHitFlag = true;
-			//lka->Landing(SANDisk.y - 142);
 		}
 	}
 	else {
@@ -82,11 +79,9 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	if (hitPoly2.HitFlag || hitPoly4.HitFlag) {
 		if (hitPoly2.HitFlag) {
 			LkaHitFlag = true;
-			//lka->Landing(hitPoly2.HitPosition.y);
 		}
 		else {
 			LkaHitFlag = true;
-			//san->Landing(hitPoly4.HitPosition.y);
 		}
 	}
 	else {
@@ -105,9 +100,10 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		balance = BALANCE::LKA;
 		BalanceFlag = true;
 	}
-	else if (oldBalance != balance && BlendRate == 1) {
+	/*else if (oldBalance != balance && BlendRate == 1) {
 		BalanceFlag = false;
-	}
+		BlendRate = 0;
+	}*/
 
 
 	if (oldBalance == balance) {
@@ -163,7 +159,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 					MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
 					MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
 					san->Landing(SANDisk.y - 284);
-					lka->Landing(SANDisk.y - 284);
+					lka->Landing(LKADisk.y - 284);
 					BlendRate += 0.01f;
 					MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 					MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
@@ -179,7 +175,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 					MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
 					MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
 					san->Landing(SANDisk.y - 284);
-					lka->Landing(SANDisk.y - 284);
+					lka->Landing(LKADisk.y - 284);
 					BlendRate += 0.01f;
 					MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 					MV1SetAttachAnimTime(BalanceHandle, 2, BlendRate);
@@ -212,7 +208,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			if (BlendRate <= 1) {
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
 				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, BlendRate);
-				lka->Landing(SANDisk.y - 284);
+				lka->Landing(LKADisk.y - 284);
 				BlendRate += 0.01f;
 				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
 				MV1SetAttachAnimTime(BalanceHandle, 2, BlendRate);
@@ -239,5 +235,6 @@ float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
 void Gimmick::Render() {
 	
 	MV1DrawModel(BalanceHandle);
+	
 	//DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
 }
