@@ -27,6 +27,7 @@
 #include "IronDoor.h"
 #include "Electrode.h"
 #include "Elevator.h"
+#include "Tube.h"
 
 
 #include <string>
