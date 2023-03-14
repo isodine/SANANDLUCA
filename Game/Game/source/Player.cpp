@@ -209,27 +209,22 @@ void Player::Update()
 			}
 			
 		}
-		if (hitPolyDimSAN.HitNum >= 1) {
+		else if (hitPolyDimSAN.HitNum >= 1) {
 		if (_gimmick->balance == Gimmick::BALANCE::SAN) {
-			Landing(_gimmick->SANDisk.y - 250);
+			Landing(_gimmick->SANDisk.y - 275);
 		}
 		else if (_gimmick->balance == Gimmick::BALANCE::LKA) {
-			Landing(_gimmick->LKADisk.y - 250);
+			Landing(_gimmick->LKADisk.y - 275);
 		}
 		else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
-			Landing(_gimmick->SANDisk.y - 250);
-			Landing(_gimmick->LKADisk.y - 250);
+			Landing(_gimmick->SANDisk.y - 275);
+			Landing(_gimmick->LKADisk.y - 275);
 		}
 		}
 		
 		else {
 			freeFall();
 		}
-
-
-
-
-
 		// ˆÚ“®—Ê‚ð‚»‚Ì‚Ü‚ÜƒLƒƒƒ‰‚ÌŒü‚«‚É‚·‚é
 		if (VSize(v) > 0.f) {		// ˆÚ“®‚µ‚Ä‚¢‚È‚¢Žž‚Í–³Ž‹‚·‚é‚½‚ß
 			vDir = v;

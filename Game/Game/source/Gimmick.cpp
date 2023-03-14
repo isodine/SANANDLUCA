@@ -176,8 +176,24 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			/*san->Landing(SANDisk.y - 280);
 			lka->Landing(LKADisk.y - 280);*/
 		}
-		SanHitFlag = false;
-		LkaHitFlag = false;
+		/*if (san->hitPolyDimSAN.HitNum >= 1) {
+			if (balance == BALANCE::SAN) {
+				san->Landing(SANDisk.y - 275);
+			}
+			else if (balance == BALANCE::EQUAL) {
+				san->Landing(SANDisk.y - 275);
+			}
+		}
+		if (lka->hitPolyDimLKA.HitNum >= 1) {
+			if (balance == BALANCE::LKA) {
+				lka->Landing(LKADisk.y - 275);
+			}
+			else if (balance == BALANCE::EQUAL) {
+				lka->Landing(LKADisk.y - 275);
+			}
+		}*/
+		/*SanHitFlag = false;
+		LkaHitFlag = false;*/
 	}
 
 
