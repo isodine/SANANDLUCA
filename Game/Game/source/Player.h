@@ -38,12 +38,19 @@ public:
 	virtual void freeFall();
 	void charJump();
 	virtual void Input();
+	void CollisionCheck();
 
 	int key;
 	int trg;
 	int stageHandle;
 	int floorCol;
 	int wallCol;
+
+	//“–‚½‚è”»’è—p
+	MV1_COLL_RESULT_POLY hitPoly1;
+	MV1_COLL_RESULT_POLY hitPoly2;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimSAN;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimLKA;
 
 public:
 

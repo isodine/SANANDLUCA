@@ -375,7 +375,7 @@ bool ModeGame::Render() {
 	}
 	DrawFormatString(0, 300, GetColor(255, 0, 0), "SANDisk(%f,%f,%f)", gimmick.SANDisk.x, gimmick.SANDisk.y, gimmick.SANDisk.z);
 	DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
-	DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %f", gimmick.hitPolyDimSAN.HitNum);
+	DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %f", san.hitPolyDimSAN.HitNum);
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();

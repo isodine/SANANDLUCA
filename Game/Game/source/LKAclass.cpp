@@ -61,6 +61,15 @@ void LKA::Update(Damage& damage)
 {
 	Player::Update();
 	if (damage.LkaHitFlag == true) { oldcount = GetNowCount(); }
+
+	/*if (hitPolyDimLKA.HitNum >= 1) {
+		if (_gimmick->balance == Gimmick::BALANCE::LKA) {
+			Landing(_gimmick->LKADisk.y - 275);
+		}
+		else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
+			Landing(_gimmick->LKADisk.y - 275);
+		}
+	}*/
 }
 
 void LKA::Render(Damage& damage)
