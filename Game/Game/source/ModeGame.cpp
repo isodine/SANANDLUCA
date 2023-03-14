@@ -26,14 +26,18 @@ bool ModeGame::Initialize() {
 
 
 	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/map_0125.fbm/a_map02.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01.fbm/Stage_01.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
 	// コリジョン情報の生成
 	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
 	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
+	frameMapCollisiongoalSAN = 4;
+	frameMapCollisiongoalLKA = 5;
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
+	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
+
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
@@ -69,6 +73,23 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
+	irondoor.Initialize();
+	electrode.Initialize(VGet(200.f, 70.f, 1000.f), true);
+	elevator.Initialize();
+	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
+
+	auto Tube1 = std::make_unique<Tube>();
+	Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
+	tubes.emplace_back(std::move(Tube1));
+
+	auto Tube2 = std::make_unique<Tube>();
+	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
+	tubes.emplace_back(std::move(Tube2));
+
+	auto Tube3 = std::make_unique<Tube>();
+	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
+	tubes.emplace_back(std::move(Tube3));
+
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
@@ -76,6 +97,11 @@ bool ModeGame::Initialize() {
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
 	san.wallCol = frameMapCollisionwall;
+	san.goalColSAN = frameMapCollisiongoalSAN;
+	san.ironDoorHandle = irondoor.handle;
+	san.ironDoorCol = irondoor.handleCol;
+	san.elevatorHnadle = elevator.handle;
+	san.elevatorCol = elevator.handleCol;
 	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
@@ -85,6 +111,11 @@ bool ModeGame::Initialize() {
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
 	lka.wallCol = frameMapCollisionwall;
+	lka.goalColLKA = frameMapCollisiongoalLKA;
+	lka.ironDoorHandle = irondoor.handle;
+	lka.ironDoorCol = irondoor.handleCol;
+	lka.elevatorHnadle = elevator.handle;
+	lka.elevatorCol = elevator.handleCol;
 	lka.stageHandle = _handleMap;
 
 	damage.Initialize(&san, &lka);
@@ -93,6 +124,8 @@ bool ModeGame::Initialize() {
 	gimmick.SetSanLka(&san, &lka);
 	sanbomb.Initialize(san);
 	lkabomb.Initialize(lka);
+
+
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -123,15 +156,15 @@ bool ModeGame::Initialize() {
 
 					else if (cnt == 3)
 					{
-						auto Slime1 = std::make_unique<Slime>();
-						Slime1->Initialize(x, y, z, pH);
-						slimes.emplace_back(std::move(Slime1));
+						//auto Slime1 = std::make_unique<Slime>();
+						//Slime1->Initialize(x, y, z, pH);
+						//slimes.emplace_back(std::move(Slime1));
 					}
 					else if (cnt == 4)
 					{
-						auto Slime2 = std::make_unique<Slime>();
-						Slime2->Initialize(x, y, z, pH);
-						slimes.emplace_back(std::move(Slime2));
+						//auto Slime2 = std::make_unique<Slime>();
+						//Slime2->Initialize(x, y, z, pH);
+						//slimes.emplace_back(std::move(Slime2));
 					}
 
 				}
@@ -190,6 +223,7 @@ bool ModeGame::Process() {
 		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
 		modeStart = true;
 	}
+	MV1RefreshCollInfo(elevator.handle, elevator.handleCol);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	san.Update(damage);
@@ -219,14 +253,24 @@ bool ModeGame::Process() {
 	}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
-	sancircle.Update(san,lka);
-	lkacircle.Update(san,lka);
+	sancircle.Update(san, lka);
+	lkacircle.Update(san, lka);
 	//sanheal.Update(san);
 	//lkaheal.Update(lka);
-	//
-	//if (_gTrgEf & PAD_INPUT_9 && oldcount == 0)
-	//{
-	//	old
+	if (!(irondoor.melt))
+	{
+		irondoor.Update(sanbomb);
+		if (irondoor.melt)
+		{
+			san.ironDoorHandle = irondoor.handle;
+			lka.ironDoorHandle = irondoor.handle;
+		}
+	}
+	electrode.Update(sanbomb, lkabomb);
+	elevator.Update(electrode);
+	for (auto&& Tubes : tubes) {
+		Tubes->Update(electrode);
+	}
 
 	//仮
 	int Trg;
@@ -235,7 +279,13 @@ bool ModeGame::Process() {
 	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 
 	int checkKey = PAD_INPUT_10;
-	if (Trg & checkKey) {
+	if (Trg & checkKey || (san.goal && lka.goal)) {
+		//BGM停止
+		StopMusic();
+
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
+
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
@@ -369,6 +419,8 @@ bool ModeGame::Render() {
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
 		}
+		//DrawCapsule3D(VGet(san.vPos.x, san.vPos.y + 30, san.vPos.z), VGet(san.vPos.x, san.vPos.y + 75, san.vPos.z), 30.0f, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
+		//DrawCapsule3D(VGet(lka.vPos.x, lka.vPos.y + 30, lka.vPos.z), VGet(lka.vPos.x, lka.vPos.y + 75, lka.vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
 	}
 	lka.Render(damage);
 	san.Render(damage);
@@ -376,5 +428,11 @@ bool ModeGame::Render() {
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
+	irondoor.Render();
+	electrode.Render();
+	elevator.Render();
+	for (auto&& Tubes : tubes) {
+		Tubes->Render();
+	}
 	return true;
 }

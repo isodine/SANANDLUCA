@@ -12,6 +12,10 @@
 #include "lkacircle.h"
 #include "sanheal.h"
 #include "lkacircle.h"
+#include "IronDoor.h"
+#include "Electrode.h"
+#include "Elevator.h"
+#include "Tube.h"
 
 #include <string>
 #include <memory>
@@ -60,6 +64,8 @@ public:
 	int _handleSkySphere;
 	int frameMapCollisionfloor;
 	int frameMapCollisionwall;
+	int frameMapCollisiongoalSAN;
+	int frameMapCollisiongoalLKA;
 
 	int LightHandle;
 	int MaskHandle;
@@ -98,5 +104,10 @@ public:
 	Damage damage;
 	Gimmick gimmick;
 	Slime slime;
+	IronDoor irondoor;
+	Electrode electrode;
+	Elevator elevator;
+	Tube tube;
 	std::vector<std::unique_ptr<Slime>> slimes;
+	std::vector<std::unique_ptr<Tube>> tubes;
 };

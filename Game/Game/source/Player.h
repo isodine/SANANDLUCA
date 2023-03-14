@@ -41,10 +41,14 @@ public:
 	int key;
 	int trg;
 	int stageHandle;
+	int ironDoorHandle;
+	int elevatorHnadle;
 	int floorCol;
 	int wallCol;
-
-public:
+	int goalColSAN;
+	int goalColLKA;
+	int ironDoorCol;
+	int elevatorCol;
 
 
 	enum class STATUS {
@@ -136,6 +140,7 @@ public:
 
 	bool motionRes = false;
 	int HP;
+	bool goal = false;
 
 
 	void Landing(float HitYPos);

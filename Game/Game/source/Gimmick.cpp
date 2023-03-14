@@ -16,7 +16,7 @@ Gimmick::Gimmick() {
 
 void Gimmick::Initialize()
 {
-	MV1SetPosition(BalanceHandle, VGet(35.0f, 200.0f, 900.0f));
+	MV1SetPosition(BalanceHandle, VGet(0.f, 700.0f, 7600.f));
 	MV1SetupCollInfo(BalanceHandle, 3, 8, 8, 8);  //ƒTƒ“‚ÌŽM
 	MV1SetupCollInfo(BalanceHandle, 4, 8, 8, 8);  //ƒ‹ƒJ‚ÌŽM
 

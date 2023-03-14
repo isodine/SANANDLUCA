@@ -33,6 +33,7 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 	LkaHitFlag = false;
 
 	stageFlag = true;
+	stageHandle = san->stageHandle;
 }
 
 void Damage::Terminate() {
@@ -120,5 +121,8 @@ void Damage::Render() {
 
 	DrawFormatString(0, 340, GetColor(0, 0, 0), "SanHitFlag %d", SanHitFlag);
 	DrawFormatString(0, 360, GetColor(0, 0, 0), "LkaHitFlag %d", LkaHitFlag);
+
+	DrawCapsule3D(VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
+	DrawCapsule3D(VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
 
 }

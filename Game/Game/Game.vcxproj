@@ -161,6 +161,9 @@
   <ItemGroup>
     <ClCompile Include="ModeEffekseer.cpp" />
     <ClCompile Include="source\Bossrun.cpp" />
+    <ClCompile Include="source\Electrode.cpp" />
+    <ClCompile Include="source\Elevator.cpp" />
+    <ClCompile Include="source\IronDoor.cpp" />
     <ClCompile Include="source\lkacircle.cpp" />
     <ClCompile Include="source\lkaheal.cpp" />
     <ClCompile Include="source\ModeRule.cpp" />
@@ -205,6 +208,7 @@
     </ClCompile>
     <ClCompile Include="source\Swamp.cpp" />
     <ClCompile Include="source\timer.cpp" />
+    <ClCompile Include="source\Tube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModeEffekseer.h" />
@@ -213,6 +217,9 @@
     <ClInclude Include="source\Bossrun.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Damage.h" />
+    <ClInclude Include="source\Electrode.h" />
+    <ClInclude Include="source\Elevator.h" />
+    <ClInclude Include="source\IronDoor.h" />
     <ClInclude Include="source\lkacircle.h" />
     <ClInclude Include="source\lkaheal.h" />
     <ClInclude Include="source\ModeRule.h" />
@@ -245,6 +252,7 @@
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\Swamp.h" />
     <ClInclude Include="source\timer.h" />
+    <ClInclude Include="source\Tube.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
