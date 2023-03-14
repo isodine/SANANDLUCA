@@ -21,7 +21,7 @@ public:
 	void CaptureEnd();
 	void Rotation(VECTOR sanPos, VECTOR lkaPos);
 	void Walk();
-	void Crush();
+	void Crush();		//•ÇÕ“Ëˆ—
 	void Search();
 	void Down();
 	void Idle();

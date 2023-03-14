@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="ModeEffekseer.cpp" />
     <ClCompile Include="source\Bossrun.cpp" />
+    <ClCompile Include="source\BossSwamp.cpp" />
     <ClCompile Include="source\Electrode.cpp" />
     <ClCompile Include="source\Elevator.cpp" />
     <ClCompile Include="source\IronDoor.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Bossrun.h" />
+    <ClInclude Include="source\BossSwamp.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\Electrode.h" />

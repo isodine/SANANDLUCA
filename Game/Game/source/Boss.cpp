@@ -278,7 +278,7 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 
 }
 
-void Boss::Crush() {
+void Boss::Crush() {				//•ÇÕ“Ëˆ—
 	MV1RefreshCollInfo(model.modelHandle, 1);
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
