@@ -40,10 +40,6 @@ void Elevator::Render()
 {
 	MV1SetPosition(handle, vPos);
 	MV1DrawModel(handle);
-	int x = 400, y = 0, size = 16;
-	SetFontSize(size);
-	floating ? DrawFormatString(x, y, GetColor(255, 0, 0), "floating == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "floating == false"); y += size;
-	moving ? DrawFormatString(x, y, GetColor(255, 0, 0), "moving == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "moving == false"); y += size;
 }
 
 void Elevator::Move()

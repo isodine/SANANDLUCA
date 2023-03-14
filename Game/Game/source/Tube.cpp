@@ -6,60 +6,81 @@ Tube::~Tube()
 {
 }
 
-void Tube::Initialize(int Type)
+void Tube::Initialize(int type, VECTOR Pos)
 {
-	if (Type==0)
+	if (type == 0)
 	{
-		handle = MV1LoadModel("res/02_Object_Model/Elevator/gimmick_elevator_01.mv1");
+		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_gimmick.mv1");
 		handleCol = 0;
 		Type = TubeType::Neutrality;
 		Dir = DirType::Front;
-		vPos = VGet(500.f, 170.f, 1000.f);
-		vPosfirst = VGet(500.f, 70.f, 1000.f);
-		MV1SetScale(handle, VGet(5.0f, 5.0f, 5.0f));
+		vPos = Pos;
+		vDir = VGet(0, 0, 0);
 		MV1SetPosition(handle, vPos);
 	}
-	else if (Type == 1)
+	else if (type == 1)
 	{
-		handle = MV1LoadModel("res/02_Object_Model/Elevator/gimmick_elevator_01.mv1");
+		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_gimmick_S.mv1");
 		handleCol = 0;
-		Type = TubeType::Neutrality;
-		Dir = DirType::Front;
-		vPos = VGet(500.f, 170.f, 1000.f);
-		vPosfirst = VGet(500.f, 70.f, 1000.f);
-		MV1SetScale(handle, VGet(5.0f, 5.0f, 5.0f));
+		Type = TubeType::San;
+		Dir = DirType::Right;
+		vPos = Pos;
+		vDir = VGet(0, 90, 0);
 		MV1SetPosition(handle, vPos);
 	}
-	else if (Type == 2)
+	else if (type == 2)
 	{
-		handle = MV1LoadModel("res/02_Object_Model/Elevator/gimmick_elevator_01.mv1");
+		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_gimmick_L.mv1");
 		handleCol = 0;
-		Type = TubeType::Neutrality;
-		Dir = DirType::Front;
-		vPos = VGet(500.f, 170.f, 1000.f);
-		vPosfirst = VGet(500.f, 70.f, 1000.f);
-		MV1SetScale(handle, VGet(5.0f, 5.0f, 5.0f));
+		Type = TubeType::Lka;
+		Dir = DirType::Left;
+		vPos = Pos;
+		vDir = VGet(0, -90, 0);
 		MV1SetPosition(handle, vPos);
 	}
-	else{}
+	else {}
 }
 
 void Tube::Update(Electrode& electr)
 {
-	if (electr.change)
+	switch (Type)
 	{
-		if (electr.isSan && !Dir == DirType::Front)
+	//case Tube::Neutrality:
+	//	break;
+	case Tube::San:
+		if (electr.change)
 		{
-			spining = true;
-			Dir = DirType::Left;
+			if (electr.isSan && Dir == DirType::Front)
+			{
+				spining = true;
+				Dir = DirType::Right;
+			}
+			else if (!(electr.isSan) && Dir == DirType::Right)
+			{
+				spining = true;
+				Dir = DirType::Front;
+			}
+			else {}
 		}
-		else if (!(electr.isSan) && Dir == DirType::Front)
+		break;
+	case Tube::Lka:
+		if (electr.change)
 		{
-			spining = true;
-			Dir = DirType::Left;
+			if (electr.isSan && Dir == DirType::Front)
+			{
+				spining = true;
+				Dir = DirType::Left;
+			}
+			else if (!(electr.isSan) && Dir == DirType::Left)
+			{
+				spining = true;
+				Dir = DirType::Front;
+			}
+			else {}
 		}
-		else {}
+		break;
 	}
+
 	Spin();
 
 }
@@ -67,34 +88,72 @@ void Tube::Update(Electrode& electr)
 void Tube::Render()
 {
 	MV1SetPosition(handle, vPos);
-	MV1SetRotationXYZ(handle, VGet(0.0f, 90.0f * DX_PI_F / 180.0f, 0.0f));
+	MV1SetRotationXYZ(handle, VGet(0.0f, vDir.y * DX_PI_F / 180.0f, 0.0f));
 	MV1DrawModel(handle);
-	//int x = 400, y = 0, size = 16;
-	//SetFontSize(size);
-	//floating ? DrawFormatString(x, y, GetColor(255, 0, 0), "floating == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "floating == false"); y += size;
-	//moving ? DrawFormatString(x, y, GetColor(255, 0, 0), "moving == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "moving == false"); y += size;
+	int x = 400, y = 0, size = 16;
+	SetFontSize(size);
+	switch (Type)
+	{
+	case Tube::San:
+		Dir == DirType::Front ? DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Front ") : DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Right"); y += size;
+		spining ? DrawFormatString(x, y, GetColor(255, 0, 0), "spining == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "spining == false"); y += size;
+		break;
+	case Tube::Lka:
+		x = 400, y = 32, size = 16;
+		Dir == DirType::Front ? DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Front ") : DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Left"); y += size;
+		spining ? DrawFormatString(x, y, GetColor(255, 0, 0), "spining == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "spining == false"); y += size;
+		break;
+	}
 }
 
 void Tube::Spin()
 {
-	//if (!moving) { return; }
+	if (!spining) { return; }
+	switch (Type)
+	{
+	case Tube::Neutrality:
+		break;
+	case Tube::San:
+		if (!(abs(vDir.y) == rightRange) && Dir == DirType::Right)
+		{
+			vDir = VAdd(vDir, speed);
 
-	//if (!(abs(vPos.y) == vPosfirst.y + upRange) && floating)
-	//{
-	//	vPos = VAdd(vPos, speed);
+			if (abs(vDir.y) == rightRange)
+			{
+				Dir = DirType::Right; spining = false; return;
+			}
+		}
+		if (!(abs(vDir.y) == frontRange) && Dir == DirType::Front)
+		{
+			vDir = VSub(vDir, speed);
 
-	//	if (abs(vPos.y) == vPosfirst.y + upRange)
-	//	{
-	//		floating = true; moving = false; return;
-	//	}
-	//}
-	//if (!(abs(vPos.y) == vPosfirst.y + downRange) && !floating)
-	//{
-	//	vPos = VSub(vPos, speed);
+			if (abs(vDir.y) == frontRange)
+			{
+				Dir = DirType::Front; spining = false; return;
+			}
+		}
+		break;
+	case Tube::Lka:
+		if (!((vDir.y) == leftRange) && Dir == DirType::Left)
+		{
+			vDir = VSub(vDir, speed);
 
-	//	if (abs(vPos.y) == vPosfirst.y + downRange)
-	//	{
-	//		floating = false; moving = false;  return;
-	//	}
-	//}
+			if ((vDir.y) == leftRange)
+			{
+				Dir = DirType::Left; spining = false; return;
+			}
+		}
+		if (!((vDir.y) == frontRange) && Dir == DirType::Front)
+		{
+			vDir = VAdd(vDir, speed);
+
+			if ((vDir.y) == frontRange)
+			{
+				Dir = DirType::Front; spining = false; return;
+			}
+		}
+		break;
+	}
+
+
 }

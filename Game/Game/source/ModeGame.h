@@ -15,6 +15,7 @@
 #include "IronDoor.h"
 #include "Electrode.h"
 #include "Elevator.h"
+#include "Tube.h"
 
 #include <string>
 #include <memory>
@@ -106,5 +107,7 @@ public:
 	IronDoor irondoor;
 	Electrode electrode;
 	Elevator elevator;
+	Tube tube;
 	std::vector<std::unique_ptr<Slime>> slimes;
+	std::vector<std::unique_ptr<Tube>> tubes;
 };

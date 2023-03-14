@@ -78,6 +78,18 @@ bool ModeGame::Initialize() {
 	elevator.Initialize();
 	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
+	auto Tube1 = std::make_unique<Tube>();
+	Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
+	tubes.emplace_back(std::move(Tube1));
+
+	auto Tube2 = std::make_unique<Tube>();
+	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
+	tubes.emplace_back(std::move(Tube2));
+
+	auto Tube3 = std::make_unique<Tube>();
+	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
+	tubes.emplace_back(std::move(Tube3));
+
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
@@ -256,6 +268,9 @@ bool ModeGame::Process() {
 	}
 	electrode.Update(sanbomb, lkabomb);
 	elevator.Update(electrode);
+	for (auto&& Tubes : tubes) {
+		Tubes->Update(electrode);
+	}
 
 	//‰¼
 	int Trg;
@@ -416,5 +431,8 @@ bool ModeGame::Render() {
 	irondoor.Render();
 	electrode.Render();
 	elevator.Render();
+	for (auto&& Tubes : tubes) {
+		Tubes->Render();
+	}
 	return true;
 }

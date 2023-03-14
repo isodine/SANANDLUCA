@@ -5,7 +5,7 @@ class Tube
 public:
 	Tube();
 	~Tube();
-	void Initialize(int Type);
+	void Initialize(int Type, VECTOR Pos);
 	void Update(Electrode& electr);
 	void Render();
 	void Spin();
@@ -15,10 +15,10 @@ public:
 	int handleCol;
 	VECTOR vPos;		// 位置
 	VECTOR vDir;			// 向き
-	VECTOR vPosfirst;
 	VECTOR speed = VGet(0.f, 1.0f, 0.f);	//動くスピード
-	float rightRange = -180.f;
-	float leftRange = 180.f;
+	float rightRange = 90.f;
+	float leftRange = -90.f;
+	float frontRange = 0.f;
 	bool spining = false;
 
 	//今向いている方向
