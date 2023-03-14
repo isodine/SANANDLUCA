@@ -182,6 +182,7 @@ bool ModeBoss::Process() {
 	//}-
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
+	bossrun.Update(boss);
 	/*san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());*/
 	san.Update(damage);
@@ -267,8 +268,6 @@ bool ModeBoss::Render() {
 		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
 		//}
 	}
-	sanbomb.Render();
-	lkabomb.Render();
 	// マップモデルを描画する
 	{
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
@@ -325,6 +324,8 @@ bool ModeBoss::Render() {
 			break;
 		}*/
 	}
-	/*damage.Render();*/
+	sanbomb.Render();
+	lkabomb.Render();
+	bossrun.Render();
 	return true;
 }

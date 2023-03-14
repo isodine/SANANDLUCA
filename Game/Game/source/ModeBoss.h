@@ -1,4 +1,5 @@
 #pragma once
+#include "Bossrun.h"
 
 class Boss;
 
@@ -53,4 +54,5 @@ public:
 	LkaBomb lkabomb;
 	Damage damage;
 	Boss boss;
+	Bossrun bossrun;
 };

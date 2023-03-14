@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ModeEffekseer.cpp" />
+    <ClCompile Include="source\Bossrun.cpp" />
     <ClCompile Include="source\lkacircle.cpp" />
     <ClCompile Include="source\lkaheal.cpp" />
     <ClCompile Include="source\ModeRule.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="ModeEffekseer.h" />
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
+    <ClInclude Include="source\Bossrun.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\lkacircle.h" />
