@@ -72,6 +72,7 @@ bool ModeGame::Initialize() {
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
+	san.SetGimmick(&gimmick);
 
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
@@ -81,6 +82,7 @@ bool ModeGame::Initialize() {
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
+	lka.SetGimmick(&gimmick);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
@@ -184,7 +186,7 @@ bool ModeGame::Terminate() {
 
 bool ModeGame::Process() {
 	base::Process();
-
+	gimmick.Balance(san.vPos, lka.vPos);
 	if (!modeStart)
 	{
 		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
@@ -192,11 +194,12 @@ bool ModeGame::Process() {
 	}
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
+	
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
 	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
-	gimmick.Balance(san.vPos, lka.vPos);
+	
 	for (auto&& Slimes : slimes) {
 		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);
 	}
@@ -372,6 +375,7 @@ bool ModeGame::Render() {
 	}
 	DrawFormatString(0, 300, GetColor(255, 0, 0), "SANDisk(%f,%f,%f)", gimmick.SANDisk.x, gimmick.SANDisk.y, gimmick.SANDisk.z);
 	DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
+	DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %f", gimmick.hitPolyDimSAN.HitNum);
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();

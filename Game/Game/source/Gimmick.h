@@ -39,14 +39,20 @@ public:
 	float TotalBalance;
 	float BlendRate;
 	float nowBlendRate;
+	float BalancePer;//傾きの値。サンの時－1、ルカの時１
 
 	bool SanHitFlag;
 	bool LkaHitFlag;
 	bool BalanceFlag;
 
+	MV1_COLL_RESULT_POLY hitPoly1;
+	MV1_COLL_RESULT_POLY hitPoly2;
+	MV1_COLL_RESULT_POLY hitPoly3;
+	MV1_COLL_RESULT_POLY hitPoly4;
 
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimSAN;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimLKA;
 
-protected:
 	enum class BALANCE {
 		EQUAL,
 		SAN,
@@ -87,5 +93,5 @@ protected:
 private:
 	SAN* san;
 	LKA* lka;
-	Player* player;
+	//Player* player;
 };

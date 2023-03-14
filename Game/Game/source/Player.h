@@ -1,13 +1,12 @@
 #pragma once
 #include <memory>
 #include <vector>
-
 #include "appframe.h"
 
 class PlayerBomb;
 class Camera;
 class Damage;
-//class ModeBoss;
+class Gimmick;
 
 class Player
 {
@@ -22,10 +21,12 @@ public:
 	Camera* _camera;
 	Damage* _damage;
 	ModeBase* base;
+	Gimmick* _gimmick;
 
 	void SetBomb(PlayerBomb* bomb);
 	void SetCamera(Camera* camera);
 	void SetDamage(Damage* damage);
+	void SetGimmick(Gimmick* gimmick);
 	void SetType(bool isSan);
 
 	Player();
@@ -59,7 +60,7 @@ public:
 		_EOT_
 	};
 	STATUS _status;
-
+	STATUS oldStatus;
 	//Camera _cam;
 
 	//std::unique_ptr<Camera> cam = std::make_unique<Camera>();
@@ -140,9 +141,10 @@ public:
 
 	void Landing(float HitYPos);
 
-
 	//デバッグ表示用
 	bool debagMode = false;
 	bool viewCollision = false;
 	bool viewValue = false;
+
+	
 };

@@ -1,5 +1,5 @@
 #include "Player.h"
-//#include "ModeGame.h"
+#include "Gimmick.h"
 #include "ModeBoss.h"
 
 //extern int _handleMap;
@@ -28,6 +28,10 @@ void Player::SetCamera(Camera* camera)
 void Player::SetDamage(Damage* damage)
 {
 	_damage = damage;
+}
+
+void Player::SetGimmick(Gimmick* gimmick) {
+	_gimmick = gimmick;
 }
 
 void Player::SetType(bool isSan)
@@ -95,7 +99,7 @@ void Player::Update()
 	else {
 
 		// 処理前のステータスを保存しておく
-		STATUS oldStatus = _status;
+		oldStatus = _status;
 		// カメラの向いている角度を取得
 		float sx = _camera->_vPos.x - _camera->_vTarget.x;
 		float sz = _camera->_vPos.z - _camera->_vTarget.z;
@@ -128,7 +132,8 @@ void Player::Update()
 			attack = Attack::Throw;
 			mypH == San ? PlaySoundMem(VOICEthrowBombSAN[GetRand(2)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEthrowBombLKA[GetRand(2)], DX_PLAYTYPE_BACK, true);
 		}
-		if (_status == STATUS::JUMP) { Jump(); }
+		if (_status == STATUS::JUMP) 
+		{ Jump(); }
 		// vをrad分回転させる
 		float length = 0.f;
 		if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -199,7 +204,21 @@ void Player::Update()
 			{
 				Landing(hitPolyfloor.HitPosition.y);
 			}
+			
 		}
+		if (_gimmick->hitPolyDimSAN.HitNum >= 1) {
+		if (_gimmick->balance == Gimmick::BALANCE::SAN) {
+			Landing(_gimmick->SANDisk.y - 275);
+		}
+		else if (_gimmick->balance == Gimmick::BALANCE::LKA) {
+			Landing(_gimmick->LKADisk.y - 275);
+		}
+		else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
+			Landing(_gimmick->SANDisk.y - 275);
+			Landing(_gimmick->LKADisk.y - 275);
+		}
+		}
+		
 		else {
 			freeFall();
 		}
@@ -332,6 +351,7 @@ void Player::charJump() {
 
 void Player::Landing(float HitYPos) {
 	_status = STATUS::WAIT;
+	//oldStatus = STATUS::WAIT;
 	throughtime = 0.0f;
 	//float minusY = vPos.y;
 	// 当たったY位置をキャラ座標にする

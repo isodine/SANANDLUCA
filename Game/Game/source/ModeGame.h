@@ -6,7 +6,7 @@
 #include "LKAclass.h"
 #include "Damage.h"
 #include "timer.h"
-#include "gimmick.h"
+#include "Gimmick.h"
 #include "Slime.h"
 #include "sancircle.h"
 #include "lkacircle.h"
