@@ -35,8 +35,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	SANDisk = MV1GetFramePosition(BalanceHandle, 26);
 	LKADisk = MV1GetFramePosition(BalanceHandle, 25);
 
-	MV1RefreshCollInfo(BalanceHandle, 3, 8);  //サンの皿
-	MV1RefreshCollInfo(BalanceHandle, 4, 8);  //ルカの皿
+	
 
 	BALANCE oldBalance = balance;
 
@@ -82,42 +81,9 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		BlendRate = abs(BalancePer);
 		
 
-		hitPolyDimSAN = MV1CollCheck_Capsule(BalanceHandle, 3,
-			VGet(san->vPos.x, san->vPos.y + 30, san->vPos.z), VGet(san->vPos.x, san->vPos.y + 75, san->vPos.z), 30.0f);
-
-
-		hitPoly1 = MV1CollCheck_Line(BalanceHandle, 3,
-			VAdd(san->vPos, VGet(0, 1000, 0)), VAdd(san->vPos, VGet(0, -1000.f, 0)));
-		hitPoly2 = MV1CollCheck_Line(BalanceHandle, 4,
-			VAdd(lka->vPos, VGet(0, 1000, 0)), VAdd(lka->vPos, VGet(0, -1000.f, 0)));
-		hitPoly3 = MV1CollCheck_Line(BalanceHandle, 3,
-			VAdd(lka->vPos, VGet(0, 1000, 0)), VAdd(lka->vPos, VGet(0, -1000.f, 0)));
-		hitPoly4 = MV1CollCheck_Line(BalanceHandle, 4,
-			VAdd(san->vPos, VGet(0, 1000, 0)), VAdd(san->vPos, VGet(0, -1000.f, 0)));
+		
 		//toDoプレイヤーが浮くバグあり
-		if (hitPoly1.HitFlag || hitPoly3.HitFlag) {
-			if (hitPoly1.HitFlag) {
-				SanHitFlag = true;
-			}
-			else {
-				SanHitFlag = true;
-			}
-		}
-		else {
-			SanHitFlag = false;
-		}
-
-		if (hitPoly2.HitFlag || hitPoly4.HitFlag) {
-			if (hitPoly2.HitFlag) {
-				LkaHitFlag = true;
-			}
-			else {
-				LkaHitFlag = true;
-			}
-		}
-		else {
-			LkaHitFlag = false;
-		}
+		
 
 		if ((SanHitFlag == true && LkaHitFlag == true)) {
 			balance = BALANCE::EQUAL;
@@ -210,75 +176,8 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			/*san->Landing(SANDisk.y - 280);
 			lka->Landing(LKADisk.y - 280);*/
 		}
-				
-			
-
-	//	if (balance == BALANCE::EQUAL) {
-	//		if (oldBalance == BALANCE::SAN) {
-	//			if (true) {
-
-	//				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, 1.0f - BlendRate);
-	//				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
-	//				san->Landing(SANDisk.y - 280);
-	//				lka->Landing(LKADisk.y - 280);
-	//				//BlendRate += 0.01f;
-	//				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
-	//				MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
-	//			}
-	//			//todoここのelseに入らない
-	//			else {
-	//				//BlendRate = 0;
-	//				BalanceFlag = false;
-	//			}
-	//		}
-	//		else if (oldBalance == BALANCE::LKA) {
-	//			if (true) {
-	//				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, 1.0f - BlendRate);
-	//				MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, BlendRate);
-	//				san->Landing(SANDisk.y - 280);
-	//				lka->Landing(LKADisk.y - 280);
-	//				//BlendRate += 0.01f;
-	//				MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
-	//				MV1SetAttachAnimTime(BalanceHandle, 2, BlendRate);
-	//			}
-	//			else {
-	//				//BlendRate > 0 ? BlendRate -= 0.01f : BlendRate = 0;
-	//				BalanceFlag = false;
-	//			}
-	//		}
-	//		/*else if (oldBalance == BALANCE::EQUAL) {
-
-	//		}*/
-	//	}
-	//	else if (balance == BALANCE::SAN) {
-	//		if (true) {
-	//			//san->Landing(hitPoly1.HitPosition.y);
-	//			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
-	//			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, BlendRate);
-	//			san->Landing(SANDisk.y - 280);
-	//			//BlendRate += 0.01f;
-	//			MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
-	//			MV1SetAttachAnimTime(BalanceHandle, 1, BlendRate);
-	//		}
-	//		else {
-	//			//BlendRate = 0;
-	//			BalanceFlag = false;
-	//		}
-	//	}
-	//	else if (balance == BALANCE::LKA) {
-	//		if (true) {
-	//			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - BlendRate);
-	//			MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, BlendRate);
-	//			lka->Landing(LKADisk.y - 280);
-	//			//BlendRate += 0.01f;
-	//			MV1SetAttachAnimTime(BalanceHandle, 0, BlendRate);
-	//			MV1SetAttachAnimTime(BalanceHandle, 2, BlendRate);
-	//		}
-	//		else {
-	//			//BlendRate = 0;
-	//			BalanceFlag = false;
-	//		}
-	//	}
+		SanHitFlag = false;
+		LkaHitFlag = false;
 	}
 
 
@@ -292,6 +191,11 @@ float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
 		}
 	}
 	return MaxY;
+}
+
+void Gimmick::UpdateCollision() {
+
+	
 }
 
 void Gimmick::Render() {

@@ -38,6 +38,7 @@ public:
 	virtual void freeFall();
 	void charJump();
 	virtual void Input();
+	void UpdateCollision();
 
 	int key;
 	int trg;
@@ -46,7 +47,12 @@ public:
 	int wallCol;
 
 public:
+	//“–‚½‚è”»’è—p
+	MV1_COLL_RESULT_POLY hitPoly1;
+	MV1_COLL_RESULT_POLY hitPoly2;
 
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimSAN;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimLKA;
 
 	enum class STATUS {
 		NONE,

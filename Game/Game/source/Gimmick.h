@@ -14,6 +14,7 @@ public:
 	void Terminate();
 	void Process();
 	void Render();
+	void UpdateCollision();
 
 	void SetSanLka(SAN* San, LKA* Lka) {
 		san = San;
@@ -45,13 +46,7 @@ public:
 	bool LkaHitFlag;
 	bool BalanceFlag;
 
-	MV1_COLL_RESULT_POLY hitPoly1;
-	MV1_COLL_RESULT_POLY hitPoly2;
-	MV1_COLL_RESULT_POLY hitPoly3;
-	MV1_COLL_RESULT_POLY hitPoly4;
-
-	MV1_COLL_RESULT_POLY_DIM hitPolyDimSAN;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDimLKA;
+	
 
 	enum class BALANCE {
 		EQUAL,

@@ -197,6 +197,9 @@ void Player::Update()
 
 		hitPolyDim = MV1CollCheck_Capsule(stageHandle, floorCol,
 			VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+
+		UpdateCollision();
+
 		if (hitPolyDim.HitNum >= 1)
 		{
 			// “–‚½‚Á‚½
@@ -206,16 +209,16 @@ void Player::Update()
 			}
 			
 		}
-		if (_gimmick->hitPolyDimSAN.HitNum >= 1) {
+		if (hitPolyDimSAN.HitNum >= 1) {
 		if (_gimmick->balance == Gimmick::BALANCE::SAN) {
-			Landing(_gimmick->SANDisk.y - 275);
+			Landing(_gimmick->SANDisk.y - 250);
 		}
 		else if (_gimmick->balance == Gimmick::BALANCE::LKA) {
-			Landing(_gimmick->LKADisk.y - 275);
+			Landing(_gimmick->LKADisk.y - 250);
 		}
 		else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
-			Landing(_gimmick->SANDisk.y - 275);
-			Landing(_gimmick->LKADisk.y - 275);
+			Landing(_gimmick->SANDisk.y - 250);
+			Landing(_gimmick->LKADisk.y - 250);
 		}
 		}
 		
@@ -310,6 +313,28 @@ void Player::freeFall()
 {
 	vPos.y -= throughtime;
 	throughtime += 0.25f;
+}
+
+void Player::UpdateCollision() {
+	MV1RefreshCollInfo(_gimmick->BalanceHandle, 3, 8);  //ƒTƒ“‚ÌŽM
+	MV1RefreshCollInfo(_gimmick->BalanceHandle, 4, 8);  //ƒ‹ƒJ‚ÌŽM
+
+	hitPolyDimSAN = MV1CollCheck_Capsule(_gimmick->BalanceHandle, 3,
+		VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+	hitPolyDimLKA = MV1CollCheck_Capsule(_gimmick->BalanceHandle, 4,
+		VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+
+	hitPoly1 = MV1CollCheck_Line(_gimmick->BalanceHandle, 3,
+		VAdd(vPos, VGet(0, 1000, 0)), VAdd(vPos, VGet(0, -1000.f, 0)));
+	hitPoly2 = MV1CollCheck_Line(_gimmick->BalanceHandle, 4,
+		VAdd(vPos, VGet(0, 1000, 0)), VAdd(vPos, VGet(0, -1000.f, 0)));
+
+	if (hitPoly1.HitFlag) {
+		_gimmick->SanHitFlag = true;
+	}
+	if (hitPoly2.HitFlag) {
+		_gimmick->LkaHitFlag = true;
+	}
 }
 
 void Player::Render()
