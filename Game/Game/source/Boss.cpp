@@ -151,6 +151,11 @@ void Boss::Process() {
 	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
 	// çƒê∂éûä‘Çèâä˙âª
 	//PlayTime = 0.0f;	
+
+	for (int i = 0; i < swamps.size(); i++)
+	{
+		swamps[i]->Update(swamps);
+	}
 }
 
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
@@ -383,6 +388,7 @@ void Boss::Capture() {
 			phType = PH::ACID;
 			if (oldphType == PH::NONE) {
 				oldphType = PH::ACID;
+				SwampSpawn(true);
 			}
 			else if (oldphType == PH::ALCALI) {
 				phType = PH::NONE;
@@ -394,6 +400,7 @@ void Boss::Capture() {
 			phType = PH::ALCALI;
 			if (oldphType == PH::NONE) {
 				oldphType = PH::ALCALI;
+				SwampSpawn(false);
 			}
 			else if (oldphType == PH::ACID) {
 				phType = PH::NONE;
@@ -447,6 +454,23 @@ void Boss::Down() {
 	}
 }
 
+void Boss::SwampSpawn(bool IsSan)
+{
+	for (int z = 0; z <3; z++)
+	{
+		for (int x = 0; x < 5; x++)
+		{
+			auto SwampPos = model.pos;
+			SwampPos.x = SwampPos.x + (-200 + 100 * x);
+			SwampPos.y += 20;
+			SwampPos.z = SwampPos.z + (-100 + 100 * z);
+			auto swamp = std::make_unique<BossSwamp>();
+			swamp->Initialize(IsSan, SwampPos);
+			swamps.emplace_back(std::move(swamp));
+		}
+	}
+}
+
 void Boss::Render() {
 	{
 		/*MV1SetRotationXYZ(BossHandle, BossSetDir);
@@ -468,6 +492,10 @@ void Boss::Render() {
 			MV1SetTextureGraphHandle(model.modelHandle, 1, noneHandle, FALSE);
 			MV1SetTextureGraphHandle(model.modelHandle, 2, noneHandle, FALSE);
 			break;
+		}
+		for (int i = 0; i < swamps.size(); i++)
+		{
+			swamps[i]->Render();
 		}
 
 		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);

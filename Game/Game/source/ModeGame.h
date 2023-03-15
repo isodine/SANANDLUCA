@@ -16,6 +16,7 @@
 #include "Electrode.h"
 #include "Elevator.h"
 #include "Tube.h"
+#include "BossSwamp.h"
 
 #include <string>
 #include <memory>

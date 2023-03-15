@@ -1,6 +1,7 @@
 #pragma once
 
 #include "appframe.h"
+#include "BossSwamp.h"
 
 class ModeBoss;
 class SAN;
@@ -26,6 +27,7 @@ public:
 	void Down();
 	void Idle();
 	void Pull();
+	void SwampSpawn(bool IsSan);
 
 	int Target;
 	VECTOR BossPos;
@@ -41,6 +43,7 @@ public:
 	VECTOR BossPosition1;
 	VECTOR BossPosition2;
 	VECTOR BossPosition3;
+	//VECTOR SwampPos;
 
 	MATRIX rotationMatrix;
 	VECTOR forward;
@@ -112,4 +115,6 @@ public:
 	ModeBoss* modeboss;
 	modelInf model;
 	modelManager* manager;
+	//BossSwamp Bswamp;
+	std::vector<std::unique_ptr<BossSwamp>> swamps;
 };
