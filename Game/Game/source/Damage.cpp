@@ -14,6 +14,10 @@ Damage::~Damage() {
 
 }
 
+void Damage::SetGame(ModeGame* game) {
+	Game = game;
+}
+
 void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
@@ -67,8 +71,8 @@ void Damage::Process() {
 	if (stageFlag == true) {
 		MV1_COLL_RESULT_POLY_DIM HitPolySan;
 		MV1_COLL_RESULT_POLY_DIM HitPolyLka;
-		HitPolySan = MV1CollCheck_Capsule(stageHandle, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
-		HitPolyLka = MV1CollCheck_Capsule(stageHandle, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
+		HitPolySan = MV1CollCheck_Capsule(Game->_handleMap, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
+		HitPolyLka = MV1CollCheck_Capsule(Game->_handleMap, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
 
 		if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
 			San->HP -= 1;

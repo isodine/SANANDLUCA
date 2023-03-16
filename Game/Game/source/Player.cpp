@@ -305,6 +305,9 @@ void Player::freeFall()
 }
 
 void Player::UpdateCollision() {
+	if (_gimmick == nullptr) {
+		return;
+	}
 	MV1RefreshCollInfo(_gimmick->BalanceHandle, 3);  //ƒTƒ“‚ÌM
 	MV1RefreshCollInfo(_gimmick->BalanceHandle, 4);  //ƒ‹ƒJ‚ÌM
 

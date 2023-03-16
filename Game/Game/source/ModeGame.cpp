@@ -69,6 +69,8 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
+	damage.SetGame(this);
+
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
