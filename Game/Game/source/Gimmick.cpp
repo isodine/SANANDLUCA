@@ -18,7 +18,7 @@ Gimmick::Gimmick() {
 
 void Gimmick::Initialize()
 {
-	MV1SetPosition(BalanceHandle, VGet(35.0f, 200.0f, 900.0f));
+	MV1SetPosition(BalanceHandle, VGet(50.0f, 700.0f, 7650.0f));
 	SanPos = VGet(-135, 68, 915);
 	MV1SetPosition(SanHandle, SanPos);
 	MV1SetPosition(LkaHandle, VGet(35.0f, 200.0f, 900.0f));
@@ -215,7 +215,7 @@ float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
 }
 
 void Gimmick::Render() {
-	
+	MV1SetPosition(BalanceHandle, VGet(50.0f, 700.0f, 7650.0f));
 	MV1DrawModel(BalanceHandle);
 	//MV1DrawModel(SanHandle);
 	//DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
