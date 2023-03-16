@@ -185,6 +185,7 @@ bool ModeGame::Terminate() {
 }
 
 bool ModeGame::Process() {
+	
 	base::Process();
 	gimmick.Balance(san.vPos, lka.vPos);
 	if (!modeStart)
@@ -194,7 +195,8 @@ bool ModeGame::Process() {
 	}
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	
+	gimmick.SanHitFlag = false;
+	gimmick.LkaHitFlag = false;
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
@@ -376,6 +378,7 @@ bool ModeGame::Render() {
 	DrawFormatString(0, 300, GetColor(255, 0, 0), "SANDisk(%f,%f,%f)", gimmick.SANDisk.x, gimmick.SANDisk.y, gimmick.SANDisk.z);
 	DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
 	DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %d", san.hitPolyDimSAN.HitNum);
+	DrawFormatString(0, 300, GetColor(0, 0, 0), "SanHitFlag = %d", gimmick.SanHitFlag);
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();

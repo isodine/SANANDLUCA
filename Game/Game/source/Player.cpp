@@ -209,17 +209,27 @@ void Player::Update()
 			}
 			
 		}
-		else if (hitPolyDimSAN.HitNum >= 1) {
-		if (_gimmick->balance == Gimmick::BALANCE::SAN) {
-			Landing(_gimmick->SANDisk.y - 275);
-		}
-		else if (_gimmick->balance == Gimmick::BALANCE::LKA) {
-			Landing(_gimmick->LKADisk.y - 275);
-		}
-		else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
-			Landing(_gimmick->SANDisk.y - 275);
-			Landing(_gimmick->LKADisk.y - 275);
-		}
+		else if (hitPolyDimSAN.HitNum >= 1 || hitPolyDimLKA.HitNum >= 1) {
+			if (_gimmick->balance == Gimmick::BALANCE::SAN && mypH == Type::San) {
+				Landing(_gimmick->SANDisk.y - 280);
+			}
+			else if (_gimmick->balance == Gimmick::BALANCE::LKA && mypH == Type::Lka) {
+				Landing(_gimmick->LKADisk.y - 280);
+			}
+			else if (_gimmick->balance == Gimmick::BALANCE::SAN && mypH == Type::Lka) {
+				Landing(_gimmick->SANDisk.y - 280);
+			}
+			else if (_gimmick->balance == Gimmick::BALANCE::LKA && mypH == Type::San) {
+				Landing(_gimmick->LKADisk.y - 280);
+			}
+			else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
+				if (mypH == Type::San) {
+					Landing(_gimmick->SANDisk.y - 280);
+				}
+				else if (mypH == Type::Lka) {
+					Landing(_gimmick->LKADisk.y - 280);
+				}
+			}
 		}
 		
 		else {
@@ -311,8 +321,8 @@ void Player::freeFall()
 }
 
 void Player::UpdateCollision() {
-	MV1RefreshCollInfo(_gimmick->BalanceHandle, 3, 8);  //ƒTƒ“‚ÌŽM
-	MV1RefreshCollInfo(_gimmick->BalanceHandle, 4, 8);  //ƒ‹ƒJ‚ÌŽM
+	MV1RefreshCollInfo(_gimmick->BalanceHandle, 3);  //ƒTƒ“‚ÌŽM
+	MV1RefreshCollInfo(_gimmick->BalanceHandle, 4);  //ƒ‹ƒJ‚ÌŽM
 
 	hitPolyDimSAN = MV1CollCheck_Capsule(_gimmick->BalanceHandle, 3,
 		VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);

@@ -14,7 +14,6 @@ public:
 	void Terminate();
 	void Process();
 	void Render();
-	void UpdateCollision();
 
 	void SetSanLka(SAN* San, LKA* Lka) {
 		san = San;
@@ -28,6 +27,8 @@ public:
 	bool EnumFlag;  //天秤のステータスが変わったかどうか
 
 	int BalanceHandle;
+	int SanHandle;
+	int LkaHandle;
 
 	int AttachAnim1;
 	int AttachAnimSAN;
@@ -35,6 +36,8 @@ public:
 
 	VECTOR SANDisk;
 	VECTOR LKADisk;
+	VECTOR SanPos;
+	VECTOR LkaPos;
 
 	float PlayBalance;
 	float TotalBalance;
