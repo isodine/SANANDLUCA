@@ -1,10 +1,15 @@
 //BossSwamp::BossSwamp(){}
 //BossSwamp::~BossSwamp() {}
-
-void BossSwamp::Initialize(bool IsSan, VECTOR Pos)
+void BossSwamp::ModelInitialize()
 {
-	IsSan ? handle = MV1LoadModel("res/07_Stage_map/Boss_Stage/acid.mv1") :
-		handle = MV1LoadModel("res/07_Stage_map/Boss_Stage/alkali.mv1");
+	handleBaseSan = MV1LoadModel("res/07_Stage_map/Boss_Stage/acid.mv1");
+	handleBaseLka = MV1LoadModel("res/07_Stage_map/Boss_Stage/alkali.mv1");
+}
+
+void BossSwamp::Initialize(bool IsSan, VECTOR Pos, int handleSan, int handleLka)
+{
+	IsSan ? handle = MV1DuplicateModel(handleSan) :
+				handle = MV1DuplicateModel(handleLka);
 	vPos = Pos;
 	MV1SetPosition(handle, vPos);
 	handleCol = 0;

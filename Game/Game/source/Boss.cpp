@@ -30,6 +30,10 @@ void Boss::Initialize() {
 	BossPosition1 = VGet(-327, 37, 673);
 	BossPosition2 = VGet(41, 37, 1013);
 	BossPosition3 = VGet(327, 37, 673);
+
+	swampDir = VGet(0, 0, 0);
+	swampDegreeDir = swampDir;
+
 	/*rotateFlag = false;
 	walkFlag = false;
 	rushFlag = false;
@@ -46,11 +50,12 @@ void Boss::Initialize() {
 	acidHandle = LoadGraph("res/Boss/robo_acid_tex.png");
 	alcaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
 	noneHandle = LoadGraph("res/Boss/robo_tex.png");
+	handleBaseSan = MV1LoadModel("res/07_Stage_map/Boss_Stage/acid.mv1");
+	handleBaseLka = MV1LoadModel("res/07_Stage_map/Boss_Stage/alkali.mv1");
 	//モデルをメモリに読み込んでいる
 	manager->modelImport("res/Boss/beaker_robot_All220217.mv1", 1.f, &model);
 	//拡大率の適用
 	manager->changeScale(&model);
-
 }
 
 void Boss::Terminate() {
@@ -64,7 +69,7 @@ void Boss::Process() {
 	BOSSTYPE oldtype = type;
 
 	rotationMatrix = MMult(MMult(MGetRotX(model.dir.x), MGetRotY(model.dir.y)), MGetRotZ(model.dir.z));
-	forward = VTransform({0.0f,0.0f,-1.0f},rotationMatrix);
+	forward = VTransform({ 0.0f,0.0f,-1.0f }, rotationMatrix);
 
 	switch (type) {
 	case BOSSTYPE::NONE:
@@ -111,46 +116,53 @@ void Boss::Process() {
 		//}
 	}
 	else {
-	
-	switch (type) {
-	case BOSSTYPE::RUSH:
-		manager->animChange(8, &model, false, false, false);//突進前モーションをアタッチする
-		manager->setNextAnim(9, &model, true, false);//突進モーションをアタッチする
-		break;
-	case BOSSTYPE::CAPTURE:
-		manager->animChange(2, &model, false, false, false);//捕まえるモーションをアタッチする
-		manager->setNextAnim(1, &model, true, false);//ループモーションをアタッチする
-		break;
-	case BOSSTYPE::CAPTUREEND:
-		manager->animChange(0, &model, true, false, false);//離す前モーションをアタッチする
-		break;
-	case BOSSTYPE::ROTATION:
-		manager->animChange(10, &model, true, false, false);//回転モーションをアタッチする
-		break;
-	case BOSSTYPE::WALK:
-		manager->animChange(11, &model, true, false, false);//歩きモーションをアタッチする
-		break;
-	case BOSSTYPE::CRUSH:
-		manager->animChange(5, &model, false, false, false);//刺さるモーションをアタッチする
-		manager->setNextAnim(4, &model, true, false);//じたばたモーションをアタッチする
-		break;
-	case BOSSTYPE::SEARCH:
-		manager->animChange(10, &model, true, false, false);//回転モーションをアタッチする
-		break;
-	case BOSSTYPE::PULL:
-		manager->animChange(3, &model, true, false, false);//離れるモーションをアタッチする
-		break;
-	case BOSSTYPE::DOWN:
-		manager->animChange(6, &model, false, false, true);//ダウンモーションをアタッチする
-		break;
-	case BOSSTYPE::IDLE:
-		manager->animChange(7, &model, true, false, false);//待機モーションをアタッチする
+
+		switch (type) {
+		case BOSSTYPE::RUSH:
+			manager->animChange(8, &model, false, false, false);//突進前モーションをアタッチする
+			manager->setNextAnim(9, &model, true, false);//突進モーションをアタッチする
+			break;
+		case BOSSTYPE::CAPTURE:
+			manager->animChange(2, &model, false, false, false);//捕まえるモーションをアタッチする
+			manager->setNextAnim(1, &model, true, false);//ループモーションをアタッチする
+			break;
+		case BOSSTYPE::CAPTUREEND:
+			manager->animChange(0, &model, true, false, false);//離す前モーションをアタッチする
+			break;
+		case BOSSTYPE::ROTATION:
+			manager->animChange(10, &model, true, false, false);//回転モーションをアタッチする
+			break;
+		case BOSSTYPE::WALK:
+			manager->animChange(11, &model, true, false, false);//歩きモーションをアタッチする
+			break;
+		case BOSSTYPE::CRUSH:
+			manager->animChange(5, &model, false, false, false);//刺さるモーションをアタッチする
+			manager->setNextAnim(4, &model, true, false);//じたばたモーションをアタッチする
+			break;
+		case BOSSTYPE::SEARCH:
+			manager->animChange(10, &model, true, false, false);//回転モーションをアタッチする
+			break;
+		case BOSSTYPE::PULL:
+			manager->animChange(3, &model, true, false, false);//離れるモーションをアタッチする
+			break;
+		case BOSSTYPE::DOWN:
+			manager->animChange(6, &model, false, false, true);//ダウンモーションをアタッチする
+			break;
+		case BOSSTYPE::IDLE:
+			manager->animChange(7, &model, true, false, false);//待機モーションをアタッチする
+		}
 	}
-}
 	/*TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
 	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
 	// 再生時間を初期化
 	//PlayTime = 0.0f;	
+
+	if (abs(swampDir.y * DX_PI_F / 180.0f) >= 360.f)
+	{
+		swampDir.y = 0.f;
+	}
+
+	swampDegreeDir.y = swampDir.y * DX_PI_F / 180.0f;
 
 	for (int i = 0; i < swamps.size(); i++)
 	{
@@ -167,10 +179,13 @@ void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
 			BossDir = VNorm(VSub(lkaPos, model.pos));
 		}
 		float dir{ 1.0f };
+		float xz{ 65.8f };
 		if (VCross(forward, BossDir).y < 0) {
 			dir = -1.0f;
+			xz = -65.8f;
 		}
 		model.dir.y += 0.02f * dir;
+		swampDir.y += xz/* dir * 65.9f*/;
 		//model.dir.y = fmod(model.dir.y, 2 * DX_PI);//一周したらdir.yを0に戻す
 		type = BOSSTYPE::ROTATION;
 		RotateCount += 1;
@@ -205,10 +220,13 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 		BossDir = VNorm(VSub(lkaPos, model.pos));
 	}
 	float dir{ 1.0f };
+	float xz{ 65.8f };
 	if (VCross(forward, BossDir).y < 0) {
 		dir = -1.0f;
+		xz = -65.8f;
 	}
 	model.dir.y += 0.02f * dir;
+	swampDir.y += xz /*dir * 65.9f*/;
 	//model.dir.y = fmod(model.dir.y, 2 * DX_PI);//一周したらdir.yを0に戻す
 	if (StopDir > VCross(forward, BossDir).y) {
 		rushFlag = true;
@@ -217,10 +235,10 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 }
 
 void Boss::Walk() {
-		model.pos = VAdd(VScale(forward, 2.f), model.pos);
-		//type = BOSSTYPE::WALK;
-		if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
-			type = BOSSTYPE::IDLE;
+	model.pos = VAdd(VScale(forward, 2.f), model.pos);
+	//type = BOSSTYPE::WALK;
+	if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
+		type = BOSSTYPE::IDLE;
 	}
 
 }
@@ -270,7 +288,7 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 			crushFlag = true;
 		}
 
-		
+
 	}
 	if (SanCatchFlag || LkaCatchFlag) {
 		type = BOSSTYPE::CAPTURE;
@@ -293,6 +311,14 @@ void Boss::Crush() {				//壁衝突時処理
 	if (hitPolyDimSan.HitNum >= 1 || hitPolyDimLka.HitNum >= 1) {
 		AttackedFlag = true;
 		BossHP -= 1;
+	}
+	if (phType == PH::ACID)
+	{
+		SwampSpawn(true);
+	}
+	if (phType == PH::ALCALI)
+	{
+		SwampSpawn(false);
 	}
 	phType = PH::NONE;
 	oldphType = PH::NONE;
@@ -332,14 +358,17 @@ void Boss::Search() {
 		}
 		BossDir = VNorm(VSub(BossDir, model.pos));
 	}
-	
+
 	float dir{ 1.0f };
+	float xz{ 65.8f };
 	if (VCross(forward, BossDir).y < 0) {
 		dir = -1.0f;
+		xz = -65.8f;
 	}
 	//VECTOR modeldir = VNorm(model.dir);
 	VECTOR Forward = VNorm(forward);
 	model.dir.y += 0.02f * dir;
+	swampDir.y += xz /*dir * 65.9f*/;
 	if (StopDir > abs(1 - VDot(forward, BossDir))) {
 		type = BOSSTYPE::WALK;
 	}
@@ -350,7 +379,7 @@ void Boss::Pull() {
 	PullCount += 1;
 	if (PullCount > 60) {
 		model.pos = VAdd(model.pos, VScale(forward, -3));
-		
+
 	}
 	if (PullCount == 78) {
 		PullCount = 0;
@@ -388,7 +417,6 @@ void Boss::Capture() {
 			phType = PH::ACID;
 			if (oldphType == PH::NONE) {
 				oldphType = PH::ACID;
-				SwampSpawn(true);
 			}
 			else if (oldphType == PH::ALCALI) {
 				phType = PH::NONE;
@@ -400,7 +428,6 @@ void Boss::Capture() {
 			phType = PH::ALCALI;
 			if (oldphType == PH::NONE) {
 				oldphType = PH::ALCALI;
-				SwampSpawn(false);
 			}
 			else if (oldphType == PH::ACID) {
 				phType = PH::NONE;
@@ -408,18 +435,18 @@ void Boss::Capture() {
 			}
 		}
 	}
-		if (CaptureCount == 180) {
-			CaptureCount = 0;
-			type = BOSSTYPE::CAPTUREEND;
-		}
-		if (AttackedFlag) {
-			CaptureCount = 0;
-			AttackedFlag = false;
-			type = BOSSTYPE::CAPTUREEND;
-		}
-		if (BossHP == 0) {
-			type = BOSSTYPE::DOWN;
-		}
+	if (CaptureCount == 180) {
+		CaptureCount = 0;
+		type = BOSSTYPE::CAPTUREEND;
+	}
+	if (AttackedFlag) {
+		CaptureCount = 0;
+		AttackedFlag = false;
+		type = BOSSTYPE::CAPTUREEND;
+	}
+	if (BossHP == 0) {
+		type = BOSSTYPE::DOWN;
+	}
 }
 
 
@@ -449,23 +476,40 @@ void Boss::CaptureEnd() {
 void Boss::Down() {
 	DownCount += 1;
 	if (DownCount == 459) {
-		
+
 		downFlag = true;
 	}
 }
 
 void Boss::SwampSpawn(bool IsSan)
 {
-	for (int z = 0; z <3; z++)
+	for (int z = 0; z < 3; z++)
 	{
-		for (int x = 0; x < 5; x++)
+		for (int x = 0; x < 3; x++)
 		{
+			int a = -1;
+			int b = 100;
+			int c = -100;
 			auto SwampPos = model.pos;
-			SwampPos.x = SwampPos.x + (-200 + 100 * x);
-			SwampPos.y += 20;
-			SwampPos.z = SwampPos.z + (-100 + 100 * z);
+
+			if ((swampDegreeDir.y >= 45 && swampDegreeDir.y < 135)|| (swampDegreeDir.y <= -225 && swampDegreeDir.y > -315))
+			{ SwampPos.x += (-50 + 100 * x); SwampPos.z += (100 - 100 * z); }
+
+			if ((swampDegreeDir.y >= 135 && swampDegreeDir.y < 225) || ((swampDegreeDir.y <= -315 && swampDegreeDir.y > -360) || (swampDegreeDir.y <= 0 && swampDegreeDir.y > -45)))
+			{ SwampPos.x += (100 - 100 * x); SwampPos.z += (50 - 100 * z); }
+
+			if ((swampDegreeDir.y >= 225 && swampDegreeDir.y < 315) ||(swampDegreeDir.y <= -45 && swampDegreeDir.y > -135))
+			{ SwampPos.x += (50 - 100 * x); SwampPos.z += (100 - 100 * z); }
+
+			if (((swampDegreeDir.y >= 315 && swampDegreeDir.y < 360) || (swampDegreeDir.y >= 0 && swampDegreeDir.y < 45)) || (swampDegreeDir.y <= -135 && swampDegreeDir.y > -225))
+			{ SwampPos.x += (-100 + 100 * x); SwampPos.z += (-50 + 100 * z); }
+
+			SwampPos.y = 50.f;
+			//SwampPos.x += (-100 + 100 * x);
+			//SwampPos.y += 20;
+			//SwampPos.z += (-100 + 100 * z);
 			auto swamp = std::make_unique<BossSwamp>();
-			swamp->Initialize(IsSan, SwampPos);
+			swamp->Initialize(IsSan, SwampPos, handleBaseSan, handleBaseLka);
 			swamps.emplace_back(std::move(swamp));
 		}
 	}
@@ -501,10 +545,12 @@ void Boss::Render() {
 		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
 		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
-		DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
-		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
-		DrawFormatString(0, 150, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
-		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		DrawFormatString(0, 75, GetColor(255, 0, 0), "swampDegreeDir.y = %f", swampDegreeDir.y);
+		DrawFormatString(0, 50, GetColor(255, 0, 0), "swampDir.y = %f", swampDir.y * DX_PI_F / 180.0f);
+		DrawFormatString(0, 100, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
+		DrawFormatString(0, 150, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
+		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossHP = %d", BossHP);
 		//DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 	}
 }

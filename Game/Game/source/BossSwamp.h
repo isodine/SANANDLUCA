@@ -4,11 +4,14 @@ class BossSwamp
 public:
 	//BossSwamp();
 	//~BossSwamp();
-	void Initialize(bool IsSan,VECTOR Pos);
+	void ModelInitialize();
+	void Initialize(bool IsSan,VECTOR Pos,int handleSan, int handleLka);
 	void Update(std::vector<std::unique_ptr<BossSwamp>>& swamps);
 	void Render();
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
+	int handleBaseSan;
+	int handleBaseLka;
 	int handle;
 	VECTOR vPos;	// ˆÊ’u
 	int handleCol;

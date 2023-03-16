@@ -44,6 +44,10 @@ public:
 	VECTOR BossPosition2;
 	VECTOR BossPosition3;
 	//VECTOR SwampPos;
+	int handleBaseSan;
+	int handleBaseLka;
+	VECTOR swampDir;
+	VECTOR swampDegreeDir;
 
 	MATRIX rotationMatrix;
 	VECTOR forward;
@@ -115,6 +119,6 @@ public:
 	ModeBoss* modeboss;
 	modelInf model;
 	modelManager* manager;
-	//BossSwamp Bswamp;
+	BossSwamp Bswamp;
 	std::vector<std::unique_ptr<BossSwamp>> swamps;
 };
