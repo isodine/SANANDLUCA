@@ -136,7 +136,10 @@ public:
 
 	bool motionRes = false;
 	int HP;
-
+	int Playercenter; //プレイヤーの中心をとる
+	int Playerhead; //プレイヤーの頭上をとる
+	float Playerbombsize;
+	float Playercirclesize;
 
 	void Landing(float HitYPos);
 

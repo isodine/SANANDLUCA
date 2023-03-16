@@ -11,7 +11,7 @@ SanBomb::~SanBomb()
 void SanBomb::Initialize(SAN& san)
 {
 	_effectResourceHandle = LoadEffekseerEffect("res/san_bomb_1.6_2/san_bomb_loop_01.efkefc");
-	vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
+	vPos = VGet(san.vPos.x, san.vPos.y + san.Playerhead, san.vPos.z);
 	
 	mypH = San;
 	situation = PlayerBomb::None;
@@ -44,7 +44,7 @@ void SanBomb::Update(SAN& san)
 	case PlayerBomb::None:
 		break;
 	case PlayerBomb::Pop:
-		vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
+		vPos = VGet(san.vPos.x, san.vPos.y + san.Playerhead, san.vPos.z);
 		if(bomblive == false)
 		{
 			_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
@@ -63,7 +63,7 @@ void SanBomb::Update(SAN& san)
 		}
 		break;
 	case PlayerBomb::Keep:
-		vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
+		vPos = VGet(san.vPos.x, san.vPos.y + san.Playerhead, san.vPos.z);
 		break;
 	case PlayerBomb::Throw:
 		Throw(san);

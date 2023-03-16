@@ -20,4 +20,5 @@ public:
 	int hpgaugehandle[6];
 	int hphandle[6];
 	float oldcount;
+	bool lkahitflag;
 };

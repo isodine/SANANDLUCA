@@ -1,5 +1,7 @@
 #pragma once
 #include "Bossrun.h"
+#include "Bossattack.h"
+#include "Bossdamage.h"
 
 class Boss;
 
@@ -55,4 +57,6 @@ public:
 	Damage damage;
 	Boss boss;
 	Bossrun bossrun;
+	Bossattack bossattack;
+	Bossdamage bossdamage;
 };

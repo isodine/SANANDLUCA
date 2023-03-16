@@ -180,15 +180,17 @@ bool ModeBoss::Process() {
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
 	//}-
-	sanbomb.Update(san);
-	lkabomb.Update(lka);
-	bossrun.Update(boss);
 	/*san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());*/
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
 	boss.Process();
+	sanbomb.Update(san);
+	lkabomb.Update(lka);
+	bossrun.Update(boss);
+	bossattack.Update(boss, damage);
+	bossdamage.Update(boss);
 
 	//‰¼
 	int Trg;
@@ -327,5 +329,7 @@ bool ModeBoss::Render() {
 	sanbomb.Render();
 	lkabomb.Render();
 	bossrun.Render();
+	bossattack.Render(boss);
+	bossdamage.Render(boss);
 	return true;
 }

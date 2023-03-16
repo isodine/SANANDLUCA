@@ -61,6 +61,7 @@ void LKA::Update(Damage& damage)
 {
 	Player::Update();
 	if (damage.LkaHitFlag == true) { oldcount = GetNowCount(); }
+	lkahitflag = false;
 }
 
 void LKA::Render(Damage& damage)
@@ -76,6 +77,7 @@ void LKA::Render(Damage& damage)
 			if (nowcount - oldcount < 2000)
 			{
 				DrawGraph(v.x - 125, v.y, hphandle[0], true);
+				lkahitflag = true;
 			}
 		}
 		if (Player::HP == 5)
@@ -85,6 +87,7 @@ void LKA::Render(Damage& damage)
 			if (nowcount - oldcount < 2000)
 			{
 				DrawGraph(v.x - 125, v.y, hphandle[1], true);
+				lkahitflag = true;
 			}
 		}
 		if (Player::HP == 4)
@@ -94,6 +97,7 @@ void LKA::Render(Damage& damage)
 			if (nowcount - oldcount < 2000)
 			{
 				DrawGraph(v.x - 125, v.y, hphandle[2], true);
+				lkahitflag = true;
 			}
 		}
 		if (Player::HP == 3)
@@ -103,6 +107,7 @@ void LKA::Render(Damage& damage)
 			if (nowcount - oldcount < 2000)
 			{
 				DrawGraph(v.x - 125, v.y, hphandle[3], true);
+				lkahitflag = true;
 			}
 		}
 		if (Player::HP == 2)
@@ -112,6 +117,7 @@ void LKA::Render(Damage& damage)
 			if (nowcount - oldcount < 2000)
 			{
 				DrawGraph(v.x - 125, v.y, hphandle[4], true);
+				lkahitflag = true;
 			}
 		}
 		if (Player::HP == 1)
@@ -121,6 +127,7 @@ void LKA::Render(Damage& damage)
 			if (nowcount - oldcount < 2000)
 			{
 				DrawGraph(v.x - 125, v.y, hphandle[5], true);
+				lkahitflag = true;
 			}
 		}
 	}

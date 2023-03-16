@@ -14,6 +14,8 @@ void Boss::Initialize() {
 	walkFlag = false;
 	SanCatchFlag = false;
 	LkaCatchFlag = false;
+	sanhitEf = false;
+	lkahitEf = false;
 	searchFlag = false;
 	downFlag = false;
 	walkTimeCount = 0;
@@ -151,6 +153,22 @@ void Boss::Process() {
 	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
 	// 再生時間を初期化
 	//PlayTime = 0.0f;	
+ 
+	//デバッグ
+	int keyold1P = Key1P;
+	Key1P = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg1P = (Key1P ^ keyold1P) & Key1P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	key = Key1P;
+	trg = Trg1P;
+	if (trg & PAD_INPUT_10)
+	{
+		BossHP -= 1;
+	}
+	if (BossHP < 0)
+	{
+		BossHP == 0;
+	}
+	//ここまで
 }
 
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
@@ -284,10 +302,10 @@ void Boss::Crush() {
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
 	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
 	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
-
 	if (hitPolyDimSan.HitNum >= 1 || hitPolyDimLka.HitNum >= 1) {
 		AttackedFlag = true;
 		BossHP -= 1;
+		bosshitEf = true;
 	}
 	phType = PH::NONE;
 	oldphType = PH::NONE;
@@ -380,6 +398,7 @@ void Boss::Capture() {
 	if (CaptureCount == 120) {
 		if (SanCatchFlag) {
 			san->HP -= 1;
+			sanhitEf = true;
 			phType = PH::ACID;
 			if (oldphType == PH::NONE) {
 				oldphType = PH::ACID;
@@ -391,6 +410,7 @@ void Boss::Capture() {
 		}
 		if (LkaCatchFlag) {
 			lka->HP -= 1;
+			lkahitEf = true;
 			phType = PH::ALCALI;
 			if (oldphType == PH::NONE) {
 				oldphType = PH::ALCALI;
