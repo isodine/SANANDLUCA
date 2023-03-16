@@ -23,9 +23,6 @@ void Sancircle::Update(SAN& san,LKA& lka)
 	if (LE <= 130.0f && IsPlaying == -1)
 	{
 		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
-		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y + san.Playercenter, san.vPos.z);
-		//_position_x += 0.2f;
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, san.Playercirclesize, san.Playercirclesize, san.Playercirclesize);
 
 	}

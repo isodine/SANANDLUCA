@@ -20,11 +20,10 @@ void Bossdamage::Update(Boss& boss)
 	if (boss.bosshitEf == true&& IsPlaying == -1)
 	{
 		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, damageEfsize, damageEfsize, damageEfsize);
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, boss.model.pos.x, boss.model.pos.y + 1, boss.model.pos.z);
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);
 }
 
 void Bossdamage::Render(Boss& boss)

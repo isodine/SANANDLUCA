@@ -19,7 +19,6 @@ void Bossrun::Update(Boss& boss)
 	if (boss.type == Boss::BOSSTYPE::RUSH && IsPlaying == -1)
 	{
 		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, boss.model.pos.x , boss.model.pos.y, boss.model.pos.z);
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, runEfsize, runEfsize, runEfsize);
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
@@ -27,7 +26,6 @@ void Bossrun::Update(Boss& boss)
 
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);
 	SetRotationPlayingEffekseer3DEffect(_playingEffectHandle, 0,boss.model.dir.y-(DX_PI_F/2.0f), 0);
-	UpdateEffekseer3D();
 }
 
 void Bossrun::Render()

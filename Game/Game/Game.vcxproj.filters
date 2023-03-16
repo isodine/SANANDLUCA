@@ -35,6 +35,7 @@
     <ClCompile Include="source\Bossrun.cpp" />
     <ClCompile Include="source\Bossattack.cpp" />
     <ClCompile Include="source\Bossdamage.cpp" />
+    <ClCompile Include="source\Bossdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModeEffekseer.h" />
@@ -72,5 +73,6 @@
     <ClInclude Include="source\Bossrun.h" />
     <ClInclude Include="source\Bossattack.h" />
     <ClInclude Include="source\Bossdamage.h" />
+    <ClInclude Include="source\Bossdown.h" />
   </ItemGroup>
 </Project>

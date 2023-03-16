@@ -18,6 +18,7 @@ void Boss::Initialize() {
 	lkahitEf = false;
 	searchFlag = false;
 	downFlag = false;
+	bossdownflag = false;
 	walkTimeCount = 0;
 	walkRand = 0;
 	CrushCount = 0;
@@ -152,7 +153,8 @@ void Boss::Process() {
 	/*TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
 	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
 	// 再生時間を初期化
-	//PlayTime = 0.0f;	
+	//PlayTime = 0.0f;
+
  
 	//デバッグ
 	int keyold1P = Key1P;
@@ -166,7 +168,7 @@ void Boss::Process() {
 	}
 	if (BossHP < 0)
 	{
-		BossHP == 0;
+		BossHP = 0;
 	}
 	//ここまで
 }
@@ -463,7 +465,7 @@ void Boss::Down() {
 	DownCount += 1;
 	if (DownCount == 459) {
 		
-		downFlag = true;
+		bossdownflag = true;
 	}
 }
 

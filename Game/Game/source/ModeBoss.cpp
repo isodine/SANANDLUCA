@@ -191,6 +191,7 @@ bool ModeBoss::Process() {
 	bossrun.Update(boss);
 	bossattack.Update(boss, damage);
 	bossdamage.Update(boss);
+	bossdown.Update(boss);
 
 	//‰¼
 	int Trg;
@@ -200,7 +201,7 @@ bool ModeBoss::Process() {
 
 	int checkKey = PAD_INPUT_2;
 
-	if (boss.downFlag) {
+	if (boss.downFlag == true) {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
 	}
@@ -331,5 +332,6 @@ bool ModeBoss::Render() {
 	bossrun.Render();
 	bossattack.Render(boss);
 	bossdamage.Render(boss);
+	bossdown.Render();
 	return true;
 }

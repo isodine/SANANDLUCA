@@ -2,6 +2,7 @@
 #include "Bossrun.h"
 #include "Bossattack.h"
 #include "Bossdamage.h"
+#include "Bossdown.h"
 
 class Boss;
 
@@ -59,4 +60,5 @@ public:
 	Bossrun bossrun;
 	Bossattack bossattack;
 	Bossdamage bossdamage;
+	Bossdown bossdown;
 };

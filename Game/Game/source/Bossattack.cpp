@@ -22,11 +22,10 @@ void Bossattack::Update(Boss&boss,Damage& damage)
 	{
 		_playingEffectHandle[0] = PlayEffekseer3DEffect(_effectResourceHandle[0]);
 		_playingEffectHandle[1] = PlayEffekseer3DEffect(_effectResourceHandle[1]);
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[0], attackEfsize, attackEfsize, attackEfsize);
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle[1]);
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], boss.model.pos.x, boss.model.pos.y + 1, boss.model.pos.z);
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);
 }
 
 void Bossattack::Render(Boss& boss)
