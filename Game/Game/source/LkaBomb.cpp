@@ -10,7 +10,7 @@ LkaBomb::~LkaBomb()
 
 void LkaBomb::Initialize(LKA& lka)
 {
-	vPos = VGet(lka.vPos.x, lka.vPos.y + 150, lka.vPos.z);
+	vPos = VGet(lka.vPos.x, lka.vPos.y + lka.Playerhead, lka.vPos.z);
 
 	mypH = Lka;
 	situation = PlayerBomb::None;
@@ -43,7 +43,7 @@ void LkaBomb::Update(LKA& lka)
 	case PlayerBomb::None:
 		break;
 	case PlayerBomb::Pop:
-		vPos = VGet(lka.vPos.x, lka.vPos.y + 150, lka.vPos.z);
+		vPos = VGet(lka.vPos.x, lka.vPos.y + lka.Playerhead, lka.vPos.z);
 		bomblive = true;
 		if (sphereSize <= sphereMax)
 		{
@@ -55,7 +55,7 @@ void LkaBomb::Update(LKA& lka)
 		}
 		break;
 	case PlayerBomb::Keep:
-		vPos = VGet(lka.vPos.x, lka.vPos.y + 150, lka.vPos.z);
+		vPos = VGet(lka.vPos.x, lka.vPos.y + lka.Playerhead, lka.vPos.z);
 		break;
 	case PlayerBomb::Throw:
 		Throw(lka);
