@@ -2,6 +2,7 @@
 #include "SANclass.h"
 #include "LKAclass.h"
 
+class ModeGame;
 
 class Damage {
 public:
@@ -11,6 +12,7 @@ public:
 	virtual void Terminate();
 	virtual void Process();
 	virtual void Render();
+	void SetGame(ModeGame* game);
 
 	int MaxSanHP,SanHP;
 	int MaxLkaHP,LkaHP;
@@ -36,4 +38,5 @@ public:
 protected:
 	SAN* San;
 	LKA* Lka;
+	ModeGame* Game;
 };

@@ -90,9 +90,12 @@ bool ModeGame::Initialize() {
 	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
 	tubes.emplace_back(std::move(Tube3));
 
+	damage.SetGame(this);
+
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
+	san.SetGimmick(&gimmick);
 
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
@@ -107,6 +110,7 @@ bool ModeGame::Initialize() {
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
+	lka.SetGimmick(&gimmick);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
@@ -216,8 +220,9 @@ bool ModeGame::Terminate() {
 }
 
 bool ModeGame::Process() {
+	
 	base::Process();
-
+	gimmick.Balance(san.vPos, lka.vPos);
 	if (!modeStart)
 	{
 		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
@@ -226,11 +231,13 @@ bool ModeGame::Process() {
 	MV1RefreshCollInfo(elevator.handle, elevator.handleCol);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
+	gimmick.SanHitFlag = false;
+	gimmick.LkaHitFlag = false;
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
 	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
-	gimmick.Balance(san.vPos, lka.vPos);
+	
 	for (auto&& Slimes : slimes) {
 		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);
 	}
@@ -422,6 +429,10 @@ bool ModeGame::Render() {
 		//DrawCapsule3D(VGet(san.vPos.x, san.vPos.y + 30, san.vPos.z), VGet(san.vPos.x, san.vPos.y + 75, san.vPos.z), 30.0f, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 		//DrawCapsule3D(VGet(lka.vPos.x, lka.vPos.y + 30, lka.vPos.z), VGet(lka.vPos.x, lka.vPos.y + 75, lka.vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
 	}
+	DrawFormatString(0, 300, GetColor(255, 0, 0), "SANDisk(%f,%f,%f)", gimmick.SANDisk.x, gimmick.SANDisk.y, gimmick.SANDisk.z);
+	DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
+	DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %d", san.hitPolyDimSAN.HitNum);
+	DrawFormatString(0, 300, GetColor(0, 0, 0), "SanHitFlag = %d", gimmick.SanHitFlag);
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();

@@ -27,6 +27,8 @@ public:
 	bool EnumFlag;  //天秤のステータスが変わったかどうか
 
 	int BalanceHandle;
+	int SanHandle;
+	int LkaHandle;
 
 	int AttachAnim1;
 	int AttachAnimSAN;
@@ -34,19 +36,21 @@ public:
 
 	VECTOR SANDisk;
 	VECTOR LKADisk;
+	VECTOR SanPos;
+	VECTOR LkaPos;
 
 	float PlayBalance;
 	float TotalBalance;
 	float BlendRate;
 	float nowBlendRate;
+	float BalancePer;//傾きの値。サンの時－1、ルカの時１
 
 	bool SanHitFlag;
 	bool LkaHitFlag;
 	bool BalanceFlag;
 
+	
 
-
-protected:
 	enum class BALANCE {
 		EQUAL,
 		SAN,
@@ -87,5 +91,5 @@ protected:
 private:
 	SAN* san;
 	LKA* lka;
-	Player* player;
+	//Player* player;
 };

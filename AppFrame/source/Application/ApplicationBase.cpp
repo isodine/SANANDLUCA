@@ -74,9 +74,9 @@ bool ApplicationBase::Input() {
 	int keyold2P = _gKey2P;
 	_gKey2P = GetJoypadInputState(DX_INPUT_PAD2);
 	_gTrg2P = (_gKey2P ^ keyold2P) & _gKey2P;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
-	int keyoldEf = _gTrgEf;
-	_gKeyEf = GetJoypadInputState(DX_INPUT_KEY);
-	_gTrgEf = (_gKeyEf ^ keyoldEf) & _gKeyEf;
+	//int keyoldEf = _gTrgEf;
+	//_gKeyEf = GetJoypadInputState(DX_INPUT_KEY);
+	//_gTrgEf = (_gKeyEf ^ keyoldEf) & _gKeyEf;
 
 	return true;
 }

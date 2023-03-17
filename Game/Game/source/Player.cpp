@@ -1,5 +1,5 @@
 #include "Player.h"
-//#include "ModeGame.h"
+#include "Gimmick.h"
 #include "ModeBoss.h"
 
 //extern int _handleMap;
@@ -28,6 +28,10 @@ void Player::SetCamera(Camera* camera)
 void Player::SetDamage(Damage* damage)
 {
 	_damage = damage;
+}
+
+void Player::SetGimmick(Gimmick* gimmick) {
+	_gimmick = gimmick;
 }
 
 void Player::SetType(bool isSan)
@@ -94,7 +98,7 @@ void Player::Update()
 	else {
 
 		// 処理前のステータスを保存しておく
-		STATUS oldStatus = _status;
+		oldStatus = _status;
 		// カメラの向いている角度を取得
 		float sx = _camera->_vPos.x - _camera->_vTarget.x;
 		float sz = _camera->_vPos.z - _camera->_vTarget.z;
@@ -127,7 +131,8 @@ void Player::Update()
 			attack = Attack::Throw;
 			mypH == San ? PlaySoundMem(VOICEthrowBombSAN[GetRand(2)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEthrowBombLKA[GetRand(2)], DX_PLAYTYPE_BACK, true);
 		}
-		if (_status == STATUS::JUMP) { Jump(); }
+		if (_status == STATUS::JUMP) 
+		{ Jump(); }
 		// vをrad分回転させる
 		float length = 0.f;
 		if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -268,6 +273,30 @@ void Player::Update()
 
 
 
+		hitPolyDim = MV1CollCheck_Capsule(stageHandle, floorCol,
+			VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+
+		UpdateCollision();
+
+		if (hitPolyDim.HitNum >= 1)
+		{
+			// 当たった
+			if (vPos.y < hitPolyfloor.HitPosition.y)
+			{
+				Landing(hitPolyfloor.HitPosition.y);
+			}
+			
+		}
+		else if (hitPolyDimSAN.HitNum >= 1) {
+			 Landing(_gimmick->SANDisk.y - 280);
+			}
+			else if (hitPolyDimLKA.HitNum >= 1) {
+				Landing(_gimmick->LKADisk.y - 280);
+			}
+		
+		else {
+			freeFall();
+		}
 		// 移動量をそのままキャラの向きにする
 		if (VSize(v) > 0.f) {		// 移動していない時は無視するため
 			vDir = v;
@@ -353,6 +382,31 @@ void Player::freeFall()
 	throughtime += 0.25f;
 }
 
+void Player::UpdateCollision() {
+	if (_gimmick == nullptr) {
+		return;
+	}
+	MV1RefreshCollInfo(_gimmick->BalanceHandle, 3);  //サンの皿
+	MV1RefreshCollInfo(_gimmick->BalanceHandle, 4);  //ルカの皿
+
+	hitPolyDimSAN = MV1CollCheck_Capsule(_gimmick->BalanceHandle, 3,
+		VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+	hitPolyDimLKA = MV1CollCheck_Capsule(_gimmick->BalanceHandle, 4,
+		VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f);
+
+	hitPoly1 = MV1CollCheck_Line(_gimmick->BalanceHandle, 3,
+		VAdd(vPos, VGet(0, 1000, 0)), VAdd(vPos, VGet(0, -10.f, 0)));
+	hitPoly2 = MV1CollCheck_Line(_gimmick->BalanceHandle, 4,
+		VAdd(vPos, VGet(0, 1000, 0)), VAdd(vPos, VGet(0, -10.f, 0)));
+
+	if (hitPoly1.HitFlag) {
+		_gimmick->SanHitFlag = true;
+	}
+	if (hitPoly2.HitFlag) {
+		_gimmick->LkaHitFlag = true;
+	}
+}
+
 void Player::Render()
 {
 	// 再生時間をセットする
@@ -392,6 +446,7 @@ void Player::charJump() {
 
 void Player::Landing(float HitYPos) {
 	_status = STATUS::WAIT;
+	//oldStatus = STATUS::WAIT;
 	throughtime = 0.0f;
 	//float minusY = vPos.y;
 	// 当たったY位置をキャラ座標にする
