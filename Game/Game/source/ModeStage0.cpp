@@ -28,7 +28,7 @@ bool ModeStage0::Initialize() {
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01.fbm/Stage_01.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
-	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
+	_handleSkySphere = MV1LoadModel("res/SkySphia/SunSet.mv1");
 
 	// コリジョン情報の生成
 	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
