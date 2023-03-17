@@ -18,7 +18,7 @@ void BossSwamp::Initialize(bool IsSan, VECTOR Pos, int handleSan, int handleLka)
 
 void BossSwamp::Update(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 {
-	if (neutralization) { return; }
+	//if (neutralization) { return; }
 
 	for (int i = 0; i < swamps.size(); i++)
 	{
