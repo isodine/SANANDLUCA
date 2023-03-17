@@ -129,7 +129,7 @@ bool ModeGame::Initialize() {
 	sanbomb.Initialize(san);
 	lkabomb.Initialize(lka);
 
-
+	
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -181,6 +181,9 @@ bool ModeGame::Initialize() {
 		}
 		cnt++;
 	}
+
+	slime.SetSan(&san);
+	slime.SetLka(&lka);
 
 	//CSVの調整にカメラを追いつかせる
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
@@ -236,7 +239,7 @@ bool ModeGame::Process() {
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
-	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
+	//slime.Process(san.vPos, lka.vPos, _handleMap, 1.0);
 	
 	for (auto&& Slimes : slimes) {
 		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);

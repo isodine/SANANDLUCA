@@ -2,8 +2,8 @@
 #include "AppFrame.h"
 #include <string>
 
-class SANclass;
-class LKAclass;
+class SAN;
+class LKA;
 
 class Slime {
 public:
@@ -12,16 +12,20 @@ public:
 	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
 	void Render(VECTOR Pos);
 	void Walk(float speed);
-	void Targeting(VECTOR SanPos, VECTOR LkaPos, float speed);
-	void SlimeJump();
+	void SanTargeting(VECTOR SanPos, float speed);
+	void LkaTargeting( VECTOR LkaPos, float speed);
+	void SlimeJump(VECTOR SanPos, VECTOR LkaPos);
+
+	void SetSan(SAN* san);
+	void SetLka(LKA* lka);
 
 	float sanDistance;//スライムとサンの距離
 	float lkaDistance;//スライムとルカの距離
-	float slimecount;//モーションのフレーム数
-	bool slimeSerch;//
+	float acidcount;//モーションのフレーム数
+	float alkalicount;//モーションのフレーム数
 	bool slimeAttackFlag;//TRUEなら攻撃に入る
-	bool slimeHitFlag;//TRUEならスライムがサンに当たった
-
+	bool sanHitFlag;//TRUEならスライムがサンに当たった
+	bool lkaHitFlag;//TRUEならルカに当たった
 
 	int AttachAnim;
 	float TotalTime;
@@ -62,7 +66,8 @@ public:
 	int mypH = 0;     //１＝酸性、２＝アルカリ性
 
 	//std::vector<std::unique_ptr<Slime>> slime;
-
+	SAN* _san;
+	LKA* _lka;
 protected:
 	enum class STATUS {
 		NONE,
@@ -73,6 +78,6 @@ protected:
 	};
 	STATUS _status;
 
-
+	
 
 };
