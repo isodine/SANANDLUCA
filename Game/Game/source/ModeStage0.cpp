@@ -4,17 +4,17 @@
 //#include "ModeGame.h"
 #include "ModeGameOver.h"
 
-//std::vector<std::string> splitme(std::string& input, char delimiter)
-//{
-//	std::istringstream stream(input);
-//	std::string field;
-//	std::vector<std::string> result;
-//	char del = ',';
-//	while (std::getline(stream, field, delimiter)) {
-//		result.push_back(field);
-//	}
-//	return result;
-//}
+std::vector<std::string> splitme0(std::string& input, char delimiter)
+{
+	std::istringstream stream(input);
+	std::string field;
+	std::vector<std::string> result;
+	char del = ',';
+	while (std::getline(stream, field, delimiter)) {
+		result.push_back(field);
+	}
+	return result;
+}
 
 ModeStage0::ModeStage0() : ModeBase()
 {
@@ -137,7 +137,7 @@ bool ModeStage0::Initialize() {
 	int cnt = 0;
 	while (std::getline(ifs, line)) {
 
-		std::vector < std::string > strvec = splitme(line, ',');
+		std::vector < std::string > strvec = splitme0(line, ',');
 
 		for (int i = 0; i < strvec.size(); i++) {
 			int readInteger = atoi(strvec.at(i).c_str());
