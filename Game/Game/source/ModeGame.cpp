@@ -22,6 +22,7 @@ ModeGame::ModeGame() : ModeBase()
 }
 
 bool ModeGame::Initialize() {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	if (!base::Initialize()) { return false; }
 
 
@@ -196,7 +197,7 @@ bool ModeGame::Initialize() {
 	ShadowMap_DrawSetup(ShadowMapHandle);
 
 	// シャドウマップへステージモデルの描画
-	MV1DrawModel(_handleMap);
+	//MV1DrawModel(_handleMap);
 
 	// シャドウマップへキャラクターモデルの描画
 	MV1DrawModel(san.Mhandle);
@@ -237,6 +238,7 @@ bool ModeGame::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
+		sanbomb.Reset();
 		//BGM停止
 		StopMusic();
 

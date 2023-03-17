@@ -12,6 +12,7 @@ public:
 	void Move();
 	void Throw(SAN& san);
 	void bombthrow();
+	void Reset();
 private:
 	int _effectResourceHandle;		// エフェクトファイルをロードするハンドル
 	int _playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
