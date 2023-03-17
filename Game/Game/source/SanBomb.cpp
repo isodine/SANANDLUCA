@@ -109,3 +109,7 @@ void PlayerBomb::BombReset()
 	situation = PlayerBomb::None;
 	count = 0.f;
 }
+void SanBomb::Reset()
+{
+	StopEffekseer3DEffect(_playingEffectHandle);
+}
