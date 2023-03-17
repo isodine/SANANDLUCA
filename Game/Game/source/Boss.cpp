@@ -420,16 +420,16 @@ void Boss::CaptureEnd() {
 	EndCount += 1;
 	if (EndCount > 45) {
 		model.pos = VAdd(model.pos, VScale(forward, -3));
-		if (SanCatchFlag) {
-			san->vPos.x = SphereCenter.x;
-			san->vPos.y = 0;
-			san->vPos.z = SphereCenter.z;
-		}
-		else if (LkaCatchFlag) {
-			lka->vPos.x = SphereCenter.x;
-			lka->vPos.y = 0;
-			lka->vPos.z = SphereCenter.z;
-		}
+		//if (SanCatchFlag) {
+		//	san->vPos.x = SphereCenter.x;
+		//	san->vPos.y = 0;
+		//	san->vPos.z = SphereCenter.z;
+		//}
+		//else if (LkaCatchFlag) {
+		//	lka->vPos.x = SphereCenter.x;
+		//	lka->vPos.y = 0;
+		//	lka->vPos.z = SphereCenter.z;
+		//}
 	}
 	if (EndCount == 64) {
 		EndCount = 0;
@@ -470,13 +470,13 @@ void Boss::Render() {
 			break;
 		}
 
-		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		//DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
-		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
-		DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
-		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
-		DrawFormatString(0, 150, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
-		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		//DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
+		//DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
+		//DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
+		//DrawFormatString(0, 150, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
+		//DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
 		//DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 	}
 }

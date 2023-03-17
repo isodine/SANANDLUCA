@@ -104,6 +104,9 @@ public:
 	bool OnBalance;  //天秤に乗っているかどうか
 	void SetOnBalance(bool on) { OnBalance = on; }
 
+	MV1_COLL_RESULT_POLY_DIM hitPolyDim;
+	MV1_COLL_RESULT_POLY hitPolyfloor;
+
 	//SE用
 	//アウトゲーム
 

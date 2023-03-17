@@ -73,22 +73,22 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
-	irondoor.Initialize();
-	electrode.Initialize(VGet(200.f, 70.f, 1000.f), true);
-	elevator.Initialize();
-	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
+	//irondoor.Initialize();
+	//electrode.Initialize(VGet(200.f, 70.f, 1000.f), true);
+	//elevator.Initialize();
+	//MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
-	auto Tube1 = std::make_unique<Tube>();
-	Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
-	tubes.emplace_back(std::move(Tube1));
+	//auto Tube1 = std::make_unique<Tube>();
+	//Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
+	//tubes.emplace_back(std::move(Tube1));
 
-	auto Tube2 = std::make_unique<Tube>();
-	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
-	tubes.emplace_back(std::move(Tube2));
+	//auto Tube2 = std::make_unique<Tube>();
+	//Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
+	//tubes.emplace_back(std::move(Tube2));
 
-	auto Tube3 = std::make_unique<Tube>();
-	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
-	tubes.emplace_back(std::move(Tube3));
+	//auto Tube3 = std::make_unique<Tube>();
+	//Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
+	//tubes.emplace_back(std::move(Tube3));
 
 	damage.SetGame(this);
 
@@ -264,20 +264,20 @@ bool ModeGame::Process() {
 	lkacircle.Update(san, lka);
 	//sanheal.Update(san);
 	//lkaheal.Update(lka);
-	if (!(irondoor.melt))
-	{
-		irondoor.Update(sanbomb);
-		if (irondoor.melt)
-		{
-			san.ironDoorHandle = irondoor.handle;
-			lka.ironDoorHandle = irondoor.handle;
-		}
-	}
-	electrode.Update(sanbomb, lkabomb);
-	elevator.Update(electrode);
-	for (auto&& Tubes : tubes) {
-		Tubes->Update(electrode);
-	}
+	//if (!(irondoor.melt))
+	//{
+	//	irondoor.Update(sanbomb);
+	//	if (irondoor.melt)
+	//	{
+	//		san.ironDoorHandle = irondoor.handle;
+	//		lka.ironDoorHandle = irondoor.handle;
+	//	}
+	//}
+	//electrode.Update(sanbomb, lkabomb);
+	//elevator.Update(electrode);
+	//for (auto&& Tubes : tubes) {
+	//	Tubes->Update(electrode);
+	//}
 
 	//‰¼
 	int Trg;
@@ -429,21 +429,21 @@ bool ModeGame::Render() {
 		//DrawCapsule3D(VGet(san.vPos.x, san.vPos.y + 30, san.vPos.z), VGet(san.vPos.x, san.vPos.y + 75, san.vPos.z), 30.0f, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 		//DrawCapsule3D(VGet(lka.vPos.x, lka.vPos.y + 30, lka.vPos.z), VGet(lka.vPos.x, lka.vPos.y + 75, lka.vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
 	}
-	DrawFormatString(0, 300, GetColor(255, 0, 0), "SANDisk(%f,%f,%f)", gimmick.SANDisk.x, gimmick.SANDisk.y, gimmick.SANDisk.z);
-	DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
-	DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %d", san.hitPolyDimSAN.HitNum);
-	DrawFormatString(0, 300, GetColor(0, 0, 0), "SanHitFlag = %d", gimmick.SanHitFlag);
+	//DrawFormatString(0, 300, GetColor(255, 0, 0), "SANDisk(%f,%f,%f)", gimmick.SANDisk.x, gimmick.SANDisk.y, gimmick.SANDisk.z);
+	//DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
+	//DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %d", san.hitPolyDimSAN.HitNum);
+	//DrawFormatString(0, 300, GetColor(0, 0, 0), "SanHitFlag = %d", gimmick.SanHitFlag);
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
-	irondoor.Render();
-	electrode.Render();
-	elevator.Render();
-	for (auto&& Tubes : tubes) {
-		Tubes->Render();
-	}
+	//irondoor.Render();
+	//electrode.Render();
+	//elevator.Render();
+	//for (auto&& Tubes : tubes) {
+	//	Tubes->Render();
+	//}
 	return true;
 }
