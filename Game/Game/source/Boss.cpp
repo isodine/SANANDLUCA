@@ -44,7 +44,7 @@ void Boss::Initialize() {
 	phType = PH::NONE;
 	oldphType = PH::NONE;
 	acidHandle = LoadGraph("res/Boss/robo_acid_tex.png");
-	alcaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
+	alkaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
 	noneHandle = LoadGraph("res/Boss/robo_tex.png");
 	//ƒ‚ƒfƒ‹‚ðƒƒ‚ƒŠ‚É“Ç‚Ýž‚ñ‚Å‚¢‚é
 	manager->modelImport("res/Boss/beaker_robot_All220217.mv1", 1.f, &model);
@@ -461,8 +461,8 @@ void Boss::Render() {
 			MV1SetTextureGraphHandle(model.modelHandle, 2, acidHandle, FALSE);
 			break;
 		case PH::ALCALI:
-			MV1SetTextureGraphHandle(model.modelHandle, 1, alcaliHandle, FALSE);
-			MV1SetTextureGraphHandle(model.modelHandle, 2, alcaliHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 1, alkaliHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 2, alkaliHandle, FALSE);
 			break;
 		case PH::NONE:
 			MV1SetTextureGraphHandle(model.modelHandle, 1, noneHandle, FALSE);

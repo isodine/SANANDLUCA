@@ -11,36 +11,53 @@ public:
 	void Terminate();
 	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
 	void Render(VECTOR Pos);
-
-	void SlimeU(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
-
+	void Walk(float speed);
+	void Targeting(VECTOR SanPos, VECTOR LkaPos, float speed);
 	void SlimeJump();
 
-	void SlimeRender(VECTOR Pos);
-
-	float sanDistance;
-	float lkaDistance;
-	float height;
-	float slimecount;
-	bool slimeSerch;
-	bool slimeAttackFlag;
-	bool slimeHitFlag;
+	float sanDistance;//スライムとサンの距離
+	float lkaDistance;//スライムとルカの距離
+	float slimecount;//モーションのフレーム数
+	bool slimeSerch;//
+	bool slimeAttackFlag;//TRUEなら攻撃に入る
+	bool slimeHitFlag;//TRUEならスライムがサンに当たった
 
 
 	int AttachAnim;
 	float TotalTime;
 	float PlayTime;
 
-	int slimeHandle;
+	int slimeHandle;//スライムのモデル
+	int acidHandle;//酸性スライムのテクスチャ
+	int alkaliHandle;//アルカリ性スライムのテクスチャ
 
 	MATRIX _rotationMatrix;
 
-	VECTOR slimeDir;
-	VECTOR oldPos;
+	VECTOR slimeDir;//スライムの向き
+	VECTOR oldPos;//スライムの前の場所
 
-	VECTOR sanPos;
-	VECTOR lkaPos;
-	VECTOR slimePos;
+	VECTOR sanPos;//スライムから見たサンの向き
+	VECTOR lkaPos;//スライムから見たルカの向き
+	VECTOR slimePos;//スライムの場所
+
+	VECTOR forward;//スライムの向き
+	VECTOR slimeTargetPos;//スライムが目指すポイント
+	VECTOR acidPos[4];
+	VECTOR acidPos1;//酸性スライムが巡回するときに通過するポイント
+	VECTOR acidPos2;
+	VECTOR acidPos3;
+	VECTOR acidPos4;
+
+	VECTOR alkaliPos[4];
+	VECTOR alkaliPos1;//アルカリ性スライムが巡回するときに通過するポイント
+	VECTOR alkaliPos2;
+	VECTOR alkaliPos3;
+	VECTOR alkaliPos4;
+
+	int SearchPosMinX;//サンかルカがこの範囲に入ったらスライムが追いかける
+	int SearchPosMaxX;
+	int SearchPosMinZ;
+	int SearchPosMaxZ;
 
 	int mypH = 0;     //１＝酸性、２＝アルカリ性
 

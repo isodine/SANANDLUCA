@@ -102,7 +102,7 @@ public:
 	bool downFlag;//TRUEならやられた
 
 	int acidHandle;//酸性のときのテクスチャ
-	int alcaliHandle;//アルカリ性のときのテクスチャ
+	int alkaliHandle;//アルカリ性のときのテクスチャ
 	int noneHandle;//中性の時のテクスチャ
 
 	SAN* san;
