@@ -20,7 +20,43 @@ namespace {
 
 ModeBoss::ModeBoss() : ModeBase()
 {
+	// マップ
+	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/Boss_Stage.mv1");
+	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
+	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
 
+	// コリジョン情報の生成
+	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor1");
+	frameMapCollisionwall = MV1SearchFrame(_handleMap, "wall");
+	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
+	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
+	// コリジョンのフレームを描画しない設定
+	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	/*MV1SetFrameVisible(_handleMap, 0, FALSE);
+	MV1SetFrameVisible(_handleMap, 1, FALSE);*/
+
+	////マスクの試験運用
+	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
+	//CreateMaskScreen();
+
+
+	//フォグを使ってみる
+	//SetFogEnable(TRUE);
+
+	// フォグの色を設定
+	//SetFogColor(255, 255, 255);
+
+	// フォグの開始距離、終了距離を設定
+	//SetFogStartEnd(0.0f, 3000.0f);
+
+	// その他初期化
+	_bViewCollision = FALSE;
+
+	throughtime = 0.0f;
+	height = 0.0f;
 }
 
 bool ModeBoss::Initialize() {

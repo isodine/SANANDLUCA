@@ -31,9 +31,6 @@
 #define	DEG2RAD(x)			( ((x) / 180.0f ) * PI )
 #define	RAD2DEG(x)			( ((x) * 180.0f ) / PI )
 
-	
-
-
 
 // モード
 class ModeGame : public ModeBase
@@ -79,7 +76,6 @@ public:
 	float height;
 
 	//シャドウマップ用
-
 	int ShadowMapHandle;
 
 	VECTOR ShadowMapUpVec;

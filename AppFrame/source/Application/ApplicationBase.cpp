@@ -50,7 +50,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance) {
 
 	// モードサーバの初期化
 	_serverMode = new ModeServer();
-	DxSetAllocPrintFlag(1);// ＤＸライブラリ内でメモリ確保が行われる時に情報を出力するかどうかをセットする
+	//DxSetAllocPrintFlag(1);// ＤＸライブラリ内でメモリ確保が行われる時に情報を出力するかどうかをセットする
 
 	return true;
 }
@@ -59,6 +59,9 @@ bool ApplicationBase::Terminate() {
 
 	// Effekseerを終了する。
 	Effkseer_End();
+
+	// 音をすべて削除します
+	InitSoundMem();
 
 	// すべてのモデルを削除する
 	MV1InitModel();

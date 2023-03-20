@@ -18,7 +18,53 @@ std::vector<std::string> splitme0(std::string& input, char delimiter)
 
 ModeStage0::ModeStage0() : ModeBase()
 {
+	// マップ
+	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01.fbm/Stage_01.mv1");
+	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
+	_handleSkySphere = MV1LoadModel("res/SkySphia/SunSet.mv1");
 
+	// コリジョン情報の生成
+	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
+	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
+	frameMapCollisiongoalSAN = 4;
+	frameMapCollisiongoalLKA = 5;
+	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
+	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
+
+	// コリジョンのフレームを描画しない設定
+	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	MV1SetFrameVisible(_handleMap, 2, FALSE);
+	MV1SetFrameVisible(_handleMap, 3, FALSE);
+
+	////マスクの試験運用
+	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
+	//CreateMaskScreen();
+
+	// カメラの設定（わかりやすい位置に）
+	_cam._vPos = VGet(0, 700.f, -900.f);
+	_cam._vTarget = VGet(0, 60, 0);
+	_cam._clipNear = 2.f;
+	_cam._clipFar = 20000.f;
+
+	//シャドウマップ用変数たちの初期化
+	ShadowMapUpVec = VGet(-500.f, -1000.f, -1000.f);     //サン側想定
+	ShadowMapDownVec = VGet(500.f, 1000.f, 1000.f);      //ルカ側想定
+
+	//フォグを使ってみる
+	//SetFogEnable(TRUE);
+
+	// フォグの色を設定
+	//SetFogColor(255, 255, 255);
+
+	// フォグの開始距離、終了距離を設定
+	//SetFogStartEnd(0.0f, 3000.0f);
+
+	// その他初期化
+	_bViewCollision = FALSE;
+
+	throughtime = 0.0f;
+	height = 0.0f;
 }
 
 bool ModeStage0::Initialize() {

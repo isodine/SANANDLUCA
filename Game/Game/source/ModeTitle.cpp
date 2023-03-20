@@ -31,7 +31,7 @@ bool ModeTitle::Process() {
 
 	if (!modeStart)
 	{
-		PlaySoundMem(VOICEtitle[GetRand(3)], DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(VOICEtitle[GetRand(2)], DX_PLAYTYPE_BACK, true);
 		modeStart = true;
 	}
 	int Trg;

@@ -168,6 +168,13 @@ void Boss::Process() {
 	{
 		swamps[i]->Update(swamps);
 	}
+	for (int i = 0; i < swamps.size(); i++)
+	{
+		if (swamps[i]->neutralization)
+		{
+			swamps.erase(swamps.begin() + i);
+		}
+	}
 }
 
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {

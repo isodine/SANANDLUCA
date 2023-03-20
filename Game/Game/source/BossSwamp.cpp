@@ -33,13 +33,6 @@ void BossSwamp::Update(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 		}
 		else{ neutralization = false; }
 	}
-	for (int i = 0; i < swamps.size(); i++)
-	{
-		if (swamps[i]->neutralization)
-		{
-			swamps.erase(swamps.begin() + i);
-		}
-	}
 }
 
 void BossSwamp::Render()

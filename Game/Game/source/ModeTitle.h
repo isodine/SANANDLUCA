@@ -17,8 +17,7 @@ public:
 
 	//VOICE—p
 	bool modeStart = false;
-	int VOICEtitle[4] = { LoadSoundMem("res/06_Sound/02_Voice/00_Out_Game/01_TitleCall/San_Title_Call_Voice_01.wav") ,
-	                      LoadSoundMem("res/06_Sound/02_Voice/00_Out_Game/01_TitleCall/Lka_Title_Call_Voice_01.wav"),
-	                      LoadSoundMem("res/06_Sound/02_Voice/00_Out_Game/01_TitleCall/SanLka_Title_Call_Voice_01.wav") , 
-	                      LoadSoundMem("res/06_Sound/02_Voice/00_Out_Game/01_TitleCall/SanLka_Title_Call_Voice_02.wav") };
+	int VOICEtitle[3] = { LoadSoundMem("res/06_Sound/02_Voice/00_Out_Game/01_TitleCall/San_Title_Call_Voice_01.wav") ,
+						           LoadSoundMem("res/06_Sound/02_Voice/00_Out_Game/01_TitleCall/Lka_Title_Call_Voice_01.wav") ,
+						           LoadSoundMem("res/06_Sound/02_Voice/00_Out_Game/01_TitleCall/SanLka_Title_Call_Voice_01.wav") };
 };
