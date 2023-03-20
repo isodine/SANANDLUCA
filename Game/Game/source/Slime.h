@@ -12,9 +12,13 @@ public:
 	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
 	void Render(VECTOR Pos, int pH);
 	void Walk(float speed);
+	void AsidWalk(float speed);
+	void AlkaliWalk(float speed);
 	void SanTargeting(VECTOR SanPos, float speed);
 	void LkaTargeting( VECTOR LkaPos, float speed);
 	void SlimeJump(VECTOR SanPos, VECTOR LkaPos);
+	void AsidJump(VECTOR SanPos);
+	void AlkaliJump(VECTOR LkaPos);
 
 	void SetSan(SAN* san);
 	void SetLka(LKA* lka);
