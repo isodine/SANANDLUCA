@@ -1,7 +1,8 @@
-void Slime::Initialize(float x, float y, float z,int pH) {
+void Slime::Initialize(float x, float y, float z, int pH) {
 	PlayTime = 0.0f;
 	slimePos = VGet(x, y, z);
 	slimeDir = VGet(0, 0, 0);
+	slimeError = 2.0;
 	mypH = pH;
 	_status = STATUS::NONE;
 	AttachAnim = -1;
@@ -11,19 +12,19 @@ void Slime::Initialize(float x, float y, float z,int pH) {
 	sanHitFlag = false;
 	lkaHitFlag = false;
 	//エラーが起きるならここ
-	acidPos[0] = { VGet(344, 567, 7105) };
-	acidPos[1] = { VGet(140, 567, 7105) };
-	acidPos[2] = { VGet(140, 567, 6744) };
-	acidPos[3] = { VGet(344, 567, 6744) };
+	acidPos[0] = { VGet(140, 567, 7105) }; 
+	acidPos[1] = { VGet(140, 567, 6744) };
+	acidPos[2] = { VGet(344, 567, 6744) };
+	acidPos[3] = { VGet(344, 567, 7105) };
 	//acidPos1 = VGet(344, 567, 7105);
 	//acidPos2 = VGet(140, 567, 7105);
 	//acidPos3 = VGet(140, 567, 6744);
 	//acidPos4 = VGet(344, 567, 6744);
 
 	alkaliPos[0] = { VGet(-99, 567, 7105) };
-	alkaliPos[1] = { VGet(-303, 567, 7105) };
+	alkaliPos[1] = { VGet(-99, 567, 6744) }; 
 	alkaliPos[2] = { VGet(-303, 567, 6744) };
-	alkaliPos[3] = { VGet(-99, 567, 6744) };
+	alkaliPos[3] = { VGet(-303, 567, 7105) };
 	//alkaliPos1 = VGet(-99, 567, 7105);
 	//alkaliPos2 = VGet(-303, 567, 7105);
 	//alkaliPos3 = VGet(-303, 567, 6744);
@@ -33,6 +34,9 @@ void Slime::Initialize(float x, float y, float z,int pH) {
 	SearchPosMaxX = 415;
 	SearchPosMinZ = 6647;
 	SearchPosMaxZ = 7178;
+
+	asidPassedCount = 0;
+	alkaliPassedCount = 0;
 
 	MV1SetupCollInfo(slimeHandle, 2, 8, 8, 8);
 	slimeHandle = MV1LoadModel("res/slime/slime_multimotion.mv1");
@@ -77,16 +81,22 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed) {
 		slimePos = oldPos;
 		forward = { 0,0,0 };
 	}
-	Walk(2.0f);
 	
-	if (_san->vPos.x >= SearchPosMinX && _san->vPos.x <= SearchPosMaxX && _san->vPos.z >= SearchPosMinZ && _san->vPos.z <= SearchPosMaxZ) {
-		SanTargeting(_san->vPos, 2.0);
-	}
-	if (_lka->vPos.x >= SearchPosMinX && _lka->vPos.x <= SearchPosMaxX && _lka->vPos.z >= SearchPosMinZ && _lka->vPos.z <= SearchPosMaxZ) {
-		LkaTargeting(_lka->vPos, 2.0);
-	}
+		if (_san->vPos.x >= SearchPosMinX && _san->vPos.x <= SearchPosMaxX && _san->vPos.z >= SearchPosMinZ && _san->vPos.z <= SearchPosMaxZ) {
+			SanTargeting(_san->vPos, 1.0);
+		}
+		else {
+			Walk(0.5f);
+		}
 
+		if (_lka->vPos.x >= SearchPosMinX && _lka->vPos.x <= SearchPosMaxX && _lka->vPos.z >= SearchPosMinZ && _lka->vPos.z <= SearchPosMaxZ) {
+			LkaTargeting(_lka->vPos, 1.0);
+		}
+		else {
+			Walk(0.5f);
+		}
 
+	//Walk(1.0f);
 
 
 	// モーションが切り替わったか？
@@ -121,10 +131,10 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed) {
 
 	MV1SetAttachAnimTime(slimeHandle, AttachAnim, PlayTime);
 
-	
+
 }
 
-void Slime::Render(VECTOR Pos) {
+void Slime::Render(VECTOR Pos, int pH) {
 	MV1SetPosition(slimeHandle, Pos);
 	MV1SetScale(slimeHandle, VGet(3.0f, 3.0f, 3.0f));
 	MV1SetRotationXYZ(slimeHandle, slimeDir);
@@ -138,7 +148,7 @@ void Slime::Render(VECTOR Pos) {
 		MV1SetTextureGraphHandle(slimeHandle, 1, alkaliHandle, FALSE);
 		MV1DrawModel(slimeHandle);
 	}
-	
+
 }
 
 //攻撃
@@ -146,7 +156,7 @@ void Slime::SlimeJump(VECTOR SanPos, VECTOR LkaPos) {
 	if (!slimeAttackFlag) {
 		return;
 	}
-
+	_status = STATUS::ATTACK;
 	VECTOR forward{ VTransform({0.0f,0.0f,-1.0f},_rotationMatrix) };
 	VECTOR up{ 0.0f,0.1f,0.0f };
 	float spd = 2.0f;
@@ -198,7 +208,7 @@ void Slime::SlimeJump(VECTOR SanPos, VECTOR LkaPos) {
 
 		forward = VScale(forward, spd);
 		alkalicount += 1;
-		if ( alkalicount == 1) {
+		if (alkalicount == 1) {
 			slimeDir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
 		}
 		if (alkalicount <= 40 && alkalicount >= 20 && slimeAttackFlag == true) {
@@ -216,75 +226,42 @@ void Slime::SlimeJump(VECTOR SanPos, VECTOR LkaPos) {
 			}
 		}
 	}
-	
-	
-	
-	//else if (slimeSerch == false && slimecount == 1) {
-	//	slimeDir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
-	//}
-	//if (slimecount <= 20 && slimecount != 0 && slimeAttackFlag == true) {
-
-	//}
-	//else if (slimecount <= 40 && slimecount >= 20 && slimeAttackFlag == true) {
-	//	slimePos = VAdd(slimePos, VScale(forward, 3.0f));
-	//	slimePos = VAdd(slimePos, VScale(up, 20.0f));
-	//}
-	//else if (slimecount > 40 && slimecount != 61 && slimeAttackFlag == true) {
-	//	if (sanHitFlag == true) {
-	//		slimePos = VSub(slimePos, VScale(forward, 4.0f));
-	//		slimePos = VSub(slimePos, VScale(up, 20.0f));
-	//	}
-	//	else if (sanHitFlag == false) {
-	//		slimePos = VAdd(slimePos, VScale(forward, 0.5f));
-	//		slimePos = VSub(slimePos, VScale(up, 20.0f));
-	//	}
-
-	//}
-	//else if (slimecount == 61) {
-	//	slimecount = 0;
-	//	slimeAttackFlag = false;
-	//	sanHitFlag = false;
-	//}
 	MV1CollResultPolyDimTerminate(hitPolyDim1);
 	MV1CollResultPolyDimTerminate(hitPolyDim2);
 }
 
 void Slime::Walk(float speed) {
+	_status = STATUS::WALK_KAI;
+
 	if (mypH == 1) {
-		for (auto i = 0; i > 4; i++) {
-			if (slimeTargetPos.x == acidPos[i].x && slimeTargetPos.z == acidPos[i].z) {
-				forward = VNorm(VSub(slimePos, slimeTargetPos));
-				slimePos = VAdd(slimePos, VScale(forward, speed));
-				if (slimePos.x == slimeTargetPos.x && slimePos.z == slimeTargetPos.z) {
-					slimeTargetPos = acidPos[i + 1];
-					if (i == 3) {
-						slimeTargetPos = acidPos[0];
-					}
-				}
+		if (abs(acidPos[asidPassedCount].x - slimePos.x) <= slimeError && abs(acidPos[asidPassedCount].z - slimePos.z) <= slimeError) {
+			slimePos = acidPos[asidPassedCount];
+			slimeTargetPos = acidPos[asidPassedCount + 1];
+			asidPassedCount += 1;
+			if (asidPassedCount == 4) {
+			slimeTargetPos = acidPos[0];
+			asidPassedCount = 0;
 			}
 		}
 	}
 	if (mypH == 2) {
-		for (auto i = 0; i > 4; i++) {
-			if (slimeTargetPos.x == alkaliPos[i].x && slimeTargetPos.z == alkaliPos[i].z) {
-				forward = VNorm(VSub(slimePos, slimeTargetPos));
-				slimePos = VAdd(slimePos, VScale(forward, speed));
-				if (slimePos.x == slimeTargetPos.x && slimePos.z == slimeTargetPos.z) {
-					slimeTargetPos = acidPos[i + 1];
-					if (i == 3) {
-						slimeTargetPos = alkaliPos[0];
-					}
-				}
+		if (abs(alkaliPos[alkaliPassedCount].x - slimePos.x) <= slimeError && abs(alkaliPos[alkaliPassedCount].z - slimePos.z) <= slimeError) {
+			slimePos = alkaliPos[alkaliPassedCount];
+			slimeTargetPos = alkaliPos[alkaliPassedCount + 1];
+			alkaliPassedCount += 1;
+			if (alkaliPassedCount == 4) {
+				slimeTargetPos = alkaliPos[0];
+				alkaliPassedCount = 0;
 			}
 		}
 	}
-	slimeDir.y = atan2(slimeTargetPos.z, slimeTargetPos.x);
-	forward = VNorm(VSub(slimePos, slimeTargetPos));
+	forward = VNorm(VSub(slimeTargetPos, slimePos));
+	slimeDir.y = atan2(forward.x * -1, forward.z * -1);
 	slimePos = VAdd(slimePos, VScale(forward, speed));
 }
 
-void Slime::SanTargeting(VECTOR SanPos,  float speed) {
-	 if (mypH == 2) {
+void Slime::SanTargeting(VECTOR SanPos, float speed) {
+	if (mypH == 2) {
 		sanPos = VNorm(VSub(SanPos, slimePos));
 		sanDistance = VSize(VSub(SanPos, slimePos));
 		slimeDir.y = atan2(sanPos.x * -1, sanPos.z * -1);

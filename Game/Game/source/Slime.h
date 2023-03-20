@@ -10,7 +10,7 @@ public:
 	void Initialize(float x, float y, float z, int pH);
 	void Terminate();
 	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
-	void Render(VECTOR Pos);
+	void Render(VECTOR Pos, int pH);
 	void Walk(float speed);
 	void SanTargeting(VECTOR SanPos, float speed);
 	void LkaTargeting( VECTOR LkaPos, float speed);
@@ -62,6 +62,10 @@ public:
 	int SearchPosMaxX;
 	int SearchPosMinZ;
 	int SearchPosMaxZ;
+
+	float slimeError;//スライムの座標の誤差
+	int asidPassedCount;//酸性スライムが通過した数
+	int alkaliPassedCount;//アルカリ性スライムが通過した数
 
 	int mypH = 0;     //１＝酸性、２＝アルカリ性
 

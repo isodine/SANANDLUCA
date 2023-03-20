@@ -162,12 +162,16 @@ bool ModeGame::Initialize() {
 					{
 						auto Slime1 = std::make_unique<Slime>();
 						Slime1->Initialize(x, y, z, pH);
+						Slime1->SetSan(&san);
+						Slime1->SetLka(&lka);
 						slimes.emplace_back(std::move(Slime1));
 					}
 					else if (cnt == 4)
 					{
 						auto Slime2 = std::make_unique<Slime>();
 						Slime2->Initialize(x, y, z, pH);
+						Slime2->SetSan(&san);
+						Slime2->SetLka(&lka);
 						slimes.emplace_back(std::move(Slime2));
 					}
 
@@ -181,9 +185,10 @@ bool ModeGame::Initialize() {
 		}
 		cnt++;
 	}
-
-	slime.SetSan(&san);
-	slime.SetLka(&lka);
+	//slime.Initialize(344, 567, 7105, 1);
+	//slime.Initialize(-99, 567, 7105, 2);
+	//slime.SetSan(&san);
+	//slime.SetLka(&lka);
 
 	//CSVの調整にカメラを追いつかせる
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
@@ -358,7 +363,7 @@ bool ModeGame::Render() {
 	{
 		gimmick.Render();
 		for (auto&& Slimes : slimes) {
-			Slimes->Render(Slimes->slimePos);
+			Slimes->Render(Slimes->slimePos, Slimes->mypH);
 		}
 	}
 	//マップモデルを描画する
@@ -435,6 +440,7 @@ bool ModeGame::Render() {
 		DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
 		DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %d", san.hitPolyDimSAN.HitNum);
 		DrawFormatString(0, 300, GetColor(0, 0, 0), "SanHitFlag = %d", gimmick.SanHitFlag);
+		DrawFormatString(0, 350, GetColor(255, 0, 0), "slimePos(%f,%f,%f)", slime.slimePos.x, slime.slimePos.y, slime.slimePos.z);
 	}
 	
 	lka.Render(damage);
@@ -446,6 +452,8 @@ bool ModeGame::Render() {
 	irondoor.Render();
 	electrode.Render();
 	elevator.Render();
+	//slime.Render(VGet(344, 567, 7105), 1);
+	//slime.Render(VGet(-99, 567, 7105), 2);
 	for (auto&& Tubes : tubes) {
 		Tubes->Render();
 	}
