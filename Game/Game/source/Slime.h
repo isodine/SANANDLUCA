@@ -48,19 +48,22 @@ public:
 	VECTOR lkaPos;//スライムから見たルカの向き
 	VECTOR slimePos;//スライムの場所
 
+	VECTOR acidSlimePos;//酸性スライムの場所
+	VECTOR alkaliSlimePos;//アルカリ性スライムの場所
+
 	VECTOR forward;//スライムの向き
 	VECTOR slimeTargetPos;//スライムが目指すポイント
-	VECTOR acidPos[4];
-	VECTOR acidPos1;//酸性スライムが巡回するときに通過するポイント
-	VECTOR acidPos2;
-	VECTOR acidPos3;
-	VECTOR acidPos4;
+	VECTOR acidPos[4];//酸性スライムが巡回するときに通過するポイント
+	//VECTOR acidPos1;
+	//VECTOR acidPos2;
+	//VECTOR acidPos3;
+	//VECTOR acidPos4;
 
-	VECTOR alkaliPos[4];
-	VECTOR alkaliPos1;//アルカリ性スライムが巡回するときに通過するポイント
-	VECTOR alkaliPos2;
-	VECTOR alkaliPos3;
-	VECTOR alkaliPos4;
+	VECTOR alkaliPos[4];//アルカリ性スライムが巡回するときに通過するポイント
+	//VECTOR alkaliPos1;
+	//VECTOR alkaliPos2;
+	//VECTOR alkaliPos3;
+	//VECTOR alkaliPos4;
 
 	int SearchPosMinX;//サンかルカがこの範囲に入ったらスライムが追いかける
 	int SearchPosMaxX;

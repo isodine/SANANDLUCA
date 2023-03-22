@@ -36,11 +36,11 @@ void Slime::Initialize(float x, float y, float z, int pH) {
 	alkaliHandle = LoadGraph("res/slime/alkalislime_tex.png");
 
 	if (mypH == 1) {
-		slimePos = acidPos[0];
+		acidSlimePos = acidPos[0];
 		slimeTargetPos = acidPos[1];
 	}
 	if (mypH == 2) {
-		slimePos = alkaliPos[0];
+		alkaliSlimePos = alkaliPos[0];
 		slimeTargetPos = alkaliPos[1];
 	}
 }
