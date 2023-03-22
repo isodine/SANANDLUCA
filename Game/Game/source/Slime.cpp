@@ -74,15 +74,15 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed) {
 		forward = { 0,0,0 };
 	}
 	
-		if (_san->vPos.x >= SearchPosMinX && _san->vPos.x <= SearchPosMaxX && _san->vPos.z >= SearchPosMinZ && _san->vPos.z <= SearchPosMaxZ) {
-			SanTargeting(_san->vPos, 1.0);
+		if (SanPos.x >= SearchPosMinX && SanPos.x <= SearchPosMaxX && SanPos.z >= SearchPosMinZ && SanPos.z <= SearchPosMaxZ) {
+			SanTargeting(SanPos, 1.0);
 		}
 		else {
 			AsidWalk(1.0f);
 		}
 
-		if (_lka->vPos.x >= SearchPosMinX && _lka->vPos.x <= SearchPosMaxX && _lka->vPos.z >= SearchPosMinZ && _lka->vPos.z <= SearchPosMaxZ) {
-			LkaTargeting(_lka->vPos, 1.0);
+		if (LkaPos.x >= SearchPosMinX && LkaPos.x <= SearchPosMaxX && LkaPos.z >= SearchPosMinZ && LkaPos.z <= SearchPosMaxZ) {
+			LkaTargeting(LkaPos, 1.0);
 		}
 		else {
 			AlkaliWalk(1.0f);
@@ -169,13 +169,14 @@ void Slime::AsidJump(VECTOR SanPos) {
 				slimePos = VSub(slimePos, VScale(forward, 4.0f));
 				slimePos = VSub(slimePos, VScale(up, 20.0f));
 			}
-			else if (lkaHitFlag == false) {
+			else if (sanHitFlag == false) {
 				slimePos = VAdd(slimePos, VScale(forward, 0.5f));
 				slimePos = VSub(slimePos, VScale(up, 20.0f));
 			}
 		}
 		else if (alkalicount == 61) {
 			lkaHitFlag == false;
+			alkalicount = 0;
 		}
 	}
 	MV1CollResultPolyDimTerminate(hitPolyDim1);
@@ -208,21 +209,22 @@ void Slime::AlkaliJump(VECTOR LkaPos) {
 			slimePos = VAdd(slimePos, VScale(up, 20.0f));
 		}
 		else if (acidcount > 40 && acidcount != 61) {
-			if (sanHitFlag == true) {
+			if (lkaHitFlag == true) {
 				slimePos = VSub(slimePos, VScale(forward, 4.0f));
 				slimePos = VSub(slimePos, VScale(up, 20.0f));
 			}
-			else if (sanHitFlag == false) {
+			else if (lkaHitFlag == false) {
 				slimePos = VAdd(slimePos, VScale(forward, 0.5f));
 				slimePos = VSub(slimePos, VScale(up, 20.0f));
 			}
-			else if (sanHitFlag == false) {
+			else if (lkaHitFlag == false) {
 				slimePos = VAdd(slimePos, VScale(forward, 0.5f));
 				slimePos = VSub(slimePos, VScale(up, 20.0f));
 			}
 		}
 		else if (acidcount == 61) {
 			sanHitFlag == false;
+			acidcount = 0;
 		}
 	}
 	MV1CollResultPolyDimTerminate(hitPolyDim2);
@@ -277,7 +279,7 @@ void Slime::SanTargeting(VECTOR SanPos, float speed) {
 		{
 			slimeDir.y = atan2(sanPos.x * -1, sanPos.z * -1);
 			_status = STATUS::ATTACK;
-			AsidJump(_san->vPos);
+			AsidJump(SanPos);
 		}
 	}
 }
@@ -293,7 +295,7 @@ void Slime::LkaTargeting(VECTOR LkaPos, float speed) {
 		{
 			slimeDir.y = atan2(lkaPos.x * -1, lkaPos.z * -1);
 			_status = STATUS::ATTACK;
-			AlkaliJump(_lka->vPos);
+			AlkaliJump(LkaPos);
 		}
 	}
 }
