@@ -490,6 +490,10 @@ void Boss::Down() {
 
 void Boss::SwampSpawn(bool IsSan)
 {
+	bool top = false;
+	bool bottom = false;
+	bool left = false;
+	bool right = false;
 	for (int z = 0; z < 3; z++)
 	{
 		for (int x = 0; x < 3; x++)
@@ -499,27 +503,51 @@ void Boss::SwampSpawn(bool IsSan)
 			int c = -100;
 			auto SwampPos = model.pos;
 
-			if ((swampDegreeDir.y >= 45 && swampDegreeDir.y < 135)|| (swampDegreeDir.y <= -225 && swampDegreeDir.y > -315))
-			{ SwampPos.x += (-50 + 100 * x); SwampPos.z += (100 - 100 * z); }
+			if ((swampDegreeDir.y >= 45 && swampDegreeDir.y < 135) || (swampDegreeDir.y <= -225 && swampDegreeDir.y > -315))
+			{
+				SwampPos.x += (-50 + 100 * x); SwampPos.z += (100 - 100 * z);
+			}
 
 			if ((swampDegreeDir.y >= 135 && swampDegreeDir.y < 225) || ((swampDegreeDir.y <= -315 && swampDegreeDir.y > -360) || (swampDegreeDir.y <= 0 && swampDegreeDir.y > -45)))
-			{ SwampPos.x += (100 - 100 * x); SwampPos.z += (50 - 100 * z); }
+			{
+				SwampPos.x += (100 - 100 * x); SwampPos.z += (50 - 100 * z);
+			}
 
-			if ((swampDegreeDir.y >= 225 && swampDegreeDir.y < 315) ||(swampDegreeDir.y <= -45 && swampDegreeDir.y > -135))
-			{ SwampPos.x += (50 - 100 * x); SwampPos.z += (100 - 100 * z); }
+			if ((swampDegreeDir.y >= 225 && swampDegreeDir.y < 315) || (swampDegreeDir.y <= -45 && swampDegreeDir.y > -135))
+			{
+				SwampPos.x += (50 - 100 * x); SwampPos.z += (100 - 100 * z);
+			}
 
 			if (((swampDegreeDir.y >= 315 && swampDegreeDir.y < 360) || (swampDegreeDir.y >= 0 && swampDegreeDir.y < 45)) || (swampDegreeDir.y <= -135 && swampDegreeDir.y > -225))
-			{ SwampPos.x += (-100 + 100 * x); SwampPos.z += (-50 + 100 * z); }
+			{
+				SwampPos.x += (-100 + 100 * x); SwampPos.z += (-50 + 100 * z);
+			}
+
+			if (SwampPos.z >= 1150 && !top)
+			{
+				top = true;
+			}
+			if (SwampPos.z <= 190 && !bottom)
+			{
+				bottom = true;
+			}
+			if (bottom)
+			{
+				SwampPos.z += 180;
+			}
 
 			SwampPos.y = 50.f;
-			//SwampPos.x += (-100 + 100 * x);
-			//SwampPos.y += 20;
-			//SwampPos.z += (-100 + 100 * z);
+
 			auto swamp = std::make_unique<BossSwamp>();
 			swamp->Initialize(IsSan, SwampPos, handleBaseSan, handleBaseLka);
+			swamp->CollCheck(swamps);
 			swamps.emplace_back(std::move(swamp));
 		}
 	}
+	top = false;
+	bottom = false;
+	left = false;
+	right = false;
 }
 
 void Boss::Render() {

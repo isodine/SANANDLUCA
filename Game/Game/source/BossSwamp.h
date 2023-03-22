@@ -8,6 +8,7 @@ public:
 	void Initialize(bool IsSan,VECTOR Pos,int handleSan, int handleLka);
 	void Update(std::vector<std::unique_ptr<BossSwamp>>& swamps);
 	void Render();
+	void CollCheck(std::vector<std::unique_ptr<BossSwamp>>& swamps);
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int handleBaseSan;

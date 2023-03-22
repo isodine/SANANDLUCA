@@ -12,7 +12,7 @@ bool ApplicationMain::Initialize(HINSTANCE hInstance) {
 
 	// ƒ‚[ƒh‚Ì“o˜^
 	//ModeServer::GetInstance()->Add(new ModeTitle(), 1, "title");
-	ModeServer::GetInstance()->Add(new ModeLogo(), 1, "logo");
+	ModeServer::GetInstance()->Add(new ModeBoss(), 1, "Boss");
 	return true;
 }
 
