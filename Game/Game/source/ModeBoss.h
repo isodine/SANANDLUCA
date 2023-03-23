@@ -55,6 +55,8 @@ public:
 	LKA lka;
 	SanBomb sanbomb;
 	LkaBomb lkabomb;
+	Sancircle sancircle;
+	Lkacircle lkacircle;
 	Damage damage;
 	Boss boss;
 	Bossrun bossrun;

@@ -5,7 +5,6 @@
 
 Lkacircle::Lkacircle()
 {
-	_effectResourceHandle = LoadEffekseerEffect("res/Lka_heal/Lka_heal_start_.efkefc", 10.0f);
 	IsPlaying = -1;
 	_effectResourceHandle[0] = LoadEffekseerEffect("res/Lka_heal/Lka_heal_start_.efkefc", 10.0f);
 	_effectResourceHandle[1] = LoadEffekseerEffect("res/Lka_heal/Lka_heal_end_.efkefc", 10.0f);

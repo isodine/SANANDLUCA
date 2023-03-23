@@ -188,6 +188,8 @@ bool ModeBoss::Process() {
 	boss.Process();
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
+	sancircle.Update(san,lka);
+	lkacircle.Update(san,lka);
 	bossrun.Update(boss);
 	bossattack.Update(boss, damage);
 	bossdamage.Update(boss);
@@ -333,6 +335,8 @@ bool ModeBoss::Render() {
 	}
 	sanbomb.Render();
 	lkabomb.Render();
+	sancircle.Render();
+	lkacircle.Render();
 	bossrun.Render();
 	bossattack.Render(boss);
 	bossdamage.Render(boss);

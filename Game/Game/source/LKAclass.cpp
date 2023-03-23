@@ -85,7 +85,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x -43, v.y - 200, hphandle, true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 		if (Player::HP == 4)
@@ -94,7 +94,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 43, v.y - 200, hphandle, true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 		if (Player::HP == 3)
@@ -103,7 +103,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 43, v.y - 200, hphandle, true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 		if (Player::HP == 2)
@@ -112,7 +112,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 43, v.y - 200, hphandle, true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 		if (Player::HP == 1)
@@ -121,7 +121,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 43, v.y - 200, hphandle, true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 	}
