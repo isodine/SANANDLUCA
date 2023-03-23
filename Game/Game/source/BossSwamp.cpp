@@ -19,10 +19,10 @@ void BossSwamp::Initialize(bool IsSan, VECTOR Pos, int handleSan, int handleLka)
 
 void BossSwamp::Update(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 {
-	if (secondcnt >= 30) {
+	if (secondcnt >= 60) {
 		count1--;
 		if (count1 == -1 && count10 == 0) {
-			count10 = 6;
+			count10 = 3;
 			count1 = 0;
 			neutralization = true;
 		}
