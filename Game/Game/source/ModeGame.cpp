@@ -129,7 +129,7 @@ bool ModeGame::Initialize() {
 	sanbomb.Initialize(san);
 	lkabomb.Initialize(lka);
 
-	
+
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -185,10 +185,6 @@ bool ModeGame::Initialize() {
 		}
 		cnt++;
 	}
-	//slime.Initialize(344, 567, 7105, 1);
-	//slime.Initialize(-99, 567, 7105, 2);
-	//slime.SetSan(&san);
-	//slime.SetLka(&lka);
 
 	//CSVの調整にカメラを追いつかせる
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
@@ -244,10 +240,9 @@ bool ModeGame::Process() {
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
-	//slime.Process(san.vPos, lka.vPos, _handleMap, 1.0);
 	
 	for (auto&& Slimes : slimes) {
-		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);
+		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f, Slimes->mypH);
 	}
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
@@ -361,9 +356,9 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		gimmick.Render();
+		//gimmick.Render();
 		for (auto&& Slimes : slimes) {
-			Slimes->Render(Slimes->slimePos, Slimes->mypH);
+			Slimes->Render(Slimes->mypH);
 		}
 	}
 	//マップモデルを描画する

@@ -172,7 +172,7 @@ void Player::Update()
 			MV1_COLL_RESULT_POLY hitPolyElevator;
 
 
-			//‘O•ûŒü‚Ì•Ç”»’è
+			//‘OŒã•ûŒü‚Ì•Ç”»’è
 			hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
 				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
 			if (hitPolywallback.HitFlag && (vPos.z + 30 >= hitPolywallback.HitPosition.z)) {
@@ -185,7 +185,7 @@ void Player::Update()
 				v = { 0,0,0 };
 			}
 
-
+			//¶‰E•ûŒü‚Ì•Ç”»’è
 			hitPolywallside = MV1CollCheck_Line(stageHandle, wallCol,
 				VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
 			if (hitPolywallside.HitFlag && (vPos.x + 30 >= hitPolywallside.HitPosition.x)) {

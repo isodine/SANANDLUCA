@@ -9,15 +9,15 @@ class Slime {
 public:
 	void Initialize(float x, float y, float z, int pH);
 	void Terminate();
-	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed);
-	void Render(VECTOR Pos, int pH);
+	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, int mypH);
+	void Render(int pH);
 	void Walk(float speed);
 	void AsidWalk(float speed);
 	void AlkaliWalk(float speed);
 	void SanTargeting(VECTOR SanPos, float speed);
 	void LkaTargeting( VECTOR LkaPos, float speed);
 	void SlimeJump(VECTOR SanPos, VECTOR LkaPos);
-	void AsidJump(VECTOR SanPos);
+	void AcidJump(VECTOR SanPos);
 	void AlkaliJump(VECTOR LkaPos);
 
 	void SetSan(SAN* san);
@@ -54,16 +54,8 @@ public:
 	VECTOR forward;//スライムの向き
 	VECTOR slimeTargetPos;//スライムが目指すポイント
 	VECTOR acidPos[4];//酸性スライムが巡回するときに通過するポイント
-	//VECTOR acidPos1;
-	//VECTOR acidPos2;
-	//VECTOR acidPos3;
-	//VECTOR acidPos4;
 
 	VECTOR alkaliPos[4];//アルカリ性スライムが巡回するときに通過するポイント
-	//VECTOR alkaliPos1;
-	//VECTOR alkaliPos2;
-	//VECTOR alkaliPos3;
-	//VECTOR alkaliPos4;
 
 	int SearchPosMinX;//サンかルカがこの範囲に入ったらスライムが追いかける
 	int SearchPosMaxX;
@@ -71,7 +63,7 @@ public:
 	int SearchPosMaxZ;
 
 	float slimeError;//スライムの座標の誤差
-	int asidPassedCount;//酸性スライムが通過した数
+	int acidPassedCount;//酸性スライムが通過した数
 	int alkaliPassedCount;//アルカリ性スライムが通過した数
 
 	int mypH = 0;     //１＝酸性、２＝アルカリ性
