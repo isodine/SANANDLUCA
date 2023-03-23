@@ -1,6 +1,5 @@
 LkaBomb::LkaBomb() :PlayerBomb()
 {
-
 }
 
 LkaBomb::~LkaBomb()
@@ -10,6 +9,9 @@ LkaBomb::~LkaBomb()
 
 void LkaBomb::Initialize(LKA& lka)
 {
+	_effectResourceHandle[0] = LoadEffekseerEffect("res/Lka_bomb_1.6_2/Lka_bomb_loop_01.efkefc");
+	_effectResourceHandle[1] = LoadEffekseerEffect("res/Lka_bomb_explode/LKa_bomb_explode_effect.efkefc");
+
 	vPos = VGet(lka.vPos.x, lka.vPos.y + lka.Playerhead, lka.vPos.z);
 
 	mypH = Lka;
@@ -52,6 +54,13 @@ void LkaBomb::Update(LKA& lka)
 		break;
 	case PlayerBomb::Pop:
 		vPos = VGet(lka.vPos.x, lka.vPos.y + lka.Playerhead, lka.vPos.z);
+		if (bomblive == false)
+		{
+			_playingEffectHandle[0] = PlayEffekseer3DEffect(_effectResourceHandle[0]);
+			// 再生中のエフェクトを移動する。
+			SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], vPos.x, vPos.y, vPos.z);
+			/*		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[0], 10.0f, 10.0f, 10.0f);*/
+		}
 		bomblive = true;
 		if (sphereSize <= sphereMax)
 		{
