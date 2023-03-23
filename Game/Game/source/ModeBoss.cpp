@@ -23,7 +23,7 @@ ModeBoss::ModeBoss() : ModeBase()
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/Boss_Stage.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
-	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
+	_handleSkySphere = MV1LoadModel("res/SkySphia/sky.mv1");
 
 	// コリジョン情報の生成
 	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor1");
@@ -90,7 +90,7 @@ bool ModeBoss::Initialize() {
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/Boss_Stage.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
-	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
+	_handleSkySphere = MV1LoadModel("res/SkySphia/sky.mv1");
 
 	// コリジョン情報の生成
 	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor1");

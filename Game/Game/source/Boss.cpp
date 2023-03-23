@@ -523,20 +523,9 @@ void Boss::SwampSpawn(bool IsSan)
 				SwampPos.x += (-100 + 100 * x); SwampPos.z += (-50 + 100 * z);
 			}
 
-			if (SwampPos.z >= 1150 && !top)
-			{
-				top = true;
-			}
-			if (SwampPos.z <= 190 && !bottom)
-			{
-				bottom = true;
-			}
-			if (bottom)
-			{
-				SwampPos.z += 180;
-			}
-
 			SwampPos.y = 50.f;
+
+
 
 			auto swamp = std::make_unique<BossSwamp>();
 			swamp->Initialize(IsSan, SwampPos, handleBaseSan, handleBaseLka);
@@ -580,6 +569,7 @@ void Boss::Render() {
 		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
 		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
+		DrawFormatString(0, 225, GetColor(255, 0, 0), "model.pos = %f,%f,%f", model.pos.x, model.pos.y, model.pos.z);
 		DrawFormatString(0, 75, GetColor(255, 0, 0), "swampDegreeDir.y = %f", swampDegreeDir.y);
 		DrawFormatString(0, 50, GetColor(255, 0, 0), "swampDir.y = %f", swampDir.y * DX_PI_F / 180.0f);
 		DrawFormatString(0, 100, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);

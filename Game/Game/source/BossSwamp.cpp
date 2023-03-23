@@ -43,6 +43,11 @@ void BossSwamp::Render()
 
 void BossSwamp::CollCheck(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 {
+	if(vPos.z<=150|| vPos.z >= 1170 || vPos.x <= -480 || vPos.x >= 600)
+	{
+		neutralization = true;
+		return;
+	}
 	for (int i = 0; i < swamps.size(); i++)
 	{
 		if (swamps[i]->isSan == isSan)
