@@ -100,10 +100,19 @@ public:
 	bool AttackedFlag;//TRUEなら攻撃された
 	bool searchFlag;//TRUEなら定位置を決める
 	bool downFlag;//TRUEならやられた
+	bool sanhitEf;//TRUEならダメージエフェクト出現
+	bool lkahitEf;//TRUEならダメージエフェクト出現
+	bool bosshitEf;//TRUEならダメージエフェクト出現
+	bool bossdownflag;//TRUEならダウンエフェクト出現
 
 	int acidHandle;//酸性のときのテクスチャ
 	int alcaliHandle;//アルカリ性のときのテクスチャ
 	int noneHandle;//中性の時のテクスチャ
+
+	int Key1P;
+	int Trg1P;
+	int key;
+	int trg;
 
 	SAN* san;
 	LKA* lka;

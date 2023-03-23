@@ -154,6 +154,10 @@ public:
 	int HP;
 	bool goal = false;
 
+	int Playercenter; //プレイヤーの中心をとる
+	int Playerhead; //プレイヤーの頭上をとる
+	float Playerbombsize;
+	float Playercirclesize;
 
 	void Landing(float HitYPos);
 

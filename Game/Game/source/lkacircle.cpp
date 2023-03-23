@@ -6,6 +6,7 @@
 Lkacircle::Lkacircle()
 {
 	_effectResourceHandle = LoadEffekseerEffect("res/Lka_heal/Lka_heal_start_.efkefc", 10.0f);
+	IsPlaying = -1;
 }
 
 Lkacircle::~Lkacircle()
@@ -23,13 +24,11 @@ void Lkacircle::Update(SAN& san,LKA& lka)
 	{
 		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y + 45, lka.vPos.z);
-		//_position_x += 0.2f;
-		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, 0.75f, 0.75f, 0.75f);
+		SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y + lka.Playercenter, lka.vPos.z);
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, lka.Playercirclesize, lka.Playercirclesize, lka.Playercirclesize);
 	}
 	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y + 45, lka.vPos.z);
-	//UpdateEffekseer3D();
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, lka.vPos.x, lka.vPos.y + lka.Playercenter, lka.vPos.z);
 }
 
 void Lkacircle::Render()

@@ -73,6 +73,10 @@ void Player::Initialize()
 
 	// ˜ˆÊ’u‚Ìİ’è
 	_colSubY = 45.f;
+	Playercenter = 45;
+	Playerhead = 150;
+	Playerbombsize = 10.0f;
+	Playercirclesize = 0.75f;
 
 }
 

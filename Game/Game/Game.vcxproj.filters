@@ -37,6 +37,9 @@
     <ClCompile Include="source\Electrode.cpp" />
     <ClCompile Include="source\Elevator.cpp" />
     <ClCompile Include="source\Tube.cpp" />
+    <ClCompile Include="source\Bossattack.cpp" />
+    <ClCompile Include="source\Bossdamage.cpp" />
+    <ClCompile Include="source\Bossdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModeEffekseer.h" />
@@ -76,5 +79,8 @@
     <ClInclude Include="source\Electrode.h" />
     <ClInclude Include="source\Elevator.h" />
     <ClInclude Include="source\Tube.h" />
+    <ClInclude Include="source\Bossattack.h" />
+    <ClInclude Include="source\Bossdamage.h" />
+    <ClInclude Include="source\Bossdown.h" />
   </ItemGroup>
 </Project>

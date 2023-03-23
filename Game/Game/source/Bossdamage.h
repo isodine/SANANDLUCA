@@ -1,16 +1,17 @@
 #pragma once
 class Boss;
-class Bossrun
+class Bossdamage
 {
 public:
-	Bossrun();
-	~Bossrun();
+	Bossdamage();
+	~Bossdamage();
 
 	void Update(Boss& boss);
-	void Render();
+	void Render(Boss& boss);
+
 private:
 	int	_effectResourceHandle;		// エフェクトファイルをロードするハンドル
 	int	_playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
-	int IsPlaying;//エフェクトが再生されているか
-	float runEfsize; //走るエフェクトのサイズ設定
+	int IsPlaying ;//エフェクトが再生されているか
+	float damageEfsize;//ダメージエフェクトのサイズ設定
 };

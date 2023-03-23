@@ -160,6 +160,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ModeEffekseer.cpp" />
+    <ClCompile Include="source\Bossattack.cpp" />
+    <ClCompile Include="source\Bossdamage.cpp" />
+    <ClCompile Include="source\Bossdown.cpp" />
     <ClCompile Include="source\Bossrun.cpp" />
     <ClCompile Include="source\Electrode.cpp" />
     <ClCompile Include="source\Elevator.cpp" />
@@ -214,6 +217,9 @@
     <ClInclude Include="ModeEffekseer.h" />
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
+    <ClInclude Include="source\Bossattack.h" />
+    <ClInclude Include="source\Bossdamage.h" />
+    <ClInclude Include="source\Bossdown.h" />
     <ClInclude Include="source\Bossrun.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Damage.h" />

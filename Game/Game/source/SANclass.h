@@ -19,7 +19,6 @@ public:
 	//void freeFall();
 
 
-
 private:
 	int  sangauge;
 	int  sanicon;
