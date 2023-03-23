@@ -11,6 +11,7 @@ public:
 	virtual void Terminate();
 	virtual void Process();
 	virtual void Render();
+	virtual void SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps);
 
 	int MaxSanHP,SanHP;
 	int MaxLkaHP,LkaHP;
