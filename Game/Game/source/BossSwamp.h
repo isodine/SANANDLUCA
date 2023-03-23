@@ -19,4 +19,8 @@ public:
 	bool isSan = true;     //true‚È‚çƒTƒ“Afalse‚È‚çƒ‹ƒJ
 	bool neutralization = false;		//true‚È‚ç’†˜a‚µ‚½Afalse‚È‚ç’†˜a‚µ‚Ä‚È‚¢(’†˜a=Á‚¦‚é)
 	float diameter = 90;		//’¼Œa‚Ì’·‚³
+
+	int count10 = 6;
+	int count1 = 0;
+	int secondcnt = 0;
 };

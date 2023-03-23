@@ -19,21 +19,20 @@ void BossSwamp::Initialize(bool IsSan, VECTOR Pos, int handleSan, int handleLka)
 
 void BossSwamp::Update(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 {
-	//if (neutralization) { return; }
-
-	//for (int i = 0; i < swamps.size(); i++)
-	//{
-	//	if (swamps[i]->isSan == isSan)
-	//	{
-	//		break;
-	//	}
-	//	if ((abs(swamps[i]->vPos.x - vPos.x) < diameter) && (abs(swamps[i]->vPos.z - vPos.z) < diameter))
-	//	{
-	//		neutralization = true;
-	//		swamps[i]->neutralization = true;
-	//	}
-	//	//else{ neutralization = false; }
-	//}
+	if (secondcnt >= 30) {
+		count1--;
+		if (count1 == -1 && count10 == 0) {
+			count10 = 6;
+			count1 = 0;
+			neutralization = true;
+		}
+		if (count1 <= -1) {
+			count10--;
+			count1 = 9;
+		}
+		secondcnt = 0;
+	}
+	secondcnt++;
 }
 
 void BossSwamp::Render()

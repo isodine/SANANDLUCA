@@ -576,6 +576,11 @@ void Boss::Render() {
 		DrawFormatString(0, 150, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
 		DrawFormatString(0, 200, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
 		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		if (swamps.size()>=1)
+		{
+			DrawFormatString(640, 0, GetColor(255, 255, 255), "%d", swamps[0]->count10);
+			DrawFormatString(650, 0, GetColor(255, 255, 255), "%d", swamps[0]->count1);
+		}
 		//DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 	}
 }
