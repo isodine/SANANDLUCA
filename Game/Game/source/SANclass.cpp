@@ -24,12 +24,7 @@ void SAN::Initialize()
 	hpgaugehandle[3] = LoadGraph("res/san/HP_san_3.png");
 	hpgaugehandle[4] = LoadGraph("res/san/HP_san_2.png");
 	hpgaugehandle[5] = LoadGraph("res/san/HP_san_1.png");
-	hphandle[0] = LoadGraph("res/san_v2/UI_san_v6.png");
-	hphandle[1] = LoadGraph("res/san_v2/UI_san_v5.png");
-	hphandle[2] = LoadGraph("res/san_v2/UI_san_v4.png");
-	hphandle[3] = LoadGraph("res/san_v2/UI_san_v3.png");
-	hphandle[4] = LoadGraph("res/san_v2/UI_san_v2.png");
-	hphandle[5] = LoadGraph("res/san_v2/UI_san_v1.png");
+	hphandle = LoadGraph("res/san_minus/UI_san_minus.png");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -78,11 +73,6 @@ void SAN::Render(Damage& damage)//(SanBomb& sanB,Damage& damage)
 		if (Player::HP == 6)
 		{
 			DrawGraph(0, 880, hpgaugehandle[0], true);
-			auto nowcount = GetNowCount();
-			if (nowcount - oldcount < 2000)
-			{
-				DrawGraph(v.x - 125, v.y, hphandle[0], true);
-			}
 		}
 		if (Player::HP == 5)
 		{
@@ -90,7 +80,7 @@ void SAN::Render(Damage& damage)//(SanBomb& sanB,Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[1], true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 		if (Player::HP == 4)
@@ -99,7 +89,7 @@ void SAN::Render(Damage& damage)//(SanBomb& sanB,Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[2], true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 		if (Player::HP == 3)
@@ -108,7 +98,7 @@ void SAN::Render(Damage& damage)//(SanBomb& sanB,Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[3], true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 		if (Player::HP == 2)
@@ -117,7 +107,7 @@ void SAN::Render(Damage& damage)//(SanBomb& sanB,Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[4], true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 		if (Player::HP == 1)
@@ -126,7 +116,7 @@ void SAN::Render(Damage& damage)//(SanBomb& sanB,Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[5], true);
+				DrawGraph(v.x - 100, v.y - 300, hphandle, true);
 			}
 		}
 	}

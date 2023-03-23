@@ -97,7 +97,8 @@ public:
 		None,
 		Pop,
 		Keep,
-		Throw
+		Throw,
+		Dead
 	};
 	Attack attack;
 

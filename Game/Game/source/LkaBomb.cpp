@@ -14,18 +14,20 @@ void LkaBomb::Initialize(LKA& lka)
 
 	mypH = Lka;
 	situation = PlayerBomb::None;
+	Isbombdead = false;
 }
 
 void LkaBomb::Update(LKA& lka)
 {
 	int key = lka.Key2P;
 	int trg = lka.Trg2P;
-
+	MV1_COLL_RESULT_POLY_DIM hitfloor;
+	hitfloor = MV1CollCheck_Sphere(lka.stageHandle, lka.floorCol, vPos, 10.0f);
 
 	if (lka.attack == Pop)
 	{
 		situation = PlayerBomb::Pop;
-		bomblive = true;
+		//bomblive = true;
 	}
 
 	if (lka.attack == Keep)
@@ -37,7 +39,13 @@ void LkaBomb::Update(LKA& lka)
 	{
 		situation = PlayerBomb::Throw;
 	}
-
+	if (0 < hitfloor.HitNum)
+	{
+		BombReset();
+		StopEffekseer3DEffect(_playingEffectHandle[0]);
+		vPos = VGet(vPos.x, vPos.y, vPos.z);
+		situation = PlayerBomb::Dead;
+	}
 	switch (situation)
 	{
 	case PlayerBomb::None:
@@ -60,13 +68,26 @@ void LkaBomb::Update(LKA& lka)
 	case PlayerBomb::Throw:
 		Throw(lka);
 		break;
-	}
+	case PlayerBomb::Dead:
+		if (!Isbombdead)
+		{
+			_playingEffectHandle[1] = PlayEffekseer3DEffect(_effectResourceHandle[1]);
+			// 再生中のエフェクトを移動する。
+			SetPosPlayingEffekseer3DEffect(_playingEffectHandle[1], vPos.x, vPos.y, vPos.z);
+			SetScalePlayingEffekseer3DEffect(_playingEffectHandle[1], 10.0f, 10.0f, 10.0f);
+		}
+		Isbombdead = true;
+		IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle[1]);
+		Bombdead();
+		break;
+}
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], vPos.x, vPos.y, vPos.z);
 }
 
 void LkaBomb::Render()
 {
-	DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
-
+	//DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
+	DrawEffekseer3D();
 }
 
 void LkaBomb::Throw(LKA& lka)
@@ -83,7 +104,33 @@ void LkaBomb::Throw(LKA& lka)
 	vPos.y += decrement;
 	count += 0.5f;
 	if (vPos.y < 0) {
-		BombReset();
+		bomblive = false;
+		firstdir = false;
+		sphereSize = 0.f;
+		count = 0.f;
+		StopEffekseer3DEffect(_playingEffectHandle[0]);
+		situation = PlayerBomb::None;
 	}
+
+}
+
+void LkaBomb::Bombdead()
+{
+	DrawEffekseer3D();
+	if (IsPlaying == -1)
+	{
+		situation = PlayerBomb::None;
+		Isbombdead = false;
+		vPos = VGet(san.vPos.x, san.vPos.y + 150, san.vPos.z);
+	}
+}
+
+void LkaBomb::BombReset()
+{
+	bomblive = false;
+	firstdir = false;
+	sphereSize = 0.f;
+	situation = PlayerBomb::Dead;
+	count = 0.f;
 }
 

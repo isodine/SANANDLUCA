@@ -11,10 +11,13 @@ public:
 	void Update(SAN& san,LKA& lka);
 	void Render();
 private:
-	int		_effectResourceHandle;		// エフェクトファイルをロードするハンドル
-	int		_playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
+	int		_effectResourceHandle[2];		// エフェクトファイルをロードするハンドル
+	int		_playingEffectHandle[2];		// ロードしたエフェクトファイルから、エフェクトを生成したもの
 	int oldcount;
-	int IsPlaying; //エフェクトが再生されているか
+	bool Iscircle;
+	float PlayTime = 0.0f;
+	int _isEffect = 0;
+	int IsPlaying = -1;
 
 
 };

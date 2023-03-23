@@ -78,12 +78,18 @@ public:
 	float throughtime;
 	float height;
 
+	int au[20];
+	int i = 0;
 	//シャドウマップ用
 
 	int ShadowMapHandle;
 
 	VECTOR ShadowMapUpVec;
 	VECTOR ShadowMapDownVec;
+
+	//ゲームオーバー用
+	bool Isgameover;
+	bool gameoverchange;
 
 	//VOICE用
 	bool modeStart = false;

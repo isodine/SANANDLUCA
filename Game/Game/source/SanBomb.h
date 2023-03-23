@@ -11,10 +11,11 @@ public:
 	void Render();
 	void Move();
 	void Throw(SAN& san);
+	void Bombdead();
 	void bombthrow();
 private:
-	int _effectResourceHandle;		// エフェクトファイルをロードするハンドル
-	int _playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
+	int _effectResourceHandle[2];		// エフェクトファイルをロードするハンドル
+	int _playingEffectHandle[2];		// ロードしたエフェクトファイルから、エフェクトを生成したもの
 	int oldcount;
 	float PlayTime = 0.0f;
 	int _isEffect = 0;
@@ -23,4 +24,5 @@ private:
 	int _KeyEf, _TrgEf;
 	float _hight, _throw;
 	float _position_x, _position_y, _position_z;
+	bool Isbombdead;
 };

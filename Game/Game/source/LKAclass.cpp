@@ -24,12 +24,7 @@ void LKA::Initialize()
 	hpgaugehandle[3] = LoadGraph("res/Lka/HP_lka_3.png");
 	hpgaugehandle[4] = LoadGraph("res/Lka/HP_lka_2.png");
 	hpgaugehandle[5] = LoadGraph("res/Lka/HP_lka_1.png");
-	hphandle[0] = LoadGraph("res/lka_v2/UI_lka_v6.png");
-	hphandle[1] = LoadGraph("res/lka_v2/UI_lka_v5.png");
-	hphandle[2] = LoadGraph("res/lka_v2/UI_lka_v4.png");
-	hphandle[3] = LoadGraph("res/lka_v2/UI_lka_v3.png");
-	hphandle[4] = LoadGraph("res/lka_v2/UI_lka_v2.png");
-	hphandle[5] = LoadGraph("res/lka_v2/UI_lka_v1.png");
+	hphandle = LoadGraph("res/lka_minus/UI_lka_minus.png");
 	Mattach_index = -1;		// アニメーションアタッチはされていない
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
@@ -83,11 +78,6 @@ void LKA::Render(Damage& damage)
 		{
 			DrawGraph(1120, 880, hpgaugehandle[0], true);
 			auto nowcount = GetNowCount();
-			if (nowcount - oldcount < 2000)
-			{
-				DrawGraph(v.x - 125, v.y, hphandle[0], true);
-				lkahitflag = true;
-			}
 		}
 		if (Player::HP == 5)
 		{
@@ -95,8 +85,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[1], true);
-				lkahitflag = true;
+				DrawGraph(v.x -43, v.y - 200, hphandle, true);
 			}
 		}
 		if (Player::HP == 4)
@@ -105,8 +94,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[2], true);
-				lkahitflag = true;
+				DrawGraph(v.x - 43, v.y - 200, hphandle, true);
 			}
 		}
 		if (Player::HP == 3)
@@ -115,8 +103,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[3], true);
-				lkahitflag = true;
+				DrawGraph(v.x - 43, v.y - 200, hphandle, true);
 			}
 		}
 		if (Player::HP == 2)
@@ -125,8 +112,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[4], true);
-				lkahitflag = true;
+				DrawGraph(v.x - 43, v.y - 200, hphandle, true);
 			}
 		}
 		if (Player::HP == 1)
@@ -135,8 +121,7 @@ void LKA::Render(Damage& damage)
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
-				DrawGraph(v.x - 125, v.y, hphandle[5], true);
-				lkahitflag = true;
+				DrawGraph(v.x - 43, v.y - 200, hphandle, true);
 			}
 		}
 	}

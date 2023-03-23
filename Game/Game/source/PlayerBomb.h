@@ -41,7 +41,8 @@ public:
 		None,
 		Pop,
 		Keep,
-		Throw
+		Throw,
+		Dead
 	};
 	Situation situation;
 

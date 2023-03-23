@@ -135,8 +135,8 @@ void Player::Update()
 			attack = Attack::Throw;
 			mypH == San ? PlaySoundMem(VOICEthrowBombSAN[GetRand(2)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEthrowBombLKA[GetRand(2)], DX_PLAYTYPE_BACK, true);
 		}
-		if (_status == STATUS::JUMP) 
-		{ Jump(); }
+		if (_bomb->situation == Dead) { attack = Attack::Dead; }
+		if (_status == STATUS::JUMP) { Jump(); }
 		// v‚ðrad•ª‰ñ“]‚³‚¹‚é
 		float length = 0.f;
 		if (VSize(v) > 0.f) { length = mvSpeed; }

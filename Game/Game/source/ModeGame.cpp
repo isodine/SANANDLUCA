@@ -29,7 +29,6 @@ bool ModeGame::Initialize() {
 	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01.fbm/Stage_01.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
-
 	// コリジョン情報の生成
 	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
 	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
@@ -43,7 +42,30 @@ bool ModeGame::Initialize() {
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
 	MV1SetFrameVisible(_handleMap, 2, FALSE);
 	MV1SetFrameVisible(_handleMap, 3, FALSE);
+	//ゲームオーバーマスク
+	au[0] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_01.png");
+	au[1] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_02.png");
+	au[2] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_03.png");
+	au[3] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_04.png");
+	au[4] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_05.png");
+	au[5] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_06.png");
+	au[6] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_07.png");
+	au[7] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_08.png");
+	au[8] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_09.png");
+	au[9] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_10.png");
+	au[10] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_11.png");
+	au[11] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_12.png");
+	au[12] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_13.png");
+	au[13] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_14.png");
+	au[14] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_15.png");
+	au[15] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_16.png");
+	au[16] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_17.png");
+	au[17] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_18.png");
+	au[18] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_19.png");
+	au[19] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_20.png");
 
+	Isgameover = false;
+	gameoverchange = false;
 	////マスクの試験運用
 	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
 	//CreateMaskScreen();
@@ -128,7 +150,6 @@ bool ModeGame::Initialize() {
 	gimmick.SetSanLka(&san, &lka);
 	sanbomb.Initialize(san);
 	lkabomb.Initialize(lka);
-
 
 	//CSVによる初期化（レベルデザイン時に実装）
 
@@ -244,6 +265,7 @@ bool ModeGame::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
+		Isgameover = true;
 		//BGM停止
 		StopMusic();
 
@@ -254,9 +276,11 @@ bool ModeGame::Process() {
 		ChangePanSoundMem(-255, lka.VOICEdeathLKA);
 		PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
-
-		ModeServer::GetInstance()->Del(this);
+		if (gameoverchange == true)
+		{
+			ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
+		}
 	}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
@@ -295,6 +319,11 @@ bool ModeGame::Process() {
 
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
+	}
+
+	if (Trg & PAD_INPUT_4)
+	{
+		i = 0;
 	}
 
 	return true;
@@ -439,11 +468,11 @@ bool ModeGame::Render() {
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
-	//irondoor.Render();
-	//electrode.Render();
-	//elevator.Render();
-	//for (auto&& Tubes : tubes) {
-	//	Tubes->Render();
-	//}
+	if (Isgameover == true)
+	{
+		DrawGraph(0, 0, au[i], true);
+		i++;
+		if (i >= 19)DrawGraph(0, 0, au[19], true), gameoverchange = true;
+	}
 	return true;
 }

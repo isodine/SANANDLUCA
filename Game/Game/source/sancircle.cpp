@@ -5,8 +5,9 @@
 
 Sancircle::Sancircle()
 {
-	_effectResourceHandle = LoadEffekseerEffect("res/sun_heal/sun_heal_start_.efkefc", 10.0f);
-	IsPlaying = -1;
+	_effectResourceHandle[0] = LoadEffekseerEffect("res/sun_heal/sun_heal_start_.efkefc", 10.0f);
+	_effectResourceHandle[1] = LoadEffekseerEffect("res/sun_heal/sun_heal_end_.efkefc", 10.0f);
+	Iscircle = false;
 }
 
 Sancircle::~Sancircle()
@@ -20,14 +21,28 @@ void Sancircle::Update(SAN& san,LKA& lka)
 	ChIt = VSub(san.vPos, lka.vPos);
 	ChIt.y = 0.0f;
 	LE = VSize(ChIt);
-	if (LE <= 130.0f && IsPlaying == -1)
+	if (LE <= 200.0f && IsPlaying == -1)
 	{
-		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
-		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, san.Playercirclesize, san.Playercirclesize, san.Playercirclesize);
-
+		_playingEffectHandle[0] = PlayEffekseer3DEffect(_effectResourceHandle[0]);
+		// 再生中のエフェクトを移動する。
+		SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], san.vPos.x, san.vPos.y + 45, san.vPos.z);
+		//_position_x += 0.2f;
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[0], 0.75f, 0.75f, 0.75f);
+		Iscircle = true;
 	}
-	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, san.vPos.x, san.vPos.y + san.Playercenter, san.vPos.z);
+	if (LE > 200.0f && Iscircle == true)
+	{
+		StopEffekseer3DEffect(_playingEffectHandle[0]);
+		_playingEffectHandle[1] = PlayEffekseer3DEffect(_effectResourceHandle[1]);
+		// 再生中のエフェクトを移動する。
+		SetPosPlayingEffekseer3DEffect(_playingEffectHandle[1], san.vPos.x, san.vPos.y + 45, san.vPos.z);
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[1], 0.75f, 0.75f, 0.75f);
+		//_position_x += 0.2f;
+		Iscircle = false;
+	}
+	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle[0]);
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], san.vPos.x, san.vPos.y + 45, san.vPos.z);
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[1], san.vPos.x, san.vPos.y + 45, san.vPos.z);
 	UpdateEffekseer3D();
 }
 
