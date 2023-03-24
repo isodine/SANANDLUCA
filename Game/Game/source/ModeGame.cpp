@@ -43,26 +43,26 @@ bool ModeGame::Initialize() {
 	MV1SetFrameVisible(_handleMap, 2, FALSE);
 	MV1SetFrameVisible(_handleMap, 3, FALSE);
 	//ゲームオーバーマスク
-	au[0] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_01.png");
-	au[1] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_02.png");
-	au[2] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_03.png");
-	au[3] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_04.png");
-	au[4] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_05.png");
-	au[5] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_06.png");
-	au[6] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_07.png");
-	au[7] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_08.png");
-	au[8] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_09.png");
-	au[9] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_10.png");
-	au[10] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_11.png");
-	au[11] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_12.png");
-	au[12] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_13.png");
-	au[13] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_14.png");
-	au[14] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_15.png");
-	au[15] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_16.png");
-	au[16] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_17.png");
-	au[17] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_18.png");
-	au[18] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_19.png");
-	au[19] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_20.png");
+	Grhandle[0] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_01.png");
+	Grhandle[1] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_02.png");
+	Grhandle[2] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_03.png");
+	Grhandle[3] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_04.png");
+	Grhandle[4] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_05.png");
+	Grhandle[5] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_06.png");
+	Grhandle[6] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_07.png");
+	Grhandle[7] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_08.png");
+	Grhandle[8] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_09.png");
+	Grhandle[9] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_10.png");
+	Grhandle[10] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_11.png");
+	Grhandle[11] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_12.png");
+	Grhandle[12] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_13.png");
+	Grhandle[13] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_14.png");
+	Grhandle[14] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_15.png");
+	Grhandle[15] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_16.png");
+	Grhandle[16] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_17.png");
+	Grhandle[17] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_18.png");
+	Grhandle[18] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_19.png");
+	Grhandle[19] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_20.png");
 
 	Isgameover = false;
 	gameoverchange = false;
@@ -470,9 +470,9 @@ bool ModeGame::Render() {
 	lkacircle.Render();
 	if (Isgameover == true)
 	{
-		DrawGraph(0, 0, au[i], true);
+		DrawGraph(0, 0, Grhandle[i], true);
 		i++;
-		if (i >= 19)DrawGraph(0, 0, au[19], true), gameoverchange = true;
+		if (i >= 19)DrawGraph(0, 0, Grhandle[19], true), gameoverchange = true;
 	}
 	return true;
 }

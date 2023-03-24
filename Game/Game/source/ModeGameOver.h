@@ -8,4 +8,6 @@ public:
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
+private:
+	int Grhandle;
 };

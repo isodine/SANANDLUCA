@@ -11,7 +11,7 @@
 
 bool ModeGameOver::Initialize() {
 	if (!base::Initialize()) { return false; }
-
+	Grhandle = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_20.png");
 	return true;
 }
 
