@@ -143,3 +143,9 @@ void LkaBomb::BombReset()
 	count = 0.f;
 }
 
+void LkaBomb::EffectReset()
+{
+	StopEffekseer3DEffect(_playingEffectHandle[0]);
+	StopEffekseer3DEffect(_playingEffectHandle[1]);
+}
+
