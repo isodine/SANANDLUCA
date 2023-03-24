@@ -14,6 +14,7 @@ public:
 	void bombthrow();
 	void BombReset();
 	void Bombdead();
+	void EffectReset();
 private:
 	int _effectResourceHandle[2];		// エフェクトファイルをロードするハンドル
 	int _playingEffectHandle[2];		// ロードしたエフェクトファイルから、エフェクトを生成したもの

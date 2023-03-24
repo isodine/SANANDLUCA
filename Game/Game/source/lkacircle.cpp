@@ -50,3 +50,9 @@ void Lkacircle::Render()
 
 	DrawEffekseer3D();
 }
+
+void Lkacircle::EffectReset()
+{
+	StopEffekseer3DEffect(_playingEffectHandle[0]);
+	StopEffekseer3DEffect(_playingEffectHandle[1]);
+}

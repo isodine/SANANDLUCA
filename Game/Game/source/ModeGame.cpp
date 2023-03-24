@@ -232,6 +232,7 @@ bool ModeGame::Initialize() {
 	ShadowMap_DrawEnd();
 
 	PlayMusic("res/06_Sound/01_BGM/Stage/Confectioner.mp3", DX_PLAYTYPE_LOOP);
+	sanbomb.EffectReset();
 
 	return true;
 }
@@ -267,6 +268,10 @@ bool ModeGame::Process() {
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
 		Isgameover = true;
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
 		//BGM’âŽ~
 		StopMusic();
 

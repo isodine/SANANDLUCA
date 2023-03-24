@@ -10,6 +10,7 @@ public:
 	void Init();
 	void Update(SAN& san,LKA& lka);
 	void Render();
+	void EffectReset();
 private:
 	int		_effectResourceHandle[2];		// エフェクトファイルをロードするハンドル
 	int		_playingEffectHandle[2];		// ロードしたエフェクトファイルから、エフェクトを生成したもの

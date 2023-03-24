@@ -51,3 +51,9 @@ void Sancircle::Render()
 	Effekseer_Sync3DSetting();
 	DrawEffekseer3D();
 }
+
+void Sancircle::EffectReset()
+{
+	StopEffekseer3DEffect(_playingEffectHandle[0]);
+	StopEffekseer3DEffect(_playingEffectHandle[1]);
+}
