@@ -32,13 +32,13 @@ bool ModeGameOver::Process() {
 	if (Trg & PAD_INPUT_1) {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
-		//ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
 	return true;
 }
 
-bool ModeGameOver::Render() {
-	DrawString(0, 0, "ゲームオーバー", GetColor(255, 255, 255));
+bool ModeGameOver::Render()
+{
+	DrawGraph(0, 0,Grhandle,true);
 
 	return true;
 }

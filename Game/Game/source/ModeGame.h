@@ -77,7 +77,8 @@ public:
 	float height;
 
 	int Grhandle[20];
-	int i = 0;
+	int gameovercount;
+	int gamestartcount;
 	//シャドウマップ用
 	int ShadowMapHandle;
 
@@ -87,6 +88,7 @@ public:
 	//ゲームオーバー用
 	bool Isgameover;
 	bool gameoverchange;
+	bool Isgamestart;
 
 	//VOICE用
 	bool modeStart = false;

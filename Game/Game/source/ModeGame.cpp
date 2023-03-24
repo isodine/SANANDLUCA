@@ -114,6 +114,9 @@ bool ModeGame::Initialize() {
 
 	Isgameover = false;
 	gameoverchange = false;
+	Isgamestart = true;
+	gameovercount = 0;
+	gamestartcount = 20;
 	////マスクの試験運用
 	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
 	//CreateMaskScreen();
@@ -280,7 +283,7 @@ bool ModeGame::Initialize() {
 	ShadowMap_DrawEnd();
 
 	PlayMusic("res/06_Sound/01_BGM/Stage/Confectioner.mp3", DX_PLAYTYPE_LOOP);
-	sanbomb.EffectReset();
+
 
 	return true;
 }
@@ -531,9 +534,15 @@ bool ModeGame::Render() {
 	//}
 	if (Isgameover == true)
 	{
-		DrawGraph(0, 0, Grhandle[i], true);
-		i++;
-		if (i >= 19)DrawGraph(0, 0, Grhandle[19], true), gameoverchange = true;
+		DrawGraph(0, 0, Grhandle[gameovercount], true);
+		gameovercount++;
+		if (gameovercount >= 19)DrawGraph(0, 0, Grhandle[19], true), gameoverchange = true;
+	}
+	if (Isgamestart == true)
+	{
+		DrawGraph(0, 0, Grhandle[gamestartcount], true);
+		gamestartcount--;
+		if (gamestartcount <= 0)DrawGraph(0, 0, Grhandle[0], true), Isgamestart = false;
 	}
 	return true;
 }
