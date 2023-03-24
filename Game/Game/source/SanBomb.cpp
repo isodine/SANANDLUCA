@@ -142,3 +142,9 @@ void PlayerBomb::BombReset()
 	situation = PlayerBomb::Dead;
 	count = 0.f;
 }
+
+void SanBomb::EffectReset()
+{
+	StopEffekseer3DEffect(_playingEffectHandle[0]);
+	StopEffekseer3DEffect(_playingEffectHandle[1]);
+}
