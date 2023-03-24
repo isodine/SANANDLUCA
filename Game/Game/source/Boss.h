@@ -2,6 +2,7 @@
 
 #include "appframe.h"
 #include "BossSwamp.h"
+#include "Damage.h"
 
 class ModeBoss;
 class SAN;
@@ -13,7 +14,7 @@ class Boss {
 public:
 	void Initialize();
 	void Terminate();
-	void Process();
+	void Process(Damage& damage);
 	void Render();
 
 	void Targeting(VECTOR sanPos, VECTOR lkaPos);
@@ -48,6 +49,7 @@ public:
 	int handleBaseLka;
 	VECTOR swampDir;
 	VECTOR swampDegreeDir;
+	int SwampCnt;
 
 	MATRIX rotationMatrix;
 	VECTOR forward;

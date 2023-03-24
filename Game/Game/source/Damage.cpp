@@ -139,9 +139,9 @@ void Damage::SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 			HitPolySwamp = MV1CollCheck_Capsule(swamps[i]->handle, 3,
 				VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
 
-		if (swamps[i]->isSan)
+		if (!swamps[i]->isSan)
 		{
-			HitPolySwamp = MV1CollCheck_Capsule(swamps[i]->handle, 3,
+			HitPolySwamp = MV1CollCheck_Capsule(swamps[i]->handle, swamps[i]->handleCol,
 				VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
 			if ((HitPolySwamp.HitNum >= 1) && !SanHitFlag) {
 				San->HP -= 1;
@@ -149,9 +149,9 @@ void Damage::SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 				PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 			}
 		}
-		if (!swamps[i]->isSan)
+		if (swamps[i]->isSan)
 		{
-			HitPolySwamp = MV1CollCheck_Capsule(swamps[i]->handle, 3,
+			HitPolySwamp = MV1CollCheck_Capsule(swamps[i]->handle, swamps[i]->handleCol,
 				VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
 			if ((HitPolySwamp.HitNum >= 1) && !LkaHitFlag) {
 				Lka->HP -= 1;
@@ -159,7 +159,6 @@ void Damage::SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 				PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 			}
 		}
-
 		//swamps[i]->Update(swamps);
 	}
 }

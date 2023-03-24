@@ -215,7 +215,7 @@ bool ModeBoss::Process() {
 	Count += 1;
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
-	//}-
+	//}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	bossrun.Update(boss);
@@ -224,7 +224,7 @@ bool ModeBoss::Process() {
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
-	boss.Process();
+	boss.Process(damage);
 
 	//‰¼
 	int Trg;

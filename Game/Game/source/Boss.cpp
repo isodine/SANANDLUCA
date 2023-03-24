@@ -26,6 +26,7 @@ void Boss::Initialize() {
 	EndCount = 0;
 	DownCount = 0;
 	BossHP = 3;
+	SwampCnt = 3;
 	BossPosition0 = VGet(41, 37, 274);
 	BossPosition1 = VGet(-327, 37, 673);
 	BossPosition2 = VGet(41, 37, 1013);
@@ -62,7 +63,7 @@ void Boss::Terminate() {
 
 }
 
-void Boss::Process() {
+void Boss::Process(Damage& damage) {
 	HandPos = MV1GetFramePosition(model.modelHandle, 3);
 	AddPos = VNorm(VSub(MV1GetFramePosition(model.modelHandle, 5), HandPos));
 	SphereCenter = VAdd(HandPos, VScale(AddPos, 80));
@@ -155,7 +156,7 @@ void Boss::Process() {
 	/*TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
 	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
 	// Ä¶ŽžŠÔ‚ð‰Šú‰»
-	//PlayTime = 0.0f;	
+	//PlayTime = 0.0f;
 
 	if (abs(swampDir.y * DX_PI_F / 180.0f) >= 360.f)
 	{
@@ -175,6 +176,7 @@ void Boss::Process() {
 			swamps.erase(swamps.begin() + i);
 		}
 	}
+	damage.SwampColl(swamps);
 }
 
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
@@ -319,16 +321,18 @@ void Boss::Crush() {				//•ÇÕ“ËŽžˆ—
 		AttackedFlag = true;
 		BossHP -= 1;
 	}
-	if (phType == PH::ACID)
+	if (phType == PH::ACID && CrushCount == 0)
 	{
-		SwampSpawn(true);
+		SwampSpawn(true); SwampCnt--;
 	}
-	if (phType == PH::ALCALI)
+	if (phType == PH::ALCALI && CrushCount == 0)
 	{
-		SwampSpawn(false);
+		SwampSpawn(false); SwampCnt--;
 	}
-	phType = PH::NONE;
-	oldphType = PH::NONE;
+	if (SwampCnt == 0) {
+		phType = PH::NONE;
+		oldphType = PH::NONE;
+	}
 	CrushCount += 1;
 	if (CrushCount >= 240 || AttackedFlag) {
 		CrushCount = 0;
@@ -424,10 +428,12 @@ void Boss::Capture() {
 			phType = PH::ACID;
 			if (oldphType == PH::NONE) {
 				oldphType = PH::ACID;
+				SwampCnt = 3;
 			}
 			else if (oldphType == PH::ALCALI) {
 				phType = PH::NONE;
 				oldphType = PH::NONE;
+				SwampCnt = 0;
 			}
 		}
 		if (LkaCatchFlag) {
@@ -435,10 +441,12 @@ void Boss::Capture() {
 			phType = PH::ALCALI;
 			if (oldphType == PH::NONE) {
 				oldphType = PH::ALCALI;
+				SwampCnt = 3;
 			}
 			else if (oldphType == PH::ACID) {
 				phType = PH::NONE;
 				oldphType = PH::NONE;
+				SwampCnt = 0;
 			}
 		}
 	}
@@ -576,11 +584,6 @@ void Boss::Render() {
 		DrawFormatString(0, 150, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
 		DrawFormatString(0, 200, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
 		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossHP = %d", BossHP);
-		if (swamps.size()>=1)
-		{
-			DrawFormatString(640, 0, GetColor(255, 255, 255), "%d", swamps[0]->count10);
-			DrawFormatString(650, 0, GetColor(255, 255, 255), "%d", swamps[0]->count1);
-		}
 		//DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 	}
 }
