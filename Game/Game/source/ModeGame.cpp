@@ -120,6 +120,7 @@ bool ModeGame::Initialize() {
 	san.SetGimmick(&gimmick);
 
 	san.Initialize();
+	sanbomb.EffectReset();
 	san.floorCol = frameMapCollisionfloor;
 	san.wallCol = frameMapCollisionwall;
 	san.goalColSAN = frameMapCollisiongoalSAN;
