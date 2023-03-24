@@ -10,7 +10,7 @@ public:
 	void Render();            //•`‰æ
 
 	int number[10];
-	int count10 = 6;
+	int count10 = 3;
 	int count1 = 0;
 	int secondcnt = 0;
 };

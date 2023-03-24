@@ -16,6 +16,7 @@
 #include "Electrode.h"
 #include "Elevator.h"
 #include "Tube.h"
+#include "BossSwamp.h"
 
 #include <string>
 #include <memory>
@@ -29,9 +30,6 @@
 #define	PI	(3.1415926535897932386f)
 #define	DEG2RAD(x)			( ((x) / 180.0f ) * PI )
 #define	RAD2DEG(x)			( ((x) * 180.0f ) / PI )
-
-	
-
 
 
 // モード
@@ -81,7 +79,6 @@ public:
 	int Grhandle[20];
 	int i = 0;
 	//シャドウマップ用
-
 	int ShadowMapHandle;
 
 	VECTOR ShadowMapUpVec;

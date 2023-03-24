@@ -1,5 +1,9 @@
 #pragma once
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include <appframe.h>
 #include "ApplicationMain.h"
 #include "Camera.h"
@@ -28,6 +32,7 @@
 #include "Electrode.h"
 #include "Elevator.h"
 #include "Tube.h"
+#include "BossSwamp.h"
 
 
 #include <string>
