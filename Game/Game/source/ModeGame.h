@@ -104,7 +104,7 @@ public:
 	Lkacircle lkacircle;
 	Damage damage;
 	Gimmick gimmick;
-	Slime slime;
+	//Slime slime;
 	IronDoor irondoor;
 	Electrode electrode;
 	Elevator elevator;

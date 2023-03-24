@@ -164,6 +164,8 @@ bool ModeGame::Initialize() {
 						Slime1->Initialize(x, y, z, pH);
 						Slime1->SetSan(&san);
 						Slime1->SetLka(&lka);
+						Slime1->SetSanBomb(&sanbomb);
+						Slime1->SetLkaBomb(&lkabomb);
 						slimes.emplace_back(std::move(Slime1));
 					}
 					else if (cnt == 4)
@@ -172,6 +174,8 @@ bool ModeGame::Initialize() {
 						Slime2->Initialize(x, y, z, pH);
 						Slime2->SetSan(&san);
 						Slime2->SetLka(&lka);
+						Slime2->SetSanBomb(&sanbomb);
+						Slime2->SetLkaBomb(&lkabomb);
 						slimes.emplace_back(std::move(Slime2));
 					}
 
@@ -239,8 +243,9 @@ bool ModeGame::Process() {
 	gimmick.LkaHitFlag = false;
 	san.Update(damage);
 	lka.Update(damage);
+
 	damage.Process();
-	
+	damage.SlimeDamage(slimes);
 	for (auto&& Slimes : slimes) {
 		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f, Slimes->mypH);
 	}
@@ -359,7 +364,9 @@ bool ModeGame::Render() {
 		//gimmick.Render();
 		for (auto&& Slimes : slimes) {
 			Slimes->Render(Slimes->mypH);
+			
 		}
+		//DrawFormatString(0, 0, GetColor(0, 0, 0), "alkalicount = %d", Slimes->alkalicount);
 	}
 	//マップモデルを描画する
 	{
@@ -435,7 +442,7 @@ bool ModeGame::Render() {
 		DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
 		DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %d", san.hitPolyDimSAN.HitNum);
 		DrawFormatString(0, 300, GetColor(0, 0, 0), "SanHitFlag = %d", gimmick.SanHitFlag);
-		DrawFormatString(0, 350, GetColor(255, 0, 0), "slimePos(%f,%f,%f)", slime.slimePos.x, slime.slimePos.y, slime.slimePos.z);
+		DrawFormatString(0, 400, GetColor(0, 0, 0), "sanHitFlag = %d", slimes[1]->sanHitFlag);
 	}
 	
 	lka.Render(damage);

@@ -80,12 +80,13 @@ void Damage::Process() {
 			SanHitFlag = true;
 			PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		}
-
+		
 		if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
 			Lka->HP -= 1;
 			LkaHitFlag = true;
 			PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		}
+		
 	}
 	
 
@@ -103,6 +104,36 @@ void Damage::Process() {
 	}
 
 	if (LkaCoolTime >= 60) {
+		LkaHitFlag = false;
+		LkaCoolTime = 0;
+	}
+}
+
+void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
+	if (slimes[0]->lkaHitFlag && !LkaHitFlag) {
+		Lka->HP -= 1;
+		LkaHitFlag = true;
+		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	}
+	if (slimes[1]->sanHitFlag && !SanHitFlag) {
+		San->HP -= 1;
+		SanHitFlag = true;
+		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	}
+	if (SanHitFlag == true) {
+		SanCoolTime += 1;
+	}
+
+	if (LkaHitFlag == true) {
+		LkaCoolTime += 1;
+	}
+
+	if (SanCoolTime >= 120) {
+		SanHitFlag = false;
+		SanCoolTime = 0;
+	}
+
+	if (LkaCoolTime >= 120) {
 		LkaHitFlag = false;
 		LkaCoolTime = 0;
 	}

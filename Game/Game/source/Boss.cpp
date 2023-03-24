@@ -420,16 +420,6 @@ void Boss::CaptureEnd() {
 	EndCount += 1;
 	if (EndCount > 45) {
 		model.pos = VAdd(model.pos, VScale(forward, -3));
-		//if (SanCatchFlag) {
-		//	san->vPos.x = SphereCenter.x;
-		//	san->vPos.y = 0;
-		//	san->vPos.z = SphereCenter.z;
-		//}
-		//else if (LkaCatchFlag) {
-		//	lka->vPos.x = SphereCenter.x;
-		//	lka->vPos.y = 0;
-		//	lka->vPos.z = SphereCenter.z;
-		//}
 	}
 	if (EndCount == 64) {
 		EndCount = 0;
@@ -449,9 +439,6 @@ void Boss::Down() {
 
 void Boss::Render() {
 	{
-		/*MV1SetRotationXYZ(BossHandle, BossSetDir);
-		MV1SetPosition(BossHandle, model.pos);
-		MV1DrawModel(BossHandle);*/
 		if (!downFlag) {
 			manager->modelRender(&model, 1.f, 1.f);
 		}

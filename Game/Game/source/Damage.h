@@ -1,6 +1,7 @@
 #pragma once
 #include "SANclass.h"
 #include "LKAclass.h"
+#include "Slime.h"
 
 class ModeGame;
 
@@ -11,6 +12,7 @@ public:
 	virtual void Initialize(SAN* san, LKA* lka);
 	virtual void Terminate();
 	virtual void Process();
+	virtual void SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes);
 	virtual void Render();
 	void SetGame(ModeGame* game);
 
