@@ -38,20 +38,6 @@ ModeBoss::ModeBoss() : ModeBase()
 	/*MV1SetFrameVisible(_handleMap, 0, FALSE);
 	MV1SetFrameVisible(_handleMap, 1, FALSE);*/
 
-	////マスクの試験運用
-	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	//CreateMaskScreen();
-
-
-	//フォグを使ってみる
-	//SetFogEnable(TRUE);
-
-	// フォグの色を設定
-	//SetFogColor(255, 255, 255);
-
-	// フォグの開始距離、終了距離を設定
-	//SetFogStartEnd(0.0f, 3000.0f);
-
 	// その他初期化
 	_bViewCollision = FALSE;
 

@@ -49,13 +49,15 @@ void Player::Input()
 
 void Player::Initialize()
 {
-	Mattach_index = -1;		// アニメーションアタッチはされていない
+	Mattach_index = -1;			// アニメーションアタッチはされていない
+
 	// ステータスを「無し」に設定
 	_status = STATUS::NONE;
+
 	// 再生時間の初期化
 	Mtotal_time = 0.f;
 	Mplay_time = 0.0f;
-	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
+	vDir = VGet(0, 0, -1);			// キャラモデルはデフォルトで-Z方向を向いている
 	attack = Attack::None;
 	SEjump = LoadSoundMem("res/06_Sound/03_SE/ani_ta_biyon02.mp3");
 	/*sanfrask = LoadGraph("res/pH_gauge/pHgauge_SL_flask.png");
