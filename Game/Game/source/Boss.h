@@ -1,6 +1,8 @@
 #pragma once
 
 #include "appframe.h"
+#include "BossSwamp.h"
+#include "Damage.h"
 
 class ModeBoss;
 class SAN;
@@ -12,7 +14,7 @@ class Boss {
 public:
 	void Initialize();
 	void Terminate();
-	void Process();
+	void Process(Damage& damage);
 	void Render();
 
 	void Targeting(VECTOR sanPos, VECTOR lkaPos);
@@ -21,11 +23,12 @@ public:
 	void CaptureEnd();
 	void Rotation(VECTOR sanPos, VECTOR lkaPos);
 	void Walk();
-	void Crush();
+	void Crush();		//ï«è’ìÀéûèàóù
 	void Search();
 	void Down();
 	void Idle();
 	void Pull();
+	void SwampSpawn(bool IsSan);
 
 	int Target;
 	VECTOR BossPos;
@@ -41,6 +44,12 @@ public:
 	VECTOR BossPosition1;
 	VECTOR BossPosition2;
 	VECTOR BossPosition3;
+	//VECTOR SwampPos;
+	int handleBaseSan;
+	int handleBaseLka;
+	VECTOR swampDir;
+	VECTOR swampDegreeDir;
+	int SwampCnt;
 
 	MATRIX rotationMatrix;
 	VECTOR forward;
@@ -121,4 +130,6 @@ public:
 	ModeBoss* modeboss;
 	modelInf model;
 	modelManager* manager;
+	BossSwamp Bswamp;
+	std::vector<std::unique_ptr<BossSwamp>> swamps;
 };

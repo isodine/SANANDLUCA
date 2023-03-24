@@ -40,13 +40,13 @@
     <ClCompile Include="source\Bossattack.cpp" />
     <ClCompile Include="source\Bossdamage.cpp" />
     <ClCompile Include="source\Bossdown.cpp" />
+    <ClCompile Include="source\BossSwamp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModeEffekseer.h" />
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Camera.h" />
-    <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\ModeRule.h" />
     <ClInclude Include="source\Slime.h" />
     <ClInclude Include="source\Gimmick.h" />
@@ -82,5 +82,7 @@
     <ClInclude Include="source\Bossattack.h" />
     <ClInclude Include="source\Bossdamage.h" />
     <ClInclude Include="source\Bossdown.h" />
+    <ClInclude Include="source\BossSwamp.h" />
+    <ClInclude Include="source\Damage.h" />
   </ItemGroup>
 </Project>

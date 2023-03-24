@@ -20,7 +20,29 @@ namespace {
 
 ModeBoss::ModeBoss() : ModeBase()
 {
+	// マップ
+	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/Boss_Stage.mv1");
+	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
+	_handleSkySphere = MV1LoadModel("res/SkySphia/sky.mv1");
 
+	// コリジョン情報の生成
+	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor1");
+	frameMapCollisionwall = MV1SearchFrame(_handleMap, "wall");
+	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
+	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
+	// コリジョンのフレームを描画しない設定
+	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
+	/*MV1SetFrameVisible(_handleMap, 0, FALSE);
+	MV1SetFrameVisible(_handleMap, 1, FALSE);*/
+
+	// その他初期化
+	_bViewCollision = FALSE;
+
+	throughtime = 0.0f;
+	height = 0.0f;
 }
 
 bool ModeBoss::Initialize() {
@@ -54,7 +76,7 @@ bool ModeBoss::Initialize() {
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/Boss_Stage.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
-	_handleSkySphere = MV1LoadModel("res/SkySphere/skysphere.mv1");
+	_handleSkySphere = MV1LoadModel("res/SkySphia/sky.mv1");
 
 	// コリジョン情報の生成
 	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor1");
@@ -164,7 +186,7 @@ bool ModeBoss::Initialize() {
 		cnt++;
 	}
 
-	PlayMusic("res/06_Sound/01_BGM/Confectioner.mp3", DX_PLAYTYPE_LOOP);
+	PlayMusic("res/06_Sound/01_BGM/88_BOSS/Gemini01.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;
 }
@@ -179,13 +201,16 @@ bool ModeBoss::Process() {
 	Count += 1;
 	//for (auto&& SanLka : sanlka) {
 	//	SanLka->Update();
-	//}-
+	//}
+	sanbomb.Update(san);
+	lkabomb.Update(lka);
+	bossrun.Update(boss);
 	/*san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());*/
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
-	boss.Process();
+	boss.Process(damage);
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san,lka);

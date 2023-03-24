@@ -90,20 +90,20 @@ void Tube::Render()
 	MV1SetPosition(handle, vPos);
 	MV1SetRotationXYZ(handle, VGet(0.0f, vDir.y * DX_PI_F / 180.0f, 0.0f));
 	MV1DrawModel(handle);
-	int x = 400, y = 0, size = 16;
-	SetFontSize(size);
-	switch (Type)
-	{
-	case Tube::San:
-		Dir == DirType::Front ? DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Front ") : DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Right"); y += size;
-		spining ? DrawFormatString(x, y, GetColor(255, 0, 0), "spining == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "spining == false"); y += size;
-		break;
-	case Tube::Lka:
-		x = 400, y = 32, size = 16;
-		Dir == DirType::Front ? DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Front ") : DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Left"); y += size;
-		spining ? DrawFormatString(x, y, GetColor(255, 0, 0), "spining == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "spining == false"); y += size;
-		break;
-	}
+	//int x = 400, y = 0, size = 16;
+	//SetFontSize(size);
+	//switch (Type)
+	//{
+	//case Tube::San:
+	//	Dir == DirType::Front ? DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Front ") : DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Right"); y += size;
+	//	spining ? DrawFormatString(x, y, GetColor(255, 0, 0), "spining == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "spining == false"); y += size;
+	//	break;
+	//case Tube::Lka:
+	//	x = 400, y = 32, size = 16;
+	//	Dir == DirType::Front ? DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Front ") : DrawFormatString(x, y, GetColor(255, 0, 0), "DirType == Left"); y += size;
+	//	spining ? DrawFormatString(x, y, GetColor(255, 0, 0), "spining == true ") : DrawFormatString(x, y, GetColor(255, 0, 0), "spining == false"); y += size;
+	//	break;
+	//}
 }
 
 void Tube::Spin()

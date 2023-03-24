@@ -113,6 +113,7 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 	MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndex, MI->playTime);
 
 	MV1SetPosition(MI->modelHandle, VAdd(MI->pos, MI->addPos));
+	//MI->dir.y = MI->dir.y * DX_PI_F / 180.0f;
 	MV1SetRotationXYZ(MI->modelHandle, MI->dir);// VScale(, (DX_PI_F / 180.0f)));
 	MV1DrawModel(MI->modelHandle);
 
