@@ -123,6 +123,7 @@ bool ModeGame::Initialize() {
 	lka.stageHandle = _handleMap;
 
 	damage.Initialize(&san, &lka);
+	damage.SetBomb(&sanbomb, &lkabomb);
 	//slime.Initialize();
 	gimmick.Initialize();
 	gimmick.SetSanLka(&san, &lka);
@@ -239,8 +240,9 @@ bool ModeGame::Process() {
 	MV1RefreshCollInfo(elevator.handle, elevator.handleCol);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	gimmick.SanHitFlag = false;
-	gimmick.LkaHitFlag = false;
+	//gimmick.SanHitFlag = false;
+	//gimmick.LkaHitFlag = false;
+	gimmick.Balance(san.vPos, lka.vPos);
 	san.Update(damage);
 	lka.Update(damage);
 
@@ -361,7 +363,7 @@ bool ModeGame::Render() {
 	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
 
 	{
-		//gimmick.Render();
+		gimmick.Render();
 		for (auto&& Slimes : slimes) {
 			Slimes->Render(Slimes->mypH);
 			
@@ -442,7 +444,8 @@ bool ModeGame::Render() {
 		DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
 		DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %d", san.hitPolyDimSAN.HitNum);
 		DrawFormatString(0, 300, GetColor(0, 0, 0), "SanHitFlag = %d", gimmick.SanHitFlag);
-		DrawFormatString(0, 400, GetColor(0, 0, 0), "sanHitFlag = %d", slimes[1]->sanHitFlag);
+		DrawFormatString(0, 350, GetColor(0, 0, 0), "sanHitFlag = %d", slimes[1]->sanHitFlag);
+		DrawFormatString(0, 400, GetColor(0, 0, 0), "sanHitFlag = %d", damage.HitPolySanBomb.HitNum);
 	}
 	
 	lka.Render(damage);

@@ -18,6 +18,11 @@ void Damage::SetGame(ModeGame* game) {
 	Game = game;
 }
 
+void Damage::SetBomb(SanBomb* sanbomb, LkaBomb* lkabomb) {
+	Sanbomb = sanbomb;
+	Lkabomb = lkabomb;
+}
+
 void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
@@ -38,6 +43,9 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 
 	stageFlag = true;
 	stageHandle = san->stageHandle;
+
+	MV1SetupCollInfo(San->Mhandle, 3, 8, 8, 8);
+	MV1SetupCollInfo(Lka->Mhandle, 8, 8, 8, 8);
 }
 
 void Damage::Terminate() {
@@ -45,9 +53,11 @@ void Damage::Terminate() {
 }
 
 void Damage::Process() {
+	MV1RefreshCollInfo(San->Mhandle, 3);
+	MV1RefreshCollInfo(Lka->Mhandle, 8);
 
-	//San->DamageProcess();
-	//Lka->DamageProcess();
+	HitPolySanBomb = MV1CollCheck_Sphere(Lka->Mhandle, 8, Sanbomb->vPos, Sanbomb->sphereSize);
+	HitPolyLkaBomb = MV1CollCheck_Sphere(San->Mhandle, 3, Lkabomb->vPos, Lkabomb->sphereSize);
 
 	Distance = VSize(VSub(VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z), VGet(San->vPos.x, San->vPos.y + 50, San->vPos.z)));
 
@@ -67,14 +77,27 @@ void Damage::Process() {
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
+	if ((HitPolyLkaBomb.HitNum >= 1) && !SanHitFlag) {
+		San->HP -= 1;
+		SanHitFlag = true;
+		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	}
+
+	if ((HitPolySanBomb.HitNum >= 1) && !LkaHitFlag) {
+		Lka->HP -= 1;
+		LkaHitFlag = true;
+		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	}
 
 
 	if (stageFlag == true) {
 		MV1_COLL_RESULT_POLY_DIM HitPolySan;
 		MV1_COLL_RESULT_POLY_DIM HitPolyLka;
+	
 		HitPolySan = MV1CollCheck_Capsule(Game->_handleMap, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
 		HitPolyLka = MV1CollCheck_Capsule(Game->_handleMap, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
-
+		
+		
 		if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
 			San->HP -= 1;
 			SanHitFlag = true;
@@ -86,7 +109,6 @@ void Damage::Process() {
 			LkaHitFlag = true;
 			PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		}
-		
 	}
 	
 

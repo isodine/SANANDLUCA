@@ -242,7 +242,7 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 		}
 	}
 	else {
-		model.pos = VAdd(VScale(forward, 15.f), model.pos);
+		model.pos = VAdd(VScale(forward, 30.f), model.pos);
 		MV1RefreshCollInfo(SanHandle, 3);
 		MV1RefreshCollInfo(LkaHandle, 8);
 		hitPolyDimSan = MV1CollCheck_Sphere(SanHandle, 3, SphereCenter, 50);

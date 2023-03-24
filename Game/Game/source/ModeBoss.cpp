@@ -113,6 +113,7 @@ bool ModeBoss::Initialize() {
 	lka.stageHandle = _handleMap;
 
 	damage.Initialize(&san, &lka);
+	damage.SetBomb(&sanbomb, &lkabomb);
 	damage.stageFlag = false;
 	//enemy.Initialize();
 	//CSVによる初期化（レベルデザイン時に実装）

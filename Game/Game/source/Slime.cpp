@@ -93,7 +93,7 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 		}
 
 		if (SanPos.x >= SearchPosMinX && SanPos.x <= SearchPosMaxX && SanPos.z >= SearchPosMinZ && SanPos.z <= SearchPosMaxZ) {
-			SanTargeting(SanPos, 3.0);
+			SanTargeting(SanPos, 2.3);
 			if (sanDistance < 130)
 			{
 				AcidJump(SanPos);
@@ -114,7 +114,7 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 		}
 
 		if (LkaPos.x >= SearchPosMinX && LkaPos.x <= SearchPosMaxX && LkaPos.z >= SearchPosMinZ && LkaPos.z <= SearchPosMaxZ) {
-			LkaTargeting(LkaPos, 3.0);
+			LkaTargeting(LkaPos, 2.3);
 			if (lkaDistance < 130)
 			{
 				AlkaliJump(LkaPos);
