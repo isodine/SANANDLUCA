@@ -17,6 +17,7 @@
 #include "Elevator.h"
 #include "Tube.h"
 #include "BossSwamp.h"
+#include "timer.h"
 
 #include <string>
 #include <memory>
@@ -114,6 +115,7 @@ public:
 	Electrode electrode;
 	Elevator elevator;
 	Tube tube;
+	Timer timer;
 	std::vector<std::unique_ptr<Slime>> slimes;
 	std::vector<std::unique_ptr<Tube>> tubes;
 };

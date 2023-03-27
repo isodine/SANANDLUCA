@@ -14,7 +14,7 @@ public:
 	virtual void Process();
 	virtual void Render();
 	virtual void SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps);
-	void SetGame(ModeGame* game);
+	//void SetGame(ModeGame* game);
 
 	int MaxSanHP,SanHP;
 	int MaxLkaHP,LkaHP;
@@ -40,5 +40,5 @@ public:
 protected:
 	SAN* San;
 	LKA* Lka;
-	ModeGame* Game;
+	//ModeGame* Game;
 };

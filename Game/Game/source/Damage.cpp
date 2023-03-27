@@ -14,9 +14,9 @@ Damage::~Damage() {
 
 }
 
-void Damage::SetGame(ModeGame* game) {
-	Game = game;
-}
+//void Damage::SetGame(ModeGame* game) {
+//	Game = game;
+//}
 
 void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
@@ -69,24 +69,24 @@ void Damage::Process() {
 	}
 
 
-	if (stageFlag == true) {
-		MV1_COLL_RESULT_POLY_DIM HitPolySan;
-		MV1_COLL_RESULT_POLY_DIM HitPolyLka;
-		HitPolySan = MV1CollCheck_Capsule(Game->_handleMap, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
-		HitPolyLka = MV1CollCheck_Capsule(Game->_handleMap, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
+	//if (stageFlag == true) {
+	//	MV1_COLL_RESULT_POLY_DIM HitPolySan;
+	//	MV1_COLL_RESULT_POLY_DIM HitPolyLka;
+	//	HitPolySan = MV1CollCheck_Capsule(Game->_handleMap, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
+	//	HitPolyLka = MV1CollCheck_Capsule(Game->_handleMap, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
 
-		if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
-			San->HP -= 1;
-			SanHitFlag = true;
-			PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
-		}
+	//	if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
+	//		San->HP -= 1;
+	//		SanHitFlag = true;
+	//		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	//	}
 
-		if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
-			Lka->HP -= 1;
-			LkaHitFlag = true;
-			PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
-		}
-	}
+	//	if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
+	//		Lka->HP -= 1;
+	//		LkaHitFlag = true;
+	//		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	//	}
+	//}
 
 	
 

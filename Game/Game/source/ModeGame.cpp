@@ -116,7 +116,7 @@ bool ModeGame::Initialize() {
 	gameoverchange = false;
 	Isgamestart = true;
 	gameovercount = 0;
-	gamestartcount = 20;
+	gamestartcount = 19;
 	////マスクの試験運用
 	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
 	//CreateMaskScreen();
@@ -163,7 +163,7 @@ bool ModeGame::Initialize() {
 	//Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
 	//tubes.emplace_back(std::move(Tube3));
 
-	damage.SetGame(this);
+	//damage.SetGame(this);
 
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
@@ -317,7 +317,7 @@ bool ModeGame::Process() {
 		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);
 	}
 
-	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
+	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)||timer.timeup == true)
 	{
 		Isgameover = true;
 		sanbomb.EffectReset();
@@ -340,6 +340,7 @@ bool ModeGame::Process() {
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 		}
 	}
+	timer.Update();
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
@@ -377,11 +378,6 @@ bool ModeGame::Process() {
 
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
-	}
-
-	if (Trg & PAD_INPUT_4)
-	{
-		i = 0;
 	}
 
 	return true;
@@ -526,6 +522,7 @@ bool ModeGame::Render() {
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
+	timer.Render();
 	//irondoor.Render();
 	//electrode.Render();
 	//elevator.Render();
