@@ -10,7 +10,7 @@ void Elevator::Initialize()
 {
 	handle = MV1LoadModel("res/02_Object_Model/Elevator/gimmick_elevator_01.mv1");
 	handleCol = 0;
-	vPos = VGet(500.f, 170.f, 1000.f);
+	vPos = VGet(500.f, 70.f, 1000.f);
 	vPosfirst = VGet(500.f, 70.f, 1000.f);
 	MV1SetScale(handle, VGet(5.0f, 5.0f, 5.0f));
 	MV1SetPosition(handle, vPos);

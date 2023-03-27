@@ -16,8 +16,8 @@ public:
 	VECTOR vPos;		// 位置
 	VECTOR vPosfirst;
 	VECTOR speed = VGet(0.f, 1.0f, 0.f);	//動くスピード
-	float upRange = 100.f;
+	float upRange = 200.f;
 	float downRange = 0.f;
-	bool floating = true;
+	bool floating = false;
 	bool moving = false;
 };

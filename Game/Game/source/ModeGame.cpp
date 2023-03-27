@@ -59,9 +59,9 @@ bool ModeGame::Initialize() {
 	height = 0.0f;
 
 	//irondoor.Initialize();
-	//electrode.Initialize(VGet(200.f, 70.f, 1000.f), true);
-	//elevator.Initialize();
-	//MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
+	electrode.Initialize(VGet(200.f, 70.f, 1000.f), false);
+	elevator.Initialize();
+	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
 	//auto Tube1 = std::make_unique<Tube>();
 	//Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
@@ -402,8 +402,8 @@ bool ModeGame::Render() {
 	sancircle.Render();
 	lkacircle.Render();
 	//irondoor.Render();
-	//electrode.Render();
-	//elevator.Render();
+	electrode.Render();
+	elevator.Render();
 	//for (auto&& Tubes : tubes) {
 	//	Tubes->Render();
 	//}
