@@ -186,7 +186,7 @@ bool ModeBoss::Initialize() {
 		cnt++;
 	}
 
-	PlayMusic("res/06_Sound/01_BGM/88_BOSS/Gemini01.mp3", DX_PLAYTYPE_LOOP);
+	("res/06_Sound/01_BGM/88_BOSS/Gemini01.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;
 }

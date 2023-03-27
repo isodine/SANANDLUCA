@@ -24,6 +24,7 @@ void Bossdown::Update(Boss& boss)
 	{
 		_playingEffectHandle[0] = PlayEffekseer3DEffect(_effectResourceHandle[0]);
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[0], downEfsize[0], downEfsize[0], downEfsize[0]);
+		PlaySoundFile("res/06_Sound/03_SE/beaker_biribiri.mp3", DX_PLAYTYPE_BACK);
 	}
 	IsPlaying[0] = IsEffekseer3DEffectPlaying(_playingEffectHandle[0]);
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], boss.model.pos.x + 50, boss.model.pos.y, boss.model.pos.z + 50);
@@ -34,6 +35,7 @@ void Bossdown::Update(Boss& boss)
 		MV1DeleteModel(boss.alcaliHandle);
 		_playingEffectHandle[1] = PlayEffekseer3DEffect(_effectResourceHandle[1]);
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[1], downEfsize[1], downEfsize[1], downEfsize[1]);
+		PlaySoundFile("res/06_Sound/03_SE/beaker_exprode.mp3", DX_PLAYTYPE_BACK);
 		Isdown = true;
 		boss.bossdownEf = false;
 	}

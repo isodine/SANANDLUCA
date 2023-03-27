@@ -58,6 +58,7 @@ void Damage::Process() {
 		LkaHitFlag = true;
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK);
 	}
 	else if (Distance < 110 && Distance >= 85 && SanHitFlag == false && LkaHitFlag == false) {
 		San->HP -= 1;
@@ -66,6 +67,7 @@ void Damage::Process() {
 		LkaHitFlag = true;
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK);
 	}
 
 
