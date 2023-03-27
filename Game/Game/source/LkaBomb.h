@@ -9,9 +9,7 @@ public:
 	void Initialize(LKA& lka);
 	void Update(LKA& lka);
 	void Render();
-	void Move();
 	void Throw(LKA& lka);
-	void bombthrow();
 private:
 	int _effectResourceHandle;		// エフェクトファイルをロードするハンドル
 	int _playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
