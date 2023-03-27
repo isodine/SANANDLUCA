@@ -65,21 +65,27 @@ bool ModeGame::Initialize() {
 
 	auto Tube1 = std::make_unique<Tube>();
 	Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
-	MV1SetupCollInfo(Tube1->handle, elevator.handleCol, 4, 4, 4);
+	MV1SetupCollInfo(Tube1->handle, Tube1->handleCol, 4, 4, 4);
 	san.tubeHandle = Tube1->handle;
 	lka.tubeHandle = Tube1->handle;
 	tubes.emplace_back(std::move(Tube1));
 
 	auto Tube2 = std::make_unique<Tube>();
 	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
-	MV1SetupCollInfo(Tube2->handle, elevator.handleCol, 4, 4, 4);
+	san.tubeCol = 0;
+	lka.tubeCol = 0;
+	MV1SetupCollInfo(Tube2->handle, san.tubeCol, 4, 4, 4);
+	MV1SetupCollInfo(Tube2->handle, lka.tubeCol, 4, 4, 4);
 	san.tubeHandle = Tube2->handle;
 	lka.tubeHandle = Tube2->handle;
 	tubes.emplace_back(std::move(Tube2));
 
 	auto Tube3 = std::make_unique<Tube>();
 	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
-	MV1SetupCollInfo(Tube3->handle, elevator.handleCol, 4, 4, 4);
+	san.tubeCol = 16;
+	lka.tubeCol = 16;
+	MV1SetupCollInfo(Tube3->handle, san.tubeCol, 4, 4, 4);
+	MV1SetupCollInfo(Tube3->handle, lka.tubeCol, 4, 4, 4);
 	san.tubeHandle = Tube3->handle;
 	lka.tubeHandle = Tube3->handle;
 	tubes.emplace_back(std::move(Tube3));

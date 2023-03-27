@@ -231,10 +231,10 @@ void Player::Update()
 
 			//É`ÉÖÅ[ÉuÇ∆ÇÃìñÇΩÇËîªíË
 			hitPolyTubeX = MV1CollCheck_Line(tubeHandle, tubeCol,
-				VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
+				VAdd(VGet(vPos.x, vPos.y + 70, vPos.z), VGet(-50, vPos.y + 70, 0)), VAdd(VGet(vPos.x, vPos.y + 70, vPos.z), VGet(500.f, vPos.y + 70, 0)));
 
 			hitPolyTubeZ = MV1CollCheck_Line(tubeHandle, tubeCol,
-				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+				VAdd(VGet(vPos.x, vPos.y + 70, vPos.z), VGet(0, vPos.y + 70, -50)), VAdd(VGet(vPos.x, vPos.y + 70, vPos.z), VGet(0, 70, 500.f)));
 
 			if (hitPolyTubeX.HitFlag)
 			{
