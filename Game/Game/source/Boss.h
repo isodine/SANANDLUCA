@@ -112,7 +112,7 @@ public:
 	bool sanhitEf;//TRUEならダメージエフェクト出現
 	bool lkahitEf;//TRUEならダメージエフェクト出現
 	bool bosshitEf;//TRUEならダメージエフェクト出現
-	bool bossdownflag;//TRUEならダウンエフェクト出現
+	bool bossdownEf;//TRUEならダウンエフェクト出現
 
 	int acidHandle;//酸性のときのテクスチャ
 	int alcaliHandle;//アルカリ性のときのテクスチャ

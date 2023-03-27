@@ -239,10 +239,6 @@ bool ModeBoss::Process() {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 	}
-	if (boss.downFlag) {
-		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
-	}
 
 	return true;
 }

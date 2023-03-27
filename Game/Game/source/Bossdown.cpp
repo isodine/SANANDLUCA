@@ -27,7 +27,7 @@ void Bossdown::Update(Boss& boss)
 	}
 	IsPlaying[0] = IsEffekseer3DEffectPlaying(_playingEffectHandle[0]);
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], boss.model.pos.x + 50, boss.model.pos.y, boss.model.pos.z + 50);
-	if (boss.bossdownflag == true)
+	if (boss.bossdownEf == true)
 	{
 		MV1DeleteModel(boss.noneHandle);
 		MV1DeleteModel(boss.acidHandle);
@@ -35,7 +35,7 @@ void Bossdown::Update(Boss& boss)
 		_playingEffectHandle[1] = PlayEffekseer3DEffect(_effectResourceHandle[1]);
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[1], downEfsize[1], downEfsize[1], downEfsize[1]);
 		Isdown = true;
-		boss.bossdownflag = false;
+		boss.bossdownEf = false;
 	}
 	IsPlaying[1] = IsEffekseer3DEffectPlaying(_playingEffectHandle[1]);
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[1], boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);

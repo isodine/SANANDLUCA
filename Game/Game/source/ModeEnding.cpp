@@ -5,7 +5,7 @@
 
 bool ModeEnding::Initialize() {
 	if (!base::Initialize()) { return false; }
-
+	Endinghandle = LoadGraph("res/99_Credit.mp4");
 	return true;
 }
 
@@ -31,17 +31,18 @@ bool ModeEnding::Process() {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeTitle(), 1, "title");
 	}
-
-	/*if (CheckHitKey(KEY_INPUT_SPACE)) {
-		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeTitle(), 1, "title");
-	}*/
+	IsPlaying = GetMovieStateToGraph(Endinghandle);
+	if (IsPlaying == 0)
+	{
+		PauseMovieToGraph(Endinghandle);
+	}
 
 	return true;
 }
 
 bool ModeEnding::Render() {
-	DrawString(0, 0, "エンディング", GetColor(255, 255, 255));
+	PlayMovieToGraph(Endinghandle);
+	DrawGraph(0, 0, Endinghandle, false);
 
 	return true;
 }
