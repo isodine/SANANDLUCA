@@ -159,7 +159,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ModeEffekseer.cpp" />
     <ClCompile Include="source\Bossattack.cpp" />
     <ClCompile Include="source\Bossdamage.cpp" />
     <ClCompile Include="source\Bossdown.cpp" />
