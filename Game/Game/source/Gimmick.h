@@ -91,5 +91,4 @@ public:
 private:
 	SAN* san;
 	LKA* lka;
-	//Player* player;
 };

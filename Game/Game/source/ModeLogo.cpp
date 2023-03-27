@@ -24,7 +24,6 @@ bool ModeLogo::Process() {
 }
 
 bool ModeLogo::Render() {
-	//DrawString(0, 0, "É`Å[ÉÄÉçÉS", GetColor(255, 255, 255));
   int logo = 0;
   int teamlogo = 0;
 

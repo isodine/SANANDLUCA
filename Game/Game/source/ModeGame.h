@@ -7,7 +7,6 @@
 #include "Damage.h"
 #include "timer.h"
 #include "Gimmick.h"
-#include "Slime.h"
 #include "sancircle.h"
 #include "lkacircle.h"
 #include "sanheal.h"
@@ -16,7 +15,6 @@
 #include "Electrode.h"
 #include "Elevator.h"
 #include "Tube.h"
-
 #include <string>
 #include <memory>
 #include <vector>
@@ -31,7 +29,6 @@
 #define	RAD2DEG(x)			( ((x) * 180.0f ) / PI )
 
 	
-
 
 
 // ÉÇÅ[Éh

@@ -25,17 +25,6 @@ ModeBoss::ModeBoss() : ModeBase()
 
 bool ModeBoss::Initialize() {
 	if (!ModeBase::Initialize()) { return false; }
-	GameMode = 3;
-	//// モデルデータのロード（テクスチャも読み込まれる）
-	//_handle = MV1LoadModel("res/SDChar/SDChar.mv1");
-	//_attach_index = -1;		// アニメーションアタッチはされていない
-
-	//// 再生時間の初期化
-	//_total_time = 0.f;
-	//_play_time = 0.0f;
-	//// 位置,向きの初期化
-	//_vPos = VGet(0, 0, 0);
-	//_vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 	//カメラ設定
 		_bossCam._vTarget = VGet(0, 0, 650);
 		_bossCam._vPos = VGet(0, 1100, 0);
@@ -66,22 +55,6 @@ bool ModeBoss::Initialize() {
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
-	/*MV1SetFrameVisible(_handleMap, 0, FALSE);
-	MV1SetFrameVisible(_handleMap, 1, FALSE);*/
-
-	////マスクの試験運用
-	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	//CreateMaskScreen();
-
-
-	//フォグを使ってみる
-	//SetFogEnable(TRUE);
-
-	// フォグの色を設定
-	//SetFogColor(255, 255, 255);
-
-	// フォグの開始距離、終了距離を設定
-	//SetFogStartEnd(0.0f, 3000.0f);
 
 	// その他初期化
 	_bViewCollision = FALSE;
@@ -178,14 +151,9 @@ bool ModeBoss::Terminate() {
 bool ModeBoss::Process() {
 	ModeBase::Process();
 	Count += 1;
-	//for (auto&& SanLka : sanlka) {
-	//	SanLka->Update();
-	//}-
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	bossrun.Update(boss);
-	/*san.SetOnBalance(gimmick.GetSanHitFlag());
-	lka.SetOnBalance(gimmick.GetLkaHitFlag());*/
 	san.Update(damage);
 	lka.Update(damage);
 	damage.Process();
@@ -208,7 +176,7 @@ bool ModeBoss::Process() {
 	{
 		StopMusic();
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
+		ModeServer::GetInstance()->Add(new ModeGameOver(3), 1, "gameover");
 	}
 	if (boss.downFlag) {
 		ModeServer::GetInstance()->Del(this);
@@ -232,8 +200,6 @@ bool ModeBoss::Render() {
 	SetGlobalAmbientLight(GetColorF(0.1f, 0.1f, 0.1f, 0.f));
 	ChangeLightTypeDir(VGet(0, -1, 1));
 
-	/*LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
-	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));*/
 
 #endif
 #if 0	// ポイントライト
@@ -246,33 +212,6 @@ bool ModeBoss::Render() {
 		SetCameraNearFar(_bossCam._clipNear, _bossCam._clipFar);
 	
 
-	// 0,0,0を中心に線を引く
-	{
-		//float linelength = 1000.f;
-		//VECTOR v = { 0, 0, 0 };
-		//DrawLine3D(VAdd(v, VGet(-linelength, 0, 0)), VAdd(v, VGet(linelength, 0, 0)), GetColor(255, 0, 0));
-		//DrawLine3D(VAdd(v, VGet(0, -linelength, 0)), VAdd(v, VGet(0, linelength, 0)), GetColor(0, 255, 0));
-		//DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
-	}
-
-	// カメラターゲットを中心に短い線を引く
-	{
-		float linelength = 10.f;
-		VECTOR v = _cam._vTarget;
-		DrawLine3D(VAdd(v, VGet(-linelength, 0, 0)), VAdd(v, VGet(linelength, 0, 0)), GetColor(255, 0, 0));
-		DrawLine3D(VAdd(v, VGet(0, -linelength, 0)), VAdd(v, VGet(0, linelength, 0)), GetColor(0, 255, 0));
-		DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
-	}
-
-	// 再生時間をセットする
-	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
-
-	{
-		// コリジョン判定用ラインの描画
-		//if (_bViewCollision) {
-		//	DrawLine3D(VAdd(_vPos, VGet(0, _colSubY, 0)), VAdd(_vPos, VGet(0, -99999.f, 0)), GetColor(255, 0, 0));
-		//}
-	}
 	// マップモデルを描画する
 	{
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
@@ -284,14 +223,14 @@ bool ModeBoss::Render() {
 	boss.Render();
 	san.Render(damage);
 	lka.Render(damage);
-	//DrawFormatString(0, 30, GetColor(255, 0, 0), "sanPos(%f,%f,%f)", san.vPos.x, san.vPos.y, san.vPos.z);
 	// デバッグ表示
+#ifdef debug
 	{
-		//DrawSphere3D(boss.BossPosition0, 200, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
-		//DrawSphere3D(boss.BossPosition1, 200, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
-		//DrawSphere3D(boss.BossPosition2, 200, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
-		//DrawSphere3D(boss.BossPosition3, 200, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
-		/*int x = 0, y = 0, size = 16;
+		DrawSphere3D(boss.BossPosition0, 200, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		DrawSphere3D(boss.BossPosition1, 200, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		DrawSphere3D(boss.BossPosition2, 200, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		DrawSphere3D(boss.BossPosition3, 200, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+		int x = 0, y = 0, size = 16;
 		SetFontSize(size);
 		DrawFormatString(x, y, GetColor(255, 0, 0), "Camera:"); y += size;
 		DrawFormatString(x, y, GetColor(255, 0, 0), "  target = (%5.2f, %5.2f, %5.2f)", _cam._vTarget.x, _cam._vTarget.y, _cam._vTarget.z); y += size;
@@ -327,8 +266,9 @@ bool ModeBoss::Render() {
 		case Player::STATUS::JUMP:
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
-		}*/
+		}
 	}
+#endif
 	sanbomb.Render();
 	lkabomb.Render();
 	bossrun.Render();

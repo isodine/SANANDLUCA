@@ -26,7 +26,6 @@ void SanBomb::Update(SAN& san)
 	if (san.attack == Pop)
 	{
 		situation = PlayerBomb::Pop;
-		//bomblive = true;
 	}
 
 	if (san.attack == Keep)
@@ -50,7 +49,6 @@ void SanBomb::Update(SAN& san)
 			_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 			// 再生中のエフェクトを移動する。
 			SetPosPlayingEffekseer3DEffect(_playingEffectHandle, vPos.x, vPos.y, vPos.z);
-			//_position_x += 0.2f;
 		}
 		bomblive = true;
 		if (sphereSize <= sphereMax)
@@ -79,7 +77,6 @@ void SanBomb::Update(SAN& san)
 
 void SanBomb::Render()
 {
-	//DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 	DrawEffekseer3D();
 }
 
@@ -89,7 +86,6 @@ void SanBomb::Throw(SAN& san)
 	{
 		vDir = VGet(0.f, 0.f, 0.f);
 		vDir = VAdd(vDir, san.vDir);
-		//vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
 		firstdir = true;
 	}
 	vPos = VAdd(vPos, vDir);

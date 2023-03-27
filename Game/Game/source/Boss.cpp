@@ -30,15 +30,6 @@ void Boss::Initialize() {
 	BossPosition1 = VGet(-327, 37, 673);
 	BossPosition2 = VGet(41, 37, 1013);
 	BossPosition3 = VGet(327, 37, 673);
-	/*rotateFlag = false;
-	walkFlag = false;
-	rushFlag = false;
-	targetFlag = false;
-	target = false;
-	idleFlag = false;
-	SanCatchFlag = false;
-	LkaCatchFlag = false;
-	crashFlag = false;*/
 	MV1SetupCollInfo(model.modelHandle, 1, 8, 8, 8);
 	type = BOSSTYPE::NONE;
 	phType = PH::NONE;
@@ -103,12 +94,7 @@ void Boss::Process() {
 	}
 
 	if (oldtype == type) {
-		//// 再生時間を進める
-		//PlayTime += 0.5f;
-		//if (PlayTime >= TotalTime1)
-		//{
-		//	PlayTime = 0.0f;
-		//}
+
 	}
 	else {
 	
@@ -146,11 +132,7 @@ void Boss::Process() {
 	case BOSSTYPE::IDLE:
 		manager->animChange(7, &model, true, false, false);//待機モーションをアタッチする
 	}
-}
-	/*TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
-	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
-	// 再生時間を初期化
-	//PlayTime = 0.0f;	
+ }
 }
 
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
@@ -204,7 +186,6 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 		dir = -1.0f;
 	}
 	model.dir.y += 0.02f * dir;
-	//model.dir.y = fmod(model.dir.y, 2 * DX_PI);//一周したらdir.yを0に戻す
 	if (StopDir > VCross(forward, BossDir).y) {
 		rushFlag = true;
 		type = BOSSTYPE::RUSH;
@@ -332,7 +313,6 @@ void Boss::Search() {
 	if (VCross(forward, BossDir).y < 0) {
 		dir = -1.0f;
 	}
-	//VECTOR modeldir = VNorm(model.dir);
 	VECTOR Forward = VNorm(forward);
 	model.dir.y += 0.02f * dir;
 	if (StopDir > abs(1 - VDot(forward, BossDir))) {
@@ -456,14 +436,15 @@ void Boss::Render() {
 			MV1SetTextureGraphHandle(model.modelHandle, 2, noneHandle, FALSE);
 			break;
 		}
+#ifdef debug
+		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
-		//DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
-
-		//DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
-		//DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
-		//DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
-		//DrawFormatString(0, 150, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
-		//DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
-		//DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
+		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
+		DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
+		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
+		DrawFormatString(0, 150, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
+#endif
 	}
 }

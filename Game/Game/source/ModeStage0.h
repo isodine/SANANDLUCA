@@ -1,5 +1,23 @@
 #pragma once
 #include "appframe.h"
+#include "Player.h"
+#include "SANclass.h"
+#include "LKAclass.h"
+#include "Damage.h"
+#include "timer.h"
+#include "sancircle.h"
+#include "lkacircle.h"
+#include "sanheal.h"
+#include "lkacircle.h"
+
+#include <string>
+#include <memory>
+#include <vector>
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
 
 class ModeStage0 : public ModeBase {
 	typedef ModeBase base;
@@ -8,13 +26,60 @@ public:
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
+	// カメラ
+	Camera _cam;
 
-	int handle;
-	int Mattach_index;
+
 	// 3Dモデル描画用
-	float Mtotal_time;
-	float Mplay_time;
+	int _handle;
+	int _attach_index;
+	float _total_time;
+	float _play_time;
 	VECTOR _vPos;	// 位置
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
+
+	// マップ用
+	int _handleMap;
+	int _handleSkySphere;
+	int frameMapCollisionfloor;
+	int frameMapCollisionwall;
+	int frameMapCollisiongoalSAN;
+	int frameMapCollisiongoalLKA;
+
+	int LightHandle;
+	int MaskHandle;
+
+	// デバッグ用
+	bool	_bViewCollision;
+
+	//ジャンプ処理用
+	float throughtime;
+	float height;
+
+	//シャドウマップ用
+
+	int ShadowMapHandle;
+
+	VECTOR ShadowMapUpVec;
+	VECTOR ShadowMapDownVec;
+
+	//VOICE用
+	bool modeStart = false;
+	int VOICEstartSANLKA[6] = { LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_01.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_02.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_03.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_01.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_02.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_03.wav") };
+
+public:
+	Player player;
+	SAN san;
+	LKA lka;
+	SanBomb sanbomb;
+	LkaBomb lkabomb;
+	Sancircle sancircle;
+	Lkacircle lkacircle;
+	Damage damage;
 };

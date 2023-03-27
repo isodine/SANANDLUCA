@@ -1,7 +1,6 @@
 #include"LKAclass.h"
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
-//#include "ModeGame.h"
+
 
 LKA::LKA()
 	:Player()
@@ -62,14 +61,6 @@ void LKA::Update(Damage& damage)
 	
 	Player::Update();
 	if (damage.LkaHitFlag == true) { oldcount = GetNowCount(); }
-	/*if (hitPolyDimLKA.HitNum >= 1) {
-		if (_gimmick->balance == Gimmick::BALANCE::LKA) {
-			Landing(_gimmick->LKADisk.y - 280);
-		}
-		else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
-			Landing(_gimmick->LKADisk.y - 280);
-		}
-	}*/
 }
 
 void LKA::Render(Damage& damage)

@@ -30,7 +30,6 @@
     <ClCompile Include="source\sanheal.cpp" />
     <ClCompile Include="source\lkacircle.cpp" />
     <ClCompile Include="source\lkaheal.cpp" />
-    <ClCompile Include="ModeEffekseer.cpp" />
     <ClCompile Include="source\Swamp.cpp" />
     <ClCompile Include="source\Bossrun.cpp" />
     <ClCompile Include="source\IronDoor.cpp" />
@@ -39,7 +38,6 @@
     <ClCompile Include="source\Tube.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModeEffekseer.h" />
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Camera.h" />
@@ -47,7 +45,6 @@
     <ClInclude Include="source\ModeRule.h" />
     <ClInclude Include="source\Slime.h" />
     <ClInclude Include="source\Gimmick.h" />
-    <ClInclude Include="source\Include.h" />
     <ClInclude Include="source\LkaBomb.h" />
     <ClInclude Include="source\LKAclass.h" />
     <ClInclude Include="source\ModeBoss.h" />

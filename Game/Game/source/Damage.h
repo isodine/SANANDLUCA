@@ -8,16 +8,20 @@ class SanBomb;
 class LkaBomb;
 
 class Damage {
+	
 public:
 	Damage();
 	~Damage();
-	virtual void Initialize(SAN* san, LKA* lka);
-	virtual void Terminate();
-	virtual void Process();
-	virtual void SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes);
-	virtual void Render();
-	void SetGame(ModeGame* game);
+	void Initialize(SAN* san, LKA* lka);
+	void Terminate();
+	void Process();
+	void StageDamage(int StageHandle);
+	void SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes);
+	void Render();
 	void SetBomb(SanBomb* sanbomb, LkaBomb* lkabomb);
+
+	MV1_COLL_RESULT_POLY_DIM HitPolySan;
+	MV1_COLL_RESULT_POLY_DIM HitPolyLka;
 
 	int MaxSanHP,SanHP;
 	int MaxLkaHP,LkaHP;

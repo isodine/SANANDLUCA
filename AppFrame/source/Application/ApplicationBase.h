@@ -28,6 +28,9 @@ public:
 	virtual int GetKey2P() { return _gKey2P; }
 	virtual int GetTrg2P() { return _gTrg2P; }
 
+	bool GameEnd;
+
+
 protected:
 	static	ApplicationBase	*_lpInstance;
 

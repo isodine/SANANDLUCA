@@ -2,7 +2,6 @@
 #include "AppFrame.h"
 //#include "ApplicationMain.h"
 #include "time.h"
-#include "Include.h"
 //#include "ModeGame.h"
 
 
@@ -14,14 +13,11 @@ Damage::~Damage() {
 
 }
 
-void Damage::SetGame(ModeGame* game) {
-	Game = game;
-}
-
 void Damage::SetBomb(SanBomb* sanbomb, LkaBomb* lkabomb) {
 	Sanbomb = sanbomb;
 	Lkabomb = lkabomb;
 }
+
 
 void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
@@ -41,7 +37,6 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 	SanHitFlag = false;
 	LkaHitFlag = false;
 
-	stageFlag = true;
 	stageHandle = san->stageHandle;
 
 	MV1SetupCollInfo(San->Mhandle, 3, 8, 8, 8);
@@ -90,45 +85,6 @@ void Damage::Process() {
 	}
 
 
-	if (stageFlag == true) {
-		MV1_COLL_RESULT_POLY_DIM HitPolySan;
-		MV1_COLL_RESULT_POLY_DIM HitPolyLka;
-	
-		HitPolySan = MV1CollCheck_Capsule(Game->_handleMap, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
-		HitPolyLka = MV1CollCheck_Capsule(Game->_handleMap, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
-		
-		
-		if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
-			San->HP -= 1;
-			SanHitFlag = true;
-			PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
-		}
-		
-		if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
-			Lka->HP -= 1;
-			LkaHitFlag = true;
-			PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
-		}
-	}
-	
-
-	if (SanHitFlag == true) {
-		SanCoolTime += 1;
-	}
-
-	if (LkaHitFlag == true) {
-		LkaCoolTime += 1;
-	}
-
-	if (SanCoolTime >= 60) {
-		SanHitFlag = false;
-		SanCoolTime = 0;
-	}
-
-	if (LkaCoolTime >= 60) {
-		LkaHitFlag = false;
-		LkaCoolTime = 0;
-	}
 }
 
 void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
@@ -161,7 +117,43 @@ void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
 	}
 }
 
+void Damage::StageDamage(int StageHandle) {
+	HitPolySan = MV1CollCheck_Capsule(StageHandle, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
+	HitPolyLka = MV1CollCheck_Capsule(StageHandle, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
+
+	if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
+		San->HP -= 1;
+		SanHitFlag = true;
+		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	}
+
+	if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
+		Lka->HP -= 1;
+		LkaHitFlag = true;
+		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	}
+
+	if (SanHitFlag == true) {
+		SanCoolTime += 1;
+	}
+
+	if (LkaHitFlag == true) {
+		LkaCoolTime += 1;
+	}
+
+	if (SanCoolTime >= 60) {
+		SanHitFlag = false;
+		SanCoolTime = 0;
+	}
+
+	if (LkaCoolTime >= 60) {
+		LkaHitFlag = false;
+		LkaCoolTime = 0;
+	}
+}
+
 void Damage::Render() {
+#ifdef debug
 	DrawFormatString(0, 200, GetColor(0, 0, 0), "San %d", SanHP);
 	DrawFormatString(0, 220, GetColor(0, 0, 0), "Lka %d", LkaHP);
 	DrawFormatString(0, 240, GetColor(0, 0, 0), "Distance %f", Distance);
@@ -181,5 +173,5 @@ void Damage::Render() {
 
 	DrawCapsule3D(VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 	DrawCapsule3D(VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
-
+#endif
 }

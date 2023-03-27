@@ -12,6 +12,7 @@ ApplicationBase::~ApplicationBase() {
 }
 
 bool ApplicationBase::Initialize(HINSTANCE hInstance) {
+	GameEnd = false;
 
 	// DXƒ‰ƒCƒuƒ‰ƒŠ‚Ì‰Šú‰»
 	if(AppWindowed()){

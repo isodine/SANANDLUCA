@@ -13,12 +13,10 @@ public:
 	void Terminate();
 	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, int mypH);
 	void Render(int pH);
-	//void Walk(float speed);
 	void AcidWalk(float speed);
 	void AlkaliWalk(float speed);
 	void SanTargeting(VECTOR SanPos, float speed);
 	void LkaTargeting( VECTOR LkaPos, float speed);
-	//void SlimeJump(VECTOR SanPos, VECTOR LkaPos);
 	void AcidJump(VECTOR SanPos);
 	void AlkaliJump(VECTOR LkaPos);
 
@@ -80,7 +78,6 @@ public:
 
 	int mypH = 0;     //‚P_«A‚QƒAƒ‹ƒJƒŠ«
 
-	//std::vector<std::unique_ptr<Slime>> slime;
 	SAN* _san;
 	LKA* _lka;
 	SanBomb* _sanbomb;

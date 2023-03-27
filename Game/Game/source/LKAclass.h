@@ -14,8 +14,6 @@ public:
 	void Update(Damage& damage);
 	void Render(Damage& damage);
 	void Input() override;
-	//void Jump();
-	//void freeFall();
 
 	int hpgaugehandle[6];
 	int hphandle[6];

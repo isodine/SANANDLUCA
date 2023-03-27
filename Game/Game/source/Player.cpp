@@ -62,10 +62,6 @@ void Player::Initialize()
 	vDir = VGet(0, 0, -1);		// キャラモデルはデフォルトで-Z方向を向いている
 	attack = Attack::None;
 	SEjump = LoadSoundMem("res/06_Sound/03_SE/ani_ta_biyon02.mp3");
-	/*sanfrask = LoadGraph("res/pH_gauge/pHgauge_SL_flask.png");
-	sangauge = LoadGraph("res/pH_gauge/ゲージ（中）/酸/pHgauge_strongacid.png");
-	sanicon = LoadGraph("res/pH_gauge/アイコン表情差分/サン/pHgauge_Sun_Emotions_Normal.png");
-	sanframememori = LoadGraph("res/pH_gauge/フレーム/サン/pHgauge_Sun_background_memori.png");*/
 
 
 	// 位置,向きの初期化
@@ -116,9 +112,6 @@ void Player::Update()
 			_status = STATUS::JUMP;
 			mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
 		}
-		//if (key & PAD_INPUT_2 && !(_status == STATUS::CHARGE)) { _status = STATUS::CHARGE; }
-		//if (key & PAD_INPUT_3 && !(_status == STATUS::ATTACK)) { _status = STATUS::ATTACK; }
-		//if (key & PAD_INPUT_4 && !(_status == STATUS::DAMAGE)) { _status = STATUS::DAMAGE; }
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
 		if (_bomb->situation == None) { attack = Attack::None; }
@@ -295,7 +288,7 @@ void Player::Update()
 			}
 		
 		else {
-			//freeFall();
+			
 		}
 		// 移動量をそのままキャラの向きにする
 		if (VSize(v) > 0.f) {		// 移動していない時は無視するため
@@ -309,12 +302,6 @@ void Player::Update()
 		{
 			_status = STATUS::WAIT;
 		}
-
-
-
-		//sanB.Update(this);         //ボムの更新
-
-
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {
 			// 再生時間を進める
@@ -356,10 +343,6 @@ void Player::Update()
 			Mtotal_time = MV1GetAttachAnimTotalTime(Mhandle, Mattach_index);
 			// 再生時間を初期化
 			Mplay_time = 0.0f;
-			//if(!(oldStatus== STATUS::JUMP)&& _status== STATUS::JUMP)
-			//{
-			//	Mplay_time = 20.0f;
-			//}
 		}
 
 		// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
@@ -422,7 +405,7 @@ void Player::Render()
 		MV1SetRotationXYZ(Mhandle, vRot);
 		// 描画
 		MV1DrawModel(Mhandle);
-
+#ifdef debug
 		if (debagMode)
 		{
 			//ダメージ判定の描画
@@ -433,7 +416,7 @@ void Player::Render()
 			DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
 			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 6, GetColor(0, 0, 255), GetColor(0, 0, 255), FALSE);
 		}
-
+#endif
 
 	}
 }

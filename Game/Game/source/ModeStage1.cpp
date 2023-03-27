@@ -1,7 +1,5 @@
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
 #include "ModeStage1.h"
-//#include "ModeStage2.h"
 #include "ModeGameOver.h"
 
 bool ModeStage1::Initialize() {
@@ -26,7 +24,7 @@ bool ModeStage1::Process() {
 
 	if (CheckHitKey(KEY_INPUT_A)) {
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "GameOver");
+		ModeServer::GetInstance()->Add(new ModeGameOver(2), 1, "GameOver");
 	}
 
 	return true;

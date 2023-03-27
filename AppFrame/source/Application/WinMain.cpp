@@ -7,7 +7,7 @@
 //
 
 #include "../appframe.h"
-
+#include "../Mode/ModeBase.h"
 
 
 //
@@ -35,7 +35,7 @@ int WINAPI WinMain(
 		ClearDrawScreen();		// ‰æ–Ê‚ð‰Šú‰»‚·‚é
 		appBase->Render();
 		ScreenFlip();			// — ‰æ–Ê‚Ì“à—e‚ð•\‰æ–Ê‚É”½‰f‚³‚¹‚é
-		if(CheckHitKey(KEY_INPUT_ESCAPE))
+		if(appBase->GameEnd || CheckHitKey(KEY_INPUT_ESCAPE))
 		{
 			break;
 		}
