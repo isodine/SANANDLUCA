@@ -63,17 +63,26 @@ bool ModeGame::Initialize() {
 	elevator.Initialize();
 	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
-	//auto Tube1 = std::make_unique<Tube>();
-	//Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
-	//tubes.emplace_back(std::move(Tube1));
+	auto Tube1 = std::make_unique<Tube>();
+	Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
+	MV1SetupCollInfo(Tube1->handle, elevator.handleCol, 4, 4, 4);
+	san.tubeHandle = Tube1->handle;
+	lka.tubeHandle = Tube1->handle;
+	tubes.emplace_back(std::move(Tube1));
 
-	//auto Tube2 = std::make_unique<Tube>();
-	//Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
-	//tubes.emplace_back(std::move(Tube2));
+	auto Tube2 = std::make_unique<Tube>();
+	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
+	MV1SetupCollInfo(Tube2->handle, elevator.handleCol, 4, 4, 4);
+	san.tubeHandle = Tube2->handle;
+	lka.tubeHandle = Tube2->handle;
+	tubes.emplace_back(std::move(Tube2));
 
-	//auto Tube3 = std::make_unique<Tube>();
-	//Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
-	//tubes.emplace_back(std::move(Tube3));
+	auto Tube3 = std::make_unique<Tube>();
+	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
+	MV1SetupCollInfo(Tube3->handle, elevator.handleCol, 4, 4, 4);
+	san.tubeHandle = Tube3->handle;
+	lka.tubeHandle = Tube3->handle;
+	tubes.emplace_back(std::move(Tube3));
 
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
@@ -404,8 +413,8 @@ bool ModeGame::Render() {
 	//irondoor.Render();
 	electrode.Render();
 	elevator.Render();
-	//for (auto&& Tubes : tubes) {
-	//	Tubes->Render();
-	//}
+	for (auto&& Tubes : tubes) {
+		Tubes->Render();
+	}
 	return true;
 }

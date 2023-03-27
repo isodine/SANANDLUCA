@@ -45,12 +45,14 @@ public:
 	int stageHandle;
 	int ironDoorHandle;
 	int elevatorHnadle;
+	int tubeHandle;
 	int floorCol;
 	int wallCol;
 	int goalColSAN;
 	int goalColLKA;
 	int ironDoorCol;
 	int elevatorCol;
+	int tubeCol;
 
 public:
 	//“–‚½‚è”»’è—p

@@ -163,7 +163,8 @@ void Player::Update()
 			MV1_COLL_RESULT_POLY hitPolyIronDoor;
 			MV1_COLL_RESULT_POLY_DIM hitPolyDimElevator;
 			MV1_COLL_RESULT_POLY hitPolyElevator;
-
+			MV1_COLL_RESULT_POLY hitPolyTubeX;
+			MV1_COLL_RESULT_POLY hitPolyTubeZ;
 
 			//前後方向の壁判定
 			hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
@@ -228,6 +229,21 @@ void Player::Update()
 				//freeFall();
 			}
 
+			//チューブとの当たり判定
+			hitPolyTubeX = MV1CollCheck_Line(tubeHandle, tubeCol,
+				VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
+
+			hitPolyTubeZ = MV1CollCheck_Line(tubeHandle, tubeCol,
+				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+
+			if (hitPolyTubeX.HitFlag)
+			{
+				vPos.x = hitPolyTubeX.HitPosition.x;
+			}
+			if (hitPolyTubeZ.HitFlag)
+			{
+				vPos.z = hitPolyTubeZ.HitPosition.z;
+			}
 
 			if (mypH == San && !goal)
 			{

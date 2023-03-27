@@ -6,6 +6,11 @@ Tube::~Tube()
 {
 }
 
+void Tube::SetSanLka(SAN* _san, LKA* _lka) {
+	san = _san;
+	lka = _lka;
+}
+
 void Tube::Initialize(int type, VECTOR Pos)
 {
 	if (type == 0)
@@ -31,7 +36,7 @@ void Tube::Initialize(int type, VECTOR Pos)
 	else if (type == 2)
 	{
 		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_gimmick_L.mv1");
-		handleCol = 0;
+		handleCol = 16;
 		Type = TubeType::Lka;
 		Dir = DirType::Left;
 		vPos = Pos;
