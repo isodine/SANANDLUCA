@@ -38,6 +38,10 @@ bool ModeGameOver::Process() {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
 	}
+	else if (Trg & PAD_INPUT_1 && StageNum == 3) {
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
+	}
 	return true;
 }
 

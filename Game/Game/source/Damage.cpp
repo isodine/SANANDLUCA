@@ -84,7 +84,23 @@ void Damage::Process() {
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
+	if (SanHitFlag == true) {
+		SanCoolTime += 1;
+	}
 
+	if (LkaHitFlag == true) {
+		LkaCoolTime += 1;
+	}
+
+	if (SanCoolTime >= 120) {
+		SanHitFlag = false;
+		SanCoolTime = 0;
+	}
+
+	if (LkaCoolTime >= 120) {
+		LkaHitFlag = false;
+		LkaCoolTime = 0;
+	}
 }
 
 void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
@@ -106,12 +122,12 @@ void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
 		LkaCoolTime += 1;
 	}
 
-	if (SanCoolTime >= 120) {
+	if (SanCoolTime >= 60) {
 		SanHitFlag = false;
 		SanCoolTime = 0;
 	}
 
-	if (LkaCoolTime >= 120) {
+	if (LkaCoolTime >= 60) {
 		LkaHitFlag = false;
 		LkaCoolTime = 0;
 	}

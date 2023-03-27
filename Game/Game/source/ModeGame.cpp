@@ -222,8 +222,8 @@ bool ModeGame::Process() {
 	MV1RefreshCollInfo(elevator.handle, elevator.handleCol);
 	san.SetOnBalance(gimmick.GetSanHitFlag());
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	//gimmick.SanHitFlag = false;
-	//gimmick.LkaHitFlag = false;
+	gimmick.SanHitFlag = false;
+	gimmick.LkaHitFlag = false;
 	//gimmick.Balance(san.vPos, lka.vPos);
 	san.Update(damage);
 	lka.Update(damage);
