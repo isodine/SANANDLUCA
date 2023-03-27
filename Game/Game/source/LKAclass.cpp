@@ -53,17 +53,13 @@ void LKA::Input()
 
 void LKA::Update(Damage& damage)
 {
-	
+
 	Player::Update();
 	if (damage.LkaHitFlag == true)
-	{oldcount = GetNowCount(); }
+	{
+		oldcount = GetNowCount();
+	}
 	lkahitflag = false;
-}
-		}
-		else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
-			Landing(_gimmick->LKADisk.y - 280);
-		}
-	}*/
 }
 
 void LKA::Render(Damage& damage)

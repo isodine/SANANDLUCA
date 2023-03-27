@@ -40,7 +40,6 @@ class ModeStage0 : public ModeBase
 {
 	typedef ModeBase base;
 public:
-	ModeStage0();
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
