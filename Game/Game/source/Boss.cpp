@@ -193,7 +193,7 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 }
 
 void Boss::Walk() {
-		model.pos = VAdd(VScale(forward, 2.f), model.pos);
+		model.pos = VAdd(VScale(forward, 4.f), model.pos);
 		//type = BOSSTYPE::WALK;
 		if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
 			type = BOSSTYPE::IDLE;
@@ -217,13 +217,13 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimWall;
 	if (rushFlag == true) {
 		WaitCount += 1;
-		if (WaitCount == 120) {
+		if (WaitCount == 60) {
 			WaitCount = 0;
 			rushFlag = false;
 		}
 	}
 	else {
-		model.pos = VAdd(VScale(forward, 30.f), model.pos);
+		model.pos = VAdd(VScale(forward, 60.f), model.pos);
 		MV1RefreshCollInfo(SanHandle, 3);
 		MV1RefreshCollInfo(LkaHandle, 8);
 		hitPolyDimSan = MV1CollCheck_Sphere(SanHandle, 3, SphereCenter, 50);
@@ -420,8 +420,14 @@ void Boss::Down() {
 void Boss::Render() {
 	{
 		if (!downFlag) {
-			manager->modelRender(&model, 1.f, 1.f);
+			if (type == BOSSTYPE::RUSH && WaitCount <= 60) {
+				manager->modelRender(&model, 2.f, 1.f);
+			}
+			else {
+				manager->modelRender(&model, 1.f, 1.f);
+			}
 		}
+
 		switch (phType) {
 		case PH::ACID:
 			MV1SetTextureGraphHandle(model.modelHandle, 1, acidHandle, FALSE);

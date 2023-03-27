@@ -35,7 +35,6 @@ bool ModeRule::Process() {
   {
     ModeServer::GetInstance()->Del(this);
     ModeServer::GetInstance()->Add(new ModeStage0(), 1, "stage00");
-    //ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
   }
   return true;
 }
