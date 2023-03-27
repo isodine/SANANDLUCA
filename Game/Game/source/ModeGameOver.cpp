@@ -11,7 +11,8 @@
 
 bool ModeGameOver::Initialize() {
 	if (!base::Initialize()) { return false; }
-	Grhandle = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_20.png");
+	Gameoverhandle = LoadGraph("res/GameOver.mp4");
+	IsPlaying = 1;
 	return true;
 }
 
@@ -31,14 +32,20 @@ bool ModeGameOver::Process() {
 
 	if (Trg & PAD_INPUT_1) {
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
+		ModeServer::GetInstance()->Add(new ModeTitle(), 1, "title");
+	}
+	IsPlaying = GetMovieStateToGraph(Gameoverhandle);
+	if (IsPlaying == 0)
+	{
+		PauseMovieToGraph(Gameoverhandle);
 	}
 	return true;
 }
 
 bool ModeGameOver::Render()
 {
-	DrawGraph(0, 0,Grhandle,true);
+	PlayMovieToGraph(Gameoverhandle);
+	DrawGraph(0, 0, Gameoverhandle,false);
 
 	return true;
 }

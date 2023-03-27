@@ -9,5 +9,6 @@ public:
 	virtual bool Process();
 	virtual bool Render();
 private:
-	int Grhandle;
+	int Gameoverhandle;
+	int IsPlaying;
 };
