@@ -186,6 +186,40 @@ bool ModeBoss::Initialize() {
 		cnt++;
 	}
 
+	//std::ifstream ifs2("res/SALKApH.csv");
+
+	//std::string line2;
+	//std::vector<std::string> strresult2;
+	//std::vector<int> intresult2;
+	//int hp;
+	//int cntt = 0;
+	//while (std::getline(ifs2, line2)) {
+
+	//	std::vector < std::string > strvec = splitme(line2, ',');
+
+	//	for (int i = 0; i < strvec.size(); i++) {
+	//		int readInteger = atoi(strvec.at(i).c_str());
+	//		if (readInteger != 0 || (strlen(strvec.at(i).c_str()) == 1 && strvec.at(i).c_str()[0] == '0'))
+	//		{
+	//			std::cout << readInteger << "\n";
+	//			intresult2.push_back(readInteger);
+	//			if (i == 1) {
+	//				hp = readInteger;
+
+	//				if (cntt == 1) { san.HP = hp; }
+	//				else if (cntt == 2) { lka.HP = hp; }
+
+	//			}
+	//		}
+	//		else
+	//		{
+	//			std::cout << strvec.at(i) << "\n";
+	//			strresult2.push_back(strvec.at(i));
+	//		}
+	//	}
+	//	cntt++;
+	//}
+
 	PlayMusic("res/06_Sound/01_BGM/88_BOSS/Gemini01.mp3", DX_PLAYTYPE_LOOP);
 
 	return true;

@@ -252,6 +252,40 @@ bool ModeGame::Initialize() {
 		cnt++;
 	}
 
+	std::ifstream ifs2("res/SALKApH.csv");
+
+	std::string line2;
+	std::vector<std::string> strresult2;
+	std::vector<int> intresult2;
+	int hp;
+	int cntt = 0;
+	while (std::getline(ifs2, line2)) {
+
+		std::vector < std::string > strvec = splitme(line2, ',');
+
+		for (int i = 0; i < strvec.size(); i++) {
+			int readInteger = atoi(strvec.at(i).c_str());
+			if (readInteger != 0 || (strlen(strvec.at(i).c_str()) == 1 && strvec.at(i).c_str()[0] == '0'))
+			{
+				std::cout << readInteger << "\n";
+				intresult2.push_back(readInteger);
+				if (i == 2) {
+					hp = readInteger;
+
+					if (cntt == 1) { san.HP = hp; }
+					else if (cntt == 2) { lka.HP = hp; }
+
+				}
+			}
+			else
+			{
+				std::cout << strvec.at(i) << "\n";
+				strresult2.push_back(strvec.at(i));
+			}
+		}
+		cnt++;
+	}
+
 	//CSVの調整にカメラを追いつかせる
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
 	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
@@ -371,6 +405,31 @@ bool ModeGame::Process() {
 
 		// シャドウマップの削除
 		DeleteShadowMap(ShadowMapHandle);
+
+		//const char* dir("res/SALKApH.csv");
+		//std::vector<std::string> _data;
+		//fileIO::loadCSV(&_data, dir, false);
+		////san.HP = atoi(_data.at(3).c_str());
+		////lka.HP = atoi(_data.at(5).c_str());
+
+
+		////std::istringstream ss = std::istringstream(_data.at(3).c_str());
+		////int num = atoi(_data.at(3).c_str());
+		////ss >> num;
+		//_data[3] = std::to_string(san.HP);
+		//_data[5] = std::to_string(lka.HP);
+
+		//std::string insStr = "";
+		//for (auto insData : _data)
+		//{
+		//	insStr += insData;
+		//	if (insStr.size() == 3 || insStr.size() == 10 || insStr.size() == 17) { insStr += "\n"; }
+		//	else { insStr += ","; }
+		//	//if (insStr.size() == 2 || insStr.size() == 4) { insStr += "\n"; }
+		//}
+		//std::ofstream ofs(dir);
+		//ofs << insStr;
+		//ofs.close();
 
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");

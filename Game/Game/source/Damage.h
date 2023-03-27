@@ -4,6 +4,7 @@
 
 class SAN;
 class LKA;
+class ModeGame;
 
 class Damage {
 public:
