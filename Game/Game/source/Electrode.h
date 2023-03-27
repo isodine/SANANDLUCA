@@ -14,6 +14,6 @@ public:
 	int handleCol;
 	int handleSANelectrode;
 	int handleLKAelectrode;
-	bool isSan = true;     //trueならサン、falseならルカ
+	bool isSan = false;     //trueならサン、falseならルカ
 	bool change = false;
 };

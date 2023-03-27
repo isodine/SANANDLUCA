@@ -45,7 +45,6 @@ public:
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
-	void charJump();
 
 	// ÉJÉÅÉâ
 	Camera _cam;
@@ -88,11 +87,11 @@ public:
 	//VOICEóp
 	bool modeStart = false;
 	int VOICEstartSANLKA[6] = { LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_01.wav"),
-								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_02.wav"),
-								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_03.wav"),
-								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_01.wav"),
-								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_02.wav"),
-								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_03.wav") };
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_02.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_03.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_01.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_02.wav"),
+															LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_03.wav") };
 
 public:
 	Player player;
@@ -103,12 +102,4 @@ public:
 	Sancircle sancircle;
 	Lkacircle lkacircle;
 	Damage damage;
-	Gimmick gimmick;
-	Slime slime;
-	IronDoor irondoor;
-	Electrode electrode;
-	Elevator elevator;
-	Tube tube;
-	std::vector<std::unique_ptr<Slime>> slimes;
-	std::vector<std::unique_ptr<Tube>> tubes;
 };

@@ -215,7 +215,6 @@
     <ClCompile Include="source\Tube.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModeEffekseer.h" />
     <ClInclude Include="source\ApplicationMain.h" />
     <ClInclude Include="source\Boss.h" />
     <ClInclude Include="source\Bossattack.h" />
@@ -235,7 +234,6 @@
     <ClInclude Include="source\sanheal.h" />
     <ClInclude Include="source\Slime.h" />
     <ClInclude Include="source\Gimmick.h" />
-    <ClInclude Include="source\Include.h" />
     <ClInclude Include="source\LkaBomb.h" />
     <ClInclude Include="source\LKAclass.h" />
     <ClInclude Include="source\ModeBoss.h" />

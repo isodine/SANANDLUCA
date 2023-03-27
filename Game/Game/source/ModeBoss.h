@@ -8,14 +8,12 @@ class Boss;
 
 class ModeBoss : public ModeBase
 {
-	//typedef ModeBase base;
 public:
 	ModeBoss();
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
-	//void charJump();
 
 	// ÉJÉÅÉâ
 	Camera _cam;

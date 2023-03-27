@@ -54,17 +54,9 @@ void SAN::Update(Damage& damage)
 	
 	Player::Update();
 	if (damage.SanHitFlag == true) { oldcount = GetNowCount();}
-	/*if (hitPolyDimSAN.HitNum >= 1) {
-		if (_gimmick->balance == Gimmick::BALANCE::SAN) {
-			Landing(_gimmick->SANDisk.y - 280);
-		}
-		else if (_gimmick->balance == Gimmick::BALANCE::EQUAL) {
-			Landing(_gimmick->SANDisk.y - 280);
-		}
-	}*/
 }
 
-void SAN::Render(Damage& damage)//(SanBomb& sanB,Damage& damage)
+void SAN::Render(Damage& damage)
 {
 	Player::Render();
 	VECTOR v = ConvWorldPosToScreenPos(vPos);

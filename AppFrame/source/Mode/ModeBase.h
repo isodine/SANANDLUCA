@@ -28,7 +28,6 @@ public:
 	int GetCallOfCount() { return _callOfCount; }
 
 	int Key;
-	int GameMode;
 private:
 	friend	ModeServer;
 	// ModeServer—p

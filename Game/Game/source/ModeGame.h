@@ -7,7 +7,6 @@
 #include "Damage.h"
 #include "timer.h"
 #include "Gimmick.h"
-#include "Slime.h"
 #include "sancircle.h"
 #include "lkacircle.h"
 #include "sanheal.h"
@@ -31,6 +30,8 @@
 #define	PI	(3.1415926535897932386f)
 #define	DEG2RAD(x)			( ((x) / 180.0f ) * PI )
 #define	RAD2DEG(x)			( ((x) * 180.0f ) / PI )
+
+
 
 
 // ÉÇÅ[Éh
@@ -110,7 +111,7 @@ public:
 	Lkacircle lkacircle;
 	Damage damage;
 	Gimmick gimmick;
-	Slime slime;
+	//Slime slime;
 	IronDoor irondoor;
 	Electrode electrode;
 	Elevator elevator;

@@ -4,7 +4,7 @@
 //#include "ModeGame.h"
 #include "ModeGameOver.h"
 
-std::vector<std::string> splitme0(std::string& input, char delimiter)
+std::vector<std::string> splitme00(std::string& input, char delimiter)
 {
 	std::istringstream stream(input);
 	std::string field;
@@ -16,65 +16,12 @@ std::vector<std::string> splitme0(std::string& input, char delimiter)
 	return result;
 }
 
-ModeStage0::ModeStage0() : ModeBase()
-{
-	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01.fbm/Stage_01.mv1");
-	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
-	_handleSkySphere = MV1LoadModel("res/SkySphia/SunSet.mv1");
-
-	// コリジョン情報の生成
-	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
-	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
-	frameMapCollisiongoalSAN = 4;
-	frameMapCollisiongoalLKA = 5;
-	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
-	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
-
-	// コリジョンのフレームを描画しない設定
-	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
-	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
-	MV1SetFrameVisible(_handleMap, 2, FALSE);
-	MV1SetFrameVisible(_handleMap, 3, FALSE);
-
-	////マスクの試験運用
-	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	//CreateMaskScreen();
-
-	// カメラの設定（わかりやすい位置に）
-	_cam._vPos = VGet(0, 700.f, -900.f);
-	_cam._vTarget = VGet(0, 60, 0);
-	_cam._clipNear = 2.f;
-	_cam._clipFar = 20000.f;
-
-	//シャドウマップ用変数たちの初期化
-	ShadowMapUpVec = VGet(-500.f, -1000.f, -1000.f);     //サン側想定
-	ShadowMapDownVec = VGet(500.f, 1000.f, 1000.f);      //ルカ側想定
-
-	//フォグを使ってみる
-	//SetFogEnable(TRUE);
-
-	// フォグの色を設定
-	//SetFogColor(255, 255, 255);
-
-	// フォグの開始距離、終了距離を設定
-	//SetFogStartEnd(0.0f, 3000.0f);
-
-	// その他初期化
-	_bViewCollision = FALSE;
-
-	throughtime = 0.0f;
-	height = 0.0f;
-}
-
 bool ModeStage0::Initialize() {
 	if (!base::Initialize()) { return false; }
-
-
-	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01.fbm/Stage_01.mv1");
+	//ステージの種類
+	_handleMap = MV1LoadModel("res/07_Stage_map/00_Stage/Stage_00.mv1");
+	_handleSkySphere = MV1LoadModel("res/07_Stage_map/00_Stage/00SkyCube_B/sky.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
-	_handleSkySphere = MV1LoadModel("res/SkySphia/SunSet.mv1");
 
 	// コリジョン情報の生成
 	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
@@ -90,9 +37,6 @@ bool ModeStage0::Initialize() {
 	MV1SetFrameVisible(_handleMap, 2, FALSE);
 	MV1SetFrameVisible(_handleMap, 3, FALSE);
 
-	////マスクの試験運用
-	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	//CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
 	_cam._vPos = VGet(0, 700.f, -900.f);
@@ -104,37 +48,11 @@ bool ModeStage0::Initialize() {
 	ShadowMapUpVec = VGet(-500.f, -1000.f, -1000.f);     //サン側想定
 	ShadowMapDownVec = VGet(500.f, 1000.f, 1000.f);      //ルカ側想定
 
-	//フォグを使ってみる
-	//SetFogEnable(TRUE);
-
-	// フォグの色を設定
-	//SetFogColor(255, 255, 255);
-
-	// フォグの開始距離、終了距離を設定
-	//SetFogStartEnd(0.0f, 3000.0f);
-
 	// その他初期化
 	_bViewCollision = FALSE;
 
 	throughtime = 0.0f;
 	height = 0.0f;
-
-	irondoor.Initialize();
-	electrode.Initialize(VGet(200.f, 70.f, 1000.f), true);
-	elevator.Initialize();
-	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
-
-	auto Tube1 = std::make_unique<Tube>();
-	Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
-	tubes.emplace_back(std::move(Tube1));
-
-	auto Tube2 = std::make_unique<Tube>();
-	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
-	tubes.emplace_back(std::move(Tube2));
-
-	auto Tube3 = std::make_unique<Tube>();
-	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
-	tubes.emplace_back(std::move(Tube3));
 
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
@@ -144,10 +62,6 @@ bool ModeStage0::Initialize() {
 	san.floorCol = frameMapCollisionfloor;
 	san.wallCol = frameMapCollisionwall;
 	san.goalColSAN = frameMapCollisiongoalSAN;
-	san.ironDoorHandle = irondoor.handle;
-	san.ironDoorCol = irondoor.handleCol;
-	san.elevatorHnadle = elevator.handle;
-	san.elevatorCol = elevator.handleCol;
 	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_cam);
@@ -158,16 +72,10 @@ bool ModeStage0::Initialize() {
 	lka.floorCol = frameMapCollisionfloor;
 	lka.wallCol = frameMapCollisionwall;
 	lka.goalColLKA = frameMapCollisiongoalLKA;
-	lka.ironDoorHandle = irondoor.handle;
-	lka.ironDoorCol = irondoor.handleCol;
-	lka.elevatorHnadle = elevator.handle;
-	lka.elevatorCol = elevator.handleCol;
 	lka.stageHandle = _handleMap;
 
 	damage.Initialize(&san, &lka);
-	//slime.Initialize();
-	gimmick.Initialize();
-	gimmick.SetSanLka(&san, &lka);
+	damage.SetBomb(&sanbomb, &lkabomb);
 	sanbomb.Initialize(san);
 	lkabomb.Initialize(lka);
 
@@ -183,7 +91,7 @@ bool ModeStage0::Initialize() {
 	int cnt = 0;
 	while (std::getline(ifs, line)) {
 
-		std::vector < std::string > strvec = splitme0(line, ',');
+		std::vector < std::string > strvec = splitme00(line, ',');
 
 		for (int i = 0; i < strvec.size(); i++) {
 			int readInteger = atoi(strvec.at(i).c_str());
@@ -199,20 +107,6 @@ bool ModeStage0::Initialize() {
 
 					if (cnt == 1) { san.vPos = VGet(x, y, z); pH == 1 ? san.SetType(true) : san.SetType(false); }
 					else if (cnt == 2) { lka.vPos = VGet(x, y, z); pH == 1 ? lka.SetType(true) : lka.SetType(false); }
-
-					else if (cnt == 3)
-					{
-						//auto Slime1 = std::make_unique<Slime>();
-						//Slime1->Initialize(x, y, z, pH);
-						//slimes.emplace_back(std::move(Slime1));
-					}
-					else if (cnt == 4)
-					{
-						//auto Slime2 = std::make_unique<Slime>();
-						//Slime2->Initialize(x, y, z, pH);
-						//slimes.emplace_back(std::move(Slime2));
-					}
-
 				}
 			}
 			else
@@ -264,22 +158,8 @@ bool ModeStage0::Terminate() {
 bool ModeStage0::Process() {
 	base::Process();
 
-	if (!modeStart)
-	{
-		PlaySoundMem(VOICEstartSANLKA[GetRand(5)], DX_PLAYTYPE_BACK, true);
-		modeStart = true;
-	}
-	MV1RefreshCollInfo(elevator.handle, elevator.handleCol);
-	san.SetOnBalance(gimmick.GetSanHitFlag());
-	lka.SetOnBalance(gimmick.GetLkaHitFlag());
-	san.Update(damage);
-	lka.Update(damage);
 	damage.Process();
-	//slime.SlimeU(san.vPos, lka.vPos, _handleMap, 1.0f);
-	gimmick.Balance(san.vPos, lka.vPos);
-	for (auto&& Slimes : slimes) {
-		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);
-	}
+	damage.StageDamage(_handleMap);
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
@@ -295,37 +175,13 @@ bool ModeStage0::Process() {
 		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
 
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
+		ModeServer::GetInstance()->Add(new ModeGameOver(0), 1, "gameover");
 	}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
 	lkacircle.Update(san, lka);
-	//sanheal.Update(san);
-	//lkaheal.Update(lka);
-	if (!(irondoor.melt))
-	{
-		irondoor.Update(sanbomb);
-		if (irondoor.melt)
-		{
-			san.ironDoorHandle = irondoor.handle;
-			lka.ironDoorHandle = irondoor.handle;
-		}
-	}
-	electrode.Update(sanbomb, lkabomb);
-	elevator.Update(electrode);
-	for (auto&& Tubes : tubes) {
-		Tubes->Update(electrode);
-	}
-
-	//仮
-	int Trg;
-	int keyold = Key;
-	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
-
-	int checkKey = PAD_INPUT_10;
-	if (Trg & checkKey || (san.goal && lka.goal)) {
+	if ((san.goal && lka.goal)) {
 		//BGM停止
 		StopMusic();
 
@@ -333,13 +189,15 @@ bool ModeStage0::Process() {
 		DeleteShadowMap(ShadowMapHandle);
 
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
+		ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
 	}
 
 	return true;
 }
 
 bool ModeStage0::Render() {
+	base::Render();
+
 	base::Render();
 
 	// 3D基本設定
@@ -352,11 +210,7 @@ bool ModeStage0::Render() {
 #if 1	// 平行ライト
 	SetGlobalAmbientLight(GetColorF(0.1f, 0.1f, 0.1f, 0.f));
 	ChangeLightTypeDir(VGet(0, -1, 1));
-	//SetLightEnable(FALSE);
-	//SetLightDirection(VSub(_cam._vTarget, _cam._vPos));
 
-	/*LightHandle = CreateDirLightHandle(VGet(0.0f, 0.0f, 1.0f));
-	SetLightAmbColorHandle(LightHandle, GetColorF(0.5f, 0.0f, 0.0f, 0.0f));*/
 
 #endif
 #if 0	// ポイントライト
@@ -370,33 +224,6 @@ bool ModeStage0::Render() {
 	SetCameraPositionAndTarget_UpVecY(_cam._vPos, _cam._vTarget);
 	SetCameraNearFar(_cam._clipNear, _cam._clipFar);
 
-	// 0,0,0を中心に線を引く
-	{
-		//float linelength = 1000.f;
-		//VECTOR v = { 0, 0, 0 };
-		//DrawLine3D(VAdd(v, VGet(-linelength, 0, 0)), VAdd(v, VGet(linelength, 0, 0)), GetColor(255, 0, 0));
-		//DrawLine3D(VAdd(v, VGet(0, -linelength, 0)), VAdd(v, VGet(0, linelength, 0)), GetColor(0, 255, 0));
-		//DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
-	}
-
-	// カメラターゲットを中心に短い線を引く
-	{
-		float linelength = 10.f;
-		VECTOR v = _cam._vTarget;
-		DrawLine3D(VAdd(v, VGet(-linelength, 0, 0)), VAdd(v, VGet(linelength, 0, 0)), GetColor(255, 0, 0));
-		DrawLine3D(VAdd(v, VGet(0, -linelength, 0)), VAdd(v, VGet(0, linelength, 0)), GetColor(0, 255, 0));
-		DrawLine3D(VAdd(v, VGet(0, 0, -linelength)), VAdd(v, VGet(0, 0, linelength)), GetColor(0, 0, 255));
-	}
-
-	// 再生時間をセットする
-	//MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
-
-	{
-		gimmick.Render();
-		for (auto&& Slimes : slimes) {
-			Slimes->Render(Slimes->slimePos);
-		}
-	}
 	//マップモデルを描画する
 	{
 		// シャドウマップへの描画の準備
@@ -422,10 +249,9 @@ bool ModeStage0::Render() {
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
 		MV1DrawModel(_handleSkySphere);
 
-		//MV1DrawModel(_handleMap);
-		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
 	// デバッグ表示
+#ifdef debug
 	if (san.debagMode || lka.debagMode)
 	{
 		int x = 0, y = 0, size = 16;
@@ -465,20 +291,21 @@ bool ModeStage0::Render() {
 			DrawFormatString(x, y, GetColor(255, 0, 0), "  Lka states = JUMP"); y += size;
 			break;
 		}
-		//DrawCapsule3D(VGet(san.vPos.x, san.vPos.y + 30, san.vPos.z), VGet(san.vPos.x, san.vPos.y + 75, san.vPos.z), 30.0f, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
-		//DrawCapsule3D(VGet(lka.vPos.x, lka.vPos.y + 30, lka.vPos.z), VGet(lka.vPos.x, lka.vPos.y + 75, lka.vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
+		DrawCapsule3D(VGet(san.vPos.x, san.vPos.y + 30, san.vPos.z), VGet(san.vPos.x, san.vPos.y + 75, san.vPos.z), 30.0f, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
+		DrawCapsule3D(VGet(lka.vPos.x, lka.vPos.y + 30, lka.vPos.z), VGet(lka.vPos.x, lka.vPos.y + 75, lka.vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
+		DrawFormatString(0, 300, GetColor(255, 0, 0), "SANDisk(%f,%f,%f)", gimmick.SANDisk.x, gimmick.SANDisk.y, gimmick.SANDisk.z);
+		DrawFormatString(0, 220, GetColor(0, 0, 0), "BlendRate = %f", gimmick.BlendRate);
+		DrawFormatString(0, 250, GetColor(0, 0, 0), "hitPolyDimSAN.HitNum = %d", san.hitPolyDimSAN.HitNum);
+		DrawFormatString(0, 300, GetColor(0, 0, 0), "SanHitFlag = %d", gimmick.SanHitFlag);
+		DrawFormatString(0, 350, GetColor(0, 0, 0), "sanHitFlag = %d", slimes[1]->sanHitFlag);
+		DrawFormatString(0, 400, GetColor(0, 0, 0), "sanHitFlag = %d", damage.HitPolySanBomb.HitNum);
 	}
+#endif
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
-	irondoor.Render();
-	electrode.Render();
-	elevator.Render();
-	for (auto&& Tubes : tubes) {
-		Tubes->Render();
-	}
 	return true;
 }

@@ -52,7 +52,7 @@ void Boss::Initialize() {
 	phType = PH::NONE;
 	oldphType = PH::NONE;
 	acidHandle = LoadGraph("res/Boss/robo_acid_tex.png");
-	alcaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
+	alkaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
 	noneHandle = LoadGraph("res/Boss/robo_tex.png");
 	handleBaseSan = MV1LoadModel("res/07_Stage_map/Boss_Stage/acid.mv1");
 	handleBaseLka = MV1LoadModel("res/07_Stage_map/Boss_Stage/alkali.mv1");
@@ -112,12 +112,7 @@ void Boss::Process(Damage& damage) {
 	}
 
 	if (oldtype == type) {
-		//// Ä¶ŽžŠÔ‚ði‚ß‚é
-		//PlayTime += 0.5f;
-		//if (PlayTime >= TotalTime1)
-		//{
-		//	PlayTime = 0.0f;
-		//}
+
 	}
 	else {
 
@@ -247,10 +242,10 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 }
 
 void Boss::Walk() {
-	model.pos = VAdd(VScale(forward, 2.f), model.pos);
-	//type = BOSSTYPE::WALK;
-	if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
-		type = BOSSTYPE::IDLE;
+		model.pos = VAdd(VScale(forward, 4.f), model.pos);
+		//type = BOSSTYPE::WALK;
+		if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
+			type = BOSSTYPE::IDLE;
 	}
 
 }
@@ -271,13 +266,13 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimWall;
 	if (rushFlag == true) {
 		WaitCount += 1;
-		if (WaitCount == 120) {
+		if (WaitCount == 60) {
 			WaitCount = 0;
 			rushFlag = false;
 		}
 	}
 	else {
-		model.pos = VAdd(VScale(forward, 15.f), model.pos);
+		model.pos = VAdd(VScale(forward, 60.f), model.pos);
 		MV1RefreshCollInfo(SanHandle, 3);
 		MV1RefreshCollInfo(LkaHandle, 8);
 		hitPolyDimSan = MV1CollCheck_Sphere(SanHandle, 3, SphereCenter, 50);
@@ -379,7 +374,6 @@ void Boss::Search() {
 		dir = -1.0f;
 		xz = -65.8f;
 	}
-	//VECTOR modeldir = VNorm(model.dir);
 	VECTOR Forward = VNorm(forward);
 	model.dir.y += 0.02f * dir;
 	swampDir.y += xz /*dir * 65.9f*/;
@@ -474,16 +468,6 @@ void Boss::CaptureEnd() {
 	EndCount += 1;
 	if (EndCount > 45) {
 		model.pos = VAdd(model.pos, VScale(forward, -3));
-		//if (SanCatchFlag) {
-		//	san->vPos.x = SphereCenter.x;
-		//	san->vPos.y = 0;
-		//	san->vPos.z = SphereCenter.z;
-		//}
-		//else if (LkaCatchFlag) {
-		//	lka->vPos.x = SphereCenter.x;
-		//	lka->vPos.y = 0;
-		//	lka->vPos.z = SphereCenter.z;
-		//}
 	}
 	if (EndCount == 64) {
 		EndCount = 0;
@@ -553,20 +537,23 @@ void Boss::SwampSpawn(bool IsSan)
 
 void Boss::Render() {
 	{
-		/*MV1SetRotationXYZ(BossHandle, BossSetDir);
-		MV1SetPosition(BossHandle, model.pos);
-		MV1DrawModel(BossHandle);*/
 		if (!downFlag) {
-			manager->modelRender(&model, 1.f, 1.f);
+			if (type == BOSSTYPE::RUSH && WaitCount <= 60) {
+				manager->modelRender(&model, 2.f, 1.f);
+			}
+			else {
+				manager->modelRender(&model, 1.f, 1.f);
+			}
 		}
+
 		switch (phType) {
 		case PH::ACID:
 			MV1SetTextureGraphHandle(model.modelHandle, 1, acidHandle, FALSE);
 			MV1SetTextureGraphHandle(model.modelHandle, 2, acidHandle, FALSE);
 			break;
 		case PH::ALCALI:
-			MV1SetTextureGraphHandle(model.modelHandle, 1, alcaliHandle, FALSE);
-			MV1SetTextureGraphHandle(model.modelHandle, 2, alcaliHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 1, alkaliHandle, FALSE);
+			MV1SetTextureGraphHandle(model.modelHandle, 2, alkaliHandle, FALSE);
 			break;
 		case PH::NONE:
 			MV1SetTextureGraphHandle(model.modelHandle, 1, noneHandle, FALSE);
@@ -579,15 +566,15 @@ void Boss::Render() {
 		}
 
 		//DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
+#ifdef debug
+		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
 		DrawFormatString(0, 0, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
-		DrawFormatString(0, 225, GetColor(255, 0, 0), "model.pos = %f,%f,%f", model.pos.x, model.pos.y, model.pos.z);
-		DrawFormatString(0, 75, GetColor(255, 0, 0), "swampDegreeDir.y = %f", swampDegreeDir.y);
-		DrawFormatString(0, 50, GetColor(255, 0, 0), "swampDir.y = %f", swampDir.y * DX_PI_F / 180.0f);
-		DrawFormatString(0, 100, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
-		DrawFormatString(0, 150, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
-		DrawFormatString(0, 200, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
-		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossHP = %d", BossHP);
-		//DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
+		DrawFormatString(0, 50, GetColor(255, 0, 0), "model.dir.y = %f", model.dir.y);
+		DrawFormatString(0, 100, GetColor(255, 0, 0), "HandPos = %f,%f,%f", HandPos.x, HandPos.y, HandPos.z);
+		DrawFormatString(0, 150, GetColor(255, 0, 0), "SanCatchFlag = %d", SanCatchFlag);
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
+#endif
 	}
 }

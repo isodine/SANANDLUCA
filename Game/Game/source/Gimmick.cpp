@@ -152,11 +152,10 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			}
 		}
 		if (BalanceFlag && BlendRate >= 1) {
-			//BlendRate = 0;
 			BalanceFlag = false;
 		}
 		else {
-			//BalanceFlag = false;
+
 		}
 			
 		MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - abs(BalancePer));
@@ -164,38 +163,6 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, max(BalancePer, 0.0));
 		MV1SetAttachAnimTime(BalanceHandle, 0, abs(BalancePer));
 		MV1SetAttachAnimTime(BalanceHandle, 1, abs(BalancePer));
-		if (balance == BALANCE::SAN) {
-			/*san->Landing(SANDisk.y - 275);*/
-			}
-		else if (balance == BALANCE::LKA) {
-			/*lka->Landing(LKADisk.y - 275);*/
-		}
-		else if (balance == BALANCE::EQUAL) {
-			/*san->Landing(SANDisk.y - 275);
-			lka->Landing(LKADisk.y - 275);*/
-		}
-		else if (balance == BALANCE::NONE) {
-			/*san->Landing(SANDisk.y - 280);
-			lka->Landing(LKADisk.y - 280);*/
-		}
-		/*if (san->hitPolyDimSAN.HitNum >= 1) {
-			if (balance == BALANCE::SAN) {
-				san->Landing(SANDisk.y - 275);
-			}
-			else if (balance == BALANCE::EQUAL) {
-				san->Landing(SANDisk.y - 275);
-			}
-		}
-		if (lka->hitPolyDimLKA.HitNum >= 1) {
-			if (balance == BALANCE::LKA) {
-				lka->Landing(LKADisk.y - 275);
-			}
-			else if (balance == BALANCE::EQUAL) {
-				lka->Landing(LKADisk.y - 275);
-			}
-		}*/
-		/*SanHitFlag = false;
-		LkaHitFlag = false;*/
 	}
 
 
@@ -214,6 +181,4 @@ float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
 void Gimmick::Render() {
 	MV1SetPosition(BalanceHandle, VGet(50.0f, 700.0f, 7650.0f));
 	MV1DrawModel(BalanceHandle);
-	//MV1DrawModel(SanHandle);
-	//DrawFormatString(0, 220, GetColor(0, 0, 0), "SanHitFrag = %d", SanHitFlag);
 }

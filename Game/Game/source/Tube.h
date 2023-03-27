@@ -9,6 +9,8 @@ public:
 	void Update(Electrode& electr);
 	void Render();
 	void Spin();
+	void TubeTouch();
+	void SetSanLka(SAN* _san, LKA* _lka);
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int handle;
@@ -38,4 +40,7 @@ public:
 		Left
 	};
 	DirType Dir;
+
+	SAN* san;
+	LKA* lka;
 };

@@ -4,11 +4,6 @@ class Swamp {
 public:
 	Swamp();
 	~Swamp();
-	void Initialize();
-	void Terminate();
-	void Process();
-	void Render();
-
 	enum class PHTYPE {
 		ASID,
 		ALUCALI,

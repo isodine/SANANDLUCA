@@ -34,7 +34,8 @@ bool ModeRule::Process() {
   if (Trg & PAD_INPUT_2 && pushbutton == 5)
   {
     ModeServer::GetInstance()->Del(this);
-    ModeServer::GetInstance()->Add(new ModeGame(), 1, "game");
+    //ModeServer::GetInstance()->Add(new ModeStage0(), 1, "stage00");
+    ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
   }
   return true;
 }

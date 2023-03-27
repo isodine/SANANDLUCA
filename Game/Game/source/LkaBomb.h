@@ -9,7 +9,6 @@ public:
 	void Initialize(LKA& lka);
 	void Update(LKA& lka);
 	void Render();
-	void Move();
 	void Throw(LKA& lka);
 	void bombthrow();
 	void BombReset();

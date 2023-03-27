@@ -115,7 +115,7 @@ public:
 	bool bossdownEf;//TRUEならダウンエフェクト出現
 
 	int acidHandle;//酸性のときのテクスチャ
-	int alcaliHandle;//アルカリ性のときのテクスチャ
+	int alkaliHandle;//アルカリ性のときのテクスチャ
 	int noneHandle;//中性の時のテクスチャ
 
 	int Key1P;

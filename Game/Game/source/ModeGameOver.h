@@ -4,6 +4,7 @@
 class ModeGameOver : public ModeBase {
 	typedef ModeBase base;
 public:
+	ModeGameOver(int num);
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
@@ -11,4 +12,5 @@ public:
 private:
 	int Gameoverhandle;
 	int IsPlaying;
+	int StageNum;
 };
