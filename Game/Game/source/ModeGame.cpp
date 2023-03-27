@@ -114,6 +114,9 @@ bool ModeGame::Initialize() {
 
 	Isgameover = false;
 	gameoverchange = false;
+	Isgamestart = true;
+	gameovercount = 0;
+	gamestartcount = 19;
 	////マスクの試験運用
 	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
 	//CreateMaskScreen();
@@ -160,7 +163,7 @@ bool ModeGame::Initialize() {
 	//Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
 	//tubes.emplace_back(std::move(Tube3));
 
-	damage.SetGame(this);
+	//damage.SetGame(this);
 
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
@@ -314,7 +317,7 @@ bool ModeGame::Initialize() {
 	ShadowMap_DrawEnd();
 
 	PlayMusic("res/06_Sound/01_BGM/Stage/Confectioner.mp3", DX_PLAYTYPE_LOOP);
-	sanbomb.EffectReset();
+
 
 	return true;
 }
@@ -348,7 +351,7 @@ bool ModeGame::Process() {
 		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f);
 	}
 
-	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
+	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)||timer.timeup == true)
 	{
 		Isgameover = true;
 		sanbomb.EffectReset();
@@ -371,6 +374,7 @@ bool ModeGame::Process() {
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
 		}
 	}
+	timer.Update();
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
@@ -433,11 +437,6 @@ bool ModeGame::Process() {
 
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
-	}
-
-	if (Trg & PAD_INPUT_4)
-	{
-		i = 0;
 	}
 
 	return true;
@@ -582,6 +581,7 @@ bool ModeGame::Render() {
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
+	timer.Render();
 	//irondoor.Render();
 	//electrode.Render();
 	//elevator.Render();
@@ -590,9 +590,15 @@ bool ModeGame::Render() {
 	//}
 	if (Isgameover == true)
 	{
-		DrawGraph(0, 0, Grhandle[i], true);
-		i++;
-		if (i >= 19)DrawGraph(0, 0, Grhandle[19], true), gameoverchange = true;
+		DrawGraph(0, 0, Grhandle[gameovercount], true);
+		gameovercount++;
+		if (gameovercount >= 19)DrawGraph(0, 0, Grhandle[19], true), gameoverchange = true;
+	}
+	if (Isgamestart == true)
+	{
+		DrawGraph(0, 0, Grhandle[gamestartcount], true);
+		gamestartcount--;
+		if (gamestartcount <= 0)DrawGraph(0, 0, Grhandle[0], true), Isgamestart = false;
 	}
 	return true;
 }

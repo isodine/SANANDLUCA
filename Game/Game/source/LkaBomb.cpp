@@ -84,6 +84,7 @@ void LkaBomb::Update(LKA& lka)
 			// 再生中のエフェクトを移動する。
 			SetPosPlayingEffekseer3DEffect(_playingEffectHandle[1], vPos.x, vPos.y, vPos.z);
 			SetScalePlayingEffekseer3DEffect(_playingEffectHandle[1], 10.0f, 10.0f, 10.0f);
+			PlaySoundFile("res/06_Sound/03_SE/san_lka_bomb.mp3", DX_PLAYTYPE_BACK);
 		}
 		Isbombdead = true;
 		IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle[1]);

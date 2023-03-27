@@ -18,7 +18,7 @@ void Boss::Initialize() {
 	lkahitEf = false;
 	searchFlag = false;
 	downFlag = false;
-	bossdownflag = false;
+	bossdownEf = false;
 	walkTimeCount = 0;
 	walkRand = 0;
 	CrushCount = 0;
@@ -496,10 +496,7 @@ void Boss::CaptureEnd() {
 void Boss::Down() {
 	DownCount += 1;
 	if (DownCount == 459) {
-		
-		bossdownflag = true;
-
-		downFlag = true;
+		bossdownEf = true;
 	}
 }
 

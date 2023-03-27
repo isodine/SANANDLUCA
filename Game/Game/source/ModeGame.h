@@ -17,6 +17,7 @@
 #include "Elevator.h"
 #include "Tube.h"
 #include "BossSwamp.h"
+#include "timer.h"
 
 #include <string>
 #include <memory>
@@ -77,7 +78,8 @@ public:
 	float height;
 
 	int Grhandle[20];
-	int i = 0;
+	int gameovercount;
+	int gamestartcount;
 	//シャドウマップ用
 	int ShadowMapHandle;
 
@@ -87,6 +89,7 @@ public:
 	//ゲームオーバー用
 	bool Isgameover;
 	bool gameoverchange;
+	bool Isgamestart;
 
 	//VOICE用
 	bool modeStart = false;
@@ -112,6 +115,7 @@ public:
 	Electrode electrode;
 	Elevator elevator;
 	Tube tube;
+	Timer timer;
 	std::vector<std::unique_ptr<Slime>> slimes;
 	std::vector<std::unique_ptr<Tube>> tubes;
 };

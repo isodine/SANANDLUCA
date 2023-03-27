@@ -10,7 +10,8 @@ public:
 	void Render();            //•`‰æ
 
 	int number[10];
-	int count10 = 3;
+	int count10 = 5;
 	int count1 = 0;
 	int secondcnt = 0;
+	bool timeup;
 };

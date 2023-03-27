@@ -14,4 +14,6 @@ private:
 	int IsPlaying[2]; //エフェクトが再生されているか
 	float downEfsize[2];//攻撃時エフェクトのサイズ設定
 	bool Isdown;
+	int exprodesound;
+	int biribirisound;
 };
