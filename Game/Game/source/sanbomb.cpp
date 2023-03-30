@@ -77,6 +77,7 @@ void SanBomb::Update(SAN& san)
 
 void SanBomb::Render()
 {
+	DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 	DrawEffekseer3D();
 }
 

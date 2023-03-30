@@ -22,7 +22,7 @@ public:
 	float decrement = 10.f;
 
 	float sphereSize = 0.f;
-	float sphereMax = 50.f;
+	float sphereMax = 80.f;//50.f
 
 	bool bomblive = false;
 	bool firstdir = false;

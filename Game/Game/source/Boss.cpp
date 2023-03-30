@@ -25,12 +25,12 @@ void Boss::Initialize() {
 	CaptureCount = 0;
 	EndCount = 0;
 	DownCount = 0;
-	BossHP = 3;
+	BossHP = 100;
 	BossPosition0 = VGet(41, 37, 274);
 	BossPosition1 = VGet(-327, 37, 673);
 	BossPosition2 = VGet(41, 37, 1013);
 	BossPosition3 = VGet(327, 37, 673);
-	MV1SetupCollInfo(model.modelHandle, 1, 8, 8, 8);
+	MV1SetupCollInfo(model.modelHandle, 2, 8, 8, 8);
 	type = BOSSTYPE::NONE;
 	phType = PH::NONE;
 	oldphType = PH::NONE;
@@ -49,6 +49,7 @@ void Boss::Terminate() {
 }
 
 void Boss::Process() {
+	MV1RefreshCollInfo(model.modelHandle, 2);
 	HandPos = MV1GetFramePosition(model.modelHandle, 3);
 	AddPos = VNorm(VSub(MV1GetFramePosition(model.modelHandle, 5), HandPos));
 	SphereCenter = VAdd(HandPos, VScale(AddPos, 80));
@@ -263,10 +264,10 @@ void Boss::Crush() {
 	MV1RefreshCollInfo(model.modelHandle, 1);
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
-	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
-	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
+	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 2, sanB->vPos, sanB->sphereMax);
+	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 2, lkaB->vPos, lkaB->sphereMax);
 
-	if (hitPolyDimSan.HitNum >= 1 || hitPolyDimLka.HitNum >= 1) {
+	if ((sanB->situation == sanB->PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1) || (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1)) {
 		AttackedFlag = true;
 		BossHP -= 1;
 	}
@@ -349,10 +350,10 @@ void Boss::Capture() {
 
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
-	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
-	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
+	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 2, sanB->vPos, sanB->sphereMax);
+	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 2, lkaB->vPos, lkaB->sphereMax);
 
-	if (hitPolyDimSan.HitNum >= 1 || hitPolyDimLka.HitNum >= 1) {
+	if ((sanB->situation == sanB->PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1) || (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1)) {
 		AttackedFlag = true;
 		BossHP -= 1;
 	}
@@ -442,6 +443,7 @@ void Boss::Render() {
 			MV1SetTextureGraphHandle(model.modelHandle, 2, noneHandle, FALSE);
 			break;
 		}
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
 #ifdef debug
 		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 
