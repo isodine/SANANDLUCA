@@ -207,8 +207,6 @@ bool ModeBoss::Terminate() {
 bool ModeBoss::Process() {
 	ModeBase::Process();
 	Count += 1;
-	sanbomb.Update(san);
-	lkabomb.Update(lka);
 	bossrun.Update(boss);
 	san.Update(damage);
 	lka.Update(damage);
@@ -232,6 +230,7 @@ bool ModeBoss::Process() {
 	int checkKey = PAD_INPUT_2;
 
 	if (boss.downFlag == true) {
+		StopMusic();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
 	}

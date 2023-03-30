@@ -158,6 +158,8 @@ bool ModeStage0::Terminate() {
 bool ModeStage0::Process() {
 	base::Process();
 
+	san.Update(damage);
+	lka.Update(damage);
 	damage.Process();
 	damage.StageDamage(_handleMap);
 
