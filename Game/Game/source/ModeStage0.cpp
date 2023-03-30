@@ -283,6 +283,10 @@ bool ModeStage0::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
 		//BGM’âŽ~
 		StopMusic();
 

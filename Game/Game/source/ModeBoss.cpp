@@ -229,12 +229,20 @@ bool ModeBoss::Process() {
 	int checkKey = PAD_INPUT_2;
 
 	if (boss.downFlag == true) {
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
 	}
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
 		StopMusic();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(), 1, "gameover");
