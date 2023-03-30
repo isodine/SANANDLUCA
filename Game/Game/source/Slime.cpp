@@ -96,7 +96,7 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 		if (LKAhitPolyDimAlkali.HitNum >= 1) {
 			slimeHP -= 1;
 		}
-		if (slimaHP <= 0) {
+		if (slimeHP <= 0) {
 			alkaliDieFlag = true;
 		}
 		
@@ -124,7 +124,7 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 		if (LKAhitPolyDimAcid.HitNum >= 1) {
 			slimeHP -= 2;
 		}
-		if (slimaHP <= 0) {
+		if (slimeHP <= 0) {
 			alkaliDieFlag = true;
 		}
 		if (LkaPos.x >= SearchPosMinX && LkaPos.x <= SearchPosMaxX && LkaPos.z >= SearchPosMinZ && LkaPos.z <= SearchPosMaxZ) {

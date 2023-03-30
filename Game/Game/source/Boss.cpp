@@ -66,6 +66,7 @@ void Boss::Terminate() {
 }
 
 void Boss::Process(Damage& damage) {
+	MV1RefreshCollInfo(model.modelHandle, 2);
 	HandPos = MV1GetFramePosition(model.modelHandle, 3);
 	AddPos = VNorm(VSub(MV1GetFramePosition(model.modelHandle, 5), HandPos));
 	SphereCenter = VAdd(HandPos, VScale(AddPos, 80));
@@ -311,59 +312,60 @@ void Boss::Crush() {				//•ÇÕ“ËŽžˆ—
 	MV1RefreshCollInfo(model.modelHandle, 2);
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
-	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
-	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
-	
+	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 2, sanB->vPos, sanB->sphereMax);
+	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 2, lkaB->vPos, lkaB->sphereMax);
+
 	if (sanB->situation == sanB->PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1) {
 		AttackedFlag = true;
 		bosshitEf = true;
 		switch (phType) {
-		case PH::None:
+		case PH::NONE:
 			BossHP -= 10;
 			break;
 		case PH::ACID:
 			BossHP -= 5;
 			break;
-		case HP::ALKALI:
+		case PH::ALKALI:
 			BossHP -= 20;
 			break;
 		}
+	}
 		if (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1) {
 			AttackedFlag = true;
 			bosshitEf = true;
 			switch (phType) {
-			case PH::None:
+			case PH::NONE:
 				BossHP -= 10;
 				break;
 			case PH::ACID:
 				BossHP -= 20;
 				break;
-			case HP::ALKALI:
+			case PH::ALKALI:
 				BossHP -= 5;
 				break;
 			}
-	}
-	if (phType == PH::ACID && CrushCount == 0)
-	{
-		SwampSpawn(true); SwampCnt--;
-	}
-	if (phType == PH::ALCALI && CrushCount == 0)
-	{
-		SwampSpawn(false); SwampCnt--;
-	}
-	if (SwampCnt == 0) {
-		phType = PH::NONE;
-		oldphType = PH::NONE;
-	}
-	CrushCount += 1;
-	if (CrushCount >= 240 || AttackedFlag) {
-		CrushCount = 0;
-		AttackedFlag = false;
-		type = BOSSTYPE::PULL;
-	}
-	if (BossHP == 0) {
-		type = BOSSTYPE::DOWN;
-	}
+		}
+		if (phType == PH::ACID && CrushCount == 0)
+		{
+			SwampSpawn(true); SwampCnt--;
+		}
+		if (phType == PH::ALKALI && CrushCount == 0)
+		{
+			SwampSpawn(false); SwampCnt--;
+		}
+		if (SwampCnt == 0) {
+			phType = PH::NONE;
+			oldphType = PH::NONE;
+		}
+		CrushCount += 1;
+		if (CrushCount >= 240 || AttackedFlag) {
+			CrushCount = 0;
+			AttackedFlag = false;
+			type = BOSSTYPE::PULL;
+		}
+		if (BossHP == 0) {
+			type = BOSSTYPE::DOWN;
+		}
 }
 
 void Boss::Search() {
@@ -435,81 +437,83 @@ void Boss::Capture() {
 
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
-	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
-	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
+	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 2, sanB->vPos, sanB->sphereMax);
+	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 2, lkaB->vPos, lkaB->sphereMax);
 
 	if (sanB->situation == sanB->PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1) {
 		AttackedFlag = true;
 		bosshitEf = true;
 		switch (phType) {
-		case PH::None:
+		case PH::NONE:
 			BossHP -= 10;
 			break;
 		case PH::ACID:
 			BossHP -= 5;
 			break;
-		case HP::ALKALI:
+		case PH::ALKALI:
 			BossHP -= 20;
 			break;
 		}
+	}
 		if (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1) {
 			AttackedFlag = true;
 			bosshitEf = true;
 			switch (phType) {
-			case PH::None:
+			case PH::NONE:
 				BossHP -= 10;
 				break;
 			case PH::ACID:
 				BossHP -= 20;
 				break;
-			case HP::ALKALI:
+			case PH::ALKALI:
 				BossHP -= 5;
 				break;
 			}
 		}
 
-	if (CaptureCount == 120) {
-		if (SanCatchFlag) {
-			san->HP -= 1;
-			sanhitEf = true;
-			phType = PH::ACID;
-			if (oldphType == PH::NONE) {
-				oldphType = PH::ACID;
-				SwampCnt = 3;
+		if (CaptureCount == 120) {
+			if (SanCatchFlag) {
+				san->HP -= 1;
+				sanhitEf = true;
+				phType = PH::ACID;
+				if (oldphType == PH::NONE) {
+					oldphType = PH::ACID;
+					SwampCnt = 3;
+				}
+				else if (oldphType == PH::ALKALI) {
+					phType = PH::NONE;
+					oldphType = PH::NONE;
+					SwampCnt = 0;
+				}
 			}
-			else if (oldphType == PH::ALCALI) {
-				phType = PH::NONE;
-				oldphType = PH::NONE;
-				SwampCnt = 0;
+			if (LkaCatchFlag) {
+				lka->HP -= 1;
+				lkahitEf = true;
+				phType = PH::ALKALI;
+				if (oldphType == PH::NONE) {
+					oldphType = PH::ALKALI;
+					SwampCnt = 3;
+				}
+				else if (oldphType == PH::ACID) {
+					phType = PH::NONE;
+					oldphType = PH::NONE;
+					SwampCnt = 0;
+				}
 			}
 		}
-		if (LkaCatchFlag) {
-			lka->HP -= 1;
-			lkahitEf = true;
-			phType = PH::ALCALI;
-			if (oldphType == PH::NONE) {
-				oldphType = PH::ALCALI;
-				SwampCnt = 3;
-			}
-			else if (oldphType == PH::ACID) {
-				phType = PH::NONE;
-				oldphType = PH::NONE;
-				SwampCnt = 0;
-			}
+		if (CaptureCount == 180) {
+			CaptureCount = 0;
+			type = BOSSTYPE::CAPTUREEND;
 		}
-	}
-	if (CaptureCount == 180) {
-		CaptureCount = 0;
-		type = BOSSTYPE::CAPTUREEND;
-	}
-	if (AttackedFlag) {
-		CaptureCount = 0;
-		AttackedFlag = false;
-		type = BOSSTYPE::CAPTUREEND;
-	}
-	if (BossHP <= 0) {
-		type = BOSSTYPE::DOWN;
-	}
+		if (AttackedFlag) {
+			CaptureCount = 0;
+			AttackedFlag = false;
+			type = BOSSTYPE::CAPTUREEND;
+		}
+		if (BossHP <= 0) {
+			type = BOSSTYPE::DOWN;
+		}
+	
 }
 
 
@@ -600,7 +604,7 @@ void Boss::Render() {
 			MV1SetTextureGraphHandle(model.modelHandle, 1, acidHandle, FALSE);
 			MV1SetTextureGraphHandle(model.modelHandle, 2, acidHandle, FALSE);
 			break;
-		case PH::ALCALI:
+		case PH::ALKALI:
 			MV1SetTextureGraphHandle(model.modelHandle, 1, alkaliHandle, FALSE);
 			MV1SetTextureGraphHandle(model.modelHandle, 2, alkaliHandle, FALSE);
 			break;
@@ -613,7 +617,7 @@ void Boss::Render() {
 		{
 			swamps[i]->Render();
 		}
-
+		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
 		//DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 #ifdef debug
 		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
