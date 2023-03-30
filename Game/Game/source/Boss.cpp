@@ -2,7 +2,6 @@
 #include "LKAclass.h"
 
 void Boss::Initialize() {
-	//BossHandle = MV1LoadModel("res/Boss/beaker_robot_All220203.mv1");
 	model.pos = VGet(0, 20, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
@@ -28,7 +27,7 @@ void Boss::Initialize() {
 	CaptureCount = 0;
 	EndCount = 0;
 	DownCount = 0;
-	BossHP = 3;
+	BossHP = 100;
 	SwampCnt = 3;
 	BossPosition0 = VGet(41, 37, 274);
 	BossPosition1 = VGet(-327, 37, 673);
@@ -47,7 +46,7 @@ void Boss::Initialize() {
 	SanCatchFlag = false;
 	LkaCatchFlag = false;
 	crashFlag = false;*/
-	MV1SetupCollInfo(model.modelHandle, 1, 8, 8, 8);
+	MV1SetupCollInfo(model.modelHandle, 2, 8, 8, 8);
 	type = BOSSTYPE::NONE;
 	phType = PH::NONE;
 	oldphType = PH::NONE;
@@ -260,7 +259,7 @@ void Boss::Idle() {
 }
 
 void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int MapHandle) {
-	MV1RefreshCollInfo(model.modelHandle, 1);
+	MV1RefreshCollInfo(model.modelHandle, 2);
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimWall;
@@ -309,15 +308,40 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 }
 
 void Boss::Crush() {				//•ÇÕ“ËŽžˆ—
-	MV1RefreshCollInfo(model.modelHandle, 1);
+	MV1RefreshCollInfo(model.modelHandle, 2);
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
 	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
 	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
-	if (hitPolyDimSan.HitNum >= 1 || hitPolyDimLka.HitNum >= 1) {
+	
+	if (sanB->situation == sanB->PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1) {
 		AttackedFlag = true;
-		BossHP -= 1;
 		bosshitEf = true;
+		switch (phType) {
+		case PH::None:
+			BossHP -= 10;
+			break;
+		case PH::ACID:
+			BossHP -= 5;
+			break;
+		case HP::ALKALI:
+			BossHP -= 20;
+			break;
+		}
+		if (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1) {
+			AttackedFlag = true;
+			bosshitEf = true;
+			switch (phType) {
+			case PH::None:
+				BossHP -= 10;
+				break;
+			case PH::ACID:
+				BossHP -= 20;
+				break;
+			case HP::ALKALI:
+				BossHP -= 5;
+				break;
+			}
 	}
 	if (phType == PH::ACID && CrushCount == 0)
 	{
@@ -414,10 +438,35 @@ void Boss::Capture() {
 	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 1, sanB->vPos, sanB->sphereMax);
 	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 1, lkaB->vPos, lkaB->sphereMax);
 
-	if (hitPolyDimSan.HitNum >= 1 || hitPolyDimLka.HitNum >= 1) {
+	if (sanB->situation == sanB->PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1) {
 		AttackedFlag = true;
-		BossHP -= 1;
-	}
+		bosshitEf = true;
+		switch (phType) {
+		case PH::None:
+			BossHP -= 10;
+			break;
+		case PH::ACID:
+			BossHP -= 5;
+			break;
+		case HP::ALKALI:
+			BossHP -= 20;
+			break;
+		}
+		if (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1) {
+			AttackedFlag = true;
+			bosshitEf = true;
+			switch (phType) {
+			case PH::None:
+				BossHP -= 10;
+				break;
+			case PH::ACID:
+				BossHP -= 20;
+				break;
+			case HP::ALKALI:
+				BossHP -= 5;
+				break;
+			}
+		}
 
 	if (CaptureCount == 120) {
 		if (SanCatchFlag) {
@@ -458,7 +507,7 @@ void Boss::Capture() {
 		AttackedFlag = false;
 		type = BOSSTYPE::CAPTUREEND;
 	}
-	if (BossHP == 0) {
+	if (BossHP <= 0) {
 		type = BOSSTYPE::DOWN;
 	}
 }
