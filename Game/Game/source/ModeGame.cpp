@@ -296,7 +296,17 @@ bool ModeGame::Initialize() {
 
 	//CSV‚Ì’²®‚ÉƒJƒƒ‰‚ð’Ç‚¢‚Â‚©‚¹‚é
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
-	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	//_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	if (san.vPos.y > lka.vPos.y) {
+		_cam._vPos.y += (lka.vPos.y);
+	}
+	else if (lka.vPos.y > san.vPos.y) {
+		_cam._vPos.y += (san.vPos.y);
+	}
+	else {
+		_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	}
+
 	_cam._vPos.z += (san.vPos.z + lka.vPos.z) / 2.f;
 	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
