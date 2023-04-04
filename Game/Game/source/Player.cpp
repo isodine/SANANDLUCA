@@ -169,8 +169,7 @@ void Player::Update()
 			MV1_COLL_RESULT_POLY hitPolyIronDoor;
 			MV1_COLL_RESULT_POLY_DIM hitPolyDimElevator;
 			MV1_COLL_RESULT_POLY hitPolyElevator;
-			MV1_COLL_RESULT_POLY hitPolyTubeX;
-			MV1_COLL_RESULT_POLY hitPolyTubeZ;
+			MV1_COLL_RESULT_POLY_DIM hitPolyTube;
 
 			//前後方向の壁判定
 			hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
@@ -236,20 +235,18 @@ void Player::Update()
 			}
 
 			//チューブとの当たり判定
-			hitPolyTubeX = MV1CollCheck_Line(tubeHandle, tubeCol,
-				VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
+			for (auto i = 0; i < 3; i++) {
+				hitPolyTube = MV1CollCheck_Sphere(tubeHandle[i], tubeCol, VGet(vPos.x, vPos.y + _colSubY, vPos.z), 30);
 
-			hitPolyTubeZ = MV1CollCheck_Line(tubeHandle, tubeCol,
-				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-
-			if (hitPolyTubeX.HitFlag)
-			{
-				vPos.x = hitPolyTubeX.HitPosition.x;
+				if (hitPolyTube.HitNum >= 1)
+				{
+					//vPos.x = hitPolyTube.Dim->HitPosition.x;
+					//vPos.z = hitPolyTube.Dim->HitPosition.z;
+					vPos.x = oldvPos.x;
+					vPos.z = oldvPos.z;
+				}
 			}
-			if (hitPolyTubeZ.HitFlag)
-			{
-				vPos.z = hitPolyTubeZ.HitPosition.z;
-			}
+			
 
 			if (mypH == San && !goal)
 			{
@@ -427,12 +424,14 @@ void Player::Render()
 		MV1SetRotationXYZ(Mhandle, vRot);
 		// 描画
 		MV1DrawModel(Mhandle);
+		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 30, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 #ifdef debug
 		if (debagMode)
 		{
 			//ダメージ判定の描画
 			DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
-			//DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
+			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
+			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 30, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 
 			// コリジョン判定用ラインの描画
 			DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));

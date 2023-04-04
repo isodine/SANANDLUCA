@@ -96,6 +96,7 @@ bool ModeBoss::Initialize() {
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
 	san.wallCol = frameMapCollisionwall;
+	san.tubeCol = 
 	san.stageHandle = _handleMap;
 
 	lka.SetCamera(&_bossCam);

@@ -16,43 +16,48 @@ void Tube::Initialize(int type, VECTOR Pos)
 	if (type == 0)
 	{
 		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_gimmick.mv1");
-		handleCol = 0;
+		handleCol = 1;
 		Type = TubeType::Neutrality;
 		Dir = DirType::Front;
 		vPos = Pos;
 		vDir = VGet(0, 0, 0);
 		MV1SetPosition(handle, vPos);
+		MV1SetFrameVisible(handle, handleCol, FALSE);
 	}
 	else if (type == 1)
 	{
-		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_gimmick_S.mv1");
-		handleCol = 0;
+		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_S.mv1");
+		handleCol = 4;
 		Type = TubeType::San;
 		Dir = DirType::Right;
 		vPos = Pos;
 		vDir = VGet(0, 90, 0);
 		MV1SetPosition(handle, vPos);
+		MV1SetFrameVisible(handle, handleCol, FALSE);
 	}
 	else if (type == 2)
 	{
 		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_gimmick_L.mv1");
-		handleCol = 16;
+		handleCol = 1;
 		Type = TubeType::Lka;
 		Dir = DirType::Left;
 		vPos = Pos;
 		vDir = VGet(0, -90, 0);
 		MV1SetPosition(handle, vPos);
+		MV1SetFrameVisible(handle, handleCol, FALSE);
 	}
 	else {}
 }
 
 void Tube::Update(Electrode& electr)
 {
+	
 	switch (Type)
 	{
 	//case Tube::Neutrality:
 	//	break;
 	case Tube::San:
+		MV1RefreshCollInfo(handle, handleCol);
 		if (electr.change)
 		{
 			if (electr.isSan && Dir == DirType::Front)
@@ -69,6 +74,7 @@ void Tube::Update(Electrode& electr)
 		}
 		break;
 	case Tube::Lka:
+		MV1RefreshCollInfo(handle, handleCol);
 		if (electr.change)
 		{
 			if (electr.isSan && Dir == DirType::Front)
@@ -107,6 +113,7 @@ void Tube::Spin()
 	case Tube::Neutrality:
 		break;
 	case Tube::San:
+		MV1RefreshCollInfo(handle, handleCol);
 		if (!(abs(vDir.y) == rightRange) && Dir == DirType::Right)
 		{
 			vDir = VAdd(vDir, speed);
@@ -127,6 +134,7 @@ void Tube::Spin()
 		}
 		break;
 	case Tube::Lka:
+		MV1RefreshCollInfo(handle, handleCol);
 		if (!((vDir.y) == leftRange) && Dir == DirType::Left)
 		{
 			vDir = VSub(vDir, speed);

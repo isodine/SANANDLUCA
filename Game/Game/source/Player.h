@@ -45,7 +45,7 @@ public:
 	int stageHandle;
 	int ironDoorHandle;
 	int elevatorHnadle;
-	int tubeHandle;
+	int tubeHandle[3];
 	int floorCol;
 	int wallCol;
 	int goalColSAN;
