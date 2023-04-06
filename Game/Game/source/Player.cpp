@@ -236,11 +236,11 @@ void Player::Update()
 
 			//ƒ`ƒ…[ƒu‚Æ‚Ì“–‚½‚è”»’è
 			for (auto i = 0; i < 3; i++) {
-				hitPolyTube = MV1CollCheck_Sphere(tubeHandle[i], tubeCol[i], VGet(vPos.x, vPos.y + _colSubY, vPos.z), 30);
+				hitPolyTube = MV1CollCheck_Sphere(tubeHandle[i], tubeCol[i], VGet(vPos.x, vPos.y + _colSubY, vPos.z), 20);
 				if (hitPolyTube.HitNum >= 1)
 				{
 					hitPos = hitPolyTube.Dim->HitPosition;
-					hitLine = VAdd(hitPos, VScale(VNorm(hitPolyTube.Dim->Normal), 30));
+					hitLine = VAdd(VScale(VNorm(hitPolyTube.Dim->Normal), 20), hitPos);
 					vPos.x = hitLine.x;
 					vPos.z = hitLine.z;
 				}

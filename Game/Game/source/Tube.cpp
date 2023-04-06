@@ -17,6 +17,7 @@ void Tube::Initialize(int type, VECTOR Pos)
 	{
 		
 		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_gimmick.mv1");
+		handleCol = 1;
 		Type = TubeType::Neutrality;
 		Dir = DirType::Front;
 		vPos = Pos;
@@ -35,7 +36,7 @@ void Tube::Initialize(int type, VECTOR Pos)
 		vDir = VGet(0, 90, 0);
 		MV1SetPosition(handle, vPos);
 		MV1SetupCollInfo(handle, handleCol, 4, 4, 4);
-		//MV1SetFrameVisible(handle, 1, FALSE);
+		MV1SetFrameVisible(handle, 1, FALSE);
 	}
 	else if (type == 2)
 	{
@@ -48,7 +49,7 @@ void Tube::Initialize(int type, VECTOR Pos)
 		vDir = VGet(0, -90, 0);
 		MV1SetPosition(handle, vPos);
 		MV1SetupCollInfo(handle, handleCol, 4, 4, 4);
-		//MV1SetFrameVisible(handle, 1, FALSE);
+		MV1SetFrameVisible(handle, 1, FALSE);
 	}
 	else {}
 }
@@ -124,9 +125,6 @@ void Tube::Spin()
 		break;
 	case Tube::San:
 		MV1RefreshCollInfo(handle, handleCol);
-		//MV1RefreshCollInfo(handle, handleColLeft);
-		//MV1RefreshCollInfo(handle, handleColRight);
-		//MV1RefreshCollInfo(handle, handleColCenter);
 		if (!(abs(vDir.y) == rightRange) && Dir == DirType::Right)
 		{
 			vDir = VAdd(vDir, speed);
@@ -148,9 +146,6 @@ void Tube::Spin()
 		break;
 	case Tube::Lka:
 		MV1RefreshCollInfo(handle, handleCol);
-		//MV1RefreshCollInfo(handle, handleColLeft);
-		//MV1RefreshCollInfo(handle, handleColRight);
-		//MV1RefreshCollInfo(handle, handleColCenter);
 		if (!((vDir.y) == leftRange) && Dir == DirType::Left)
 		{
 			vDir = VSub(vDir, speed);
