@@ -83,7 +83,6 @@ void Player::Update()
 {
 	Input();
 
-
 	if (debagMode && trg & PAD_INPUT_9)
 	{
 		debagMode = false;
@@ -106,6 +105,7 @@ void Player::Update()
 		float sx = _camera->_vPos.x - _camera->_vTarget.x;
 		float sz = _camera->_vPos.z - _camera->_vTarget.z;
 		float camrad = atan2(sz, sx);
+
 
 		// 移動方向を決める
 		VECTOR v = { 0,0,0 };
@@ -133,6 +133,9 @@ void Player::Update()
 		}
 		if (_bomb->situation == Dead) { attack = Attack::Dead; }
 		if (_status == STATUS::JUMP) { Jump(); }
+		if (oldHP > HP) 
+		{_status = STATUS::DAMAGE;}
+
 		// vをrad分回転させる
 		float length = 0.f;
 		if (VSize(v) > 0.f) { length = mvSpeed; }
@@ -141,8 +144,9 @@ void Player::Update()
 		v.z = sin(rad + camrad) * length;
 
 		// 移動前の位置を保存
-		VECTOR oldvPos = vPos;
+		oldPos = vPos;
 
+		oldHP = HP;
 
 
 		// 画面内にキャラクターが入っていないかどうかを描画する
@@ -150,7 +154,7 @@ void Player::Update()
 		if (CheckCameraViewClip(vPos) == TRUE)
 		{
 			// 画面外に出た。元の座標に戻す
-			vPos = oldvPos;
+			vPos = oldPos;
 			v = { 0,0,0 };
 		}
 
@@ -177,10 +181,10 @@ void Player::Update()
 				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
 			if (hitPolywallback.HitFlag && (vPos.z + 30 >= hitPolywallback.HitPosition.z)) {
 				float backwidth = hitPolywallback.HitPosition.z - vPos.z + 30;
-				float subX = vPos.x - oldvPos.x;
-				float subZ = vPos.z - oldvPos.z;
-				vPos.x = oldvPos.x;
-				vPos.z = oldvPos.z;
+				float subX = vPos.x - oldPos.x;
+				float subZ = vPos.z - oldPos.z;
+				vPos.x = oldPos.x;
+				vPos.z = oldPos.z;
 
 				v = { 0,0,0 };
 			}
@@ -190,10 +194,10 @@ void Player::Update()
 				VAdd(vPos, VGet(-50, _colSubY, 0)), VAdd(vPos, VGet(500.f, _colSubY, 0)));
 			if (hitPolywallside.HitFlag && (vPos.x + 30 >= hitPolywallside.HitPosition.x)) {
 				float sidewidth = hitPolywallside.HitPosition.x - vPos.x + 30;
-				float subX = vPos.x - oldvPos.x;
-				float subZ = vPos.z - oldvPos.z;
-				vPos.x = oldvPos.x;
-				vPos.z = oldvPos.z;
+				float subX = vPos.x - oldPos.x;
+				float subZ = vPos.z - oldPos.z;
+				vPos.x = oldPos.x;
+				vPos.z = oldPos.z;
 
 				v = { 0,0,0 };
 			}
@@ -273,10 +277,10 @@ void Player::Update()
 			hitPolyIronDoor = MV1CollCheck_Line(ironDoorHandle, ironDoorCol,
 				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
 			if (hitPolyIronDoor.HitFlag && (vPos.z + 30 >= hitPolyIronDoor.HitPosition.z)) {
-				float subX = vPos.x - oldvPos.x;
-				float subZ = vPos.z - oldvPos.z;
-				vPos.x = oldvPos.x;
-				vPos.z = oldvPos.z;
+				float subX = vPos.x - oldPos.x;
+				float subZ = vPos.z - oldPos.z;
+				vPos.x = oldPos.x;
+				vPos.z = oldPos.z;
 
 				v = { 0,0,0 };
 			}
@@ -456,3 +460,4 @@ void Player::Landing(float HitYPos) {
 	// 当たったY位置をキャラ座標にする
 	vPos.y = HitYPos - 0.5f;
 }
+

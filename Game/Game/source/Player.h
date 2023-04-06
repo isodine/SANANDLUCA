@@ -7,6 +7,7 @@ class PlayerBomb;
 class Camera;
 class Damage;
 class Gimmick;
+class Slime;
 
 class Player
 {
@@ -22,6 +23,8 @@ public:
 	Damage* _damage;
 	ModeBase* base;
 	Gimmick* _gimmick;
+	Slime* _acid;
+	Slime* _alkali;
 
 	void SetBomb(PlayerBomb* bomb);
 	void SetCamera(Camera* camera);
@@ -39,6 +42,7 @@ public:
 	void charJump();
 	virtual void Input();
 	void UpdateCollision();
+	void KnockBack();
 
 	int key;
 	int trg;
@@ -166,6 +170,7 @@ public:
 
 	bool motionRes = false;
 	int HP;
+	int oldHP;
 	bool goal = false;
 
 	int Playercenter; //プレイヤーの中心をとる

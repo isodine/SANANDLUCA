@@ -37,15 +37,6 @@ void Boss::Initialize() {
 	swampDir = VGet(0, 0, 0);
 	swampDegreeDir = swampDir;
 
-	/*rotateFlag = false;
-	walkFlag = false;
-	rushFlag = false;
-	targetFlag = false;
-	target = false;
-	idleFlag = false;
-	SanCatchFlag = false;
-	LkaCatchFlag = false;
-	crashFlag = false;*/
 	MV1SetupCollInfo(model.modelHandle, 2, 8, 8, 8);
 	type = BOSSTYPE::NONE;
 	phType = PH::NONE;
@@ -151,10 +142,6 @@ void Boss::Process(Damage& damage) {
 			manager->animChange(7, &model, true, false, false);//待機モーションをアタッチする
 		}
 	}
-	/*TotalTime1 = MV1GetAttachAnimTotalTime(BossHandle, AttachAnim1);
-	MV1SetAttachAnimTime(BossHandle, AttachAnim1, PlayTime);*/
-	// 再生時間を初期化
-	//PlayTime = 0.0f;
 
 	if (abs(swampDir.y * DX_PI_F / 180.0f) >= 360.f)
 	{

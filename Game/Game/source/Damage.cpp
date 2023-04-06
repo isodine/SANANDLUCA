@@ -23,12 +23,6 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
   
-	SanHP = 6;
-	LkaHP = 6;
-
-	MaxSanHP = 6;
-	MaxLkaHP = 6;
-
 	Distance = 1000;
 
 	SanCoolTime = 0;
@@ -173,8 +167,6 @@ void Damage::StageDamage(int StageHandle) {
 
 void Damage::Render() {
 #ifdef debug
-	DrawFormatString(0, 200, GetColor(0, 0, 0), "San %d", SanHP);
-	DrawFormatString(0, 220, GetColor(0, 0, 0), "Lka %d", LkaHP);
 	DrawFormatString(0, 240, GetColor(0, 0, 0), "Distance %f", Distance);
 
 	auto vec1 = VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z);
