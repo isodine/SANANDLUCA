@@ -76,6 +76,7 @@ void Player::Initialize()
 	Playerbombsize = 10.0f;
 	Playercirclesize = 0.75f;
 
+	pushCircle = 20;
 }
 
 void Player::Update()
@@ -236,11 +237,11 @@ void Player::Update()
 
 			//É`ÉÖÅ[ÉuÇ∆ÇÃìñÇΩÇËîªíË
 			for (auto i = 0; i < 3; i++) {
-				hitPolyTube = MV1CollCheck_Sphere(tubeHandle[i], tubeCol[i], VGet(vPos.x, vPos.y + _colSubY, vPos.z), 20);
+				hitPolyTube = MV1CollCheck_Sphere(tubeHandle[i], tubeCol[i], VGet(vPos.x, vPos.y + _colSubY, vPos.z), pushCircle);
 				if (hitPolyTube.HitNum >= 1)
 				{
 					hitPos = hitPolyTube.Dim->HitPosition;
-					hitLine = VAdd(VScale(VNorm(hitPolyTube.Dim->Normal), 20), hitPos);
+					hitLine = VAdd(VScale(VNorm(hitPolyTube.Dim->Normal), pushCircle), hitPos);
 					vPos.x = hitLine.x;
 					vPos.z = hitLine.z;
 				}

@@ -52,10 +52,8 @@ public:
 	int goalColLKA;
 	int ironDoorCol;
 	int elevatorCol;
-	int tubeColLeft[3];//パイプの左側のコリジョン
-	int tubeColRight[3];//パイプの右側のコリジョン
-	int tubeColCenter[3];//パイプの正面のコリジョン
 	int tubeCol[3];
+	int pushCircle;//パイプの押し出し判定などのための半径
 	float tubeDistance;
 	int tubeHandleRight;
 	int tubeHandleCenter;

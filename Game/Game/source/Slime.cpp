@@ -112,7 +112,7 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 			}
 		}
 		else {
-			AlkaliWalk(2.0f);
+			AlkaliWalk(1.4f);
 		}
   }
 	if(mypH == 1 &&!acidDieFlag){
@@ -139,7 +139,7 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 			}
 		}
 		else {
-			AcidWalk(2.0f);
+			AcidWalk(1.4f);
 		}
 	}
 	// ƒ‚[ƒVƒ‡ƒ“‚ªØ‚è‘Ö‚í‚Á‚½‚©H
