@@ -118,5 +118,6 @@ public:
 	Tube tube;
 	Timer timer;
 	std::vector<std::unique_ptr<Slime>> slimes;
+	std::vector<std::unique_ptr<IronDoor>> irondoors;
 	std::vector<std::unique_ptr<Tube>> tubes;
 };

@@ -134,7 +134,16 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
-	//irondoor.Initialize();
+	auto IronDoor1 = std::make_unique<IronDoor>();
+	IronDoor1->Initialize(false, VGet(-100.0f, 70.0f, 1100.0f));
+	//MV1SetupCollInfo(IronDoor1->handleIronMeltDoor, IronDoor1->handleCol, 2, 2, 2);
+	irondoors.emplace_back(std::move(IronDoor1));
+
+	auto IronDoor2 = std::make_unique<IronDoor>();
+	IronDoor2->Initialize(true, VGet(200.0f, 70.0f, 900.0f));
+	//MV1SetupCollInfo(IronDoor2->handleIronMeltDoor, IronDoor2->handleCol, 2, 2, 2);
+	irondoors.emplace_back(std::move(IronDoor2));
+
 	electrode.Initialize(VGet(200.f, 70.f, 1000.f), false);
 	elevator.Initialize();
 	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
@@ -333,7 +342,7 @@ bool ModeGame::Terminate() {
 }
 
 bool ModeGame::Process() {
-	
+
 	base::Process();
 	gimmick.Balance(san.vPos, lka.vPos);
 	if (!modeStart)
@@ -357,7 +366,7 @@ bool ModeGame::Process() {
 		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f, Slimes->mypH);
 	}
 
-	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)||timer.timeup == true)
+	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0) || timer.timeup == true)
 	{
 		Isgameover = true;
 		sanbomb.EffectReset();
@@ -377,7 +386,7 @@ bool ModeGame::Process() {
 		if (gameoverchange == true)
 		{
 			ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
+			ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
 		}
 	}
 	timer.Update();
@@ -385,15 +394,23 @@ bool ModeGame::Process() {
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
 	lkacircle.Update(san, lka);
-  if (!(irondoor.melt))
-	{
-		irondoor.Update(sanbomb);
-		if (irondoor.melt)
-		{
-			san.ironDoorHandle = irondoor.handle;
-			lka.ironDoorHandle = irondoor.handle;
+	//if (!(irondoor.melt))
+	//{
+	//	irondoor.Update(sanbomb, lkabomb);
+	//	if (irondoor.melt)
+	//	{
+	//		san.ironDoorHandle = irondoor.handle;
+	//		lka.ironDoorHandle = irondoor.handle;
+	//	}
+	//}
+
+	for (auto&& Irondoors : irondoors) {
+		if (!Irondoors->melt) {
+			Irondoors->Update(sanbomb, lkabomb);
 		}
+		Irondoors->CollCheck(san, lka);
 	}
+
 	electrode.Update(sanbomb, lkabomb);
 	elevator.Update(electrode);
 	//for (auto&& Tubes : tubes) {
@@ -470,7 +487,6 @@ bool ModeGame::Render() {
 		gimmick.Render();
 		for (auto&& Slimes : slimes) {
 			Slimes->Render(Slimes->mypH);
-			
 		}
 	}
 	//マップモデルを描画する
@@ -556,6 +572,9 @@ bool ModeGame::Render() {
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
+	for (auto&& Irondoors : irondoors) {
+		Irondoors->Render();
+	}
 	timer.Render();
 	//irondoor.Render();
 	//electrode.Render();

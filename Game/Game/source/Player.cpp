@@ -153,6 +153,11 @@ void Player::Update()
 			v = { 0,0,0 };
 		}
 
+		if (hitDoor)
+		{
+			// ドアにぶつかった。元の座標に戻す
+			vPos = VSub(vPos, v);
+		}
 
 		// vの分移動
 		vPos = VAdd(vPos, v);

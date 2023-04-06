@@ -4,9 +4,10 @@ class IronDoor
 public:
 	IronDoor();
 	~IronDoor();
-	void Initialize();
-	void Update(SanBomb& sanbomb);
+	void Initialize(bool type, VECTOR Pos);
+	void Update(SanBomb& sanbomb, LkaBomb& lkabomb);
 	void Render();
+	void CollCheck(SAN& san, LKA& lka);
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p
 	int handle;
@@ -14,5 +15,6 @@ public:
 	int handleCol;
 	int handleIronDoor;
 	int handleIronMeltDoor;
+	bool isSan = false;
 	bool melt = false;
 };

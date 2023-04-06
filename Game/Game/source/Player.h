@@ -110,6 +110,8 @@ public:
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim;
 	MV1_COLL_RESULT_POLY hitPolyfloor;
 
+	bool hitDoor = false;
+
 	//SE用
 	//アウトゲーム
 
