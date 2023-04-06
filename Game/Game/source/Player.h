@@ -52,7 +52,20 @@ public:
 	int goalColLKA;
 	int ironDoorCol;
 	int elevatorCol;
-	int tubeCol;
+	int tubeColLeft[3];//パイプの左側のコリジョン
+	int tubeColRight[3];//パイプの右側のコリジョン
+	int tubeColCenter[3];//パイプの正面のコリジョン
+	int tubeCol[3];
+	float tubeDistance;
+	int tubeHandleRight;
+	int tubeHandleCenter;
+
+	VECTOR tubeLineLeft[3];//当たり判定の線をとるための左側の点
+	VECTOR tubeLineRight[3];//当たり判定の線をとるための右側の点
+	VECTOR tubeLineCenter[3];//当たり判定の線をとるための中心の点
+	VECTOR tubeLineFront[3];//当たり判定の線をとるための手前の点
+	VECTOR hitPos;//パイプと当たった場所
+	VECTOR hitLine;//法線
 
 public:
 	//当たり判定用

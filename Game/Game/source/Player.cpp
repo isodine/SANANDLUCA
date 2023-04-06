@@ -236,14 +236,13 @@ void Player::Update()
 
 			//É`ÉÖÅ[ÉuÇ∆ÇÃìñÇΩÇËîªíË
 			for (auto i = 0; i < 3; i++) {
-				hitPolyTube = MV1CollCheck_Sphere(tubeHandle[i], tubeCol, VGet(vPos.x, vPos.y + _colSubY, vPos.z), 30);
-
+				hitPolyTube = MV1CollCheck_Sphere(tubeHandle[i], tubeCol[i], VGet(vPos.x, vPos.y + _colSubY, vPos.z), 30);
 				if (hitPolyTube.HitNum >= 1)
 				{
-					//vPos.x = hitPolyTube.Dim->HitPosition.x;
-					//vPos.z = hitPolyTube.Dim->HitPosition.z;
-					vPos.x = oldvPos.x;
-					vPos.z = oldvPos.z;
+					hitPos = hitPolyTube.Dim->HitPosition;
+					hitLine = VAdd(hitPos, VScale(VNorm(hitPolyTube.Dim->Normal), 30));
+					vPos.x = hitLine.x;
+					vPos.z = hitLine.z;
 				}
 			}
 			
@@ -424,7 +423,7 @@ void Player::Render()
 		MV1SetRotationXYZ(Mhandle, vRot);
 		// ï`âÊ
 		MV1DrawModel(Mhandle);
-		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 30, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
+		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 40, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 #ifdef debug
 		if (debagMode)
 		{
