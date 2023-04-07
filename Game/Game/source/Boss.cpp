@@ -462,6 +462,7 @@ void Boss::Capture() {
 			if (SanCatchFlag) {
 				san->HP -= 1;
 				sanhitEf = true;
+				StartJoypadVibration(DX_INPUT_PAD1, 750, 1, -1);
 				phType = PH::ACID;
 				if (oldphType == PH::NONE) {
 					oldphType = PH::ACID;
@@ -476,6 +477,7 @@ void Boss::Capture() {
 			if (LkaCatchFlag) {
 				lka->HP -= 1;
 				lkahitEf = true;
+				StartJoypadVibration(DX_INPUT_PAD2, 750, 1, -1);
 				phType = PH::ALKALI;
 				if (oldphType == PH::NONE) {
 					oldphType = PH::ALKALI;

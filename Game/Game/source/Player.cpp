@@ -133,8 +133,6 @@ void Player::Update()
 		}
 		if (_bomb->situation == Dead) { attack = Attack::Dead; }
 		if (_status == STATUS::JUMP) { Jump(); }
-		if (oldHP > HP) 
-		{_status = STATUS::DAMAGE;}
 
 		// vをrad分回転させる
 		float length = 0.f;
@@ -325,6 +323,10 @@ void Player::Update()
 		{
 			_status = STATUS::WAIT;
 		}
+
+		if (_damage->SanHitFlag && _damage->LkaHitFlag) { _status = STATUS::DAMAGE; }
+		if (_status == STATUS::DAMAGE) { KnockBack(); }
+
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {
 			// 再生時間を進める
@@ -350,6 +352,7 @@ void Player::Update()
 				break;
 			case STATUS::DAMAGE:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "damage"), -1, FALSE);
+				
 				break;
 			case STATUS::CHARGE:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "attack1"), -1, FALSE);
@@ -428,7 +431,7 @@ void Player::Render()
 		MV1SetRotationXYZ(Mhandle, vRot);
 		// 描画
 		MV1DrawModel(Mhandle);
-		DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 40, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
+		
 #ifdef debug
 		if (debagMode)
 		{
@@ -436,7 +439,8 @@ void Player::Render()
 			DrawCapsule3D(VGet(vPos.x, vPos.y + 30, vPos.z), VGet(vPos.x, vPos.y + 75, vPos.z), 30.0f, 8, GetColor(0, 255, 0), GetColor(255, 255, 255), FALSE);
 			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 30, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
-
+			//パイプ当たり判定の描画
+			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 40, 8, GetColor(0, 0, 255), GetColor(255, 255, 255), FALSE);
 			// コリジョン判定用ラインの描画
 			DrawLine3D(VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)), GetColor(255, 0, 0));
 			DrawSphere3D(VGet(vPos.x, vPos.y + 50, vPos.z), 55, 6, GetColor(0, 0, 255), GetColor(0, 0, 255), FALSE);
@@ -461,3 +465,6 @@ void Player::Landing(float HitYPos) {
 	vPos.y = HitYPos - 0.5f;
 }
 
+void Player::KnockBack() {
+	vPos = VAdd(vPos, VScale(vDir, -0.5));
+}

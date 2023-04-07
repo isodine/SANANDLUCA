@@ -55,6 +55,8 @@ void Damage::Process() {
 		Lka->HP -= 2;
 		SanHitFlag = true;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 1000, 1, -1);
+		StartJoypadVibration(DX_INPUT_PAD2, 1000, 1, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK);
@@ -64,6 +66,8 @@ void Damage::Process() {
 		Lka->HP -= 1;
 		SanHitFlag = true;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 1000, 1, -1);
+		StartJoypadVibration(DX_INPUT_PAD2, 1000, 1, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK); 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK);
@@ -72,12 +76,14 @@ void Damage::Process() {
 	if ((HitPolyLkaBomb.HitNum >= 1) && !SanHitFlag) {
 		San->HP -= 1;
 		SanHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 750, 1, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
 	if ((HitPolySanBomb.HitNum >= 1) && !LkaHitFlag) {
 		Lka->HP -= 1;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD2, 750, 1, -1);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
@@ -104,11 +110,13 @@ void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
 	if (slimes[0]->lkaHitFlag && !LkaHitFlag) {
 		Lka->HP -= 1;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD2, 750, 1, -1);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 	if (slimes[1]->sanHitFlag && !SanHitFlag) {
 		San->HP -= 1;
 		SanHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 750, 1, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 	if (SanHitFlag == true) {
@@ -137,12 +145,14 @@ void Damage::StageDamage(int StageHandle) {
 	if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
 		San->HP -= 1;
 		SanHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 750, 1, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
 	if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
 		Lka->HP -= 1;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD2, 750, 1, -1);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
@@ -206,6 +216,7 @@ void Damage::SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 			if ((HitPolySwamp.HitNum >= 1) && !SanHitFlag) {
 				San->HP -= 1;;
 				SanHitFlag = true;
+				StartJoypadVibration(DX_INPUT_PAD1, 750, 1, -1);
 				PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 			}
 		}
@@ -216,6 +227,7 @@ void Damage::SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 			if ((HitPolySwamp.HitNum >= 1) && !LkaHitFlag) {
 				Lka->HP -= 1;
 				LkaHitFlag = true;
+				StartJoypadVibration(DX_INPUT_PAD2, 750, 1, -1);
 				PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 			}
 		}
