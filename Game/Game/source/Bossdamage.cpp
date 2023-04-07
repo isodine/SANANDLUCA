@@ -5,9 +5,9 @@
 
 Bossdamage::Bossdamage()
 {
-	_effectResourceHandle = LoadEffekseerEffect("res/Beaker/Beaker_damage01/Beaker_damage01_effect.efkmat.efkefc");
+	_effectResourceHandle = LoadEffekseerEffect("res/Beaker/Beaker_down01/Beaker_down01.efkefc");
 	IsPlaying = -1;
-	damageEfsize = 100.0f;
+	damageEfsize = 400.0f;
 }
 
 Bossdamage::~Bossdamage()
