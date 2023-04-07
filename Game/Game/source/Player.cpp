@@ -62,6 +62,7 @@ void Player::Initialize()
 	Mtotal_time = 0.f;
 	Mplay_time = 0.0f;
 	vDir = VGet(0, 0, -1);			// キャラモデルはデフォルトで-Z方向を向いている
+	backPos = VGet(0, 0, 0);
 	attack = Attack::None;
 	SEjump = LoadSoundMem("res/06_Sound/03_SE/ani_ta_biyon02.mp3");
 
@@ -108,7 +109,7 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 
 
 		// 移動方向を決める
-		VECTOR v = { 0,0,0 };
+		v = { 0,0,0 };
 		float mvSpeed = 6.f;
 		if (key & PAD_INPUT_DOWN) { v.x = 1; }
 		if (key & PAD_INPUT_UP) { v.x = -1; }
@@ -277,18 +278,24 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 			}
 			else {}
 
-			for (auto&& Irondoors : *irondoors) {
+			for (int i = 0; i < length; i++)
+			{
 				if (irondoors == NULL) { break; }
-				hitPolyIronDoor = MV1CollCheck_Line(Irondoors->handle, Irondoors->handleCol,
-					VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-				if (hitPolyIronDoor.HitFlag && (vPos.z + 30 >= hitPolyIronDoor.HitPosition.z)) {
-					float subX = vPos.x - oldvPos.x;
-					float subZ = vPos.z - oldvPos.z;
-					vPos.x = oldvPos.x;
-					vPos.z = oldvPos.z;
 
-					v = { 0,0,0 };
+				for (auto&& Irondoors : *irondoors) {
+
+					hitPolyIronDoor = MV1CollCheck_Line(Irondoors->handle, Irondoors->handleCol,
+						VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+					if (hitPolyIronDoor.HitFlag && (vPos.z + 30 >= hitPolyIronDoor.HitPosition.z)) {
+						float subX = vPos.x - oldPos.x;
+						float subZ = vPos.z - oldPos.z;
+						vPos.x = oldPos.x;
+						vPos.z = oldPos.z;
+
+						v = { 0,0,0 };
+					}
 				}
+				break;
 			}
 			//hitPolyIronDoor = MV1CollCheck_Line(ironDoorHandle, ironDoorCol,
 			//	VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
@@ -343,7 +350,7 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 		}
 
 		if (_damage->SanHitFlag && _damage->LkaHitFlag) { _status = STATUS::DAMAGE; }
-		if (_status == STATUS::DAMAGE) { KnockBack(); }
+		//if (_status == STATUS::DAMAGE) {KnockBack();}
 
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {
@@ -370,7 +377,7 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 				break;
 			case STATUS::DAMAGE:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "damage"), -1, FALSE);
-				
+				backFlag = false;
 				break;
 			case STATUS::CHARGE:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "attack1"), -1, FALSE);
@@ -484,5 +491,9 @@ void Player::Landing(float HitYPos) {
 }
 
 void Player::KnockBack() {
-	vPos = VAdd(vPos, VScale(vDir, -0.5));
+	if (!backFlag) {
+		backPos = VScale(VNorm(vDir), -2.0f);
+		backFlag = true;
+	}
+	vPos = VSub(vPos, backPos);
 }

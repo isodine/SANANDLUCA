@@ -100,5 +100,6 @@ public:
 	LkaBomb lkabomb;
 	Sancircle sancircle;
 	Lkacircle lkacircle;
+	std::vector<std::unique_ptr<IronDoor>> irondoors;
 	Damage damage;
 };

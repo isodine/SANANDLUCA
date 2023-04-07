@@ -23,8 +23,6 @@ public:
 	Damage* _damage;
 	ModeBase* base;
 	Gimmick* _gimmick;
-	Slime* _acid;
-	Slime* _alkali;
 
 	void SetBomb(PlayerBomb* bomb);
 	void SetCamera(Camera* camera);
@@ -68,6 +66,7 @@ public:
 	VECTOR tubeLineFront[3];//当たり判定の線をとるための手前の点
 	VECTOR hitPos;//パイプと当たった場所
 	VECTOR hitLine;//法線
+	VECTOR v;//プレイヤーの進む方向
 
 public:
 	//当たり判定用
@@ -106,6 +105,7 @@ public:
 	VECTOR vPos;	// 位置
 	VECTOR oldPos;  //前の位置
 	VECTOR vDir;	// 向き
+	VECTOR backPos; //ノックバックする向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
 	//ボム関連用
@@ -174,6 +174,7 @@ public:
 	int HP;
 	int oldHP;
 	bool goal = false;
+	bool backFlag = false;
 
 	int Playercenter; //プレイヤーの中心をとる
 	int Playerhead; //プレイヤーの頭上をとる

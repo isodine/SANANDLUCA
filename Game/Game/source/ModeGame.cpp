@@ -134,19 +134,19 @@ bool ModeGame::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
-	auto IronDoor1 = std::make_unique<IronDoor>();
-	IronDoor1->Initialize(false, VGet(-100.0f, 70.0f, 1100.0f));
-	//MV1SetupCollInfo(IronDoor1->handleIronMeltDoor, IronDoor1->handleCol, 2, 2, 2);
-	irondoors.emplace_back(std::move(IronDoor1));
+	//auto IronDoor1 = std::make_unique<IronDoor>();
+	//IronDoor1->Initialize(false, VGet(-100.0f, 70.0f, 1100.0f));
+	////MV1SetupCollInfo(IronDoor1->handleIronMeltDoor, IronDoor1->handleCol, 2, 2, 2);
+	//irondoors.emplace_back(std::move(IronDoor1));
 
-	auto IronDoor2 = std::make_unique<IronDoor>();
-	IronDoor2->Initialize(true, VGet(200.0f, 70.0f, 900.0f));
-	//MV1SetupCollInfo(IronDoor2->handleIronMeltDoor, IronDoor2->handleCol, 2, 2, 2);
-	irondoors.emplace_back(std::move(IronDoor2));
+	//auto IronDoor2 = std::make_unique<IronDoor>();
+	//IronDoor2->Initialize(true, VGet(200.0f, 70.0f, 900.0f));
+	////MV1SetupCollInfo(IronDoor2->handleIronMeltDoor, IronDoor2->handleCol, 2, 2, 2);
+	//irondoors.emplace_back(std::move(IronDoor2));
 
-	electrode.Initialize(VGet(200.f, 70.f, 1000.f), false);
-	elevator.Initialize();
-	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
+	//electrode.Initialize(VGet(200.f, 70.f, 1000.f), false);
+	//elevator.Initialize();
+	//MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
 	//auto Tube1 = std::make_unique<Tube>();
 	//Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
@@ -157,23 +157,23 @@ bool ModeGame::Initialize() {
 	//lka.tubeHandle[0] = Tube1->handle;
 	//tubes.emplace_back(std::move(Tube1));
 
-	auto Tube2 = std::make_unique<Tube>();
-	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
-	//MV1SetupCollInfo(Tube2->handle, tube.handleCol, 4, 4, 4);
-	san.tubeCol[1] = Tube2->handleCol;
-	lka.tubeCol[1] = Tube2->handleCol;
-	san.tubeHandle[1] = Tube2->handle;
-	lka.tubeHandle[1] = Tube2->handle;
-	tubes.emplace_back(std::move(Tube2));
+	//auto Tube2 = std::make_unique<Tube>();
+	//Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
+	////MV1SetupCollInfo(Tube2->handle, tube.handleCol, 4, 4, 4);
+	//san.tubeCol[1] = Tube2->handleCol;
+	//lka.tubeCol[1] = Tube2->handleCol;
+	//san.tubeHandle[1] = Tube2->handle;
+	//lka.tubeHandle[1] = Tube2->handle;
+	//tubes.emplace_back(std::move(Tube2));
 
-	auto Tube3 = std::make_unique<Tube>();
-	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
-	//MV1SetupCollInfo(Tube3->handle, tube.handleCol, 4, 4, 4);
-	san.tubeCol[2] = Tube3->handleCol;
-	lka.tubeCol[2] = Tube3->handleCol;
-	san.tubeHandle[2] = Tube3->handle;
-	lka.tubeHandle[2] = Tube3->handle;
-	tubes.emplace_back(std::move(Tube3));
+	//auto Tube3 = std::make_unique<Tube>();
+	//Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
+	////MV1SetupCollInfo(Tube3->handle, tube.handleCol, 4, 4, 4);
+	//san.tubeCol[2] = Tube3->handleCol;
+	//lka.tubeCol[2] = Tube3->handleCol;
+	//san.tubeHandle[2] = Tube3->handle;
+	//lka.tubeHandle[2] = Tube3->handle;
+	//tubes.emplace_back(std::move(Tube3));
 
 	//damage.SetGame(this);
 
@@ -372,8 +372,8 @@ bool ModeGame::Process() {
 	gimmick.SanHitFlag = false;
 	gimmick.LkaHitFlag = false;
 	//gimmick.Balance(san.vPos, lka.vPos);
-	san.Update(damage, &irondoors);
-	lka.Update(damage, &irondoors);
+	san.Update(damage, nullptr);
+	lka.Update(damage, nullptr);
 
 	damage.Process();
 	damage.StageDamage(_handleMap);
@@ -420,33 +420,16 @@ bool ModeGame::Process() {
 	//	}
 	//}
 
-	for (auto&& Irondoors : irondoors) {
-		if (!Irondoors->melt) {
-			Irondoors->Update(sanbomb, lkabomb);
-		}
-		//Irondoors->CollCheck(san, lka);
-	}
+	//for (auto&& Irondoors : irondoors) {
+	//	if (!Irondoors->melt) {
+	//		Irondoors->Update(sanbomb, lkabomb);
+	//	}
+	//}
 
 	electrode.Update(sanbomb, lkabomb);
 	elevator.Update(electrode);
 	for (int i = 0; i < tubes.size(); ++i) {
-	//for (auto&& Tubes : tubes) {
-		//Tubes->Update(electrode);
 		tubes[i]->Update(electrode);
-		//san.tubeColLeft[i] = tubes[i]->handleColLeft;
-		//san.tubeColRight[i] = tubes[i]->handleColRight;
-		//san.tubeColCenter[i] = tubes[i]->handleColCenter;
-		//san.tubeLineLeft[i] = tubes[i]->tubeLeft;
-		//san.tubeLineRight[i] = tubes[i]->tubeRight;
-		//san.tubeLineCenter[i] = tubes[i]->tubeCenter;
-		//san.tubeLineFront[1] = tubes[i]->tubeFront;
-		//lka.tubeColLeft[i] = tubes[i]->handleColLeft;
-		//lka.tubeColRight[i] = tubes[i]->handleColRight;
-		//lka.tubeColCenter[i] = tubes[i]->handleColCenter;
-		//lka.tubeLineLeft[i] = tubes[i]->tubeLeft;
-		//lka.tubeLineRight[i] = tubes[i]->tubeRight;
-		//lka.tubeLineCenter[i] = tubes[i]->tubeCenter;
-		//lka.tubeLineFront[1] = tubes[i]->tubeFront;
 	}
 
 	if (san.goal && lka.goal) {

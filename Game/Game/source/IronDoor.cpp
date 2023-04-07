@@ -26,6 +26,8 @@ void IronDoor::Initialize(bool type, VECTOR Pos)
 			  handleIronMeltDoor = MV1LoadModel("res/02_Object_Model/iron__Door/San_iron_melt/Irondoor_melt_S.mv1");*/ /*Alc_iron_melt / Irondoor_melt_A*/
 	MV1SetPosition(handleIronDoor, Pos);
 	MV1SetPosition(handleIronMeltDoor, Pos);
+	MV1SetScale(handleIronDoor, VGet(1.5f, 1.5f, 1.5f));
+	MV1SetScale(handleIronMeltDoor, VGet(1.5f, 1.5f, 1.5f));
 	handle = handleIronDoor;
 	handleCol = 0;
 	isSan = type;

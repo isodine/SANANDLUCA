@@ -19,7 +19,7 @@ std::vector<std::string> splitme00(std::string& input, char delimiter)
 bool ModeStage0::Initialize() {
 	if (!base::Initialize()) { return false; }
 	//ステージの種類
-	_handleMap = MV1LoadModel("res/07_Stage_map/00_Stage/Stage_00.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/00_Stage/Stage_00.fbm/Stage_00.mv1");
 	_handleSkySphere = MV1LoadModel("res/07_Stage_map/00_Stage/00SkyCube_B/sky.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 
@@ -73,6 +73,26 @@ bool ModeStage0::Initialize() {
 	lka.wallCol = frameMapCollisionwall;
 	lka.goalColLKA = frameMapCollisiongoalLKA;
 	lka.stageHandle = _handleMap;
+
+	auto IronDoor1 = std::make_unique<IronDoor>();
+	IronDoor1->Initialize(true, VGet(-290.f, 25.f, 2129.f));
+	//MV1SetupCollInfo(IronDoor1->handleIronMeltDoor, IronDoor1->handleCol, 2, 2, 2);
+	irondoors.emplace_back(std::move(IronDoor1));
+
+	auto IronDoor2 = std::make_unique<IronDoor>();
+	IronDoor2->Initialize(false, VGet(421.f, 25.f, 2118.f));
+	//MV1SetupCollInfo(IronDoor2->handleIronMeltDoor, IronDoor2->handleCol, 2, 2, 2);
+	irondoors.emplace_back(std::move(IronDoor2));
+
+	auto IronDoor3 = std::make_unique<IronDoor>();
+	IronDoor3->Initialize(false, VGet(-2.f, 135.f, 4301.f));
+	//MV1SetupCollInfo(IronDoor1->handleIronMeltDoor, IronDoor1->handleCol, 2, 2, 2);
+	irondoors.emplace_back(std::move(IronDoor3));
+
+	auto IronDoor4 = std::make_unique<IronDoor>();
+	IronDoor4->Initialize(true, VGet(-3.f, 230.f, 5849.f));
+	//MV1SetupCollInfo(IronDoor2->handleIronMeltDoor, IronDoor2->handleCol, 2, 2, 2);
+	irondoors.emplace_back(std::move(IronDoor4));
 
 	damage.Initialize(&san, &lka);
 	damage.SetBomb(&sanbomb, &lkabomb);
@@ -158,8 +178,8 @@ bool ModeStage0::Terminate() {
 bool ModeStage0::Process() {
 	base::Process();
 
-	san.Update(damage, NULL);
-	lka.Update(damage, NULL);
+	san.Update(damage, &irondoors);
+	lka.Update(damage, &irondoors);
 	damage.Process();
 	damage.StageDamage(_handleMap);
 
@@ -183,6 +203,14 @@ bool ModeStage0::Process() {
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
 	lkacircle.Update(san, lka);
+
+	for (auto&& Irondoors : irondoors) {
+		if (!Irondoors->melt) {
+			Irondoors->Update(sanbomb, lkabomb);
+		}
+		//Irondoors->CollCheck(san, lka);
+	}
+
 	if ((san.goal && lka.goal)) {
 		//BGM停止
 		StopMusic();
@@ -303,6 +331,9 @@ bool ModeStage0::Render() {
 		DrawFormatString(0, 400, GetColor(0, 0, 0), "sanHitFlag = %d", damage.HitPolySanBomb.HitNum);
 	}
 #endif
+	for (auto&& Irondoors : irondoors) {
+		Irondoors->Render();
+	}
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();

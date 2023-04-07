@@ -55,6 +55,7 @@ void LKA::Update(Damage& damage, std::vector<std::unique_ptr<IronDoor>>* irondoo
 {
 
 	Player::Update(irondoors);
+	if (_status == STATUS::DAMAGE) { KnockBack(); }
 	if (damage.LkaHitFlag == true)
 	{
 		oldcount = GetNowCount();

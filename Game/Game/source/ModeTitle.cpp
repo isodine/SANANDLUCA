@@ -18,6 +18,8 @@ ModeTitle::ModeTitle() {
 
 bool ModeTitle::Initialize() {
 	if (!base::Initialize()) { return false; }
+
+	return true;
 }
 
 bool ModeTitle::Terminate() {
