@@ -78,7 +78,7 @@ void Player::Initialize()
 
 }
 
-void Player::Update()
+void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 {
 	Input();
 
@@ -278,16 +278,29 @@ void Player::Update()
 			}
 			else {}
 
-			hitPolyIronDoor = MV1CollCheck_Line(ironDoorHandle, ironDoorCol,
-				VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-			if (hitPolyIronDoor.HitFlag && (vPos.z + 30 >= hitPolyIronDoor.HitPosition.z)) {
-				float subX = vPos.x - oldvPos.x;
-				float subZ = vPos.z - oldvPos.z;
-				vPos.x = oldvPos.x;
-				vPos.z = oldvPos.z;
+			for (auto&& Irondoors : *irondoors) {
+				if (irondoors == NULL) { break; }
+				hitPolyIronDoor = MV1CollCheck_Line(Irondoors->handle, Irondoors->handleCol,
+					VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+				if (hitPolyIronDoor.HitFlag && (vPos.z + 30 >= hitPolyIronDoor.HitPosition.z)) {
+					float subX = vPos.x - oldvPos.x;
+					float subZ = vPos.z - oldvPos.z;
+					vPos.x = oldvPos.x;
+					vPos.z = oldvPos.z;
 
-				v = { 0,0,0 };
+					v = { 0,0,0 };
+				}
 			}
+			//hitPolyIronDoor = MV1CollCheck_Line(ironDoorHandle, ironDoorCol,
+			//	VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
+			//if (hitPolyIronDoor.HitFlag && (vPos.z + 30 >= hitPolyIronDoor.HitPosition.z)) {
+			//	float subX = vPos.x - oldvPos.x;
+			//	float subZ = vPos.z - oldvPos.z;
+			//	vPos.x = oldvPos.x;
+			//	vPos.z = oldvPos.z;
+
+			//	v = { 0,0,0 };
+			//}
 
 		}
 

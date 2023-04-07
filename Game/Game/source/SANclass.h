@@ -12,7 +12,7 @@ public:
 	SAN();
 	~SAN();
 	void Initialize() override;
-	void Update(Damage& damage);
+	void Update(Damage& damage, std::vector<std::unique_ptr<IronDoor>>* irondoors);
 	void Render(Damage& damage);
 	void Input() override;
 

@@ -51,10 +51,10 @@ void LKA::Input()
 	trg = Trg2P;
 }
 
-void LKA::Update(Damage& damage)
+void LKA::Update(Damage& damage, std::vector<std::unique_ptr<IronDoor>>* irondoors)
 {
 
-	Player::Update();
+	Player::Update(irondoors);
 	if (damage.LkaHitFlag == true)
 	{
 		oldcount = GetNowCount();

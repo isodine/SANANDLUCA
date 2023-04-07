@@ -7,6 +7,7 @@ class PlayerBomb;
 class Camera;
 class Damage;
 class Gimmick;
+class IronDoor;
 
 class Player
 {
@@ -32,7 +33,7 @@ public:
 	Player();
 	~Player();
 	virtual void Initialize();
-	virtual void Update();
+	virtual void Update(std::vector<std::unique_ptr<IronDoor>>* irondoors);
 	virtual void Render();
 	virtual void Jump();
 	virtual void freeFall();

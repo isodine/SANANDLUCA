@@ -208,8 +208,8 @@ bool ModeBoss::Process() {
 	ModeBase::Process();
 	Count += 1;
 	bossrun.Update(boss);
-	san.Update(damage);
-	lka.Update(damage);
+	san.Update(damage, NULL);
+	lka.Update(damage, NULL);
 	damage.Process();
 	boss.Process(damage);
 	sanbomb.Update(san);

@@ -356,8 +356,8 @@ bool ModeGame::Process() {
 	gimmick.SanHitFlag = false;
 	gimmick.LkaHitFlag = false;
 	//gimmick.Balance(san.vPos, lka.vPos);
-	san.Update(damage);
-	lka.Update(damage);
+	san.Update(damage, &irondoors);
+	lka.Update(damage, &irondoors);
 
 	damage.Process();
 	damage.StageDamage(_handleMap);
@@ -408,7 +408,7 @@ bool ModeGame::Process() {
 		if (!Irondoors->melt) {
 			Irondoors->Update(sanbomb, lkabomb);
 		}
-		Irondoors->CollCheck(san, lka);
+		//Irondoors->CollCheck(san, lka);
 	}
 
 	electrode.Update(sanbomb, lkabomb);

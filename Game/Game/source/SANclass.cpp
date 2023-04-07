@@ -49,10 +49,10 @@ void SAN::Input()
 	trg = Trg1P;
 }
 
-void SAN::Update(Damage& damage)
+void SAN::Update(Damage& damage, std::vector<std::unique_ptr<IronDoor>>* irondoors)
 {
 	
-	Player::Update();
+	Player::Update(irondoors);
 	if (damage.SanHitFlag == true) { oldcount = GetNowCount();}
 }
 
