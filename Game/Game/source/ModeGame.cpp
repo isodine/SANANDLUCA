@@ -405,7 +405,7 @@ bool ModeGame::Process() {
 			ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
 		}
 	}
-	//timer.Update();
+	timer.Update();
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
