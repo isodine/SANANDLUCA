@@ -72,7 +72,7 @@ public:
 
 	enum class PH {
 		ACID,
-		ALCALI,
+		ALKALI,
 		NONE,
 	};
 

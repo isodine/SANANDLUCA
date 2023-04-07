@@ -23,6 +23,8 @@ public:
 	Damage* _damage;
 	ModeBase* base;
 	Gimmick* _gimmick;
+	Slime* _acid;
+	Slime* _alkali;
 
 	void SetBomb(PlayerBomb* bomb);
 	void SetCamera(Camera* camera);
@@ -40,20 +42,32 @@ public:
 	void charJump();
 	virtual void Input();
 	void UpdateCollision();
+	void KnockBack();
 
 	int key;
 	int trg;
 	int stageHandle;
 	int ironDoorHandle;
 	int elevatorHnadle;
-	int tubeHandle;
+	int tubeHandle[3];
 	int floorCol;
 	int wallCol;
 	int goalColSAN;
 	int goalColLKA;
 	int ironDoorCol;
 	int elevatorCol;
-	int tubeCol;
+	int tubeCol[3];
+	int pushCircle;//パイプの押し出し判定などのための半径
+	float tubeDistance;
+	int tubeHandleRight;
+	int tubeHandleCenter;
+
+	VECTOR tubeLineLeft[3];//当たり判定の線をとるための左側の点
+	VECTOR tubeLineRight[3];//当たり判定の線をとるための右側の点
+	VECTOR tubeLineCenter[3];//当たり判定の線をとるための中心の点
+	VECTOR tubeLineFront[3];//当たり判定の線をとるための手前の点
+	VECTOR hitPos;//パイプと当たった場所
+	VECTOR hitLine;//法線
 
 public:
 	//当たり判定用
@@ -158,6 +172,7 @@ public:
 
 	bool motionRes = false;
 	int HP;
+	int oldHP;
 	bool goal = false;
 
 	int Playercenter; //プレイヤーの中心をとる

@@ -28,15 +28,11 @@ public:
 	MV1_COLL_RESULT_POLY_DIM HitPolySan;
 	MV1_COLL_RESULT_POLY_DIM HitPolyLka;
 
-	int MaxSanHP,SanHP;
-	int MaxLkaHP,LkaHP;
+	float SanCoolTime;//サンがダメージを受けた時のクールタイム
+	float LkaCoolTime;//ルカがダメージを受けた時のクールタイム
 
-	float SanCoolTime;
-	float LkaCoolTime;
-
-	bool SanHitFlag;
-	bool LkaHitFlag;
-
+	bool SanHitFlag;//TRUEならサンがダメージを受けるものに触れた
+	bool LkaHitFlag;//TRUEならルカがダメージを受けるものに触れた
 	bool stageFlag;//trueの時にダメージ床の判定がONになる
 
 	float Distance;

@@ -83,10 +83,6 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		BlendRate = abs(BalancePer);
 		
 
-		
-		//toDoプレイヤーが浮くバグあり
-		
-
 		if ((SanHitFlag == true && LkaHitFlag == true)) {
 			balance = BALANCE::EQUAL;
 			if (oldBalance != balance) {

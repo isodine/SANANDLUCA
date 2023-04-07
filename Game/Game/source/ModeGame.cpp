@@ -148,25 +148,31 @@ bool ModeGame::Initialize() {
 	elevator.Initialize();
 	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
-	auto Tube1 = std::make_unique<Tube>();
-	Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
-	MV1SetupCollInfo(Tube1->handle, elevator.handleCol, 4, 4, 4);
-	san.tubeHandle = Tube1->handle;
-	lka.tubeHandle = Tube1->handle;
-	tubes.emplace_back(std::move(Tube1));
+	//auto Tube1 = std::make_unique<Tube>();
+	//Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
+	//MV1SetupCollInfo(Tube1->handle, tube.handleCol, 4, 4, 4);
+	//san.tubeCol[0] = tube.handleCol;
+	//lka.tubeCol[0] = tube.handleCol;
+	//san.tubeHandle[0] = Tube1->handle;
+	//lka.tubeHandle[0] = Tube1->handle;
+	//tubes.emplace_back(std::move(Tube1));
 
 	auto Tube2 = std::make_unique<Tube>();
 	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
-	MV1SetupCollInfo(Tube2->handle, elevator.handleCol, 4, 4, 4);
-	san.tubeHandle = Tube2->handle;
-	lka.tubeHandle = Tube2->handle;
+	//MV1SetupCollInfo(Tube2->handle, tube.handleCol, 4, 4, 4);
+	san.tubeCol[1] = Tube2->handleCol;
+	lka.tubeCol[1] = Tube2->handleCol;
+	san.tubeHandle[1] = Tube2->handle;
+	lka.tubeHandle[1] = Tube2->handle;
 	tubes.emplace_back(std::move(Tube2));
 
 	auto Tube3 = std::make_unique<Tube>();
 	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
-	MV1SetupCollInfo(Tube3->handle, elevator.handleCol, 4, 4, 4);
-	san.tubeHandle = Tube3->handle;
-	lka.tubeHandle = Tube3->handle;
+	//MV1SetupCollInfo(Tube3->handle, tube.handleCol, 4, 4, 4);
+	san.tubeCol[2] = Tube3->handleCol;
+	lka.tubeCol[2] = Tube3->handleCol;
+	san.tubeHandle[2] = Tube3->handle;
+	lka.tubeHandle[2] = Tube3->handle;
 	tubes.emplace_back(std::move(Tube3));
 
 	//damage.SetGame(this);
@@ -305,7 +311,17 @@ bool ModeGame::Initialize() {
 
 	//CSV‚Ì’²®‚ÉƒJƒƒ‰‚ð’Ç‚¢‚Â‚©‚¹‚é
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
-	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	//_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	if (san.vPos.y > lka.vPos.y) {
+		_cam._vPos.y += (lka.vPos.y);
+	}
+	else if (lka.vPos.y > san.vPos.y) {
+		_cam._vPos.y += (san.vPos.y);
+	}
+	else {
+		_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	}
+
 	_cam._vPos.z += (san.vPos.z + lka.vPos.z) / 2.f;
 	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
@@ -389,7 +405,7 @@ bool ModeGame::Process() {
 			ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
 		}
 	}
-	timer.Update();
+	//timer.Update();
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
@@ -413,9 +429,25 @@ bool ModeGame::Process() {
 
 	electrode.Update(sanbomb, lkabomb);
 	elevator.Update(electrode);
+	for (int i = 0; i < tubes.size(); ++i) {
 	//for (auto&& Tubes : tubes) {
-	//	Tubes->Update(electrode);
-	//}
+		//Tubes->Update(electrode);
+		tubes[i]->Update(electrode);
+		//san.tubeColLeft[i] = tubes[i]->handleColLeft;
+		//san.tubeColRight[i] = tubes[i]->handleColRight;
+		//san.tubeColCenter[i] = tubes[i]->handleColCenter;
+		//san.tubeLineLeft[i] = tubes[i]->tubeLeft;
+		//san.tubeLineRight[i] = tubes[i]->tubeRight;
+		//san.tubeLineCenter[i] = tubes[i]->tubeCenter;
+		//san.tubeLineFront[1] = tubes[i]->tubeFront;
+		//lka.tubeColLeft[i] = tubes[i]->handleColLeft;
+		//lka.tubeColRight[i] = tubes[i]->handleColRight;
+		//lka.tubeColCenter[i] = tubes[i]->handleColCenter;
+		//lka.tubeLineLeft[i] = tubes[i]->tubeLeft;
+		//lka.tubeLineRight[i] = tubes[i]->tubeRight;
+		//lka.tubeLineCenter[i] = tubes[i]->tubeCenter;
+		//lka.tubeLineFront[1] = tubes[i]->tubeFront;
+	}
 
 	if (san.goal && lka.goal) {
 		//BGM’âŽ~
@@ -577,11 +609,11 @@ bool ModeGame::Render() {
 	}
 	timer.Render();
 	//irondoor.Render();
-	//electrode.Render();
+	electrode.Render();
 	//elevator.Render();
-	//for (auto&& Tubes : tubes) {
-	//	Tubes->Render();
-	//}
+	for (auto&& Tubes : tubes) {
+		Tubes->Render();
+	}
 	if (Isgameover == true)
 	{
 		DrawGraph(0, 0, Grhandle[gameovercount], true);
