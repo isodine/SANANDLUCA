@@ -54,6 +54,10 @@ void Boss::Initialize() {
 	acidHandle = LoadGraph("res/Boss/robo_acid_tex.png");
 	alkaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
 	noneHandle = LoadGraph("res/Boss/robo_tex.png");
+	HPhandle = LoadGraph("res/BossHP/HP.png");
+	iconhandle = LoadGraph("res/BossHP/icon.png");
+	BGhandle = LoadGraph("res/BossHP/BG.png");
+	flamehandle = LoadGraph("res/BossHP/flame.png");
 	handleBaseSan = MV1LoadModel("res/07_Stage_map/Boss_Stage/acid.mv1");
 	handleBaseLka = MV1LoadModel("res/07_Stage_map/Boss_Stage/alkali.mv1");
 	//ÉÇÉfÉãÇÉÅÉÇÉäÇ…ì«Ç›çûÇÒÇ≈Ç¢ÇÈ
@@ -536,6 +540,7 @@ void Boss::SwampSpawn(bool IsSan)
 }
 
 void Boss::Render() {
+	DrawGraph(1000, 100, iconhandle, true);
 	{
 		if (!downFlag) {
 			if (type == BOSSTYPE::RUSH && WaitCount <= 60) {
