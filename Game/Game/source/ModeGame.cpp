@@ -172,6 +172,7 @@ bool ModeGame::Initialize() {
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
 	san.SetGimmick(&gimmick);
+	san.SetLka(&lka);
 
 	san.Initialize();
 	sanbomb.EffectReset();
@@ -188,6 +189,7 @@ bool ModeGame::Initialize() {
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
 	lka.SetGimmick(&gimmick);
+	lka.SetSan(&san);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;

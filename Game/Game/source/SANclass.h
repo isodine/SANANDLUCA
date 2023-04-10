@@ -5,6 +5,7 @@
 class SanBomb;
 class Damage;
 class Boss;
+class LKA;
 
 class SAN :public Player
 {
@@ -15,6 +16,10 @@ public:
 	void Update(Damage& damage);
 	void Render(Damage& damage);
 	void Input() override;
+	void KnockBack() override;
+	void SetLka(LKA* _lka);
+	bool sanBackFlag;
+
 
 private:
 	int  sangauge;
@@ -27,4 +32,6 @@ private:
 	int hphandle;
 	float oldcount;
 	bool _isflag;
+
+	LKA* lka;
 };

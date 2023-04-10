@@ -57,6 +57,7 @@ bool ModeStage0::Initialize() {
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
+	san.SetLka(&lka);
 
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
@@ -67,6 +68,7 @@ bool ModeStage0::Initialize() {
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
+	lka.SetSan(&san);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
@@ -157,6 +159,9 @@ bool ModeStage0::Terminate() {
 
 bool ModeStage0::Process() {
 	base::Process();
+
+	san.Update(damage);
+	lka.Update(damage);
 
 	damage.Process();
 	damage.StageDamage(_handleMap);

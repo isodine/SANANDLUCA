@@ -55,6 +55,8 @@ void Damage::Process() {
 		Lka->HP -= 2;
 		SanHitFlag = true;
 		LkaHitFlag = true;
+		San->sanBackFlag = true;
+		Lka->lkaBackFlag = true;
 		StartJoypadVibration(DX_INPUT_PAD1, 1000, 1, -1);
 		StartJoypadVibration(DX_INPUT_PAD2, 1000, 1, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
@@ -64,6 +66,8 @@ void Damage::Process() {
 	else if (Distance < 110 && Distance >= 85 && SanHitFlag == false && LkaHitFlag == false) {
 		San->HP -= 1;
 		Lka->HP -= 1;
+		San->sanBackFlag = true;
+		Lka->lkaBackFlag = true;
 		SanHitFlag = true;
 		LkaHitFlag = true;
 		StartJoypadVibration(DX_INPUT_PAD1, 1000, 1, -1);

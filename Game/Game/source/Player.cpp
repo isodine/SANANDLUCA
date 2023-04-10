@@ -108,7 +108,7 @@ void Player::Update()
 
 
 		// ˆÚ“®•ûŒü‚ðŒˆ‚ß‚é
-		VECTOR v = { 0,0,0 };
+		v = { 0,0,0 };
 		float mvSpeed = 6.f;
 		if (key & PAD_INPUT_DOWN) { v.x = 1; }
 		if (key & PAD_INPUT_UP) { v.x = -1; }
@@ -466,5 +466,5 @@ void Player::Landing(float HitYPos) {
 }
 
 void Player::KnockBack() {
-	vPos = VAdd(vPos, VScale(vDir, -0.5));
+	
 }

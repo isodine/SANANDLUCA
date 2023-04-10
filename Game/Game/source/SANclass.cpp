@@ -38,6 +38,7 @@ void SAN::Initialize()
 	// ˜ˆÊ’u‚ÌÝ’è
 	_colSubY = 45.f;
 	HP = 6;
+	sanBackFlag = false;
 }
 
 void SAN::Input()
@@ -49,11 +50,32 @@ void SAN::Input()
 	trg = Trg1P;
 }
 
+void SAN::SetLka(LKA* _lka) {
+	lka = _lka;
+}
+
+void SAN::KnockBack() {
+	if (sanBackFlag) {
+		int checkKey = PAD_INPUT_DOWN | PAD_INPUT_UP | PAD_INPUT_LEFT | PAD_INPUT_RIGHT | PAD_INPUT_1;
+		if (v.x == 0 && v.z == 0) {
+			knockBackDir = VScale(VNorm(lka->vDir), 1.5);
+		}
+		else {
+			knockBackDir = VScale(VNorm(vDir), -1.5);
+		}
+		sanBackFlag = false;
+	}
+	vPos = VAdd(vPos, knockBackDir);
+}
+
 void SAN::Update(Damage& damage)
 {
 	
 	Player::Update();
 	if (damage.SanHitFlag == true) { oldcount = GetNowCount();}
+	if (damage.SanHitFlag && damage.LkaHitFlag) {
+		KnockBack();
+	}
 }
 
 void SAN::Render(Damage& damage)

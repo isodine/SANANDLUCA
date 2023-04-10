@@ -42,7 +42,7 @@ public:
 	void charJump();
 	virtual void Input();
 	void UpdateCollision();
-	void KnockBack();
+	virtual void KnockBack();
 
 	int key;
 	int trg;
@@ -106,6 +106,8 @@ public:
 	VECTOR vPos;	// 位置
 	VECTOR oldPos;  //前の位置
 	VECTOR vDir;	// 向き
+	VECTOR v;
+	VECTOR knockBackDir;//ノックバックする向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
 	//ボム関連用
@@ -172,6 +174,7 @@ public:
 	int HP;
 	int oldHP;
 	bool goal = false;
+	bool knockbackFlag = true;
 
 	int Playercenter; //プレイヤーの中心をとる
 	int Playerhead; //プレイヤーの頭上をとる
