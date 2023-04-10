@@ -44,12 +44,11 @@ public:
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
-	void charJump();
-	
+
 
 	// カメラ
 	Camera _cam;
-	
+
 
 	// 3Dモデル描画用
 	int _handle;
@@ -67,6 +66,8 @@ public:
 	int frameMapCollisionwall;
 	int frameMapCollisiongoalSAN;
 	int frameMapCollisiongoalLKA;
+
+
 
 	int LightHandle;
 	int MaskHandle;
@@ -95,11 +96,11 @@ public:
 	//VOICE用
 	bool modeStart = false;
 	int VOICEstartSANLKA[6] = { LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_01.wav"),
-	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_02.wav"), 
-	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_03.wav"), 
-	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_01.wav"), 
-	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_02.wav"), 
-	                            LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_03.wav")};
+								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_02.wav"),
+								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_03.wav"),
+								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_01.wav"),
+								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_02.wav"),
+								LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/San_GO_Voice_03.wav") };
 
 public:
 	Player player;

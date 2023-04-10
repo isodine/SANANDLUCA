@@ -44,6 +44,7 @@ public:
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
+	void Respawn();
 
 	// ÉJÉÅÉâ
 	Camera _cam;
@@ -65,6 +66,13 @@ public:
 	int frameMapCollisionwall;
 	int frameMapCollisiongoalSAN;
 	int frameMapCollisiongoalLKA;
+
+	bool respawn1st = false;
+	VECTOR respawn1stPosSan;
+	VECTOR respawn1stPosLka;
+	bool respawn2nd = false;
+	VECTOR respawn2ndPosSan;
+	VECTOR respawn2ndPosLka;
 
 	int LightHandle;
 	int MaskHandle;

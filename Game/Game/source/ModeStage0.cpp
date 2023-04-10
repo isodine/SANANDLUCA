@@ -211,16 +211,23 @@ bool ModeStage0::Process() {
 		//Irondoors->CollCheck(san, lka);
 	}
 
-	if ((san.goal && lka.goal)) {
-		//BGM停止
-		StopMusic();
+	if (respawn1stPosSan.y <= san.vPos.y && respawn1stPosSan.z <= san.vPos.z)
+	{
 
-		// シャドウマップの削除
-		DeleteShadowMap(ShadowMapHandle);
-
-		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
 	}
+
+
+
+		if ((san.goal && lka.goal)) {
+			//BGM停止
+			StopMusic();
+
+			// シャドウマップの削除
+			DeleteShadowMap(ShadowMapHandle);
+
+			ModeServer::GetInstance()->Del(this);
+			ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
+		}
 
 	return true;
 }
@@ -341,4 +348,19 @@ bool ModeStage0::Render() {
 	sancircle.Render();
 	lkacircle.Render();
 	return true;
+}
+
+void ModeStage0::Respawn()
+{
+	if (respawn1st)
+	{
+		san.vPos = respawn1stPosSan;
+		lka.vPos = respawn1stPosLka;
+	}
+	else if (respawn2nd)
+	{
+		san.vPos = respawn2ndPosSan;
+		lka.vPos = respawn2ndPosLka;
+	}
+	else {}
 }
