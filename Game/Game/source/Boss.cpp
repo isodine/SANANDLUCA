@@ -543,10 +543,10 @@ void Boss::SwampSpawn(bool IsSan)
 
 void Boss::Render() 
 {
-	DrawGraph(0, 900, iconhandle, true);
-	DrawGraph(0, 950, flamehandle, true);
+	DrawGraph(300, 900, iconhandle, true);
+	DrawGraph(300, 950, flamehandle, true);
 	int HPgauge = (1185 / BossMaxHP) * BossHP;
-	DrawRectGraph(10, 960, 0, 0,HPgauge, 30, HPhandle, true, false);
+	DrawRectGraph(310, 960, 0, 0,HPgauge, 30, HPhandle, true, false);
 
 	{
 		if (!downFlag) {
