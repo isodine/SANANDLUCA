@@ -540,7 +540,6 @@ void Boss::SwampSpawn(bool IsSan)
 }
 
 void Boss::Render() {
-	DrawGraph(1000, 100, iconhandle, true);
 	{
 		if (!downFlag) {
 			if (type == BOSSTYPE::RUSH && WaitCount <= 60) {
@@ -550,6 +549,7 @@ void Boss::Render() {
 				manager->modelRender(&model, 1.f, 1.f);
 			}
 		}
+		DrawGraph(1000, 100, iconhandle, true);
 
 		switch (phType) {
 		case PH::ACID:
