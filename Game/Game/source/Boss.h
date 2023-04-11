@@ -88,6 +88,11 @@ public:
 	int EndCount;//•ß‚Ü‚¦‚½Œã‚ÌŽžŠÔ
 	int DownCount;//‚â‚ç‚ê‚½Žž‚ÌŽžŠÔ
 	int BossHP;//ƒ{ƒX‚Ì‘Ì—Í
+	int BossMaxHP;
+	int HPhandle;
+	int iconhandle;
+	int BGhandle;
+	int flamehandle;
 	float PlayTime;
 	int randomNum;
 	int walkRand;
