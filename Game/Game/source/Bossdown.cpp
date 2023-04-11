@@ -5,12 +5,9 @@
 
 Bossdown::Bossdown()
 {
-	_effectResourceHandle[0] = LoadEffekseerEffect("res/Beaker/Beaker_down01/Beaker_down01.efkefc");
-	_effectResourceHandle[1] = LoadEffekseerEffect("res/Beaker/Beaker_down02/Beaker_down02.efkefc");
-	IsPlaying[0] = -1;
-	IsPlaying[1] = 0;
-	downEfsize[0] = 500.0f;
-	downEfsize[1] = 100.0f;
+	_effectResourceHandle = LoadEffekseerEffect("res/Beaker/Beaker_down02/Beaker_down02.efkefc");
+	IsPlaying = 0;
+	downEfsize = 100.0f;
 	Isdown = false;
 }
 
@@ -20,28 +17,20 @@ Bossdown::~Bossdown()
 
 void Bossdown::Update(Boss& boss)
 {
-	if (boss.type == Boss::BOSSTYPE::DOWN && IsPlaying[0] == -1)
-	{
-		_playingEffectHandle[0] = PlayEffekseer3DEffect(_effectResourceHandle[0]);
-		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[0], downEfsize[0], downEfsize[0], downEfsize[0]);
-		PlaySoundFile("res/06_Sound/03_SE/beaker_biribiri.mp3", DX_PLAYTYPE_BACK);
-	}
-	IsPlaying[0] = IsEffekseer3DEffectPlaying(_playingEffectHandle[0]);
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], boss.model.pos.x + 50, boss.model.pos.y, boss.model.pos.z + 50);
 	if (boss.bossdownEf == true)
 	{
 		MV1DeleteModel(boss.noneHandle);
 		MV1DeleteModel(boss.acidHandle);
 		MV1DeleteModel(boss.alkaliHandle);
-		_playingEffectHandle[1] = PlayEffekseer3DEffect(_effectResourceHandle[1]);
-		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[1], downEfsize[1], downEfsize[1], downEfsize[1]);
+		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
+		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, downEfsize, downEfsize, downEfsize);
 		PlaySoundFile("res/06_Sound/03_SE/beaker_exprode.mp3", DX_PLAYTYPE_BACK);
 		Isdown = true;
 		boss.bossdownEf = false;
 	}
-	IsPlaying[1] = IsEffekseer3DEffectPlaying(_playingEffectHandle[1]);
-	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[1], boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);
-	if (Isdown == true &&IsPlaying[1] == -1)
+	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
+	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);
+	if (Isdown == true &&IsPlaying == -1)
 	{
 		boss.downFlag = true;
 	}
