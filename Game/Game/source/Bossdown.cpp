@@ -21,7 +21,7 @@ void Bossdown::Update(Boss& boss)
 	{
 		MV1DeleteModel(boss.noneHandle);
 		MV1DeleteModel(boss.acidHandle);
-		MV1DeleteModel(boss.alcaliHandle);
+		MV1DeleteModel(boss.alkaliHandle);
 		_playingEffectHandle = PlayEffekseer3DEffect(_effectResourceHandle);
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, downEfsize, downEfsize, downEfsize);
 		PlaySoundFile("res/06_Sound/03_SE/beaker_exprode.mp3", DX_PLAYTYPE_BACK);
