@@ -29,6 +29,7 @@ void Boss::Initialize() {
 	EndCount = 0;
 	DownCount = 0;
 	BossHP = 3;
+	BossMaxHP = 3;
 	SwampCnt = 3;
 	BossPosition0 = VGet(41, 37, 274);
 	BossPosition1 = VGet(-327, 37, 673);
@@ -488,6 +489,7 @@ void Boss::Down() {
 	}
 }
 
+
 void Boss::SwampSpawn(bool IsSan)
 {
 	bool top = false;
@@ -539,7 +541,13 @@ void Boss::SwampSpawn(bool IsSan)
 	right = false;
 }
 
-void Boss::Render() {
+void Boss::Render() 
+{
+	DrawGraph(0, 900, iconhandle, true);
+	DrawGraph(0, 950, flamehandle, true);
+	int HPgauge = (1185 / BossMaxHP) * BossHP;
+	DrawRectGraph(10, 960, 0, 0,HPgauge, 30, HPhandle, true, false);
+
 	{
 		if (!downFlag) {
 			if (type == BOSSTYPE::RUSH && WaitCount <= 60) {
@@ -549,7 +557,6 @@ void Boss::Render() {
 				manager->modelRender(&model, 1.f, 1.f);
 			}
 		}
-		DrawGraph(1000, 100, iconhandle, true);
 
 		switch (phType) {
 		case PH::ACID:

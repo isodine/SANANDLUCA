@@ -64,11 +64,11 @@ void SAN::Render(Damage& damage)
 	{
 		if (Player::HP == 6)
 		{
-			DrawGraph(0, 880, hpgaugehandle[0], true);
+			DrawGraph(0, 0, hpgaugehandle[0], true);
 		}
 		if (Player::HP == 5)
 		{
-			DrawGraph(0, 880, hpgaugehandle[1], true);
+			DrawGraph(0, 0, hpgaugehandle[1], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -77,7 +77,7 @@ void SAN::Render(Damage& damage)
 		}
 		if (Player::HP == 4)
 		{
-			DrawGraph(0, 880, hpgaugehandle[2], true);
+			DrawGraph(0, 0, hpgaugehandle[2], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -86,7 +86,7 @@ void SAN::Render(Damage& damage)
 		}
 		if (Player::HP == 3)
 		{
-			DrawGraph(0, 880, hpgaugehandle[3], true);
+			DrawGraph(0, 0, hpgaugehandle[3], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -95,7 +95,7 @@ void SAN::Render(Damage& damage)
 		}
 		if (Player::HP == 2)
 		{
-			DrawGraph(0, 880, hpgaugehandle[4], true);
+			DrawGraph(0, 0, hpgaugehandle[4], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -104,7 +104,7 @@ void SAN::Render(Damage& damage)
 		}
 		if (Player::HP == 1)
 		{
-			DrawGraph(0, 880, hpgaugehandle[5], true);
+			DrawGraph(0, 0, hpgaugehandle[5], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
