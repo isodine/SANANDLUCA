@@ -23,8 +23,6 @@ public:
 	Damage* _damage;
 	ModeBase* base;
 	Gimmick* _gimmick;
-	Slime* _acid;
-	Slime* _alkali;
 
 	void SetBomb(PlayerBomb* bomb);
 	void SetCamera(Camera* camera);
@@ -36,38 +34,35 @@ public:
 	~Player();
 	virtual void Initialize();
 	virtual void Update();
+	virtual void Terminate();
 	virtual void Render();
 	virtual void Jump();
 	virtual void freeFall();
-	void charJump();
 	virtual void Input();
 	void UpdateCollision();
 	virtual void KnockBack();
 
 	int key;
 	int trg;
-	int stageHandle;
-	int ironDoorHandle;
-	int elevatorHnadle;
-	int tubeHandle[3];
-	int floorCol;
-	int wallCol;
-	int goalColSAN;
-	int goalColLKA;
-	int ironDoorCol;
-	int elevatorCol;
-	int tubeCol[3];
-	int pushCircle;//パイプの押し出し判定などのための半径
-	float tubeDistance;
-	int tubeHandleRight;
-	int tubeHandleCenter;
+	int stageHandle;//ステージのハンドル
+	int ironDoorHandle;//鉄扉のハンドル
+	int elevatorHnadle;//エレベーターのハンドル
+	int tubeHandle[3];//T字パイプの数だけハンドルの配列を作る
+	int floorCol;//床の当たり判定用のコリジョン
+	int wallCol;//壁の当たり判定用のコリジョン
+	int goalColSAN;//サンのゴールの当たり判定用コリジョン
+	int goalColLKA;//ルカのゴールの当たり判定用コリジョン
+	int ironDoorCol;//
+	int elevatorCol;//
+	int tubeCol[3];//T字パイプの数だけ当たり判定の配列を作る
+	int pushCircle;//パイプの押し出しおよび当たり判定のための半径
 
 	VECTOR tubeLineLeft[3];//当たり判定の線をとるための左側の点
 	VECTOR tubeLineRight[3];//当たり判定の線をとるための右側の点
 	VECTOR tubeLineCenter[3];//当たり判定の線をとるための中心の点
 	VECTOR tubeLineFront[3];//当たり判定の線をとるための手前の点
 	VECTOR hitPos;//パイプと当たった場所
-	VECTOR hitLine;//法線
+	VECTOR hitLine;//T字パイプと当たった場所にある法線
 
 public:
 	//当たり判定用
@@ -172,9 +167,7 @@ public:
 
 	bool motionRes = false;
 	int HP;
-	int oldHP;
-	bool goal = false;
-	bool knockbackFlag = true;
+	bool goal = false;//TRUEならゴールした
 
 	int Playercenter; //プレイヤーの中心をとる
 	int Playerhead; //プレイヤーの頭上をとる

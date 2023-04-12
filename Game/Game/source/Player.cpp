@@ -51,6 +51,19 @@ void Player::Input()
 
 }
 
+void Player::Terminate() {
+	MV1DeleteModel(Mhandle);
+	MV1TerminateCollInfo(stageHandle, wallCol);
+	MV1TerminateCollInfo(stageHandle, floorCol);
+	MV1TerminateCollInfo(elevatorHnadle, elevatorCol);
+	for (auto i = 0; i < 3; i++) {
+		MV1TerminateCollInfo(tubeHandle[i], tubeCol[i]);
+	}
+	MV1TerminateCollInfo(stageHandle, goalColSAN);
+	MV1TerminateCollInfo(stageHandle, goalColLKA);
+	MV1TerminateCollInfo(ironDoorHandle, ironDoorCol);
+}
+
 void Player::Initialize()
 {
 	Mattach_index = -1;			// アニメーションアタッチはされていない
@@ -146,9 +159,6 @@ void Player::Update()
 
 		// 移動前の位置を保存
 		oldPos = vPos;
-
-		oldHP = HP;
-
 
 		// 画面内にキャラクターが入っていないかどうかを描画する
 		//TRUEは入ってない、FALSEは入ってる
@@ -328,7 +338,6 @@ void Player::Update()
 		}
 
 		if (_damage->SanHitFlag && _damage->LkaHitFlag) { _status = STATUS::DAMAGE; }
-		if (_status == STATUS::DAMAGE) { KnockBack(); }
 
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {
@@ -355,7 +364,6 @@ void Player::Update()
 				break;
 			case STATUS::DAMAGE:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "damage"), -1, FALSE);
-				
 				break;
 			case STATUS::CHARGE:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "attack1"), -1, FALSE);
@@ -453,11 +461,6 @@ void Player::Render()
 	}
 }
 
-
-void Player::charJump() {
-	height += 10.0f - throughtime;
-	throughtime += 0.25f;
-}
 
 void Player::Landing(float HitYPos) {
 	_status = STATUS::WAIT;

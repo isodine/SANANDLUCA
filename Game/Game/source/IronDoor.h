@@ -6,6 +6,7 @@ public:
 	~IronDoor();
 	void Initialize();
 	void Update(SanBomb& sanbomb);
+	void Terminate();
 	void Render();
 
 	// 3Dƒ‚ƒfƒ‹•`‰æ—p

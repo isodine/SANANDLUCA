@@ -38,7 +38,8 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 }
 
 void Damage::Terminate() {
-
+	MV1TerminateCollInfo(San->Mhandle, 3);
+	MV1TerminateCollInfo(Lka->Mhandle, 8);
 }
 
 void Damage::Process() {

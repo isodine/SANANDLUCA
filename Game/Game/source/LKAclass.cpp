@@ -52,6 +52,10 @@ void LKA::Input()
 	trg = Trg2P;
 }
 
+void LKA::Terminate() {
+	Player::Terminate();
+}
+
 void LKA::SetSan(SAN* _san) {
 	san = _san;
 }

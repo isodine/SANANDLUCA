@@ -53,6 +53,8 @@ void Boss::Initialize() {
 }
 
 void Boss::Terminate() {
+	MV1TerminateCollInfo(model.modelHandle, 2);
+	MV1DeleteModel(model.modelHandle);
 
 }
 

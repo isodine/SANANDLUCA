@@ -347,6 +347,13 @@ bool ModeGame::Initialize() {
 
 bool ModeGame::Terminate() {
 	base::Terminate();
+	MV1DeleteModel(_handleMap);
+	MV1DeleteModel(_handleSkySphere);
+	san.Terminate();
+	lka.Terminate();
+	elevator.Terminate();
+	gimmick.Terminate();
+	irondoor.Terminate();
 	return true;
 }
 
@@ -364,7 +371,7 @@ bool ModeGame::Process() {
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	gimmick.SanHitFlag = false;
 	gimmick.LkaHitFlag = false;
-	//gimmick.Balance(san.vPos, lka.vPos);
+	gimmick.Balance(san.vPos, lka.vPos);
 	san.Update(damage);
 	lka.Update(damage);
 
@@ -394,11 +401,12 @@ bool ModeGame::Process() {
 		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
 		if (gameoverchange == true)
 		{
+			Terminate();
 			ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
+		    ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
 		}
 	}
-	//timer.Update();
+	timer.Update();
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
@@ -418,20 +426,6 @@ bool ModeGame::Process() {
 	//for (auto&& Tubes : tubes) {
 		//Tubes->Update(electrode);
 		tubes[i]->Update(electrode);
-		//san.tubeColLeft[i] = tubes[i]->handleColLeft;
-		//san.tubeColRight[i] = tubes[i]->handleColRight;
-		//san.tubeColCenter[i] = tubes[i]->handleColCenter;
-		//san.tubeLineLeft[i] = tubes[i]->tubeLeft;
-		//san.tubeLineRight[i] = tubes[i]->tubeRight;
-		//san.tubeLineCenter[i] = tubes[i]->tubeCenter;
-		//san.tubeLineFront[1] = tubes[i]->tubeFront;
-		//lka.tubeColLeft[i] = tubes[i]->handleColLeft;
-		//lka.tubeColRight[i] = tubes[i]->handleColRight;
-		//lka.tubeColCenter[i] = tubes[i]->handleColCenter;
-		//lka.tubeLineLeft[i] = tubes[i]->tubeLeft;
-		//lka.tubeLineRight[i] = tubes[i]->tubeRight;
-		//lka.tubeLineCenter[i] = tubes[i]->tubeCenter;
-		//lka.tubeLineFront[1] = tubes[i]->tubeFront;
 	}
 
 	if (san.goal && lka.goal) {
@@ -465,7 +459,7 @@ bool ModeGame::Process() {
 		//std::ofstream ofs(dir);
 		//ofs << insStr;
 		//ofs.close();
-
+		Terminate();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}

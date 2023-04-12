@@ -50,6 +50,10 @@ void SAN::Input()
 	trg = Trg1P;
 }
 
+void SAN::Terminate() {
+	Player::Terminate();
+}
+
 void SAN::SetLka(LKA* _lka) {
 	lka = _lka;
 }

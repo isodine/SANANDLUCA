@@ -15,6 +15,7 @@ public:
 	void Update(Damage& damage);
 	void Render(Damage& damage);
 	void Input() override;
+	void Terminate() override;
 	void KnockBack() override;
 	void SetSan(SAN* _san);
 	bool lkaBackFlag;
