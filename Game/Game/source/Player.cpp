@@ -110,11 +110,13 @@ void Player::Update()
 		// ˆÚ“®•ûŒü‚ðŒˆ‚ß‚é
 		v = { 0,0,0 };
 		float mvSpeed = 6.f;
-		if (key & PAD_INPUT_DOWN) { v.x = 1; }
-		if (key & PAD_INPUT_UP) { v.x = -1; }
-		if (key & PAD_INPUT_LEFT) { v.z = -1; }
-		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP))
+		if (_status != STATUS::DAMAGE) {
+			if (key & PAD_INPUT_DOWN) { v.x = 1; }
+			if (key & PAD_INPUT_UP) { v.x = -1; }
+			if (key & PAD_INPUT_LEFT) { v.z = -1; }
+			if (key & PAD_INPUT_RIGHT) { v.z = 1; }
+			if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP))
+		}
 		{
 			_status = STATUS::JUMP;
 			mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
