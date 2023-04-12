@@ -28,8 +28,7 @@ void Boss::Initialize() {
 	EndCount = 0;
 	DownCount = 0;
 	BossHP = 100;
-	BossHP = 3;
-	BossMaxHP = 3;
+	BossMaxHP = 100;
 	SwampCnt = 3;
 	BossPosition0 = VGet(41, 37, 274);
 	BossPosition1 = VGet(-327, 37, 673);
