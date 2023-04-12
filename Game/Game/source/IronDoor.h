@@ -6,6 +6,9 @@ public:
 	~IronDoor();
 	void Initialize(bool type, VECTOR Pos);
 	void Update(SanBomb& sanbomb, LkaBomb& lkabomb);
+	void Initialize();
+	void Update(SanBomb& sanbomb);
+	void Terminate();
 	void Render();
 	void CollCheck(SAN& san, LKA& lka);
 

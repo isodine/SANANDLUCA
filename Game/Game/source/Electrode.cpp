@@ -24,7 +24,7 @@ void Electrode::Update(SanBomb& sanbomb, LkaBomb& lkabomb)
 
 	auto hitPolyDimSan{ MV1CollCheck_Sphere(handleSANelectrode, handleCol, sanbomb.vPos, sanbomb.sphereSize) };
 
-	if (hitPolyDimSan.HitNum >= 1)
+	if (sanbomb.situation == sanbomb.PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1)
 	{
 		handle = handleSANelectrode;
 		isSan = true;
@@ -32,7 +32,7 @@ void Electrode::Update(SanBomb& sanbomb, LkaBomb& lkabomb)
 
 	auto hitPolyDimLka{ MV1CollCheck_Sphere(handleLKAelectrode, handleCol, lkabomb.vPos, lkabomb.sphereSize) };
 
-	if (hitPolyDimLka.HitNum >= 1)
+	if (lkabomb.situation == lkabomb.PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1)
 	{
 		handle = handleLKAelectrode;
 		isSan = false;

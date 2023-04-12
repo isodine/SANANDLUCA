@@ -201,6 +201,12 @@ bool ModeBoss::Initialize() {
 
 bool ModeBoss::Terminate() {
 	ModeBase::Terminate();
+	MV1DeleteModel(_handleMap);
+	MV1DeleteModel(_handleSkySphere);
+	san.Terminate();
+	lka.Terminate();
+	boss.Terminate();
+	damage.Terminate();
 	return true;
 }
 
@@ -230,6 +236,7 @@ bool ModeBoss::Process() {
 	int checkKey = PAD_INPUT_2;
 
 	if (boss.downFlag == true) {
+		Terminate();
 		StopMusic();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeEnding(), 1, "ending");
@@ -238,6 +245,7 @@ bool ModeBoss::Process() {
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
 		StopMusic();
+		Terminate();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(3), 1, "gameover");
 	}

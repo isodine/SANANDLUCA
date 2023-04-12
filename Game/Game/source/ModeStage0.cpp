@@ -57,6 +57,7 @@ bool ModeStage0::Initialize() {
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
+	san.SetLka(&lka);
 
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
@@ -67,6 +68,7 @@ bool ModeStage0::Initialize() {
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
+	lka.SetSan(&san);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
@@ -152,6 +154,11 @@ bool ModeStage0::Initialize() {
 
 bool ModeStage0::Terminate() {
 	base::Terminate();
+	MV1DeleteModel(_handleMap);
+	MV1DeleteModel(_handleSkySphere);
+	san.Terminate();
+	lka.Terminate();
+	damage.Terminate();
 	return true;
 }
 
@@ -160,6 +167,7 @@ bool ModeStage0::Process() {
 
 	san.Update(damage);
 	lka.Update(damage);
+
 	damage.Process();
 	damage.StageDamage(_handleMap);
 
@@ -175,6 +183,7 @@ bool ModeStage0::Process() {
 		ChangePanSoundMem(-255, lka.VOICEdeathLKA);
 		PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
+		Terminate();
 
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(0), 1, "gameover");
@@ -189,7 +198,7 @@ bool ModeStage0::Process() {
 
 		// シャドウマップの削除
 		DeleteShadowMap(ShadowMapHandle);
-
+		Terminate();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
 	}

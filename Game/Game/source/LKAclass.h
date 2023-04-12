@@ -4,6 +4,7 @@
 #include "Boss.h"
 
 class Boss;
+class SAN;
 
 class LKA:public Player, public Gimmick
 {
@@ -14,9 +15,17 @@ public:
 	void Update(Damage& damage);
 	void Render(Damage& damage);
 	void Input() override;
+	void Terminate() override;
+	void KnockBack() override;
+	void SetSan(SAN* _san);
+	bool lkaBackFlag;
 
+
+private:
 	int hpgaugehandle[6];
 	int hphandle;
 	float oldcount;
 	bool lkahitflag;
+
+	SAN* san;
 };

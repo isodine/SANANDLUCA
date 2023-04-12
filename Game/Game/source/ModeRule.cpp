@@ -15,7 +15,11 @@ bool ModeRule::Initialize() {
 
 bool ModeRule::Terminate() {
   base::Terminate();
-
+  DeleteGraph(Rulehandle[0]);
+  DeleteGraph(Rulehandle[1]);
+  DeleteGraph(Rulehandle[2]);
+  DeleteGraph(Rulehandle[3]);
+  DeleteGraph(Rulehandle[4]);
   return true;
 }
 
@@ -33,9 +37,9 @@ bool ModeRule::Process() {
   if (pushbutton < 0) { pushbutton = 0; }
   if (Trg & PAD_INPUT_2 && pushbutton == 5)
   {
+    Terminate();
     ModeServer::GetInstance()->Del(this);
-    ModeServer::GetInstance()->Add(new ModeBoss(), 1, "stage00");
-    //ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
+    ModeServer::GetInstance()->Add(new ModeStage0(), 1, "stage00");
   }
   return true;
 }

@@ -40,6 +40,7 @@ void LKA::Initialize()
 
 	_colSubY = 45.f;
 	HP = 6;
+	lkaBackFlag = false;
 }
 
 void LKA::Input()
@@ -51,6 +52,28 @@ void LKA::Input()
 	trg = Trg2P;
 }
 
+void LKA::Terminate() {
+	Player::Terminate();
+}
+
+void LKA::SetSan(SAN* _san) {
+	san = _san;
+}
+
+void LKA::KnockBack() {
+	if (lkaBackFlag) {
+		int checkKey = !PAD_INPUT_DOWN | !PAD_INPUT_UP | !PAD_INPUT_LEFT | !PAD_INPUT_RIGHT | !PAD_INPUT_1;
+		if (v.x == 0 && v.z == 0) {
+			knockBackDir = VScale(VNorm(san->vDir), 1.5);
+		}
+		else {
+			knockBackDir = VScale(VNorm(vDir), -1.5);
+		}
+		lkaBackFlag = false;
+	}
+	vPos = VAdd(vPos, knockBackDir);
+}
+
 void LKA::Update(Damage& damage)
 {
 
@@ -60,6 +83,10 @@ void LKA::Update(Damage& damage)
 		oldcount = GetNowCount();
 	}
 	lkahitflag = false;
+	
+	if (damage.SanHitFlag && damage.LkaHitFlag) {
+		KnockBack();
+	}
 }
 
 void LKA::Render(Damage& damage)

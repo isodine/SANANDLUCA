@@ -23,12 +23,6 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 	San = san;
 	Lka = lka;
   
-	SanHP = 6;
-	LkaHP = 6;
-
-	MaxSanHP = 6;
-	MaxLkaHP = 6;
-
 	Distance = 1000;
 
 	SanCoolTime = 0;
@@ -44,7 +38,8 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 }
 
 void Damage::Terminate() {
-
+	MV1TerminateCollInfo(San->Mhandle, 3);
+	MV1TerminateCollInfo(Lka->Mhandle, 8);
 }
 
 void Damage::Process() {
@@ -61,6 +56,10 @@ void Damage::Process() {
 		Lka->HP -= 2;
 		SanHitFlag = true;
 		LkaHitFlag = true;
+		San->sanBackFlag = true;
+		Lka->lkaBackFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 1000, 300, -1);
+		StartJoypadVibration(DX_INPUT_PAD2, 1000, 300, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK);
@@ -68,8 +67,12 @@ void Damage::Process() {
 	else if (Distance < 110 && Distance >= 85 && SanHitFlag == false && LkaHitFlag == false) {
 		San->HP -= 1;
 		Lka->HP -= 1;
+		San->sanBackFlag = true;
+		Lka->lkaBackFlag = true;
 		SanHitFlag = true;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 1000, 300, -1);
+		StartJoypadVibration(DX_INPUT_PAD2, 1000, 300, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK); 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK);
@@ -78,12 +81,14 @@ void Damage::Process() {
 	if ((HitPolyLkaBomb.HitNum >= 1) && !SanHitFlag) {
 		San->HP -= 1;
 		SanHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
 	if ((HitPolySanBomb.HitNum >= 1) && !LkaHitFlag) {
 		Lka->HP -= 1;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD2, 750, 300, -1);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
@@ -110,11 +115,13 @@ void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
 	if (slimes[0]->lkaHitFlag && !LkaHitFlag) {
 		Lka->HP -= 1;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD2, 750, 300, -1);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 	if (slimes[1]->sanHitFlag && !SanHitFlag) {
 		San->HP -= 1;
 		SanHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 	if (SanHitFlag == true) {
@@ -143,12 +150,14 @@ void Damage::StageDamage(int StageHandle) {
 	if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
 		San->HP -= 1;
 		SanHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
 	if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
 		Lka->HP -= 1;
 		LkaHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD2, 750, 300, -1);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
@@ -173,8 +182,6 @@ void Damage::StageDamage(int StageHandle) {
 
 void Damage::Render() {
 #ifdef debug
-	DrawFormatString(0, 200, GetColor(0, 0, 0), "San %d", SanHP);
-	DrawFormatString(0, 220, GetColor(0, 0, 0), "Lka %d", LkaHP);
 	DrawFormatString(0, 240, GetColor(0, 0, 0), "Distance %f", Distance);
 
 	auto vec1 = VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z);
@@ -214,6 +221,7 @@ void Damage::SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 			if ((HitPolySwamp.HitNum >= 1) && !SanHitFlag) {
 				San->HP -= 1;;
 				SanHitFlag = true;
+				StartJoypadVibration(DX_INPUT_PAD1, 750, 1, -1);
 				PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 			}
 		}
@@ -224,6 +232,7 @@ void Damage::SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 			if ((HitPolySwamp.HitNum >= 1) && !LkaHitFlag) {
 				Lka->HP -= 1;
 				LkaHitFlag = true;
+				StartJoypadVibration(DX_INPUT_PAD2, 750, 1, -1);
 				PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 			}
 		}

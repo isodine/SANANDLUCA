@@ -4,6 +4,7 @@ void Slime::Initialize(float x, float y, float z, int pH) {
 	slimeDir = VGet(0, 0, 0);
 	slimeError = 2.0;
 	mypH = pH;
+	slimeHP = 2;
 	_status = STATUS::NONE;
 	AttachAnim = -1;
 	acidcount = 0;
@@ -87,11 +88,18 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 	}
 	
 	if(mypH == 2 && !alkaliDieFlag){
-		hitPolyDimAlkali = MV1CollCheck_Sphere(slimeHandle, 2, _sanbomb->vPos, _sanbomb->sphereSize);
-		if (hitPolyDimAlkali.HitNum >= 1) {
+		SANhitPolyDimAlkali = MV1CollCheck_Sphere(slimeHandle, 2, _sanbomb->vPos, _sanbomb->sphereSize);
+		LKAhitPolyDimAlkali = MV1CollCheck_Sphere(slimeHandle, 2, _lkabomb->vPos, _lkabomb->sphereSize);
+		if (SANhitPolyDimAlkali.HitNum >= 1) {
+			slimeHP -= 2;
+		}
+		if (LKAhitPolyDimAlkali.HitNum >= 1) {
+			slimeHP -= 1;
+		}
+		if (slimeHP <= 0) {
 			alkaliDieFlag = true;
 		}
-
+		
 		if (SanPos.x >= SearchPosMinX && SanPos.x <= SearchPosMaxX && SanPos.z >= SearchPosMinZ && SanPos.z <= SearchPosMaxZ) {
 			SanTargeting(SanPos, 2.3);
 			if (sanDistance < 130)
@@ -104,15 +112,21 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 			}
 		}
 		else {
-			AlkaliWalk(2.0f);
+			AlkaliWalk(1.4f);
 		}
   }
 	if(mypH == 1 &&!acidDieFlag){
-		hitPolyDimAcid = MV1CollCheck_Sphere(slimeHandle, 2, _lkabomb->vPos, _lkabomb->sphereSize);
-		if (hitPolyDimAcid.HitNum >= 1) {
-			acidDieFlag = true;
+		SANhitPolyDimAcid = MV1CollCheck_Sphere(slimeHandle, 2, _sanbomb->vPos, _sanbomb->sphereSize);
+		LKAhitPolyDimAcid = MV1CollCheck_Sphere(slimeHandle, 2, _lkabomb->vPos, _lkabomb->sphereSize);
+		if (SANhitPolyDimAcid.HitNum >= 1) {
+			slimeHP -= 1;
 		}
-
+		if (LKAhitPolyDimAcid.HitNum >= 1) {
+			slimeHP -= 2;
+		}
+		if (slimeHP <= 0) {
+			alkaliDieFlag = true;
+		}
 		if (LkaPos.x >= SearchPosMinX && LkaPos.x <= SearchPosMaxX && LkaPos.z >= SearchPosMinZ && LkaPos.z <= SearchPosMaxZ) {
 			LkaTargeting(LkaPos, 2.3);
 			if (lkaDistance < 130)
@@ -125,7 +139,7 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 			}
 		}
 		else {
-			AcidWalk(2.0f);
+			AcidWalk(1.4f);
 		}
 	}
 	// ƒ‚[ƒVƒ‡ƒ“‚ªØ‚è‘Ö‚í‚Á‚½‚©H

@@ -25,7 +25,9 @@ void Gimmick::Initialize()
 }
 
 void Gimmick::Terminate() {
-
+	MV1DeleteModel(BalanceHandle);
+	MV1TerminateCollInfo(BalanceHandle, 3);
+	MV1TerminateCollInfo(BalanceHandle, 4);
 }
 
 void Gimmick::Process() {
@@ -81,10 +83,6 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		}
 	}
 		BlendRate = abs(BalancePer);
-		
-
-		
-		//toDoプレイヤーが浮くバグあり
 		
 
 		if ((SanHitFlag == true && LkaHitFlag == true)) {

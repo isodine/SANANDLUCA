@@ -29,6 +29,7 @@ public:
 	float lkaDistance;//スライムとルカの距離
 	float acidcount;//モーションのフレーム数
 	float alkalicount;//モーションのフレーム数
+	int slimeHP;//スライムのHP
 	bool slimeAttackFlag;//TRUEなら攻撃に入る
 	bool sanHitFlag;//TRUEならスライムがサンに当たった
 	bool lkaHitFlag;//TRUEならルカに当たった
@@ -41,8 +42,10 @@ public:
 	int acidHandle;//酸性スライムのテクスチャ
 	int alkaliHandle;//アルカリ性スライムのテクスチャ
 
-	MV1_COLL_RESULT_POLY_DIM hitPolyDimAcid;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDimAlkali;
+	MV1_COLL_RESULT_POLY_DIM SANhitPolyDimAcid;
+	MV1_COLL_RESULT_POLY_DIM LKAhitPolyDimAlkali;
+	MV1_COLL_RESULT_POLY_DIM LKAhitPolyDimAcid;
+	MV1_COLL_RESULT_POLY_DIM SANhitPolyDimAlkali;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
 

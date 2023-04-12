@@ -148,25 +148,31 @@ bool ModeGame::Initialize() {
 	elevator.Initialize();
 	MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
-	auto Tube1 = std::make_unique<Tube>();
-	Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
-	MV1SetupCollInfo(Tube1->handle, elevator.handleCol, 4, 4, 4);
-	san.tubeHandle = Tube1->handle;
-	lka.tubeHandle = Tube1->handle;
-	tubes.emplace_back(std::move(Tube1));
+	//auto Tube1 = std::make_unique<Tube>();
+	//Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
+	//MV1SetupCollInfo(Tube1->handle, tube.handleCol, 4, 4, 4);
+	//san.tubeCol[0] = tube.handleCol;
+	//lka.tubeCol[0] = tube.handleCol;
+	//san.tubeHandle[0] = Tube1->handle;
+	//lka.tubeHandle[0] = Tube1->handle;
+	//tubes.emplace_back(std::move(Tube1));
 
 	auto Tube2 = std::make_unique<Tube>();
 	Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
-	MV1SetupCollInfo(Tube2->handle, elevator.handleCol, 4, 4, 4);
-	san.tubeHandle = Tube2->handle;
-	lka.tubeHandle = Tube2->handle;
+	//MV1SetupCollInfo(Tube2->handle, tube.handleCol, 4, 4, 4);
+	san.tubeCol[1] = Tube2->handleCol;
+	lka.tubeCol[1] = Tube2->handleCol;
+	san.tubeHandle[1] = Tube2->handle;
+	lka.tubeHandle[1] = Tube2->handle;
 	tubes.emplace_back(std::move(Tube2));
 
 	auto Tube3 = std::make_unique<Tube>();
 	Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
-	MV1SetupCollInfo(Tube3->handle, elevator.handleCol, 4, 4, 4);
-	san.tubeHandle = Tube3->handle;
-	lka.tubeHandle = Tube3->handle;
+	//MV1SetupCollInfo(Tube3->handle, tube.handleCol, 4, 4, 4);
+	san.tubeCol[2] = Tube3->handleCol;
+	lka.tubeCol[2] = Tube3->handleCol;
+	san.tubeHandle[2] = Tube3->handle;
+	lka.tubeHandle[2] = Tube3->handle;
 	tubes.emplace_back(std::move(Tube3));
 
 	//damage.SetGame(this);
@@ -175,6 +181,7 @@ bool ModeGame::Initialize() {
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
 	san.SetGimmick(&gimmick);
+	san.SetLka(&lka);
 
 	san.Initialize();
 	sanbomb.EffectReset();
@@ -191,6 +198,7 @@ bool ModeGame::Initialize() {
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
 	lka.SetGimmick(&gimmick);
+	lka.SetSan(&san);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
@@ -305,7 +313,17 @@ bool ModeGame::Initialize() {
 
 	//CSVÇÃí≤êÆÇ…ÉJÉÅÉâÇí«Ç¢Ç¬Ç©ÇπÇÈ
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
-	_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	//_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	if (san.vPos.y > lka.vPos.y) {
+		_cam._vPos.y += (lka.vPos.y);
+	}
+	else if (lka.vPos.y > san.vPos.y) {
+		_cam._vPos.y += (san.vPos.y);
+	}
+	else {
+		_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
+	}
+
 	_cam._vPos.z += (san.vPos.z + lka.vPos.z) / 2.f;
 	_cam._vTarget.x = ((san.vPos.x + lka.vPos.x) / 2.f);
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
@@ -338,6 +356,13 @@ bool ModeGame::Initialize() {
 
 bool ModeGame::Terminate() {
 	base::Terminate();
+	MV1DeleteModel(_handleMap);
+	MV1DeleteModel(_handleSkySphere);
+	san.Terminate();
+	lka.Terminate();
+	elevator.Terminate();
+	gimmick.Terminate();
+	irondoor.Terminate();
 	return true;
 }
 
@@ -355,7 +380,7 @@ bool ModeGame::Process() {
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	gimmick.SanHitFlag = false;
 	gimmick.LkaHitFlag = false;
-	//gimmick.Balance(san.vPos, lka.vPos);
+	gimmick.Balance(san.vPos, lka.vPos);
 	san.Update(damage);
 	lka.Update(damage);
 
@@ -385,8 +410,9 @@ bool ModeGame::Process() {
 		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
 		if (gameoverchange == true)
 		{
+			Terminate();
 			ModeServer::GetInstance()->Del(this);
-			ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
+		    ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
 		}
 	}
 	timer.Update();
@@ -413,9 +439,11 @@ bool ModeGame::Process() {
 
 	electrode.Update(sanbomb, lkabomb);
 	elevator.Update(electrode);
+	for (int i = 0; i < tubes.size(); ++i) {
 	//for (auto&& Tubes : tubes) {
-	//	Tubes->Update(electrode);
-	//}
+		//Tubes->Update(electrode);
+		tubes[i]->Update(electrode);
+	}
 
 	if (san.goal && lka.goal) {
 		//BGMí‚é~
@@ -448,7 +476,7 @@ bool ModeGame::Process() {
 		//std::ofstream ofs(dir);
 		//ofs << insStr;
 		//ofs.close();
-
+		Terminate();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
@@ -577,11 +605,11 @@ bool ModeGame::Render() {
 	}
 	timer.Render();
 	//irondoor.Render();
-	//electrode.Render();
+	electrode.Render();
 	//elevator.Render();
-	//for (auto&& Tubes : tubes) {
-	//	Tubes->Render();
-	//}
+	for (auto&& Tubes : tubes) {
+		Tubes->Render();
+	}
 	if (Isgameover == true)
 	{
 		DrawGraph(0, 0, Grhandle[gameovercount], true);
