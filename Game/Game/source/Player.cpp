@@ -116,10 +116,11 @@ void Player::Update()
 			if (key & PAD_INPUT_LEFT) { v.z = -1; }
 			if (key & PAD_INPUT_RIGHT) { v.z = 1; }
 			if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP))
-		}
-		{
-			_status = STATUS::JUMP;
-			mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
+
+			{
+				_status = STATUS::JUMP;
+				mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
+			}
 		}
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
