@@ -135,7 +135,7 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 				mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
 			}
 		}
-		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
+		//if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
 		if (_bomb->situation == None) { attack = Attack::None; }
 		if (trg & PAD_INPUT_6 && (attack == Attack::None)) {

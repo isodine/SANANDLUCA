@@ -61,7 +61,7 @@ bool ModeStage0::Initialize() {
 	respawnstartSan = VGet(-30.f, 20.f, 670.f);
 	respawnstartLka = VGet(100.f, 20.f, 670.f);
 
-	respawn1stPosSan = VGet(-400.f, 20.f, 2000.f);
+	respawn1stPosSan = VGet(-360.f, 20.f, 2000.f);
 	respawn1stPosLka = VGet(461.f, 20.f, 2000.f);
 
 	respawn2ndPosSan = VGet(-151.f, 73.f, 3937.f);
