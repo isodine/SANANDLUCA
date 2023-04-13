@@ -12,6 +12,5 @@ public:
 private:
 	int	_effectResourceHandle;		// エフェクトファイルをロードするハンドル
 	int	_playingEffectHandle;		// ロードしたエフェクトファイルから、エフェクトを生成したもの
-	int IsPlaying ;//エフェクトが再生されているか
 	float damageEfsize;//ダメージエフェクトのサイズ設定
 };
