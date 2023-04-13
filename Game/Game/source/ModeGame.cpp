@@ -128,6 +128,10 @@ bool ModeGame::Initialize() {
 	ShadowMapUpVec = VGet(-500.f, -1000.f, -1000.f);     //サン側想定
 	ShadowMapDownVec = VGet(500.f, 1000.f, 1000.f);      //ルカ側想定
 
+	//UVスクロール
+	_UVScroll_U = 0.0f;
+	_UVScroll_V = 0.0f;
+
 	// その他初期化
 	_bViewCollision = FALSE;
 
@@ -594,6 +598,19 @@ bool ModeGame::Render() {
 		DrawFormatString(0, 400, GetColor(0, 0, 0), "sanHitFlag = %d", damage.HitPolySanBomb.HitNum);
 	}
 #endif
+	//マップのUVスクロール
+	_UVScroll_U += 0.001f;
+		//_UVScroll_V += 0.01f;
+	MV1SetFrameTextureAddressTransform(
+		_handleSkySphere	// モデルハンドル
+		, 0				// UV操作するフレーム番号
+		, _UVScroll_U, _UVScroll_V		// UV加算値(def:0.f, 0.f～1.f ループ)
+		, 1.0f, 1.0f					// UV乗算値(def:1.f)
+		, 0.0f, 0.0f					// UV回転中心値
+		, 0.0f							// UV回転度数（ラジアンで指定）
+	);
+
+
 	lka.Render(damage);
 	san.Render(damage);
 	sanbomb.Render();

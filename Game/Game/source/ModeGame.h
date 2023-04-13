@@ -90,6 +90,9 @@ public:
 	bool gameoverchange;
 	bool Isgamestart;
 
+	//UVスクロール
+	float _UVScroll_U, _UVScroll_V;
+
 	//VOICE用
 	bool modeStart = false;
 	int VOICEstartSANLKA[6] = { LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/06_Start/Lka_GO_Voice_01.wav"),
