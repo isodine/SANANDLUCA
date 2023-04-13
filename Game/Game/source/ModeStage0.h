@@ -67,12 +67,17 @@ public:
 	int frameMapCollisiongoalSAN;
 	int frameMapCollisiongoalLKA;
 
+	VECTOR respawnstartSan;
+	VECTOR respawnstartLka;
 	bool respawn1st = false;
 	VECTOR respawn1stPosSan;
 	VECTOR respawn1stPosLka;
 	bool respawn2nd = false;
 	VECTOR respawn2ndPosSan;
 	VECTOR respawn2ndPosLka;
+	//bool respawn3rd = false;
+	//VECTOR respawn3rdPosSan;
+	//VECTOR respawn3rdPosLka;
 
 	int LightHandle;
 	int MaskHandle;

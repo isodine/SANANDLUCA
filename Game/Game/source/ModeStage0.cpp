@@ -54,6 +54,18 @@ bool ModeStage0::Initialize() {
 	throughtime = 0.0f;
 	height = 0.0f;
 
+	respawnstartSan = VGet(-30.f, 20.f, 670.f);
+	respawnstartLka = VGet(100.f, 20.f, 670.f);
+
+	respawn1stPosSan = VGet(-400.f, 20.f, 2000.f);
+	respawn1stPosLka = VGet(461.f, 20.f, 2000.f);
+
+	respawn2ndPosSan = VGet(-151.f, 73.f, 3937.f);
+	respawn2ndPosLka = VGet(146.f, 73.f, 3930.f);
+
+	//respawn3rdPosSan = VGet(-3.f, 230.f, 5849.f);
+	//respawn3rdPosLka = VGet(-3.f, 230.f, 5849.f);
+
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
@@ -183,22 +195,41 @@ bool ModeStage0::Process() {
 	damage.Process();
 	damage.StageDamage(_handleMap);
 
+	//if ((respawn3rdPosSan.y <= san.vPos.y && respawn3rdPosSan.z <= san.vPos.z) && (respawn3rdPosLka.y <= lka.vPos.y && respawn3rdPosLka.z <= lka.vPos.z) && !respawn3rd)
+	//{
+	//	respawn3rd = true;
+	//}
+	if ((respawn2ndPosSan.y <= san.vPos.y && respawn2ndPosSan.z <= san.vPos.z) && (respawn2ndPosLka.y <= lka.vPos.y && respawn2ndPosLka.z <= lka.vPos.z)&&!respawn2nd)
+	{
+		respawn2nd = true;
+	}
+	else if ((respawn1stPosSan.y <= san.vPos.y && respawn1stPosSan.z <= san.vPos.z) && (respawn1stPosLka.y <= lka.vPos.y && respawn1stPosLka.z <= lka.vPos.z)&&!respawn1st)
+	{
+		respawn1st = true;
+	}
+	else {}
+
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
-		//BGM停止
-		StopMusic();
-
-		// シャドウマップの削除
-		DeleteShadowMap(ShadowMapHandle);
-
-		ChangePanSoundMem(255, san.VOICEdeathSAN);
-		ChangePanSoundMem(-255, lka.VOICEdeathLKA);
-		PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
-		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
-
-		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGameOver(0), 1, "gameover");
+		Respawn();
 	}
+
+	//if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
+	//{
+	//	//BGM停止
+	//	StopMusic();
+
+	//	// シャドウマップの削除
+	//	DeleteShadowMap(ShadowMapHandle);
+
+	//	ChangePanSoundMem(255, san.VOICEdeathSAN);
+	//	ChangePanSoundMem(-255, lka.VOICEdeathLKA);
+	//	PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
+	//	PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
+
+	//	ModeServer::GetInstance()->Del(this);
+	//	ModeServer::GetInstance()->Add(new ModeGameOver(0), 1, "gameover");
+	//}
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
@@ -210,13 +241,6 @@ bool ModeStage0::Process() {
 		}
 		//Irondoors->CollCheck(san, lka);
 	}
-
-	if (respawn1stPosSan.y <= san.vPos.y && respawn1stPosSan.z <= san.vPos.z)
-	{
-
-	}
-
-
 
 		if ((san.goal && lka.goal)) {
 			//BGM停止
@@ -352,15 +376,29 @@ bool ModeStage0::Render() {
 
 void ModeStage0::Respawn()
 {
-	if (respawn1st)
-	{
-		san.vPos = respawn1stPosSan;
-		lka.vPos = respawn1stPosLka;
-	}
-	else if (respawn2nd)
+	//if (respawn3rd)
+	//{
+	//	san.vPos = respawn3rdPosSan;
+	//	lka.vPos = respawn3rdPosLka;
+	//}
+	if (respawn2nd)
 	{
 		san.vPos = respawn2ndPosSan;
 		lka.vPos = respawn2ndPosLka;
 	}
-	else {}
+	else if (respawn1st)
+	{
+		san.vPos = respawn1stPosSan;
+		lka.vPos = respawn1stPosLka;
+	}
+	else
+	{
+		san.vPos = respawnstartSan;
+		lka.vPos = respawnstartLka;
+	}
+
+	san.vPos.y += 10.f;
+	lka.vPos.y += 10.f;
+	san.HP = 6;
+	lka.HP = 6;
 }
