@@ -38,6 +38,7 @@ void SAN::Initialize()
 	// ˜ˆÊ’u‚ÌÝ’è
 	_colSubY = 45.f;
 	HP = 6;
+	sanBackFlag = false;
 }
 
 void SAN::Input()
@@ -49,12 +50,43 @@ void SAN::Input()
 	trg = Trg1P;
 }
 
+void SAN::Terminate() {
+	Player::Terminate();
+}
+
+void SAN::SetLka(LKA* _lka) {
+	lka = _lka;
+}
+
+void SAN::KnockBack() {
+	BackCount += 1;
+	if (sanBackFlag) {
+		if (v.x == 0 && v.z == 0) {
+			knockBackDir = VScale(VNorm(lka->vDir), 1.5);
+		}
+		else {
+			knockBackDir = VScale(VNorm(vDir), -1.5);
+		}
+		sanBackFlag = false;
+	}
+	if (BackCount <= 30 && (hitPolywallback.HitFlag == 0 && hitPolywallside.HitFlag == 0)) {
+		vPos = VAdd(vPos, knockBackDir);
+	}
+	else if(BackCount > 30 && BackCount <= 59){
+	}
+	else if (BackCount == 60) {
+		BackCount = 0;
+	}
+}
+
 void SAN::Update(Damage& damage, std::vector<std::unique_ptr<IronDoor>>* irondoors)
 {
 	
 	Player::Update(irondoors);
-	if (_status == STATUS::DAMAGE) { KnockBack(); }
 	if (damage.SanHitFlag == true) { oldcount = GetNowCount();}
+	if (damage.SanHitFlag && damage.LkaHitFlag) {
+		KnockBack();
+	}
 }
 
 void SAN::Render(Damage& damage)
@@ -65,11 +97,11 @@ void SAN::Render(Damage& damage)
 	{
 		if (Player::HP == 6)
 		{
-			DrawGraph(0, 880, hpgaugehandle[0], true);
+			DrawGraph(0, 0, hpgaugehandle[0], true);
 		}
 		if (Player::HP == 5)
 		{
-			DrawGraph(0, 880, hpgaugehandle[1], true);
+			DrawGraph(0, 0, hpgaugehandle[1], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -78,7 +110,7 @@ void SAN::Render(Damage& damage)
 		}
 		if (Player::HP == 4)
 		{
-			DrawGraph(0, 880, hpgaugehandle[2], true);
+			DrawGraph(0, 0, hpgaugehandle[2], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -87,7 +119,7 @@ void SAN::Render(Damage& damage)
 		}
 		if (Player::HP == 3)
 		{
-			DrawGraph(0, 880, hpgaugehandle[3], true);
+			DrawGraph(0, 0, hpgaugehandle[3], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -96,7 +128,7 @@ void SAN::Render(Damage& damage)
 		}
 		if (Player::HP == 2)
 		{
-			DrawGraph(0, 880, hpgaugehandle[4], true);
+			DrawGraph(0, 0, hpgaugehandle[4], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -105,7 +137,7 @@ void SAN::Render(Damage& damage)
 		}
 		if (Player::HP == 1)
 		{
-			DrawGraph(0, 880, hpgaugehandle[5], true);
+			DrawGraph(0, 0, hpgaugehandle[5], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{

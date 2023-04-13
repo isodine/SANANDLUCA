@@ -30,6 +30,10 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 
 	SanHitFlag = false;
 	LkaHitFlag = false;
+	SanFloorHitFlag = false;
+	LkaFloorHitFlag = false;
+	SanSlimeHitFlag = false;
+	LkaSlimeHitFlag = false;
 
 	stageHandle = san->stageHandle;
 
@@ -38,7 +42,8 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 }
 
 void Damage::Terminate() {
-
+	MV1TerminateCollInfo(San->Mhandle, 3);
+	MV1TerminateCollInfo(Lka->Mhandle, 8);
 }
 
 void Damage::Process() {
@@ -55,6 +60,8 @@ void Damage::Process() {
 		Lka->HP -= 2;
 		SanHitFlag = true;
 		LkaHitFlag = true;
+		San->sanBackFlag = true;
+		Lka->lkaBackFlag = true;
 		StartJoypadVibration(DX_INPUT_PAD1, 1000, 300, -1);
 		StartJoypadVibration(DX_INPUT_PAD2, 1000, 300, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
@@ -64,6 +71,8 @@ void Damage::Process() {
 	else if (Distance < 110 && Distance >= 85 && SanHitFlag == false && LkaHitFlag == false) {
 		San->HP -= 1;
 		Lka->HP -= 1;
+		San->sanBackFlag = true;
+		Lka->lkaBackFlag = true;
 		SanHitFlag = true;
 		LkaHitFlag = true;
 		StartJoypadVibration(DX_INPUT_PAD1, 1000, 300, -1);
@@ -95,38 +104,6 @@ void Damage::Process() {
 		LkaCoolTime += 1;
 	}
 
-	if (SanCoolTime >= 120) {
-		SanHitFlag = false;
-		SanCoolTime = 0;
-	}
-
-	if (LkaCoolTime >= 120) {
-		LkaHitFlag = false;
-		LkaCoolTime = 0;
-	}
-}
-
-void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
-	if (slimes[0]->lkaHitFlag && !LkaHitFlag) {
-		Lka->HP -= 1;
-		LkaHitFlag = true;
-		StartJoypadVibration(DX_INPUT_PAD2, 750, 300, -1);
-		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
-	}
-	if (slimes[1]->sanHitFlag && !SanHitFlag) {
-		San->HP -= 1;
-		SanHitFlag = true;
-		StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
-		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
-	}
-	if (SanHitFlag == true) {
-		SanCoolTime += 1;
-	}
-
-	if (LkaHitFlag == true) {
-		LkaCoolTime += 1;
-	}
-
 	if (SanCoolTime >= 60) {
 		SanHitFlag = false;
 		SanCoolTime = 0;
@@ -134,6 +111,38 @@ void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
 
 	if (LkaCoolTime >= 60) {
 		LkaHitFlag = false;
+		LkaCoolTime = 0;
+	}
+}
+
+void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
+	if (slimes[0]->lkaHitFlag && !LkaSlimeHitFlag) {
+		Lka->HP -= 1;
+		LkaSlimeHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD2, 750, 300, -1);
+		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	}
+	if (slimes[1]->sanHitFlag && !SanSlimeHitFlag) {
+		San->HP -= 1;
+		SanSlimeHitFlag = true;
+		StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
+		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	}
+	if (SanSlimeHitFlag == true) {
+		SanCoolTime += 1;
+	}
+
+	if (LkaSlimeHitFlag == true) {
+		LkaCoolTime += 1;
+	}
+
+	if (SanCoolTime >= 120) {
+		SanSlimeHitFlag = false;
+		SanCoolTime = 0;
+	}
+
+	if (LkaCoolTime >= 120) {
+		LkaSlimeHitFlag = false;
 		LkaCoolTime = 0;
 	}
 }
@@ -142,35 +151,35 @@ void Damage::StageDamage(int StageHandle) {
 	HitPolySan = MV1CollCheck_Capsule(StageHandle, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
 	HitPolyLka = MV1CollCheck_Capsule(StageHandle, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
 
-	if ((HitPolySan.HitNum >= 1) && !SanHitFlag) {
+	if ((HitPolySan.HitNum >= 1) && !SanFloorHitFlag) {
 		San->HP -= 1;
-		SanHitFlag = true;
+		SanFloorHitFlag = true;
 		StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
-	if ((HitPolyLka.HitNum >= 1) && !LkaHitFlag) {
+	if ((HitPolyLka.HitNum >= 1) && !LkaFloorHitFlag) {
 		Lka->HP -= 1;
-		LkaHitFlag = true;
+		LkaFloorHitFlag = true;
 		StartJoypadVibration(DX_INPUT_PAD2, 750, 300, -1);
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
-	if (SanHitFlag == true) {
+	if (SanFloorHitFlag == true) {
 		SanCoolTime += 1;
 	}
 
-	if (LkaHitFlag == true) {
+	if (LkaFloorHitFlag == true) {
 		LkaCoolTime += 1;
 	}
 
 	if (SanCoolTime >= 60) {
-		SanHitFlag = false;
+		SanFloorHitFlag = false;
 		SanCoolTime = 0;
 	}
 
 	if (LkaCoolTime >= 60) {
-		LkaHitFlag = false;
+		LkaFloorHitFlag = false;
 		LkaCoolTime = 0;
 	}
 }

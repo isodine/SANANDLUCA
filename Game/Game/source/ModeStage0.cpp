@@ -16,6 +16,10 @@ std::vector<std::string> splitme00(std::string& input, char delimiter)
 	return result;
 }
 
+ModeStage0::ModeStage0() {
+
+}
+
 bool ModeStage0::Initialize() {
 	if (!base::Initialize()) { return false; }
 	//ステージの種類
@@ -69,6 +73,7 @@ bool ModeStage0::Initialize() {
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
+	san.SetLka(&lka);
 
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
@@ -79,6 +84,7 @@ bool ModeStage0::Initialize() {
 	lka.SetCamera(&_cam);
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
+	lka.SetSan(&san);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
@@ -184,6 +190,11 @@ bool ModeStage0::Initialize() {
 
 bool ModeStage0::Terminate() {
 	base::Terminate();
+	MV1DeleteModel(_handleMap);
+	MV1DeleteModel(_handleSkySphere);
+	san.Terminate();
+	lka.Terminate();
+	damage.Terminate();
 	return true;
 }
 
@@ -193,6 +204,12 @@ bool ModeStage0::Process() {
 	san.Update(damage, &irondoors);
 	lka.Update(damage, &irondoors);
 	damage.Process();
+	sanbomb.Update(san);
+	lkabomb.Update(lka);
+	sancircle.Update(san, lka);
+	lkacircle.Update(san, lka);
+
+	
 	damage.StageDamage(_handleMap);
 
 	//if ((respawn3rdPosSan.y <= san.vPos.y && respawn3rdPosSan.z <= san.vPos.z) && (respawn3rdPosLka.y <= lka.vPos.y && respawn3rdPosLka.z <= lka.vPos.z) && !respawn3rd)
@@ -218,14 +235,18 @@ bool ModeStage0::Process() {
 	//{
 	//	//BGM停止
 	//	StopMusic();
+		gameover.gameoverFlag = true;
+		//BGM停止
+		StopMusic();
 
-	//	// シャドウマップの削除
-	//	DeleteShadowMap(ShadowMapHandle);
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
 
-	//	ChangePanSoundMem(255, san.VOICEdeathSAN);
-	//	ChangePanSoundMem(-255, lka.VOICEdeathLKA);
-	//	PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
-	//	PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
+		ChangePanSoundMem(255, san.VOICEdeathSAN);
+		ChangePanSoundMem(-255, lka.VOICEdeathLKA);
+		PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
+		Terminate();
 
 	//	ModeServer::GetInstance()->Del(this);
 	//	ModeServer::GetInstance()->Add(new ModeGameOver(0), 1, "gameover");
@@ -246,12 +267,12 @@ bool ModeStage0::Process() {
 			//BGM停止
 			StopMusic();
 
-			// シャドウマップの削除
-			DeleteShadowMap(ShadowMapHandle);
-
-			ModeServer::GetInstance()->Del(this);
-			ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
-		}
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
+		Terminate();
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
+	}
 
 	return true;
 }

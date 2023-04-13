@@ -7,6 +7,7 @@ public:
 	~Elevator();
 	void Initialize();
 	void Update(Electrode& electr);
+	void Terminate();
 	void Render();
 	void Move();
 

@@ -181,6 +181,7 @@ bool ModeGame::Initialize() {
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
 	san.SetGimmick(&gimmick);
+	san.SetLka(&lka);
 
 	san.Initialize();
 	sanbomb.EffectReset();
@@ -197,6 +198,7 @@ bool ModeGame::Initialize() {
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
 	lka.SetGimmick(&gimmick);
+	lka.SetSan(&san);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
@@ -354,6 +356,13 @@ bool ModeGame::Initialize() {
 
 bool ModeGame::Terminate() {
 	base::Terminate();
+	MV1DeleteModel(_handleMap);
+	MV1DeleteModel(_handleSkySphere);
+	san.Terminate();
+	lka.Terminate();
+	elevator.Terminate();
+	gimmick.Terminate();
+	irondoor.Terminate();
 	return true;
 }
 
@@ -384,6 +393,12 @@ bool ModeGame::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0) || timer.timeup == true)
 	{
+		if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)) {
+			gameover.gameoverFlag = true;
+		}
+		else if (timer.timeup == true) {
+			gameover.timeupFlag = true;
+		}
 		Isgameover = true;
 		sanbomb.EffectReset();
 		sancircle.EffectReset();
@@ -401,8 +416,9 @@ bool ModeGame::Process() {
 		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
 		if (gameoverchange == true)
 		{
+			Terminate();
 			ModeServer::GetInstance()->Del(this);
-			ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
+		    ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
 		}
 	}
 	timer.Update();
@@ -463,7 +479,7 @@ bool ModeGame::Process() {
 		//std::ofstream ofs(dir);
 		//ofs << insStr;
 		//ofs.close();
-
+		Terminate();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}

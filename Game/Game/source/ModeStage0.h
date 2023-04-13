@@ -17,6 +17,7 @@
 #include "Elevator.h"
 #include "Tube.h"
 #include "BossSwamp.h"
+#include "ModeGameOver.h"
 
 #include <string>
 #include <memory>
@@ -40,6 +41,7 @@ class ModeStage0 : public ModeBase
 {
 	typedef ModeBase base;
 public:
+	ModeStage0();
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Process();
@@ -115,4 +117,5 @@ public:
 	Lkacircle lkacircle;
 	std::vector<std::unique_ptr<IronDoor>> irondoors;
 	Damage damage;
+	ModeGameOver gameover;
 };

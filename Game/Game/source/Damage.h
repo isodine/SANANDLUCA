@@ -31,8 +31,12 @@ public:
 	float SanCoolTime;//サンがダメージを受けた時のクールタイム
 	float LkaCoolTime;//ルカがダメージを受けた時のクールタイム
 
-	bool SanHitFlag;//TRUEならサンがダメージを受けるものに触れた
-	bool LkaHitFlag;//TRUEならルカがダメージを受けるものに触れた
+	bool SanHitFlag;//TRUEならサンがルカかルカのボムに触れた
+	bool LkaHitFlag;//TRUEならルカがサンかサンのボムに触れた
+	bool SanFloorHitFlag;//TRUEならサンがダメージ床に触れた
+	bool LkaFloorHitFlag;//TRUEならルカがダメージ床に触れた
+	bool SanSlimeHitFlag;//TRUEならサンがスライムに触れた
+	bool LkaSlimeHitFlag;//TRUEならルカがスライムに触れた
 	bool stageFlag;//trueの時にダメージ床の判定がONになる
 
 	float Distance;

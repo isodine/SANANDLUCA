@@ -51,6 +51,19 @@ void Player::Input()
 
 }
 
+void Player::Terminate() {
+	MV1DeleteModel(Mhandle);
+	MV1TerminateCollInfo(stageHandle, wallCol);
+	MV1TerminateCollInfo(stageHandle, floorCol);
+	MV1TerminateCollInfo(elevatorHnadle, elevatorCol);
+	for (auto i = 0; i < 3; i++) {
+		MV1TerminateCollInfo(tubeHandle[i], tubeCol[i]);
+	}
+	MV1TerminateCollInfo(stageHandle, goalColSAN);
+	MV1TerminateCollInfo(stageHandle, goalColLKA);
+	MV1TerminateCollInfo(ironDoorHandle, ironDoorCol);
+}
+
 void Player::Initialize()
 {
 	Mattach_index = -1;			// アニメーションアタッチはされていない
@@ -111,14 +124,17 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 		// 移動方向を決める
 		v = { 0,0,0 };
 		float mvSpeed = 6.f;
-		if (key & PAD_INPUT_DOWN) { v.x = 1; }
-		if (key & PAD_INPUT_UP) { v.x = -1; }
-		if (key & PAD_INPUT_LEFT) { v.z = -1; }
-		if (key & PAD_INPUT_RIGHT) { v.z = 1; }
-		if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP))
-		{
-			_status = STATUS::JUMP;
-			mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
+		if (_status != STATUS::DAMAGE) {
+			if (key & PAD_INPUT_DOWN) { v.x = 1; }
+			if (key & PAD_INPUT_UP) { v.x = -1; }
+			if (key & PAD_INPUT_LEFT) { v.z = -1; }
+			if (key & PAD_INPUT_RIGHT) { v.z = 1; }
+			if (key & PAD_INPUT_1 && !(_status == STATUS::JUMP))
+
+			{
+				_status = STATUS::JUMP;
+				mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
+			}
 		}
 		if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
@@ -145,9 +161,6 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 		// 移動前の位置を保存
 		oldPos = vPos;
 
-		oldHP = HP;
-
-
 		// 画面内にキャラクターが入っていないかどうかを描画する
 		//TRUEは入ってない、FALSEは入ってる
 		if (CheckCameraViewClip(vPos) == TRUE)
@@ -168,17 +181,7 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 
 		{
 
-			// 移動した先でコリジョン判定
-			MV1_COLL_RESULT_POLY_DIM hitPolyDimfloor;
-			MV1_COLL_RESULT_POLY hitPolyfloor;
-			MV1_COLL_RESULT_POLY hitPolywallback;
-			MV1_COLL_RESULT_POLY hitPolywallside;
-			MV1_COLL_RESULT_POLY hitPolygoalSAN;
-			MV1_COLL_RESULT_POLY hitPolygoalLKA;
-			MV1_COLL_RESULT_POLY hitPolyIronDoor;
-			MV1_COLL_RESULT_POLY_DIM hitPolyDimElevator;
-			MV1_COLL_RESULT_POLY hitPolyElevator;
-			MV1_COLL_RESULT_POLY_DIM hitPolyTube;
+			
 
 			//前後方向の壁判定
 			hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
@@ -349,8 +352,10 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 			_status = STATUS::WAIT;
 		}
 
-		if (_damage->SanHitFlag && _damage->LkaHitFlag) { _status = STATUS::DAMAGE; }
-		//if (_status == STATUS::DAMAGE) {KnockBack();}
+		if (BackCount >= 1 && BackCount <= 30)
+		{ 
+			_status = STATUS::DAMAGE;
+		}
 
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {
@@ -377,7 +382,6 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 				break;
 			case STATUS::DAMAGE:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "damage"), -1, FALSE);
-				backFlag = false;
 				break;
 			case STATUS::CHARGE:
 				Mattach_index = MV1AttachAnim(Mhandle, MV1GetAnimIndex(Mhandle, "attack1"), -1, FALSE);
@@ -476,11 +480,6 @@ void Player::Render()
 }
 
 
-void Player::charJump() {
-	height += 10.0f - throughtime;
-	throughtime += 0.25f;
-}
-
 void Player::Landing(float HitYPos) {
 	_status = STATUS::WAIT;
 	//oldStatus = STATUS::WAIT;
@@ -491,9 +490,5 @@ void Player::Landing(float HitYPos) {
 }
 
 void Player::KnockBack() {
-	if (!backFlag) {
-		backPos = VScale(VNorm(vDir), -2.0f);
-		backFlag = true;
-	}
-	vPos = VSub(vPos, backPos);
+	
 }

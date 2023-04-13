@@ -69,6 +69,11 @@ void IronDoor::Update(SanBomb& sanbomb, LkaBomb& lkabomb)
 	}
 }
 
+void IronDoor::Terminate(){
+	MV1DeleteModel(handleIronDoor);
+	MV1DeleteModel(handleIronMeltDoor);
+}
+
 void IronDoor::Render()
 {
 	MV1DrawModel(handle);

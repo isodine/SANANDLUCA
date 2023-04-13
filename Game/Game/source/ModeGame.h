@@ -17,6 +17,7 @@
 #include "Tube.h"
 #include "BossSwamp.h"
 #include "timer.h"
+#include "ModeGameOver.h"
 
 #include <string>
 #include <memory>
@@ -51,21 +52,21 @@ public:
 
 
 	// 3Dモデル描画用
-	int _handle;
-	int _attach_index;
-	float _total_time;
-	float _play_time;
+	//int _handle;
+	//int _attach_index;
+	//float _total_time;
+	//float _play_time;
 	VECTOR _vPos;	// 位置
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
 
 	// マップ用
-	int _handleMap;
-	int _handleSkySphere;
-	int frameMapCollisionfloor;
-	int frameMapCollisionwall;
-	int frameMapCollisiongoalSAN;
-	int frameMapCollisiongoalLKA;
+	int _handleMap;//ステージのハンドル
+	int _handleSkySphere;//スカイスフィアのハンドル
+	int frameMapCollisionfloor;//床の当たり判定用のフレームの番号
+	int frameMapCollisionwall;//壁の当たり判定用のフレームの番号
+	int frameMapCollisiongoalSAN;//サンのゴール用のフレームの番号
+	int frameMapCollisiongoalLKA;//ルカのゴール用のフレームの番号
 
 
 
@@ -118,6 +119,7 @@ public:
 	Elevator elevator;
 	Tube tube;
 	Timer timer;
+	ModeGameOver gameover;
 	std::vector<std::unique_ptr<Slime>> slimes;
 	std::vector<std::unique_ptr<IronDoor>> irondoors;
 	std::vector<std::unique_ptr<Tube>> tubes;

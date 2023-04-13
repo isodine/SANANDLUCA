@@ -40,6 +40,7 @@ void LKA::Initialize()
 
 	_colSubY = 45.f;
 	HP = 6;
+	lkaBackFlag = false;
 }
 
 void LKA::Input()
@@ -51,6 +52,35 @@ void LKA::Input()
 	trg = Trg2P;
 }
 
+void LKA::Terminate() {
+	Player::Terminate();
+}
+
+void LKA::SetSan(SAN* _san) {
+	san = _san;
+}
+
+void LKA::KnockBack() {
+	BackCount += 1;
+	if (lkaBackFlag) {
+		if (v.x == 0 && v.z == 0) {
+			knockBackDir = VScale(VNorm(san->vDir), 1.5);
+		}
+		else {
+			knockBackDir = VScale(VNorm(vDir), -1.5);
+		}
+		lkaBackFlag = false;
+	}
+	if (BackCount <= 30 && (hitPolywallback.HitFlag == 0 && hitPolywallside.HitFlag == 0)) {
+		vPos = VAdd(vPos, knockBackDir);
+	}
+	else if (BackCount > 30 && BackCount <= 59) {
+	}
+	else if (BackCount == 60) {
+		BackCount = 0;
+	}
+}
+
 void LKA::Update(Damage& damage, std::vector<std::unique_ptr<IronDoor>>* irondoors)
 {
 
@@ -60,7 +90,9 @@ void LKA::Update(Damage& damage, std::vector<std::unique_ptr<IronDoor>>* irondoo
 	{
 		oldcount = GetNowCount();
 	}
-	lkahitflag = false;
+	if (damage.SanHitFlag && damage.LkaHitFlag) {
+		KnockBack();
+	}
 }
 
 void LKA::Render(Damage& damage)
@@ -71,12 +103,12 @@ void LKA::Render(Damage& damage)
 	{
 		if (Player::HP == 6)
 		{
-			DrawGraph(1120, 880, hpgaugehandle[0], true);
+			DrawGraph(1320, 0, hpgaugehandle[0], true);
 			auto nowcount = GetNowCount();
 		}
 		if (Player::HP == 5)
 		{
-			DrawGraph(1120, 880, hpgaugehandle[1], true);
+			DrawGraph(1320, 0, hpgaugehandle[1], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -85,7 +117,7 @@ void LKA::Render(Damage& damage)
 		}
 		if (Player::HP == 4)
 		{
-			DrawGraph(1120, 880, hpgaugehandle[2], true);
+			DrawGraph(1320, 0, hpgaugehandle[2], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -94,7 +126,7 @@ void LKA::Render(Damage& damage)
 		}
 		if (Player::HP == 3)
 		{
-			DrawGraph(1120, 880, hpgaugehandle[3], true);
+			DrawGraph(1320, 0, hpgaugehandle[3], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -103,7 +135,7 @@ void LKA::Render(Damage& damage)
 		}
 		if (Player::HP == 2)
 		{
-			DrawGraph(1120, 880, hpgaugehandle[4], true);
+			DrawGraph(1320, 0, hpgaugehandle[4], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{
@@ -112,7 +144,7 @@ void LKA::Render(Damage& damage)
 		}
 		if (Player::HP == 1)
 		{
-			DrawGraph(1120, 880, hpgaugehandle[5], true);
+			DrawGraph(1320, 0, hpgaugehandle[5], true);
 			auto nowcount = GetNowCount();
 			if (nowcount - oldcount < 2000)
 			{

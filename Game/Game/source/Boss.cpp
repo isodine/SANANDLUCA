@@ -28,6 +28,7 @@ void Boss::Initialize() {
 	EndCount = 0;
 	DownCount = 0;
 	BossHP = 100;
+	BossMaxHP = 100;
 	SwampCnt = 3;
 	BossPosition0 = VGet(41, 37, 274);
 	BossPosition1 = VGet(-327, 37, 673);
@@ -44,6 +45,10 @@ void Boss::Initialize() {
 	acidHandle = LoadGraph("res/Boss/robo_acid_tex.png");
 	alkaliHandle = LoadGraph("res/Boss/robo_alcali_tex.png");
 	noneHandle = LoadGraph("res/Boss/robo_tex.png");
+	HPhandle = LoadGraph("res/BossHP/HP.png");
+	iconhandle = LoadGraph("res/BossHP/icon.png");
+	BGhandle = LoadGraph("res/BossHP/BG.png");
+	flamehandle = LoadGraph("res/BossHP/flame.png");
 	handleBaseSan = MV1LoadModel("res/07_Stage_map/Boss_Stage/acid.mv1");
 	handleBaseLka = MV1LoadModel("res/07_Stage_map/Boss_Stage/alkali.mv1");
 	//ÉÇÉfÉãÇÉÅÉÇÉäÇ…ì«Ç›çûÇÒÇ≈Ç¢ÇÈ
@@ -53,6 +58,8 @@ void Boss::Initialize() {
 }
 
 void Boss::Terminate() {
+	MV1TerminateCollInfo(model.modelHandle, 2);
+	MV1DeleteModel(model.modelHandle);
 
 }
 
@@ -577,7 +584,13 @@ void Boss::SwampSpawn(bool IsSan)
 	right = false;
 }
 
-void Boss::Render() {
+void Boss::Render() 
+{
+	DrawGraph(300, 900, iconhandle, true);
+	DrawGraph(300, 950, flamehandle, true);
+	int HPgauge = (1185 / BossMaxHP) * BossHP;
+	DrawRectGraph(310, 960, 0, 0,HPgauge, 30, HPhandle, true, false);
+
 	{
 		if (!downFlag) {
 			if (type == BOSSTYPE::RUSH && WaitCount <= 60) {

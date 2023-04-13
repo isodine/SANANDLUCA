@@ -36,6 +36,10 @@ void Elevator::Update(Electrode& electr)
 
 }
 
+void Elevator::Terminate() {
+	MV1DeleteModel(handle);
+}
+
 void Elevator::Render()
 {
 	MV1SetPosition(handle, vPos);
