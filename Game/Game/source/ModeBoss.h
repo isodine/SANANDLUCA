@@ -61,4 +61,5 @@ public:
 	Bossattack bossattack;
 	Bossdamage bossdamage;
 	Bossdown bossdown;
+	ModeGameOver gameover;
 };

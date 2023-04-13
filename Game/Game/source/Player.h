@@ -96,6 +96,7 @@ public:
 	// 3Dモデル描画用
 	int Mhandle;
 	int Mattach_index;
+	int BackCount;
 	float Mtotal_time;
 	float Mplay_time;
 	VECTOR vPos;	// 位置
@@ -120,7 +121,17 @@ public:
 	void SetOnBalance(bool on) { OnBalance = on; }
 
 	MV1_COLL_RESULT_POLY_DIM hitPolyDim;
+	// 移動した先でコリジョン判定
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimfloor;
 	MV1_COLL_RESULT_POLY hitPolyfloor;
+	MV1_COLL_RESULT_POLY hitPolywallback;
+	MV1_COLL_RESULT_POLY hitPolywallside;
+	MV1_COLL_RESULT_POLY hitPolygoalSAN;
+	MV1_COLL_RESULT_POLY hitPolygoalLKA;
+	MV1_COLL_RESULT_POLY hitPolyIronDoor;
+	MV1_COLL_RESULT_POLY_DIM hitPolyDimElevator;
+	MV1_COLL_RESULT_POLY hitPolyElevator;
+	MV1_COLL_RESULT_POLY_DIM hitPolyTube;
 
 	bool hitDoor = false;
 

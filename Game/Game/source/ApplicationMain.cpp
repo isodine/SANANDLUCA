@@ -11,8 +11,9 @@ bool ApplicationMain::Initialize(HINSTANCE hInstance) {
 	if (!base::Initialize(hInstance)) { return false; }
 
 	// ƒ‚[ƒh‚Ì“o˜^
-	//ModeServer::GetInstance()->Add(new ModeTitle(), 1, "title");
-	ModeServer::GetInstance()->Add(new ModeBoss(), 1, "game");
+	//ModeServer::GetInstance()->Add(new ModeLogo(), 1, "logo");
+	ModeServer::GetInstance()->Add(new ModeStage0(), 1, "stage00");
+	//ModeServer::GetInstance()->Add(new ModeBoss(), 1, "stage01");
 	return true;
 }
 

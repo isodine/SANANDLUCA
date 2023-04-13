@@ -393,6 +393,12 @@ bool ModeGame::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0) || timer.timeup == true)
 	{
+		if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)) {
+			gameover.gameoverFlag = true;
+		}
+		else if (timer.timeup == true) {
+			gameover.timeupFlag = true;
+		}
 		Isgameover = true;
 		sanbomb.EffectReset();
 		sancircle.EffectReset();

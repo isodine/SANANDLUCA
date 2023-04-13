@@ -10,8 +10,13 @@ ModeGameOver::ModeGameOver(int num) {
 	StageNum = num;
 }
 
+ModeGameOver::ModeGameOver() {
+	
+}
+
 bool ModeGameOver::Initialize() {
 	if (!base::Initialize()) { return false; }
+	TimeUphandle = LoadGraph("res/TimeUp.mp4");
 	Gameoverhandle = LoadGraph("res/GameOver.mp4");
 	IsPlaying = 1;
 	return true;
@@ -32,14 +37,20 @@ bool ModeGameOver::Process() {
 	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 
 	if (Trg & PAD_INPUT_1 && StageNum == 0) {
+		gameoverFlag = false;
+		timeupFlag = false;
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeStage0(), 1, "stage00");
 	}
 	else if (Trg& PAD_INPUT_1&& StageNum == 1) {
+		gameoverFlag = false;
+		timeupFlag = false;
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
 	}
 	else if (Trg & PAD_INPUT_1 && StageNum == 3) {
+		gameoverFlag = false;
+		timeupFlag = false;
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
@@ -54,7 +65,12 @@ bool ModeGameOver::Process() {
 bool ModeGameOver::Render()
 {
 	PlayMovieToGraph(Gameoverhandle);
-	DrawGraph(0, 0, Gameoverhandle,false);
+	if (gameoverFlag == true) {
+		DrawGraph(0, 0, Gameoverhandle, false);
+	}
+	else if (timeupFlag == true) {
+		DrawGraph(0, 0, TimeUphandle, false);
+	}
 
 	return true;
 }

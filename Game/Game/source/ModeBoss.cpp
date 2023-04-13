@@ -92,6 +92,7 @@ bool ModeBoss::Initialize() {
 	san.SetCamera(&_bossCam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
+	san.SetLka(&lka);
 
 	san.Initialize();
 	san.floorCol = frameMapCollisionfloor;
@@ -101,6 +102,7 @@ bool ModeBoss::Initialize() {
 	lka.SetCamera(&_bossCam);
 	lka.SetBomb(&lkabomb);
 	lka.SetDamage(&damage);
+	lka.SetSan(&san);
 
 	lka.Initialize();
 	lka.floorCol = frameMapCollisionfloor;
@@ -227,14 +229,6 @@ bool ModeBoss::Process() {
 	bossdamage.Update(boss);
 	bossdown.Update(boss);
 
-	//仮
-	int Trg;
-	int keyold = Key;
-	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
-
-	int checkKey = PAD_INPUT_2;
-
 	if (boss.downFlag == true) {
 		Terminate();
 		StopMusic();
@@ -244,6 +238,7 @@ bool ModeBoss::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
+		gameover.gameoverFlag = true;
 		StopMusic();
 		Terminate();
 		ModeServer::GetInstance()->Del(this);

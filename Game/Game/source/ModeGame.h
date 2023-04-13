@@ -17,6 +17,7 @@
 #include "Tube.h"
 #include "BossSwamp.h"
 #include "timer.h"
+#include "ModeGameOver.h"
 
 #include <string>
 #include <memory>
@@ -115,6 +116,7 @@ public:
 	Elevator elevator;
 	Tube tube;
 	Timer timer;
+	ModeGameOver gameover;
 	std::vector<std::unique_ptr<Slime>> slimes;
 	std::vector<std::unique_ptr<IronDoor>> irondoors;
 	std::vector<std::unique_ptr<Tube>> tubes;

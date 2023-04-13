@@ -180,17 +180,7 @@ void Player::Update()
 
 		{
 
-			// 移動した先でコリジョン判定
-			MV1_COLL_RESULT_POLY_DIM hitPolyDimfloor;
-			MV1_COLL_RESULT_POLY hitPolyfloor;
-			MV1_COLL_RESULT_POLY hitPolywallback;
-			MV1_COLL_RESULT_POLY hitPolywallside;
-			MV1_COLL_RESULT_POLY hitPolygoalSAN;
-			MV1_COLL_RESULT_POLY hitPolygoalLKA;
-			MV1_COLL_RESULT_POLY hitPolyIronDoor;
-			MV1_COLL_RESULT_POLY_DIM hitPolyDimElevator;
-			MV1_COLL_RESULT_POLY hitPolyElevator;
-			MV1_COLL_RESULT_POLY_DIM hitPolyTube;
+			
 
 			//前後方向の壁判定
 			hitPolywallback = MV1CollCheck_Line(stageHandle, wallCol,
@@ -342,7 +332,10 @@ void Player::Update()
 			_status = STATUS::WAIT;
 		}
 
-		if (_damage->SanHitFlag && _damage->LkaHitFlag) { _status = STATUS::DAMAGE; }
+		if (BackCount >= 1 && BackCount <= 30)
+		{ 
+			_status = STATUS::DAMAGE;
+		}
 
 		// ステータスが変わっていないか？
 		if (oldStatus == _status) {

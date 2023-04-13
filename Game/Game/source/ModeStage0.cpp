@@ -16,6 +16,10 @@ std::vector<std::string> splitme00(std::string& input, char delimiter)
 	return result;
 }
 
+ModeStage0::ModeStage0() {
+
+}
+
 bool ModeStage0::Initialize() {
 	if (!base::Initialize()) { return false; }
 	//ステージの種類
@@ -167,12 +171,18 @@ bool ModeStage0::Process() {
 
 	san.Update(damage);
 	lka.Update(damage);
-
 	damage.Process();
+	sanbomb.Update(san);
+	lkabomb.Update(lka);
+	sancircle.Update(san, lka);
+	lkacircle.Update(san, lka);
+
+	
 	damage.StageDamage(_handleMap);
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
+		gameover.gameoverFlag = true;
 		//BGM停止
 		StopMusic();
 
@@ -188,10 +198,6 @@ bool ModeStage0::Process() {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(0), 1, "gameover");
 	}
-	sanbomb.Update(san);
-	lkabomb.Update(lka);
-	sancircle.Update(san, lka);
-	lkacircle.Update(san, lka);
 	if ((san.goal && lka.goal)) {
 		//BGM停止
 		StopMusic();

@@ -25,7 +25,6 @@ private:
 	int hpgaugehandle[6];
 	int hphandle;
 	float oldcount;
-	bool lkahitflag;
 
 	SAN* san;
 };

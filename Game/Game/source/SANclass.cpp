@@ -59,8 +59,8 @@ void SAN::SetLka(LKA* _lka) {
 }
 
 void SAN::KnockBack() {
+	BackCount += 1;
 	if (sanBackFlag) {
-		int checkKey = PAD_INPUT_DOWN | PAD_INPUT_UP | PAD_INPUT_LEFT | PAD_INPUT_RIGHT | PAD_INPUT_1;
 		if (v.x == 0 && v.z == 0) {
 			knockBackDir = VScale(VNorm(lka->vDir), 1.5);
 		}
@@ -69,7 +69,14 @@ void SAN::KnockBack() {
 		}
 		sanBackFlag = false;
 	}
-	vPos = VAdd(vPos, knockBackDir);
+	if (BackCount <= 30 && (hitPolywallback.HitFlag == 0 && hitPolywallside.HitFlag == 0)) {
+		vPos = VAdd(vPos, knockBackDir);
+	}
+	else if(BackCount > 30 && BackCount <= 59){
+	}
+	else if (BackCount == 60) {
+		BackCount = 0;
+	}
 }
 
 void SAN::Update(Damage& damage)
