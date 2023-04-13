@@ -264,7 +264,7 @@ bool ModeStage0::Render() {
 		MV1DrawModel(_handleSkySphere);
 
 		//マップのUVスクロール
-		_UVScroll_U += 0.001f;
+		_UVScroll_U -= 0.001f;
 		//_UVScroll_V += 0.01f;
 		MV1SetFrameTextureAddressTransform(
 			_handleSkySphere	// モデルハンドル
