@@ -91,6 +91,10 @@ public:
 	float throughtime;
 	float height;
 
+
+	//UVスクロール
+	float _UVScroll_U, _UVScroll_V;
+
 	//シャドウマップ用
 
 	int ShadowMapHandle;

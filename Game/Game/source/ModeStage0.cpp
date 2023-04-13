@@ -164,6 +164,9 @@ bool ModeStage0::Initialize() {
 	_cam._vTarget.y = ((san.vPos.y + lka.vPos.y) / 2.f);
 	_cam._vTarget.z = ((san.vPos.z + lka.vPos.z) / 2.f);
 
+	//UVスクロール
+	_UVScroll_U = 0.0f;
+	_UVScroll_V = 0.0f;
 
 	//シャドウマップの生成
 	ShadowMapHandle = MakeShadowMap(1024, 1024);
@@ -327,6 +330,17 @@ bool ModeStage0::Render() {
 		MV1SetScale(_handleSkySphere, VGet(2.0f, 2.0f, 2.0f));
 		MV1DrawModel(_handleSkySphere);
 
+		//マップのUVスクロール
+		_UVScroll_U -= 0.001f;
+		//_UVScroll_V += 0.01f;
+		MV1SetFrameTextureAddressTransform(
+			_handleSkySphere	// モデルハンドル
+			, 0				// UV操作するフレーム番号
+			, _UVScroll_U, _UVScroll_V		// UV加算値(def:0.f, 0.f～1.f ループ)
+			, 1.0f, 1.0f					// UV乗算値(def:1.f)
+			, 0.0f, 0.0f					// UV回転中心値
+			, 0.0f							// UV回転度数（ラジアンで指定）
+		);
 	}
 	// デバッグ表示
 #ifdef debug
