@@ -83,7 +83,10 @@ void SAN::Update(Damage& damage, std::vector<std::unique_ptr<IronDoor>>* irondoo
 {
 	
 	Player::Update(irondoors);
-	if (damage.SanHitFlag == true) { oldcount = GetNowCount();}
+	if (damage.SanHitFlag == true||damage.SanFloorHitFlag == true||damage.SanSlimeHitFlag == true) 
+	{
+		oldcount = GetNowCount();
+	}
 	if (damage.SanHitFlag && damage.LkaHitFlag) {
 		KnockBack();
 	}
