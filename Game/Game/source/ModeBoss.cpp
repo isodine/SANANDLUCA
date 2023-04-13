@@ -238,11 +238,10 @@ bool ModeBoss::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
-		gameover.gameoverFlag = true;
 		StopMusic();
 		Terminate();
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGameOver(3), 1, "gameover");
+		ModeServer::GetInstance()->Add(new ModeGameOver(3, false), 1, "gameover");
 	}
 	
 	return true;

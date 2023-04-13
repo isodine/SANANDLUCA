@@ -34,7 +34,6 @@ public:
 	~Player();
 	virtual void Initialize();
 	virtual void Update(std::vector<std::unique_ptr<IronDoor>>* irondoors);
-	virtual void Update();
 	virtual void Terminate();
 	virtual void Render();
 	virtual void Jump();

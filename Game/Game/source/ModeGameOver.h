@@ -4,7 +4,7 @@
 class ModeGameOver : public ModeBase {
 	typedef ModeBase base;
 public:
-	ModeGameOver(int num);
+	ModeGameOver(int num, bool flag);
 	ModeGameOver();
 	virtual bool Initialize();
 	virtual bool Terminate();
@@ -12,7 +12,6 @@ public:
 	virtual bool Render();
 
 	bool timeupFlag;//タイムアップ時にTRUEになる
-	bool gameoverFlag;//体力ゼロ、落下時にTRUEになる
 
 private:
 	int IsPlaying;

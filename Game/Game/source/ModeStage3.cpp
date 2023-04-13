@@ -26,7 +26,7 @@ bool ModeStage3::Process() {
 
 	if (CheckHitKey(KEY_INPUT_A)) {
 		ModeServer::GetInstance()->Del(this);
-		ModeServer::GetInstance()->Add(new ModeGameOver(5), 1, "GameOver");
+		ModeServer::GetInstance()->Add(new ModeGameOver(5, false), 1, "GameOver");
 	}
 
 	return true;

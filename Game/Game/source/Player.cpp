@@ -75,7 +75,6 @@ void Player::Initialize()
 	Mtotal_time = 0.f;
 	Mplay_time = 0.0f;
 	vDir = VGet(0, 0, -1);			// キャラモデルはデフォルトで-Z方向を向いている
-	backPos = VGet(0, 0, 0);
 	attack = Attack::None;
 	SEjump = LoadSoundMem("res/06_Sound/03_SE/ani_ta_biyon02.mp3");
 

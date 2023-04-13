@@ -235,26 +235,22 @@ bool ModeStage0::Process() {
 	//{
 	//	//BGM停止
 	//	StopMusic();
-		gameover.gameoverFlag = true;
-		//BGM停止
-		StopMusic();
+		//gameover.gameoverFlag = true;
+		////BGM停止
+		//StopMusic();
 
-		// シャドウマップの削除
-		DeleteShadowMap(ShadowMapHandle);
+		//// シャドウマップの削除
+		//DeleteShadowMap(ShadowMapHandle);
 
-		ChangePanSoundMem(255, san.VOICEdeathSAN);
-		ChangePanSoundMem(-255, lka.VOICEdeathLKA);
-		PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
-		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
-		Terminate();
+		//ChangePanSoundMem(255, san.VOICEdeathSAN);
+		//ChangePanSoundMem(-255, lka.VOICEdeathLKA);
+		//PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
+		//PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
+		//Terminate();
 
 	//	ModeServer::GetInstance()->Del(this);
-	//	ModeServer::GetInstance()->Add(new ModeGameOver(0), 1, "gameover");
+	//	ModeServer::GetInstance()->Add(new ModeGameOver(0, false), 1, "gameover");
 	//}
-	sanbomb.Update(san);
-	lkabomb.Update(lka);
-	sancircle.Update(san, lka);
-	lkacircle.Update(san, lka);
 
 	for (auto&& Irondoors : irondoors) {
 		if (!Irondoors->melt) {

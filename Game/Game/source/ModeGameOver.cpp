@@ -6,8 +6,9 @@
 #include "ModeBoss.h"
 #include "ModeTitle.h"
 
-ModeGameOver::ModeGameOver(int num) {
+ModeGameOver::ModeGameOver(int num, bool flag) {
 	StageNum = num;
+	timeupFlag = flag;
 }
 
 ModeGameOver::ModeGameOver() {
@@ -37,19 +38,16 @@ bool ModeGameOver::Process() {
 	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 
 	if (Trg & PAD_INPUT_1 && StageNum == 0) {
-		gameoverFlag = false;
 		timeupFlag = false;
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeStage0(), 1, "stage00");
 	}
 	else if (Trg& PAD_INPUT_1&& StageNum == 1) {
-		gameoverFlag = false;
 		timeupFlag = false;
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
 	}
 	else if (Trg & PAD_INPUT_1 && StageNum == 3) {
-		gameoverFlag = false;
 		timeupFlag = false;
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
@@ -65,12 +63,14 @@ bool ModeGameOver::Process() {
 bool ModeGameOver::Render()
 {
 	PlayMovieToGraph(Gameoverhandle);
-	if (gameoverFlag == true) {
-		DrawGraph(0, 0, Gameoverhandle, false);
-	}
-	else if (timeupFlag == true) {
+	PlayMovieToGraph(TimeUphandle);
+	if (timeupFlag) {
 		DrawGraph(0, 0, TimeUphandle, false);
 	}
+	else{
+		DrawGraph(0, 0, Gameoverhandle, false);
+	}
+	
 
 	return true;
 }

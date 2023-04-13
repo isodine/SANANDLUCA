@@ -41,7 +41,7 @@ void IronDoor::Update(SanBomb& sanbomb, LkaBomb& lkabomb)
 	{
 		auto hitPolyDim{ MV1CollCheck_Sphere(handleIronDoor, handleCol, lkabomb.vPos, lkabomb.sphereSize) };
 
-		if (hitPolyDim.HitNum >= 1)
+		if (lkabomb.situation == lkabomb.PlayerBomb::Throw && hitPolyDim.HitNum >= 1)
 		{
 			MV1TerminateCollInfo(handleIronDoor, handleCol);
 			handle = handleIronMeltDoor;
@@ -56,7 +56,7 @@ void IronDoor::Update(SanBomb& sanbomb, LkaBomb& lkabomb)
 	{
 		auto hitPolyDim{ MV1CollCheck_Sphere(handleIronDoor, handleCol, sanbomb.vPos, sanbomb.sphereSize) };
 
-		if (hitPolyDim.HitNum >= 1)
+		if (sanbomb.situation == sanbomb.PlayerBomb::Throw && hitPolyDim.HitNum >= 1)
 		{
 			MV1TerminateCollInfo(handleIronDoor, handleCol);
 			handle = handleIronMeltDoor;

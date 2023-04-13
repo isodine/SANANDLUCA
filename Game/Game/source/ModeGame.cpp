@@ -394,7 +394,7 @@ bool ModeGame::Process() {
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0) || timer.timeup == true)
 	{
 		if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)) {
-			gameover.gameoverFlag = true;
+			gameover.timeupFlag = false;
 		}
 		else if (timer.timeup == true) {
 			gameover.timeupFlag = true;
@@ -418,7 +418,12 @@ bool ModeGame::Process() {
 		{
 			Terminate();
 			ModeServer::GetInstance()->Del(this);
-		    ModeServer::GetInstance()->Add(new ModeGameOver(1), 1, "gameover");
+			if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)) {
+				ModeServer::GetInstance()->Add(new ModeGameOver(1, false), 1, "gameover");
+			}
+			else {
+				ModeServer::GetInstance()->Add(new ModeGameOver(1, true), 1, "gameover");
+			}
 		}
 	}
 	timer.Update();
