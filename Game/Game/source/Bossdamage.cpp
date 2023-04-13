@@ -6,7 +6,6 @@
 Bossdamage::Bossdamage()
 {
 	_effectResourceHandle = LoadEffekseerEffect("res/Beaker/Beaker_down01/Beaker_down01.efkefc");
-	IsPlaying = -1;
 	damageEfsize = 400.0f;
 }
 
@@ -23,7 +22,6 @@ void Bossdamage::Update(Boss& boss)
 		SetScalePlayingEffekseer3DEffect(_playingEffectHandle, damageEfsize, damageEfsize, damageEfsize);
 		PlaySoundFile("res/06_Sound/03_SE/beaker_damage.mp3", DX_PLAYTYPE_BACK);
 	}
-	IsPlaying = IsEffekseer3DEffectPlaying(_playingEffectHandle);
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle, boss.model.pos.x, boss.model.pos.y, boss.model.pos.z);
 }
 
