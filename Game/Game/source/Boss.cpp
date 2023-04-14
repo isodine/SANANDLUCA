@@ -2,7 +2,7 @@
 #include "LKAclass.h"
 
 void Boss::Initialize() {
-	model.pos = VGet(0, 20, 750);
+	model.pos = VGet(0, 60, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.03;
@@ -30,10 +30,10 @@ void Boss::Initialize() {
 	BossHP = 100;
 	BossMaxHP = 100;
 	SwampCnt = 3;
-	BossPosition0 = VGet(41, 37, 274);
-	BossPosition1 = VGet(-327, 37, 673);
-	BossPosition2 = VGet(41, 37, 1013);
-	BossPosition3 = VGet(327, 37, 673);
+	BossPosition0 = VGet(41, 57, 274);
+	BossPosition1 = VGet(-327, 57, 673);
+	BossPosition2 = VGet(41, 57, 1013);
+	BossPosition3 = VGet(327, 57, 673);
 
 	swampDir = VGet(0, 0, 0);
 	swampDegreeDir = swampDir;
@@ -419,12 +419,12 @@ void Boss::Pull() {
 void Boss::Capture() {
 	if (SanCatchFlag) {
 		san->vPos.x = SphereCenter.x;
-		san->vPos.y = 0;
+		san->vPos.y = 60;
 		san->vPos.z = SphereCenter.z;
 	}
 	if (LkaCatchFlag) {
 		lka->vPos.x = SphereCenter.x;
-		lka->vPos.y = 0;
+		lka->vPos.y = 60;
 		lka->vPos.z = SphereCenter.z;
 	}
 	CaptureCount += 1;

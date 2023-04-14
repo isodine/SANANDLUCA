@@ -63,13 +63,13 @@ bool ModeBoss::Initialize() {
 		boss.lkaB = &lkabomb;
 	
 	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/Boss_Stage.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/99_BOSS_Stage/99_BOSS_Stage.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/07_Stage_map/Boss_Stage/02SkyCube_N/Night.mv1");
 
 	// コリジョン情報の生成
-	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor1");
-	frameMapCollisionwall = MV1SearchFrame(_handleMap, "wall");
+	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor_col");
+	frameMapCollisionwall = MV1SearchFrame(_handleMap, "coStage_wall1");
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
@@ -219,6 +219,7 @@ bool ModeBoss::Process() {
 	san.Update(damage, NULL);
 	lka.Update(damage, NULL);
 	damage.Process();
+	damage.StageDamage(_handleMap);
 	boss.Process(damage);
 	sanbomb.Update(san);
 	lkabomb.Update(lka);

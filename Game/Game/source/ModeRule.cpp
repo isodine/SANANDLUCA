@@ -42,7 +42,7 @@ bool ModeRule::Process() {
     ModeServer::GetInstance()->Add(new ModeStage0(), 1, "stage00");
     //ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
     //ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
-    ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
+    //ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
   }
   return true;
 }
