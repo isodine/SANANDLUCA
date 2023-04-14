@@ -18,6 +18,6 @@ private:
 	float PlayTime = 0.0f;
 	int _isEffect = 0;
 	int IsPlaying = -1;
-
+	int cautionHandle;
 
 };
