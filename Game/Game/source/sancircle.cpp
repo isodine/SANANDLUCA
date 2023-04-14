@@ -8,6 +8,7 @@ Sancircle::Sancircle()
 	_effectResourceHandle[0] = LoadEffekseerEffect("res/sun_heal/sun_heal_start_.efkefc", 10.0f);
 	_effectResourceHandle[1] = LoadEffekseerEffect("res/sun_heal/sun_heal_end_.efkefc", 10.0f);
 	Iscircle = false;
+	cautionHandle = LoadGraph("res/sun_heal/caution.png");
 }
 
 Sancircle::~Sancircle()
@@ -50,6 +51,9 @@ void Sancircle::Render()
 {
 	Effekseer_Sync3DSetting();
 	DrawEffekseer3D();
+	if (Iscircle) {
+		DrawGraph(590, 850, cautionHandle, false);
+	}
 }
 
 void Sancircle::EffectReset()
