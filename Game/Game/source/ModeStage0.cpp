@@ -244,7 +244,8 @@ bool ModeStage0::Process() {
 
 		//// シャドウマップの削除
 		//DeleteShadowMap(ShadowMapHandle);
-
+	    //sanbomb.BombReset();
+		//lkabomb.BombReset();
 		//ChangePanSoundMem(255, san.VOICEdeathSAN);
 		//ChangePanSoundMem(-255, lka.VOICEdeathLKA);
 		//PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
@@ -428,6 +429,10 @@ void ModeStage0::Respawn()
 		lka.vPos = respawnstartLka;
 	}
 
+	san._status = SAN::STATUS::WAIT;
+	lka._status = LKA::STATUS::WAIT;
+	san.BackCount = 0;
+	lka.BackCount = 0;
 	san.vPos.y += 10.f;
 	lka.vPos.y += 10.f;
 	san.HP = 6;

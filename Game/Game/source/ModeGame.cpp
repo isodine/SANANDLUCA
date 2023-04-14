@@ -408,6 +408,8 @@ bool ModeGame::Process() {
 		sancircle.EffectReset();
 		lkabomb.EffectReset();
 		lkacircle.EffectReset();
+		sanbomb.BombReset();
+		lkabomb.BombReset();
 		//BGMí‚é~
 		StopMusic();
 
