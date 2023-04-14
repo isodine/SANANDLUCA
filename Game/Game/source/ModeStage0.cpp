@@ -244,8 +244,8 @@ bool ModeStage0::Process() {
 
 		//// シャドウマップの削除
 		//DeleteShadowMap(ShadowMapHandle);
-	    //sanbomb.BombReset();
-		//lkabomb.BombReset();
+	    //sanbomb.EffectReset();
+	    //lkabomb.EffectReset();
 		//ChangePanSoundMem(255, san.VOICEdeathSAN);
 		//ChangePanSoundMem(-255, lka.VOICEdeathLKA);
 		//PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
