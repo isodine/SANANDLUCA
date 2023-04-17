@@ -94,6 +94,11 @@ void SanBomb::Update(SAN& san)
 	SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], vPos.x, vPos.y, vPos.z);
 }
 
+void SanBomb::Terminate() {
+	DeleteEffekseerEffect(_effectResourceHandle[0]);
+	DeleteEffekseerEffect(_effectResourceHandle[1]);
+}
+
 void SanBomb::Render()
 {
 	DrawEffekseer3D();

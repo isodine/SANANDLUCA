@@ -31,9 +31,9 @@ void Tube::Initialize(int type, VECTOR Pos)
 		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_S.mv1");
 		handleCol = 1;
 		Type = TubeType::San;
-		Dir = DirType::Right;
+		Dir = DirType::Front;
 		vPos = Pos;
-		vDir = VGet(0, 90, 0);
+		vDir = VGet(0, 0, 0);
 		MV1SetPosition(handle, vPos);
 		MV1SetupCollInfo(handle, handleCol, 4, 4, 4);
 		MV1SetFrameVisible(handle, 1, FALSE);
@@ -44,9 +44,9 @@ void Tube::Initialize(int type, VECTOR Pos)
 		handle = MV1LoadModel("res/02_Object_Model/Tube_gimmick/Tube_L.mv1");
 		handleCol = 1;
 		Type = TubeType::Lka;
-		Dir = DirType::Left;
+		Dir = DirType::Front;
 		vPos = Pos;
-		vDir = VGet(0, -90, 0);
+		vDir = VGet(0, 0, 0);
 		MV1SetPosition(handle, vPos);
 		MV1SetupCollInfo(handle, handleCol, 4, 4, 4);
 		MV1SetFrameVisible(handle, 1, FALSE);

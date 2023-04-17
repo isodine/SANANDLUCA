@@ -197,6 +197,8 @@ bool ModeStage0::Terminate() {
 	MV1DeleteModel(_handleSkySphere);
 	san.Terminate();
 	lka.Terminate();
+	sanbomb.Terminate();
+	lkabomb.Terminate();
 	damage.Terminate();
 	return true;
 }
@@ -255,6 +257,30 @@ bool ModeStage0::Process() {
 	//	ModeServer::GetInstance()->Del(this);
 	//	ModeServer::GetInstance()->Add(new ModeGameOver(0, false), 1, "gameover");
 	//}
+
+	int Trg;
+	int keyold = Key;
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	int checkKey = PAD_INPUT_10;
+	if (Trg & checkKey) {
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
+		//BGM停止
+		StopMusic();
+
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
+
+		Terminate();
+
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeStage0, 1, "stage00");
+	}
 
 	for (auto&& Irondoors : irondoors) {
 		if (!Irondoors->melt) {
