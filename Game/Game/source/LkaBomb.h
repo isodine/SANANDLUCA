@@ -8,6 +8,7 @@ public:
 	~LkaBomb();
 	void Initialize(LKA& lka);
 	void Update(LKA& lka);
+	void Terminate();
 	void Render();
 	void Throw(LKA& lka);
 	void bombthrow();

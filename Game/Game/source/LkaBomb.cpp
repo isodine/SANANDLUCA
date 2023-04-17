@@ -100,6 +100,11 @@ void LkaBomb::Render()
 	DrawEffekseer3D();
 }
 
+void LkaBomb::Terminate(){
+	DeleteEffekseerEffect(_effectResourceHandle[0]);
+	DeleteEffekseerEffect(_effectResourceHandle[1]);
+}
+
 void LkaBomb::Throw(LKA& lka)
 {
 	if (!firstdir)

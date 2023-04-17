@@ -8,6 +8,7 @@ public:
 	~SanBomb();
 	void Initialize(SAN& san);
 	void Update(SAN& san);
+	void Terminate();
 	void Render();
 	void Move();
 	void Throw(SAN& san);

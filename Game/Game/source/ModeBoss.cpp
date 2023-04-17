@@ -207,6 +207,8 @@ bool ModeBoss::Terminate() {
 	MV1DeleteModel(_handleSkySphere);
 	san.Terminate();
 	lka.Terminate();
+	sanbomb.Terminate();
+	lkabomb.Terminate();
 	boss.Terminate();
 	damage.Terminate();
 	sanbomb.EffectReset();
@@ -243,11 +245,33 @@ bool ModeBoss::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
-
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
 		StopMusic();
 		Terminate();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(3, false), 1, "gameover");
+	}
+
+	int Trg;
+	int keyold = Key;
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	int checkKey = PAD_INPUT_10;
+	if (Trg & checkKey) {
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
+		//BGM停止
+		StopMusic();
+
+		Terminate();
+
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeBoss, 1, "boss");
 	}
 	
 	return true;
