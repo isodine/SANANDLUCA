@@ -12,7 +12,7 @@
 bool ModeGameOver::Initialize() {
 	if (!base::Initialize()) { return false; }
 	Gameoverhandle = LoadGraph("res/GameOver.mp4");
-	IsPlaying = 1;
+	IsPlaying = 0;
 	return true;
 }
 
