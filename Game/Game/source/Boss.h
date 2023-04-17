@@ -98,6 +98,11 @@ public:
 	int walkRand;
 	int walkTimeCount;
 
+	int BossSuck;	//ƒ{ƒX‹zˆøSE
+	int BossSearch; //ƒ{ƒX’T’mSE
+	bool BossSuckflag = false;
+	bool BossSearchflag = false;
+
 	float StopDir;//‰ñ“]‚ª~‚Ü‚éŒë·
 	float StopPos;//~‚Ü‚éêŠ‚ÌŒë·
 	float rotate;//‰ñ“]‚·‚é‘¬“x

@@ -209,6 +209,10 @@ bool ModeBoss::Terminate() {
 	lka.Terminate();
 	boss.Terminate();
 	damage.Terminate();
+	sanbomb.EffectReset();
+	lkabomb.EffectReset();
+	sancircle.EffectReset();
+	lkacircle.EffectReset();
 	return true;
 }
 
@@ -239,6 +243,7 @@ bool ModeBoss::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
+
 		StopMusic();
 		Terminate();
 		ModeServer::GetInstance()->Del(this);

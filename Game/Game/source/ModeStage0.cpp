@@ -198,6 +198,10 @@ bool ModeStage0::Terminate() {
 	san.Terminate();
 	lka.Terminate();
 	damage.Terminate();
+	sanbomb.EffectReset();
+	lkabomb.EffectReset();
+	sancircle.EffectReset();
+	lkacircle.EffectReset();
 	return true;
 }
 

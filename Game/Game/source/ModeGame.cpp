@@ -367,6 +367,10 @@ bool ModeGame::Terminate() {
 	elevator.Terminate();
 	gimmick.Terminate();
 	irondoor.Terminate();
+	sanbomb.EffectReset();
+	lkabomb.EffectReset();
+	sancircle.EffectReset();
+	lkacircle.EffectReset();
 	return true;
 }
 
@@ -404,10 +408,6 @@ bool ModeGame::Process() {
 			gameover.timeupFlag = true;
 		}
 		Isgameover = true;
-		sanbomb.EffectReset();
-		sancircle.EffectReset();
-		lkabomb.EffectReset();
-		lkacircle.EffectReset();
 		//BGMí‚é~
 		StopMusic();
 
