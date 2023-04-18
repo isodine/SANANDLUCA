@@ -16,6 +16,7 @@
 #include "Electrode.h"
 #include "Elevator.h"
 #include "Tube.h"
+#include "timer.h"
 #include "BossSwamp.h"
 #include "ModeGameOver.h"
 
@@ -121,5 +122,6 @@ public:
 	Lkacircle lkacircle;
 	std::vector<std::unique_ptr<IronDoor>> irondoors;
 	Damage damage;
+	Timer timer;
 	ModeGameOver gameover;
 };

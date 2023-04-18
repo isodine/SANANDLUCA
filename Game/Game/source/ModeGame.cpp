@@ -193,6 +193,8 @@ bool ModeGame::Initialize() {
 
 	//damage.SetGame(this);
 
+	timer.Initialize(8, 0, 80);
+
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
@@ -690,7 +692,6 @@ bool ModeGame::Render() {
 	for (auto&& Irondoors : irondoors) {
 		Irondoors->Render();
 	}
-	timer.Render();
 	//irondoor.Render();
 	electrode.Render();
 	//elevator.Render();
@@ -709,6 +710,7 @@ bool ModeGame::Render() {
 		gamestartcount--;
 		if (gamestartcount <= 0)DrawGraph(0, 0, Grhandle[0], true), Isgamestart = false;
 	}
+	timer.Render();
 	return true;
 }
 

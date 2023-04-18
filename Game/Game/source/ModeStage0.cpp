@@ -70,6 +70,8 @@ bool ModeStage0::Initialize() {
 	//respawn3rdPosSan = VGet(-3.f, 230.f, 5849.f);
 	//respawn3rdPosLka = VGet(-3.f, 230.f, 5849.f);
 
+	timer.Initialize(9, 9, 99);
+
 	san.SetCamera(&_cam);
 	san.SetBomb(&sanbomb);
 	san.SetDamage(&damage);
@@ -213,23 +215,24 @@ bool ModeStage0::Process() {
 	san.Update(damage, &irondoors);
 	lka.Update(damage, &irondoors);
 	damage.Process();
+	timer.Update();
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
 	lkacircle.Update(san, lka);
 
-	
+
 	damage.StageDamage(_handleMap);
 
 	//if ((respawn3rdPosSan.y <= san.vPos.y && respawn3rdPosSan.z <= san.vPos.z) && (respawn3rdPosLka.y <= lka.vPos.y && respawn3rdPosLka.z <= lka.vPos.z) && !respawn3rd)
 	//{
 	//	respawn3rd = true;
 	//}
-	if ((respawn2ndPosSan.y <= san.vPos.y && respawn2ndPosSan.z <= san.vPos.z) && (respawn2ndPosLka.y <= lka.vPos.y && respawn2ndPosLka.z <= lka.vPos.z)&&!respawn2nd)
+	if ((respawn2ndPosSan.y <= san.vPos.y && respawn2ndPosSan.z <= san.vPos.z) && (respawn2ndPosLka.y <= lka.vPos.y && respawn2ndPosLka.z <= lka.vPos.z) && !respawn2nd)
 	{
 		respawn2nd = true;
 	}
-	else if ((respawn1stPosSan.y <= san.vPos.y && respawn1stPosSan.z <= san.vPos.z) && (respawn1stPosLka.y <= lka.vPos.y && respawn1stPosLka.z <= lka.vPos.z)&&!respawn1st)
+	else if ((respawn1stPosSan.y <= san.vPos.y && respawn1stPosSan.z <= san.vPos.z) && (respawn1stPosLka.y <= lka.vPos.y && respawn1stPosLka.z <= lka.vPos.z) && !respawn1st)
 	{
 		respawn1st = true;
 	}
@@ -250,8 +253,8 @@ bool ModeStage0::Process() {
 
 		//// シャドウマップの削除
 		//DeleteShadowMap(ShadowMapHandle);
-	    //sanbomb.EffectReset();
-	    //lkabomb.EffectReset();
+		//sanbomb.EffectReset();
+		//lkabomb.EffectReset();
 		//ChangePanSoundMem(255, san.VOICEdeathSAN);
 		//ChangePanSoundMem(-255, lka.VOICEdeathLKA);
 		//PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
@@ -293,9 +296,35 @@ bool ModeStage0::Process() {
 		//Irondoors->CollCheck(san, lka);
 	}
 
-		if ((san.goal && lka.goal)) {
-			//BGM停止
-			StopMusic();
+	if (timer.timeup == true)
+	{
+		//BGM停止
+		StopMusic();
+
+		//BGM停止
+		StopMusic();
+
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
+		ChangePanSoundMem(255, san.VOICEdeathSAN);
+		ChangePanSoundMem(-255, lka.VOICEdeathLKA);
+		PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
+		PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
+		Terminate();
+
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeGameOver(0, true), 1, "gameover");
+	}
+
+	if ((san.goal && lka.goal)) {
+		//BGM停止
+		StopMusic();
 
 		// シャドウマップの削除
 		DeleteShadowMap(ShadowMapHandle);
@@ -433,6 +462,7 @@ bool ModeStage0::Render() {
 	lkabomb.Render();
 	sancircle.Render();
 	lkacircle.Render();
+	timer.Render();
 	return true;
 }
 

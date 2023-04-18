@@ -20,14 +20,23 @@ Timer::~Timer()
 {
 }
 
+void Timer::Initialize(int time10, int time1, int alltime)
+{
+	firstcnt10 = time10;
+	firstcnt1 = time1;
+	firstcnt = alltime;
+	count10 = firstcnt10;
+	count1 = firstcnt1;
+}
+
 void Timer::Update()
 {    //XV
 
-	if (secondcnt >= 60) {
+	if (secondcnt >= firstcnt) {
 		count1--;
 		if (count1 == -1 && count10 == 0) {
-			count10 = 6;
-			count1 = 0;
+			count10 = firstcnt10;
+			count1 = firstcnt1;
 			timeup = true;
 		}
 		if (count1 <= -1) {
