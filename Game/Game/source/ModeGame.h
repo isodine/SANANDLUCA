@@ -45,6 +45,7 @@ public:
 	virtual bool Terminate();
 	virtual bool Process();
 	virtual bool Render();
+	void Respawn();
 
 
 	// カメラ
@@ -68,7 +69,14 @@ public:
 	int frameMapCollisiongoalSAN;//サンのゴール用のフレームの番号
 	int frameMapCollisiongoalLKA;//ルカのゴール用のフレームの番号
 
-
+	VECTOR respawnstartSan;
+	VECTOR respawnstartLka;
+	bool respawn1st = false;
+	VECTOR respawn1stPosSan;
+	VECTOR respawn1stPosLka;
+	bool respawn2nd = false;
+	VECTOR respawn2ndPosSan;
+	VECTOR respawn2ndPosLka;
 
 	int LightHandle;
 	int MaskHandle;

@@ -87,6 +87,9 @@ bool ModeGame::Initialize() {
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
 	MV1SetFrameVisible(_handleMap, 2, FALSE);
 	MV1SetFrameVisible(_handleMap, 3, FALSE);
+	MV1SetFrameVisible(_handleMap, 4, FALSE);
+	MV1SetFrameVisible(_handleMap, 5, FALSE);
+
 	//ゲームオーバーマスク
 	Grhandle[0] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_01.png");
 	Grhandle[1] = LoadGraph("res/Gameover_pattern_01/Gameover_pattern_01_02.png");
@@ -137,6 +140,15 @@ bool ModeGame::Initialize() {
 
 	throughtime = 0.0f;
 	height = 0.0f;
+
+	respawnstartSan = VGet(-30.f, 20.f, 670.f);
+	respawnstartLka = VGet(100.f, 20.f, 670.f);
+
+	respawn1stPosSan = VGet(201.f, 302.f, 2943.f);
+	respawn1stPosLka = VGet(-92.f, 302.f, 2943.f);
+
+	respawn2ndPosSan = VGet(-84.f, 529.f, 6296.f);
+	respawn2ndPosLka = VGet(153.f, 529.f, 6296.f);
 
 	//auto IronDoor1 = std::make_unique<IronDoor>();
 	//IronDoor1->Initialize(false, VGet(-100.0f, 70.0f, 1100.0f));
@@ -399,18 +411,34 @@ bool ModeGame::Process() {
 	damage.Process();
 	damage.StageDamage(_handleMap);
 	damage.SlimeDamage(slimes);
+
+	if ((respawn2ndPosSan.y <= san.vPos.y && respawn2ndPosSan.z <= san.vPos.z) && (respawn2ndPosLka.y <= lka.vPos.y && respawn2ndPosLka.z <= lka.vPos.z) && !respawn2nd)
+	{
+		respawn2nd = true;
+	}
+	else if ((respawn1stPosSan.y <= san.vPos.y && respawn1stPosSan.z <= san.vPos.z) && (respawn1stPosLka.y <= lka.vPos.y && respawn1stPosLka.z <= lka.vPos.z) && !respawn1st)
+	{
+		respawn1st = true;
+	}
+	else {}
+
+	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
+	{
+		Respawn();
+	}
+
 	for (auto&& Slimes : slimes) {
 		Slimes->Process(san.vPos, lka.vPos, _handleMap, 2.f, Slimes->mypH);
 	}
 
-	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0) || timer.timeup == true)
+	if (timer.timeup == true)
 	{
-		if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)) {
-			gameover.timeupFlag = false;
-		}
-		else if (timer.timeup == true) {
-			gameover.timeupFlag = true;
-		}
+		//if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)) {
+		//	gameover.timeupFlag = false;
+		//}
+		//else if (timer.timeup == true) {
+		//	gameover.timeupFlag = true;
+		//}
 		Isgameover = true;
 		sanbomb.EffectReset();
 		sancircle.EffectReset();
@@ -682,4 +710,37 @@ bool ModeGame::Render() {
 		if (gamestartcount <= 0)DrawGraph(0, 0, Grhandle[0], true), Isgamestart = false;
 	}
 	return true;
+}
+
+void ModeGame::Respawn()
+{
+	//if (respawn3rd)
+	//{
+	//	san.vPos = respawn3rdPosSan;
+	//	lka.vPos = respawn3rdPosLka;
+	//}
+	if (respawn2nd)
+	{
+		san.vPos = respawn2ndPosSan;
+		lka.vPos = respawn2ndPosLka;
+	}
+	else if (respawn1st)
+	{
+		san.vPos = respawn1stPosSan;
+		lka.vPos = respawn1stPosLka;
+	}
+	else
+	{
+		san.vPos = respawnstartSan;
+		lka.vPos = respawnstartLka;
+	}
+
+	san._status = SAN::STATUS::WAIT;
+	lka._status = LKA::STATUS::WAIT;
+	san.BackCount = 0;
+	lka.BackCount = 0;
+	san.vPos.y += 10.f;
+	lka.vPos.y += 10.f;
+	san.HP = 6;
+	lka.HP = 6;
 }
