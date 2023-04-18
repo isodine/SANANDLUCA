@@ -45,6 +45,6 @@ void Timer::Render()
 	if ((count10 <= -1) == false) { DrawExtendGraph(848, 0, 978, 130, number[count10], TRUE);}
 	if ((count1  <= -1) == false) {	DrawExtendGraph(948, 0, 1078, 130, number[count1], TRUE);}
 	//デバッグ
-	DrawFormatString(640, 0, GetColor(255, 255, 255), "%d", count10);
-	DrawFormatString(650, 0, GetColor(255, 255, 255), "%d", count1);
+	//DrawFormatString(640, 0, GetColor(255, 255, 255), "%d", count10);
+	//DrawFormatString(650, 0, GetColor(255, 255, 255), "%d", count1);
 }

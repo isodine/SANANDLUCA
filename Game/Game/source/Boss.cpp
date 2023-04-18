@@ -619,7 +619,7 @@ void Boss::Render()
 		{
 			swamps[i]->Render();
 		}
-		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
+		//DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
 		//DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
 #ifdef debug
 		DrawSphere3D(SphereCenter, 50, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), false);
