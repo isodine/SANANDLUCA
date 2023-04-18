@@ -2,7 +2,7 @@
 #include "LKAclass.h"
 
 void Boss::Initialize() {
-	model.pos = VGet(0, 20, 750);
+	model.pos = VGet(0, 60, 750);
 	BossDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.03;
@@ -30,10 +30,10 @@ void Boss::Initialize() {
 	BossHP = 100;
 	BossMaxHP = 100;
 	SwampCnt = 3;
-	BossPosition0 = VGet(41, 37, 274);
-	BossPosition1 = VGet(-327, 37, 673);
-	BossPosition2 = VGet(41, 37, 1013);
-	BossPosition3 = VGet(327, 37, 673);
+	BossPosition0 = VGet(41, 57, 274);
+	BossPosition1 = VGet(-327, 57, 673);
+	BossPosition2 = VGet(41, 57, 1013);
+	BossPosition3 = VGet(327, 57, 673);
 
 	swampDir = VGet(0, 0, 0);
 	swampDegreeDir = swampDir;
@@ -49,6 +49,8 @@ void Boss::Initialize() {
 	iconhandle = LoadGraph("res/BossHP/icon.png");
 	BGhandle = LoadGraph("res/BossHP/BG.png");
 	flamehandle = LoadGraph("res/BossHP/flame.png");
+	BossSuck = LoadSoundMem("res/06_Sound/03_SE/beaker_suck.wav");
+	BossSearch = LoadSoundMem("res/06_Sound/03_SE/beaker_search.wav");
 	handleBaseSan = MV1LoadModel("res/07_Stage_map/Boss_Stage/acid.mv1");
 	handleBaseLka = MV1LoadModel("res/07_Stage_map/Boss_Stage/alkali.mv1");
 	//ÉÇÉfÉãÇÉÅÉÇÉäÇ…ì«Ç›çûÇÒÇ≈Ç¢ÇÈ
@@ -173,6 +175,11 @@ void Boss::Process(Damage& damage) {
 
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
 	if (rotateFlag) {
+		if (!BossSearchflag)
+		{
+			PlaySoundMem(BossSearch, DX_PLAYTYPE_BACK, true);
+			BossSearchflag = true;
+		}
 		if (RotateCount <= 90) {
 			BossDir = VNorm(VSub(sanPos, model.pos));
 		}
@@ -188,12 +195,14 @@ void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
 		model.dir.y += 0.02f * dir;
 		swampDir.y += xz/* dir * 65.9f*/;
 		//model.dir.y = fmod(model.dir.y, 2 * DX_PI);//àÍé¸ÇµÇΩÇÁdir.yÇ0Ç…ñﬂÇ∑
-		type = BOSSTYPE::ROTATION;
+		//type = BOSSTYPE::ROTATION;
 		RotateCount += 1;
 		if (RotateCount > 180) {
 			RotateCount = 0;
 			rotateFlag = false;
+			BossSearchflag = false;
 			targetFlag = true;
+			StopSoundMem(BossSearch);
 		}
 	}
 	else {
@@ -236,10 +245,10 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 }
 
 void Boss::Walk() {
-		model.pos = VAdd(VScale(forward, 4.f), model.pos);
-		//type = BOSSTYPE::WALK;
-		if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
-			type = BOSSTYPE::IDLE;
+	model.pos = VAdd(VScale(forward, 4.f), model.pos);
+	//type = BOSSTYPE::WALK;
+	if (StopPos > abs(BossSetDir.x - model.pos.x) && StopPos > abs(BossSetDir.z - model.pos.z)) {
+		type = BOSSTYPE::IDLE;
 	}
 
 }
@@ -324,42 +333,42 @@ void Boss::Crush() {				//ï«è’ìÀéûèàóù
 			break;
 		}
 	}
-		if (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1) {
-			AttackedFlag = true;
-			bosshitEf = true;
-			switch (phType) {
-			case PH::NONE:
-				BossHP -= 10;
-				break;
-			case PH::ACID:
-				BossHP -= 20;
-				break;
-			case PH::ALKALI:
-				BossHP -= 5;
-				break;
-			}
+	if (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1) {
+		AttackedFlag = true;
+		bosshitEf = true;
+		switch (phType) {
+		case PH::NONE:
+			BossHP -= 10;
+			break;
+		case PH::ACID:
+			BossHP -= 20;
+			break;
+		case PH::ALKALI:
+			BossHP -= 5;
+			break;
 		}
-		if (phType == PH::ACID && CrushCount == 0)
-		{
-			SwampSpawn(true); SwampCnt--;
-		}
-		if (phType == PH::ALKALI && CrushCount == 0)
-		{
-			SwampSpawn(false); SwampCnt--;
-		}
-		if (SwampCnt == 0) {
-			phType = PH::NONE;
-			oldphType = PH::NONE;
-		}
-		CrushCount += 1;
-		if (CrushCount >= 240 || AttackedFlag) {
-			CrushCount = 0;
-			AttackedFlag = false;
-			type = BOSSTYPE::PULL;
-		}
-		if (BossHP == 0) {
-			type = BOSSTYPE::DOWN;
-		}
+	}
+	if (phType == PH::ACID && CrushCount == 0)
+	{
+		SwampSpawn(true); SwampCnt--;
+	}
+	if (phType == PH::ALKALI && CrushCount == 0)
+	{
+		SwampSpawn(false); SwampCnt--;
+	}
+	if (SwampCnt == 0) {
+		phType = PH::NONE;
+		oldphType = PH::NONE;
+	}
+	CrushCount += 1;
+	if (CrushCount >= 240 || AttackedFlag) {
+		CrushCount = 0;
+		AttackedFlag = false;
+		type = BOSSTYPE::PULL;
+	}
+	if (BossHP <= 0) {
+		type = BOSSTYPE::DOWN;
+	}
 }
 
 void Boss::Search() {
@@ -417,14 +426,19 @@ void Boss::Pull() {
 }
 
 void Boss::Capture() {
+	if (!BossSuckflag)
+	{
+		PlaySoundMem(BossSuck, DX_PLAYTYPE_BACK, true);
+		BossSuckflag = true;
+	}
 	if (SanCatchFlag) {
 		san->vPos.x = SphereCenter.x;
-		san->vPos.y = 0;
+		san->vPos.y = 60;
 		san->vPos.z = SphereCenter.z;
 	}
 	if (LkaCatchFlag) {
 		lka->vPos.x = SphereCenter.x;
-		lka->vPos.y = 0;
+		lka->vPos.y = 60;
 		lka->vPos.z = SphereCenter.z;
 	}
 	CaptureCount += 1;
@@ -448,68 +462,72 @@ void Boss::Capture() {
 			BossHP -= 20;
 			break;
 		}
+		StopSoundMem(BossSuck);
 	}
-		if (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1) {
-			AttackedFlag = true;
-			bosshitEf = true;
-			switch (phType) {
-			case PH::NONE:
-				BossHP -= 10;
-				break;
-			case PH::ACID:
-				BossHP -= 20;
-				break;
-			case PH::ALKALI:
-				BossHP -= 5;
-				break;
-			}
+	if (lkaB->situation == lkaB->PlayerBomb::Throw && hitPolyDimLka.HitNum >= 1) {
+		AttackedFlag = true;
+		bosshitEf = true;
+		switch (phType) {
+		case PH::NONE:
+			BossHP -= 10;
+			break;
+		case PH::ACID:
+			BossHP -= 20;
+			break;
+		case PH::ALKALI:
+			BossHP -= 5;
+			break;
 		}
+		StopSoundMem(BossSuck);
+	}
 
-		if (CaptureCount == 120) {
-			if (SanCatchFlag) {
-				san->HP -= 1;
-				sanhitEf = true;
-				StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
-				phType = PH::ACID;
-				if (oldphType == PH::NONE) {
-					oldphType = PH::ACID;
-					SwampCnt = 3;
-				}
-				else if (oldphType == PH::ALKALI) {
-					phType = PH::NONE;
-					oldphType = PH::NONE;
-					SwampCnt = 0;
-				}
+	if (CaptureCount == 120) {
+		if (SanCatchFlag) {
+			san->HP -= 1;
+			sanhitEf = true;
+			StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
+			phType = PH::ACID;
+			if (oldphType == PH::NONE) {
+				oldphType = PH::ACID;
+				SwampCnt = 3;
 			}
-			if (LkaCatchFlag) {
-				lka->HP -= 1;
-				lkahitEf = true;
-				StartJoypadVibration(DX_INPUT_PAD2, 750, 300, -1);
-				phType = PH::ALKALI;
-				if (oldphType == PH::NONE) {
-					oldphType = PH::ALKALI;
-					SwampCnt = 3;
-				}
-				else if (oldphType == PH::ACID) {
-					phType = PH::NONE;
-					oldphType = PH::NONE;
-					SwampCnt = 0;
-				}
+			else if (oldphType == PH::ALKALI) {
+				phType = PH::NONE;
+				oldphType = PH::NONE;
+				SwampCnt = 0;
 			}
 		}
-		if (CaptureCount == 180) {
-			CaptureCount = 0;
-			type = BOSSTYPE::CAPTUREEND;
+		if (LkaCatchFlag) {
+			lka->HP -= 1;
+			lkahitEf = true;
+			StartJoypadVibration(DX_INPUT_PAD2, 750, 300, -1);
+			phType = PH::ALKALI;
+			if (oldphType == PH::NONE) {
+				oldphType = PH::ALKALI;
+				SwampCnt = 3;
+			}
+			else if (oldphType == PH::ACID) {
+				phType = PH::NONE;
+				oldphType = PH::NONE;
+				SwampCnt = 0;
+			}
 		}
-		if (AttackedFlag) {
-			CaptureCount = 0;
-			AttackedFlag = false;
-			type = BOSSTYPE::CAPTUREEND;
-		}
-		if (BossHP <= 0) {
-			type = BOSSTYPE::DOWN;
-		}
-	
+	}
+	if (CaptureCount == 180) {
+		CaptureCount = 0;
+		BossSuckflag = false;
+		type = BOSSTYPE::CAPTUREEND;
+	}
+	if (AttackedFlag) {
+		CaptureCount = 0;
+		AttackedFlag = false;
+		BossSuckflag = false;
+		type = BOSSTYPE::CAPTUREEND;
+	}
+	if (BossHP <= 0) {
+		type = BOSSTYPE::DOWN;
+	}
+
 }
 
 
@@ -568,7 +586,7 @@ void Boss::SwampSpawn(bool IsSan)
 				SwampPos.x += (-100 + 100 * x); SwampPos.z += (-50 + 100 * z);
 			}
 
-			SwampPos.y = 50.f;
+			SwampPos.y = 85.f;
 
 
 
@@ -584,11 +602,11 @@ void Boss::SwampSpawn(bool IsSan)
 	right = false;
 }
 
-void Boss::Render() 
+void Boss::Render()
 {
 	DrawGraph(300, 900, iconhandle, true);
 	DrawGraph(300, 950, flamehandle, true);
-	float HPgauge =  (1185.0f / BossMaxHP) * BossHP;
+	float HPgauge = (1185.0f / BossMaxHP) * BossHP;
 	DrawRectGraph(310, 960, 0, 0, static_cast<int>(HPgauge), 30, HPhandle, true, false);
 
 	{
@@ -631,5 +649,5 @@ void Boss::Render()
 		DrawFormatString(0, 200, GetColor(255, 0, 0), "BossHP = %d", BossHP);
 		DrawFormatString(0, 250, GetColor(255, 0, 0), "BossDir.y = %f", BossDir.y);
 #endif
+		}
 	}
-}

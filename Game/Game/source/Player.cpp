@@ -112,8 +112,7 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 	}
 	else {
 
-		// 処理前のステータスを保存しておく
-		oldStatus = _status;
+		
 		// カメラの向いている角度を取得
 		float sx = _camera->_vPos.x - _camera->_vTarget.x;
 		float sz = _camera->_vPos.z - _camera->_vTarget.z;
@@ -351,7 +350,7 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 			_status = STATUS::WAIT;
 		}
 
-		if (BackCount >= 1 && BackCount <= 30)
+		if (BackCount >= 1 && BackCount <= 29)
 		{ 
 			_status = STATUS::DAMAGE;
 		}
@@ -398,6 +397,9 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 			// 再生時間を初期化
 			Mplay_time = 0.0f;
 		}
+
+		// 処理前のステータスを保存しておく
+		oldStatus = _status;
 
 		// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
 		if (!(_status == STATUS::JUMP) && Mplay_time >= Mtotal_time)

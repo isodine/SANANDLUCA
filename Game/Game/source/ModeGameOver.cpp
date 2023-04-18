@@ -19,7 +19,10 @@ bool ModeGameOver::Initialize() {
 	if (!base::Initialize()) { return false; }
 	TimeUphandle = LoadGraph("res/TimeUp.mp4");
 	Gameoverhandle = LoadGraph("res/GameOver.mp4");
-	IsPlaying = 1;
+	IsPlayingGameOver = 1;
+	IsPlayingTimeUp = 1;
+	PlayMovieToGraph(TimeUphandle);
+	PlayMovieToGraph(Gameoverhandle);
 	return true;
 }
 
@@ -52,18 +55,21 @@ bool ModeGameOver::Process() {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
-	IsPlaying = GetMovieStateToGraph(Gameoverhandle);
-	if (IsPlaying == 0)
-	{
-		PauseMovieToGraph(Gameoverhandle);
-	}
+	//IsPlayingGameOver = GetMovieStateToGraph(Gameoverhandle);
+	//IsPlayingTimeUp = GetMovieStateToGraph(TimeUphandle);
+	//if (IsPlayingGameOver == 0)
+	//{
+	//	PauseMovieToGraph(Gameoverhandle);
+	//}
+	//else if (IsPlayingTimeUp == 0)
+	//{
+	//	PauseMovieToGraph(TimeUphandle);
+	//}
 	return true;
 }
 
 bool ModeGameOver::Render()
 {
-	PlayMovieToGraph(Gameoverhandle);
-	PlayMovieToGraph(TimeUphandle);
 	if (timeupFlag) {
 		DrawGraph(0, 0, TimeUphandle, false);
 	}

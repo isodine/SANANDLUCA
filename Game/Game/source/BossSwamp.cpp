@@ -9,7 +9,7 @@ void BossSwamp::ModelInitialize()
 void BossSwamp::Initialize(bool IsSan, VECTOR Pos, int handleSan, int handleLka)
 {
 	IsSan ? handle = MV1DuplicateModel(handleSan) :
-				handle = MV1DuplicateModel(handleLka);
+		handle = MV1DuplicateModel(handleLka);
 	vPos = Pos;
 	MV1SetPosition(handle, vPos);
 	handleCol = 0;
@@ -29,7 +29,7 @@ void BossSwamp::Render()
 
 void BossSwamp::CollCheck(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 {
-	if(vPos.z<=150|| vPos.z >= 1170 || vPos.x <= -480 || vPos.x >= 600)
+	if (vPos.z <= 150 || vPos.z >= 1170 || vPos.x <= -480 || vPos.x >= 600)
 	{
 		neutralization = true;
 		return;

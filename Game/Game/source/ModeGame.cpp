@@ -153,7 +153,7 @@ bool ModeGame::Initialize() {
 	//MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
 
 	//auto Tube1 = std::make_unique<Tube>();
-	//Tube1->Initialize(0, VGet(0.f, 70.f, 1000.f));
+	//Tube1->Initialize(0, VGet(-113.f, 301.f, 3389.f));
 	//MV1SetupCollInfo(Tube1->handle, tube.handleCol, 4, 4, 4);
 	//san.tubeCol[0] = tube.handleCol;
 	//lka.tubeCol[0] = tube.handleCol;
@@ -161,23 +161,23 @@ bool ModeGame::Initialize() {
 	//lka.tubeHandle[0] = Tube1->handle;
 	//tubes.emplace_back(std::move(Tube1));
 
-	//auto Tube2 = std::make_unique<Tube>();
-	//Tube2->Initialize(1, VGet(0.f, 70.f, 800.f));
-	////MV1SetupCollInfo(Tube2->handle, tube.handleCol, 4, 4, 4);
-	//san.tubeCol[1] = Tube2->handleCol;
-	//lka.tubeCol[1] = Tube2->handleCol;
-	//san.tubeHandle[1] = Tube2->handle;
-	//lka.tubeHandle[1] = Tube2->handle;
-	//tubes.emplace_back(std::move(Tube2));
+	auto Tube2 = std::make_unique<Tube>();
+	Tube2->Initialize(1, VGet(-113.f, 301.f, 3389.f));
+	MV1SetupCollInfo(Tube2->handle, tube.handleCol, 4, 4, 4);
+	san.tubeCol[1] = Tube2->handleCol;
+	lka.tubeCol[1] = Tube2->handleCol;
+	san.tubeHandle[1] = Tube2->handle;
+	lka.tubeHandle[1] = Tube2->handle;
+	tubes.emplace_back(std::move(Tube2));
 
-	//auto Tube3 = std::make_unique<Tube>();
-	//Tube3->Initialize(2, VGet(0.f, 70.f, 600.f));
-	////MV1SetupCollInfo(Tube3->handle, tube.handleCol, 4, 4, 4);
-	//san.tubeCol[2] = Tube3->handleCol;
-	//lka.tubeCol[2] = Tube3->handleCol;
-	//san.tubeHandle[2] = Tube3->handle;
-	//lka.tubeHandle[2] = Tube3->handle;
-	//tubes.emplace_back(std::move(Tube3));
+	auto Tube3 = std::make_unique<Tube>();
+	Tube3->Initialize(2, VGet(237.f, 301.f, 3389.f));
+	MV1SetupCollInfo(Tube3->handle, tube.handleCol, 4, 4, 4);
+	san.tubeCol[2] = Tube3->handleCol;
+	lka.tubeCol[2] = Tube3->handleCol;
+	san.tubeHandle[2] = Tube3->handle;
+	lka.tubeHandle[2] = Tube3->handle;
+	tubes.emplace_back(std::move(Tube3));
 
 	//damage.SetGame(this);
 
@@ -220,6 +220,8 @@ bool ModeGame::Initialize() {
 	gimmick.SetSanLka(&san, &lka);
 	sanbomb.Initialize(san);
 	lkabomb.Initialize(lka);
+	electrode.Initialize(VGet(63, 301, 2289), false);
+
 
 	//CSVによる初期化（レベルデザイン時に実装）
 
@@ -364,9 +366,15 @@ bool ModeGame::Terminate() {
 	MV1DeleteModel(_handleSkySphere);
 	san.Terminate();
 	lka.Terminate();
+	sanbomb.Terminate();
+	lkabomb.Terminate();
 	elevator.Terminate();
 	gimmick.Terminate();
 	irondoor.Terminate();
+	sanbomb.EffectReset();
+	lkabomb.EffectReset();
+	sancircle.EffectReset();
+	lkacircle.EffectReset();
 	return true;
 }
 
@@ -408,6 +416,8 @@ bool ModeGame::Process() {
 		sancircle.EffectReset();
 		lkabomb.EffectReset();
 		lkacircle.EffectReset();
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
 		//BGM停止
 		StopMusic();
 
@@ -429,6 +439,30 @@ bool ModeGame::Process() {
 				ModeServer::GetInstance()->Add(new ModeGameOver(1, true), 1, "gameover");
 			}
 		}
+	}
+
+	int Trg;
+	int keyold = Key;
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	int checkKey = PAD_INPUT_10;
+	if (Trg & checkKey) {
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
+		//BGM停止
+		StopMusic();
+
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
+
+		Terminate();
+
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeGame, 1, "stage01");
 	}
 	timer.Update();
 	sanbomb.Update(san);

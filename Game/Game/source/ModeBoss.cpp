@@ -63,13 +63,13 @@ bool ModeBoss::Initialize() {
 		boss.lkaB = &lkabomb;
 	
 	// マップ
-	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/Boss_Stage.mv1");
+	_handleMap = MV1LoadModel("res/07_Stage_map/Boss_Stage/99_BOSS_Stage/99_BOSS_Stage.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/07_Stage_map/Boss_Stage/02SkyCube_N/Night.mv1");
 
 	// コリジョン情報の生成
-	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor1");
-	frameMapCollisionwall = MV1SearchFrame(_handleMap, "wall");
+	frameMapCollisionfloor = MV1SearchFrame(_handleMap, "floor_col");
+	frameMapCollisionwall = MV1SearchFrame(_handleMap, "coStage_wall1");
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
 	// コリジョンのフレームを描画しない設定
@@ -207,8 +207,14 @@ bool ModeBoss::Terminate() {
 	MV1DeleteModel(_handleSkySphere);
 	san.Terminate();
 	lka.Terminate();
+	sanbomb.Terminate();
+	lkabomb.Terminate();
 	boss.Terminate();
 	damage.Terminate();
+	sanbomb.EffectReset();
+	lkabomb.EffectReset();
+	sancircle.EffectReset();
+	lkacircle.EffectReset();
 	return true;
 }
 
@@ -219,6 +225,7 @@ bool ModeBoss::Process() {
 	san.Update(damage, NULL);
 	lka.Update(damage, NULL);
 	damage.Process();
+	damage.StageDamage(_handleMap);
 	boss.Process(damage);
 	sanbomb.Update(san);
 	lkabomb.Update(lka);
@@ -238,10 +245,33 @@ bool ModeBoss::Process() {
 
 	if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
 	{
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
 		StopMusic();
 		Terminate();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeGameOver(3, false), 1, "gameover");
+	}
+
+	int Trg;
+	int keyold = Key;
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	int checkKey = PAD_INPUT_10;
+	if (Trg & checkKey) {
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
+		//BGM停止
+		StopMusic();
+
+		Terminate();
+
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeBoss, 1, "boss");
 	}
 	
 	return true;

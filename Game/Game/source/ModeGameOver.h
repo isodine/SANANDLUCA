@@ -14,7 +14,8 @@ public:
 	bool timeupFlag;//タイムアップ時にTRUEになる
 
 private:
-	int IsPlaying;
+	int IsPlayingGameOver;
+	int IsPlayingTimeUp;
 	int StageNum;
 	int Gameoverhandle;
 	int TimeUphandle;

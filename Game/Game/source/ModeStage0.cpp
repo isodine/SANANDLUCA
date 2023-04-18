@@ -197,7 +197,13 @@ bool ModeStage0::Terminate() {
 	MV1DeleteModel(_handleSkySphere);
 	san.Terminate();
 	lka.Terminate();
+	sanbomb.Terminate();
+	lkabomb.Terminate();
 	damage.Terminate();
+	sanbomb.EffectReset();
+	lkabomb.EffectReset();
+	sancircle.EffectReset();
+	lkacircle.EffectReset();
 	return true;
 }
 
@@ -244,7 +250,8 @@ bool ModeStage0::Process() {
 
 		//// シャドウマップの削除
 		//DeleteShadowMap(ShadowMapHandle);
-
+	    //sanbomb.EffectReset();
+	    //lkabomb.EffectReset();
 		//ChangePanSoundMem(255, san.VOICEdeathSAN);
 		//ChangePanSoundMem(-255, lka.VOICEdeathLKA);
 		//PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
@@ -254,6 +261,30 @@ bool ModeStage0::Process() {
 	//	ModeServer::GetInstance()->Del(this);
 	//	ModeServer::GetInstance()->Add(new ModeGameOver(0, false), 1, "gameover");
 	//}
+
+	int Trg;
+	int keyold = Key;
+	Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	Trg = (Key ^ keyold) & Key;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	int checkKey = PAD_INPUT_10;
+	if (Trg & checkKey) {
+		sanbomb.EffectReset();
+		sancircle.EffectReset();
+		lkabomb.EffectReset();
+		lkacircle.EffectReset();
+		sanbomb.EffectReset();
+		lkabomb.EffectReset();
+		//BGM停止
+		StopMusic();
+
+		// シャドウマップの削除
+		DeleteShadowMap(ShadowMapHandle);
+
+		Terminate();
+
+		ModeServer::GetInstance()->Del(this);
+		ModeServer::GetInstance()->Add(new ModeStage0, 1, "stage00");
+	}
 
 	for (auto&& Irondoors : irondoors) {
 		if (!Irondoors->melt) {
@@ -428,6 +459,10 @@ void ModeStage0::Respawn()
 		lka.vPos = respawnstartLka;
 	}
 
+	san._status = SAN::STATUS::WAIT;
+	lka._status = LKA::STATUS::WAIT;
+	san.BackCount = 0;
+	lka.BackCount = 0;
 	san.vPos.y += 10.f;
 	lka.vPos.y += 10.f;
 	san.HP = 6;
