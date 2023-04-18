@@ -106,11 +106,11 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 	}
 	else {}
 
-	if (key & PAD_INPUT_5) {	//多分L1ボタン
-		PlaySoundMem(VOICEpose[GetRand(1)], DX_PLAYTYPE_BACK, true);
-		WaitKey();
-	}
-	else {
+	//if (key & PAD_INPUT_5) {	//多分L1ボタン
+	//	PlaySoundMem(VOICEpose[GetRand(1)], DX_PLAYTYPE_BACK, true);
+	//	WaitKey();
+	//}
+	{
 
 		
 		// カメラの向いている角度を取得
