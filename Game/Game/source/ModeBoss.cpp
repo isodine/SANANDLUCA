@@ -138,7 +138,7 @@ bool ModeBoss::Initialize() {
 				}
 				if (i == 2)
 				{
-					y = readInteger;
+					y = 60;
 				}
 				if (i == 3)
 				{
