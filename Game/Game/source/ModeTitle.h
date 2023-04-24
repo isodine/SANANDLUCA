@@ -10,10 +10,10 @@ public:
 	virtual bool Process();
 	virtual bool Render();
 	
-	int titleHandle;
-	int titlelogohandle;
-	int pushlogo;
-	int SEcrik;
+	int titleHandle;//タイトルのハンドル
+	int titlelogohandle;//タイトルロゴのハンドル
+	int pushlogo;//プッシュUIのハンドル
+	int SEcrik;//決定BGMのハンドル
 
 	//VOICE用
 	bool modeStart = false;

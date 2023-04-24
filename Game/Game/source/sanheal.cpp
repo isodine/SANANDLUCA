@@ -6,6 +6,7 @@
 Sanheal::Sanheal()
 {
 	_effectResourceHandle = LoadEffekseerEffect("res/sun_heal01/sun_heal01.efkefc", 10.0f);
+	IsPlaying = -1;
 }
 
 Sanheal::~Sanheal()

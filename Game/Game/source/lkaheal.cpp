@@ -6,6 +6,8 @@
 Lkaheal::Lkaheal()
 {
 	_effectResourceHandle = LoadEffekseerEffect("res/Lka_heal01/Lka_heal01.efkefc", 10.0f);
+	IsPlaying = -1;
+
 }
 
 Lkaheal::~Lkaheal()

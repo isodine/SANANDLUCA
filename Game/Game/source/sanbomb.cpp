@@ -17,6 +17,7 @@ void SanBomb::Initialize(SAN& san)
 	mypH = San;
 	situation = PlayerBomb::None;
 	Isbombdead = false;
+	IsPlaying = -1;
 }
 
 void SanBomb::Update(SAN& san)
