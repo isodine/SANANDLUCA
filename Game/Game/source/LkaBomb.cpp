@@ -17,6 +17,7 @@ void LkaBomb::Initialize(LKA& lka)
 	mypH = Lka;
 	situation = PlayerBomb::None;
 	Isbombdead = false;
+	IsPlaying = -1;
 }
 
 void LkaBomb::Update(LKA& lka)

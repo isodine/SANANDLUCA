@@ -13,11 +13,9 @@ public:
 private:
 	int	_effectResourceHandle[2];		// エフェクトファイルをロードするハンドル
 	int	_playingEffectHandle[2];		// ロードしたエフェクトファイルから、エフェクトを生成したもの
-	int oldcount;
-	bool Iscircle;
-	float PlayTime = 0.0f;
-	int _isEffect = 0;
-	int IsPlaying = -1;
-	int cautionHandle;
+	int oldcount;//サークルの再生時間管理
+	bool Iscircle;//サークルは出現しているか
+	int IsPlaying;//サークルは再生されているか
+
 
 };

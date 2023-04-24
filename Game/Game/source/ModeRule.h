@@ -11,6 +11,6 @@ public:
 	virtual bool Render();
 	void ChangeMode();
 private:
-	int Rulehandle[5];
-	int pushbutton;
+	int Rulehandle[5];//ルールのハンドル
+	int pushbutton;//ボタンが押された回数
 };

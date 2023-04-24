@@ -8,6 +8,7 @@ Sancircle::Sancircle()
 	_effectResourceHandle[0] = LoadEffekseerEffect("res/sun_heal/sun_heal_start_.efkefc", 10.0f);
 	_effectResourceHandle[1] = LoadEffekseerEffect("res/sun_heal/sun_heal_end_.efkefc", 10.0f);
 	Iscircle = false;
+	IsPlaying = -1;
 	cautionHandle = LoadGraph("res/sun_heal/caution.png");
 }
 

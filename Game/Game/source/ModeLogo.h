@@ -10,5 +10,6 @@ public:
 	virtual bool Render();
 	void ChangeMode();
 private:
-	int logohandle, teamlogohandle;
+	int logohandle;//ロゴのハンドル
+	int teamlogohandle;//チームロゴのハンドル
 };
