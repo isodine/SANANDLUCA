@@ -1,10 +1,15 @@
+/*****************************************************************//**
+ * \file   Gimmick.cpp
+ * \brief  天秤の動作全般
+ * 
+ * \author 土屋　涼乃
+ * \date   December 2022
+ *********************************************************************/
 #include "Gimmick.h"
 
 
 Gimmick::Gimmick() {
 	BalanceHandle = MV1LoadModel("res/Balance/Motion/Balance_GEONew.mv1");
-	SanHandle = MV1LoadModel("res/Balance/Motion/Balance_San.mv1");
-	LkaHandle = MV1LoadModel("res/Balance/Motion/Balance_Lka.mv1");
 	SanHitFlag = false;
 	LkaHitFlag = false;
 	balance = BALANCE::EQUAL;
@@ -13,7 +18,6 @@ Gimmick::Gimmick() {
 	AttachAnimLKA = -1;
 	BlendRate = 0;
 	BalanceFlag = false;
-	EnumFlag = false;
 }
 
 void Gimmick::Initialize()
@@ -36,6 +40,7 @@ void Gimmick::Process() {
 
 void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
+	//天秤の皿の上の位置（プレイヤーの動きのため）の取得
 	SANDisk = MV1GetFramePosition(BalanceHandle, 26);
 	LKADisk = MV1GetFramePosition(BalanceHandle, 25);
 
@@ -43,15 +48,11 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 
 	BALANCE oldBalance = balance;
 
-	if (balance != oldBalance) {
-		EnumFlag = true;
-	}
-
 	if (EnumFlag) {
 		oldBalance = balance;
-		EnumFlag = false;
 	}
 
+	//タイプによって傾く向きを変える（モーションのブレンド率が変わる）
 	switch (balance)
 	{
 	case Gimmick::BALANCE::SAN:
@@ -82,6 +83,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 			break;
 		}
 	}
+	    //モーションのブレンド率を決定している
 		BlendRate = abs(BalancePer);
 		
 
@@ -111,7 +113,7 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		}
 
 		if (oldBalance == balance) {
-			PlayBalance += 1.0f;
+			
 		}
 		else {
 			// アニメーションがアタッチされていたら、デタッチする
@@ -155,7 +157,8 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 		else {
 
 		}
-			
+		
+		//タイプに応じてもしょんをブレンド率に応じてブレンドする
 		MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnim1, 1.0f - abs(BalancePer));
 		MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimSAN, abs(min(BalancePer, 0.0)));
 		MV1SetAttachAnimBlendRate(BalanceHandle, AttachAnimLKA, max(BalancePer, 0.0));
@@ -164,17 +167,6 @@ void Gimmick::Balance(VECTOR SanPos, VECTOR LkaPos) {
 	}
 
 
-float Gimmick::GetPolyMaxY(MV1_COLL_RESULT_POLY* Dim, int num) {
-	float MaxY = FLT_MIN;
-	for (auto i = 0; i < num; ++i) {
-		for (auto j = 0; j < 3; ++j) {
-			if (MaxY < Dim[i].Position[j].y) {
-				MaxY = Dim[i].Position[j].y;
-			}
-		}
-	}
-	return MaxY;
-}
 
 void Gimmick::Render() {
 	MV1SetPosition(BalanceHandle, VGet(50.0f, 700.0f, 7650.0f));

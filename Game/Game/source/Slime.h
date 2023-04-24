@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   Slime.h
+ * \brief  スライムの動作全般
+ * 
+ * \author 土屋　涼乃
+ * \date   December 2022
+ *********************************************************************/
 #pragma once
 #include "AppFrame.h"
 #include <string>
@@ -13,12 +20,12 @@ public:
 	void Terminate();
 	void Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, int mypH);
 	void Render(int pH);
-	void AcidWalk(float speed);
-	void AlkaliWalk(float speed);
-	void SanTargeting(VECTOR SanPos, float speed);
-	void LkaTargeting( VECTOR LkaPos, float speed);
-	void AcidJump(VECTOR SanPos);
-	void AlkaliJump(VECTOR LkaPos);
+	void AcidWalk(float speed);//酸性スライムの巡回
+	void AlkaliWalk(float speed);//アルカリ性スライムの巡回
+	void SanTargeting(VECTOR SanPos, float speed);//アルカリ性スライムがサン（１P）を追いかける
+	void LkaTargeting( VECTOR LkaPos, float speed);//酸性スライムがルカ（２P）を追いかける
+	void AcidJump(VECTOR SanPos);//アルカリ性スライムがサン（１P）を攻撃する
+	void AlkaliJump(VECTOR LkaPos);//酸性スライムがルカ（２P）を攻撃する
 
 	void SetSan(SAN* san);
 	void SetLka(LKA* lka);
@@ -42,12 +49,12 @@ public:
 	int acidHandle;//酸性スライムのテクスチャ
 	int alkaliHandle;//アルカリ性スライムのテクスチャ
 
-	MV1_COLL_RESULT_POLY_DIM SANhitPolyDimAcid;
-	MV1_COLL_RESULT_POLY_DIM LKAhitPolyDimAlkali;
-	MV1_COLL_RESULT_POLY_DIM LKAhitPolyDimAcid;
-	MV1_COLL_RESULT_POLY_DIM SANhitPolyDimAlkali;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;
-	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;
+	MV1_COLL_RESULT_POLY_DIM SANhitPolyDimAcid;//酸性スライムと酸性ボムとの当たり判定
+	MV1_COLL_RESULT_POLY_DIM LKAhitPolyDimAlkali;//アルカリ性スライムとアルカリ性ボムとの当たり判定
+	MV1_COLL_RESULT_POLY_DIM LKAhitPolyDimAcid;//酸性スライムとアルカリ性ボムとの当たり判定
+	MV1_COLL_RESULT_POLY_DIM SANhitPolyDimAlkali;//アルカリ性スライムと酸性ボムとの当たり判定
+	MV1_COLL_RESULT_POLY_DIM hitPolyDim1;//アルカリ性スライムとサン（１P）との当たり判定
+	MV1_COLL_RESULT_POLY_DIM hitPolyDim2;//酸性スライムとルカ（２P）との当たり判定
 
 	MATRIX _rotationMatrix;
 
@@ -86,6 +93,7 @@ public:
 	SanBomb* _sanbomb;
 	LkaBomb* _lkabomb;
 protected:
+	//スライムの状態
 	enum class STATUS {
 		NONE,
 		ATTACK,

@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   Boss.h
+ * \brief  ボスの挙動全般
+ * 
+ * \author 土屋　涼乃
+ * \date   February 2023
+ *********************************************************************/
+
 #pragma once
 
 #include "appframe.h"
@@ -17,43 +25,38 @@ public:
 	void Process(Damage& damage);
 	void Render();
 
-	void Targeting(VECTOR sanPos, VECTOR lkaPos);
-	void Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int MapHandle);
-	void Capture();
-	void CaptureEnd();
-	void Rotation(VECTOR sanPos, VECTOR lkaPos);
-	void Walk();
-	void Crush();		//壁衝突時処理
-	void Search();
-	void Down();
-	void Idle();
-	void Pull();
-	void SwampSpawn(bool IsSan);
+	void Targeting(VECTOR sanPos, VECTOR lkaPos);//攻撃対象の決定、その方向へ向く
+	void Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int MapHandle);//突進攻撃
+	void Capture();//プレイヤーを捕まえて攻撃する
+	void CaptureEnd();//捕まえていたプレイヤーを離す
+	void Rotation(VECTOR sanPos, VECTOR lkaPos);//プレイヤーの方向を交互に向く
+	void Walk();//指定された場所に歩いていく
+	void Crush();//壁衝突時処理
+	void Search();//移動する場所を決める
+	void Down();//倒された時の処理
+	void Idle();//休憩モーション再生
+	void Pull();//壁から抜ける
+	void SwampSpawn(bool IsSan);//壁に衝突したときタイプに応じた沼を生成する
 
-	int Target;
-	VECTOR BossPos;
-	VECTOR BossSetDir;
-	VECTOR BossDir;
-	VECTOR RightHandPos;
-	VECTOR LeftHandPos;
-	VECTOR HandPos;
-	VECTOR AddPos;
-	VECTOR TargetDir;
-	VECTOR SphereCenter;
-	VECTOR BossPosition0;
+	VECTOR BossSetDir;//ボスが向く予定の方向
+	VECTOR BossDir;//ボスの向き
+	VECTOR HandPos;//ボスのはさみの座標
+	VECTOR AddPos;//ボスのはさみの中心に移動させるための座標
+	VECTOR SphereCenter;//ボスのはさみの中にあるキャラや壁との当たり判定をとるための級の中心座標
+	VECTOR BossPosition0;//BossPosition0からBossPosition3はボスが移動する場所
 	VECTOR BossPosition1;
 	VECTOR BossPosition2;
 	VECTOR BossPosition3;
-	//VECTOR SwampPos;
-	int handleBaseSan;
-	int handleBaseLka;
+	int handleBaseSan;//酸性の沼のハンドル
+	int handleBaseLka;//アルカリ性の沼のハンドル
 	VECTOR swampDir;
 	VECTOR swampDegreeDir;
-	int SwampCnt;
+	int SwampCnt;//沼を出す回数
 
-	MATRIX rotationMatrix;
-	VECTOR forward;
+	MATRIX rotationMatrix;//ボスの向きを出す行列
+	VECTOR forward;//ボスの向き
 
+	//ボスの状態
 	enum class BOSSTYPE {
 		NONE,
 		RUSH,
@@ -70,14 +73,15 @@ public:
 
 	BOSSTYPE type;
 
+	//ボスのタイプ
 	enum class PH {
 		ACID,
 		ALKALI,
 		NONE,
 	};
 
-	PH phType;
-	PH oldphType;
+	PH phType;//ボスのタイプ
+	PH oldphType;//ボスの前のタイプ
 	
 	int RotateCount;//回転する時間
 	int WaitCount;//ため攻撃のモーションのカウント
@@ -88,20 +92,16 @@ public:
 	int EndCount;//捕まえた後の時間
 	int DownCount;//やられた時の時間
 	int BossHP;//ボスの体力
-	int BossMaxHP;
-	int HPhandle;
-	int iconhandle;
-	int BGhandle;
-	int flamehandle;
-	float PlayTime;
-	int randomNum;
-	int walkRand;
-	int walkTimeCount;
+	int BossMaxHP;//ボスの最大体力
+	int HPhandle;//ボスのHPの画像のハンドル
+	int iconhandle;//ボスのアイコンのハンドル
+	int BGhandle;//ボスのHP乃ベースのハンドル
+	int flamehandle;//ボスHPフレームのハンドル
 
 	int BossSuck;	//ボス吸引時SE
 	int BossSearch; //ボス探知時SE
-	bool BossSuckflag = false;
-	bool BossSearchflag = false;
+	bool BossSuckflag = false;//ボスの吸引サウンドを再生するために一度だけTRUEになるフラグ
+	bool BossSearchflag = false;//ボスの探知サウンドを再生するために一度だけTRUEになるフラグ
 
 	float StopDir;//回転が止まる誤差
 	float StopPos;//止まる場所の誤差

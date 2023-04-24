@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   Boss.cpp
+ * \brief  ボスの挙動全般
+ * 
+ * \author 土屋　涼乃
+ * \date   February 2023
+ * \details SwampSpawn(bool IsSan)のみauthor 磯島　武尊
+ *********************************************************************/
 #include "SANclass.h"
 #include "LKAclass.h"
 
@@ -7,7 +15,6 @@ void Boss::Initialize() {
 	model.dir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	StopDir = 0.03;
 	StopPos = 200.f;
-	TargetDir = VGet(0, 0 * DX_PI_F / 180.0f, 0);
 	rotate = 0;
 	rotateFlag = true;
 	walkFlag = false;
@@ -18,8 +25,6 @@ void Boss::Initialize() {
 	searchFlag = false;
 	downFlag = false;
 	bossdownEf = false;
-	walkTimeCount = 0;
-	walkRand = 0;
 	CrushCount = 0;
 	PullCount = 0;
 	WaitCount = 0;
@@ -75,6 +80,7 @@ void Boss::Process(Damage& damage) {
 	rotationMatrix = MMult(MMult(MGetRotX(model.dir.x), MGetRotY(model.dir.y)), MGetRotZ(model.dir.z));
 	forward = VTransform({ 0.0f,0.0f,-1.0f }, rotationMatrix);
 
+	//タイプによって次の行動を指定している
 	switch (type) {
 	case BOSSTYPE::NONE:
 		type = BOSSTYPE::ROTATION;
@@ -115,7 +121,7 @@ void Boss::Process(Damage& damage) {
 
 	}
 	else {
-
+		//タイプによってアタッチするアニメーションを指定している
 		switch (type) {
 		case BOSSTYPE::RUSH:
 			manager->animChange(8, &model, false, false, false);//突進前モーションをアタッチする
@@ -173,6 +179,7 @@ void Boss::Process(Damage& damage) {
 	damage.SwampColl(swamps);
 }
 
+//プレイヤーの方向に交互に向く
 void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
 	if (rotateFlag) {
 		if (!BossSearchflag)
@@ -210,6 +217,7 @@ void Boss::Rotation(VECTOR sanPos, VECTOR lkaPos) {
 	}
 }
 
+//突進攻撃する対象を決定し、その方向へ向く
 void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 	if (targetFlag) {
 		float San = VSize(VSub(sanPos, model.pos));
@@ -236,7 +244,7 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 		xz = -65.8f;
 	}
 	model.dir.y += 0.02f * dir;
-	swampDir.y += xz /*dir * 65.9f*/;
+	swampDir.y += xz;
 	//model.dir.y = fmod(model.dir.y, 2 * DX_PI);//一周したらdir.yを0に戻す
 	if (StopDir > VCross(forward, BossDir).y) {
 		rushFlag = true;
@@ -244,6 +252,7 @@ void Boss::Targeting(VECTOR sanPos, VECTOR lkaPos) {
 	}
 }
 
+//指定された範囲まで歩く
 void Boss::Walk() {
 	model.pos = VAdd(VScale(forward, 4.f), model.pos);
 	//type = BOSSTYPE::WALK;
@@ -253,6 +262,7 @@ void Boss::Walk() {
 
 }
 
+//休憩モーションのみ
 void Boss::Idle() {
 	IdleCount += 1;
 	if (IdleCount == 240) {
@@ -262,6 +272,7 @@ void Boss::Idle() {
 	}
 }
 
+//Targetingで決まった方向へ突進し、プレイヤーを捕まえたら攻撃、壁に当たったら激突状態になる
 void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int MapHandle) {
 	MV1RefreshCollInfo(model.modelHandle, 2);
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
@@ -311,13 +322,15 @@ void Boss::Rush(VECTOR sanPos, VECTOR lkaPos, int SanHandle, int LkaHandle, int 
 
 }
 
-void Boss::Crush() {				//壁衝突時処理
+//壁衝突時処理、この間に攻撃を受けたらダメージを受けて壁から抜ける、HP下０以下になったら倒される
+void Boss::Crush() {				
 	MV1RefreshCollInfo(model.modelHandle, 2);
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimSan;
 	MV1_COLL_RESULT_POLY_DIM hitPolyDimLka;
 	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 2, sanB->vPos, sanB->sphereMax);
 	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 2, lkaB->vPos, lkaB->sphereMax);
 
+	//ボスのタイプとボムのタイプによってダメージ量が変化する
 	if (sanB->situation == sanB->PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1) {
 		AttackedFlag = true;
 		bosshitEf = true;
@@ -361,6 +374,7 @@ void Boss::Crush() {				//壁衝突時処理
 		oldphType = PH::NONE;
 	}
 	CrushCount += 1;
+	//ダメージを受けるか時間経過で壁から抜ける
 	if (CrushCount >= 240 || AttackedFlag) {
 		CrushCount = 0;
 		AttackedFlag = false;
@@ -371,8 +385,8 @@ void Boss::Crush() {				//壁衝突時処理
 	}
 }
 
+//次に移動する場所を決め、その方向に向く
 void Boss::Search() {
-	//int num;
 	if (searchFlag) {
 		int num = GetRand(3);
 		searchFlag = false;
@@ -412,6 +426,7 @@ void Boss::Search() {
 
 }
 
+//壁から抜ける
 void Boss::Pull() {
 	PullCount += 1;
 	if (PullCount > 60) {
@@ -425,6 +440,7 @@ void Boss::Pull() {
 	}
 }
 
+//プレイヤーを捕まえてダメージを与える
 void Boss::Capture() {
 	if (!BossSuckflag)
 	{
@@ -448,6 +464,7 @@ void Boss::Capture() {
 	hitPolyDimSan = MV1CollCheck_Sphere(model.modelHandle, 2, sanB->vPos, sanB->sphereMax);
 	hitPolyDimLka = MV1CollCheck_Sphere(model.modelHandle, 2, lkaB->vPos, lkaB->sphereMax);
 
+	//ボスのタイプとボムのタイプによってダメージ量が変化する
 	if (sanB->situation == sanB->PlayerBomb::Throw && hitPolyDimSan.HitNum >= 1) {
 		AttackedFlag = true;
 		bosshitEf = true;
@@ -518,6 +535,7 @@ void Boss::Capture() {
 		BossSuckflag = false;
 		type = BOSSTYPE::CAPTUREEND;
 	}
+	//ダメージを受けるとキャラを離す
 	if (AttackedFlag) {
 		CaptureCount = 0;
 		AttackedFlag = false;
@@ -530,7 +548,7 @@ void Boss::Capture() {
 
 }
 
-
+//捕まえていたキャラクターを離す
 void Boss::CaptureEnd() {
 	EndCount += 1;
 	if (EndCount > 45) {
@@ -544,6 +562,7 @@ void Boss::CaptureEnd() {
 	}
 }
 
+//倒された時のモーション
 void Boss::Down() {
 	DownCount += 1;
 	if (DownCount == 459) {
@@ -551,6 +570,7 @@ void Boss::Down() {
 	}
 }
 
+//ボスが壁に刺さった時、自身のタイプに対応したダメージ床をばらまく
 void Boss::SwampSpawn(bool IsSan)
 {
 	bool top = false;

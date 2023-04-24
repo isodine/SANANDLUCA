@@ -1,8 +1,14 @@
+/*****************************************************************//**
+ * \file   Damage.cpp
+ * \brief  プレイヤーのダメージ判定全般
+ * 
+ * \author 土屋　涼乃
+ * \date   January 2023
+ * \details　SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)のみ、author 磯島　武尊
+ *********************************************************************/
 #include "Damage.h"
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
 #include "time.h"
-//#include "ModeGame.h"
 
 
 Damage::Damage() {
@@ -35,7 +41,6 @@ void Damage::Initialize(SAN* san, LKA* lka) {
 	SanSlimeHitFlag = false;
 	LkaSlimeHitFlag = false;
 
-	stageHandle = san->stageHandle;
 
 	MV1SetupCollInfo(San->Mhandle, 3, 8, 8, 8);
 	MV1SetupCollInfo(Lka->Mhandle, 8, 8, 8, 8);
@@ -55,6 +60,7 @@ void Damage::Process() {
 
 	Distance = VSize(VSub(VGet(Lka->vPos.x, Lka->vPos.y + 50, Lka->vPos.z), VGet(San->vPos.x, San->vPos.y + 50, San->vPos.z)));
 
+	//プレイヤー同士が近づくと距離に応じてダメージを受ける
 	if (Distance < 85 && SanHitFlag == false && LkaHitFlag == false) {
 		San->HP -= 2;
 		Lka->HP -= 2;
@@ -82,6 +88,7 @@ void Damage::Process() {
 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK); 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK);
 		PlaySoundFile("res/06_Sound/03_SE/san_lka_damege.mp3", DX_PLAYTYPE_BACK);
 	}
+	//ボムを受けるとダメージを受ける
 	if ((HitPolyLkaBomb.HitNum >= 1) && !SanHitFlag) {
 		San->HP -= 1;
 		SanHitFlag = true;
@@ -96,6 +103,7 @@ void Damage::Process() {
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
+	//ダメージを受けた後のクールタイム（１秒）
 	if (SanHitFlag == true) {
 		SanCoolTime += 1;
 	}
@@ -115,6 +123,7 @@ void Damage::Process() {
 	}
 }
 
+//スライムに触れるとダメージを受ける
 void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
 	if (slimes[0]->lkaHitFlag && !LkaSlimeHitFlag) {
 		Lka->HP -= 1;
@@ -128,6 +137,8 @@ void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
 		StartJoypadVibration(DX_INPUT_PAD1, 750, 300, -1);
 		PlaySoundMem(VOICEdamageSAN[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
+
+	//ダメージを受けた後のクールタイム（２秒）
 	if (SanSlimeHitFlag == true) {
 		SanCoolTime += 1;
 	}
@@ -147,6 +158,7 @@ void Damage::SlimeDamage(std::vector<std::unique_ptr<Slime>>& slimes) {
 	}
 }
 
+//ステージに配置されている沼によるダメージ判定
 void Damage::StageDamage(int StageHandle) {
 	HitPolySan = MV1CollCheck_Capsule(StageHandle, 3, VGet(San->vPos.x, San->vPos.y + 30, San->vPos.z), VGet(San->vPos.x, San->vPos.y + 75, San->vPos.z), 30.0f);
 	HitPolyLka = MV1CollCheck_Capsule(StageHandle, 2, VGet(Lka->vPos.x, Lka->vPos.y + 30, Lka->vPos.z), VGet(Lka->vPos.x, Lka->vPos.y + 75, Lka->vPos.z), 30.0f);
@@ -165,6 +177,7 @@ void Damage::StageDamage(int StageHandle) {
 		PlaySoundMem(VOICEdamageLKA[GetRand(1)], DX_PLAYTYPE_BACK, true);
 	}
 
+	//ダメージを受けた後のクールタイム（１秒）
 	if (SanFloorHitFlag == true) {
 		SanCoolTime += 1;
 	}
@@ -207,6 +220,7 @@ void Damage::Render() {
 
 }
 
+//ボスの出した沼に当たった時のダメージ判定
 void Damage::SwampColl(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 {
 	for (int i = 0; i < swamps.size(); i++)

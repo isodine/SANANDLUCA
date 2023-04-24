@@ -1,3 +1,12 @@
+/*****************************************************************//**
+ * \file   Slime.cpp
+ * \brief  スライムの動作全般
+ *
+ * \author 土屋　涼乃
+ * \date   December 2022
+ * \details December 2022以降に大幅改変あり
+ *********************************************************************/
+
 void Slime::Initialize(float x, float y, float z, int pH) {
 	PlayTime = 0.0f;
 	slimePos = VGet(x, y, z);
@@ -87,6 +96,7 @@ void Slime::Process(VECTOR SanPos, VECTOR LkaPos, int HandleMap, float speed, in
 		forward = { 0,0,0 };
 	}
 	
+	//タイプとボムの種類によってダメージを受ける
 	if(mypH == 2 && !alkaliDieFlag){
 		SANhitPolyDimAlkali = MV1CollCheck_Sphere(slimeHandle, 2, _sanbomb->vPos, _sanbomb->sphereSize);
 		LKAhitPolyDimAlkali = MV1CollCheck_Sphere(slimeHandle, 2, _lkabomb->vPos, _lkabomb->sphereSize);
