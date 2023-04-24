@@ -1,19 +1,25 @@
 #pragma once
 #include "PlayerBomb.h"
 
+//サンのボムのクラス
 class SanBomb :public PlayerBomb
 {
 public:
 	SanBomb();
 	~SanBomb();
+	//初期化処理
 	void Initialize(SAN& san);
+	//更新処理
 	void Update(SAN& san);
+	//削除処理
 	void Terminate();
+	//描画処理
 	void Render();
-	void Move();
+	//球の移動処理
 	void Throw(SAN& san);
+	//ボムの消去
 	void Bombdead();
-	void bombthrow();
+
 	void EffectReset();
 private:
 	int _effectResourceHandle[2];		// エフェクトファイルをロードするハンドル
@@ -26,5 +32,5 @@ private:
 	int _KeyEf, _TrgEf;
 	float _hight, _throw;
 	float _position_x, _position_y, _position_z;
-	bool Isbombdead;
+	bool Isbombdead;					//消去通知
 };

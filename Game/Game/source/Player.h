@@ -9,6 +9,7 @@ class Damage;
 class Gimmick;
 class IronDoor;
 
+//プレイヤー共通のクラス
 class Player
 {
 public:
@@ -32,14 +33,23 @@ public:
 
 	Player();
 	~Player();
+	//初期化処理
 	virtual void Initialize();
+	//更新処理
 	virtual void Update(std::vector<std::unique_ptr<IronDoor>>* irondoors);
+	//削除処理
 	virtual void Terminate();
+	//描画処理
 	virtual void Render();
+	//ジャンプ処理
 	virtual void Jump();
+	//自由落下処理
 	virtual void freeFall();
+	//操作取得
 	virtual void Input();
+
 	void UpdateCollision();
+	//ノックバック処理
 	virtual void KnockBack();
 
 	int key;
@@ -94,17 +104,17 @@ public:
 
 
 	// 3Dモデル描画用
-	int Mhandle;
-	int Mattach_index;
+	int Mhandle;		//モデルデータ
+	int Mattach_index;	//モデルのアニメーションアタッチ番号
 	int BackCount;
-	float Mtotal_time;
-	float Mplay_time;
-	VECTOR vPos;	// 位置
-	VECTOR oldPos;  //前の位置
-	VECTOR vDir;	// 向き
+	float Mtotal_time;	//モデルのアニメーションの総再生時間
+	float Mplay_time;	//モデルのアニメーションの経過時間
+	VECTOR vPos;		//位置
+	VECTOR oldPos;		//前の位置
+	VECTOR vDir;		//向き
 	VECTOR v;
 	VECTOR knockBackDir;//ノックバックする向き
-	float _colSubY;	// コリジョン判定時のY補正(腰位置）
+	float _colSubY;		// コリジョン判定時のY補正(腰位置）
 
 	//ボム関連用
 	enum Attack
@@ -175,19 +185,19 @@ public:
 	int VOICEclearLKA = LoadSoundMem("res/06_Sound/02_Voice/01_In_Game/05_Game_Clear/Lka/Lka_Game_Clear_Voice_01.wav");    //〃
 
 	//ジャンプ処理用
-	float throughtime;
-	float height;
+	float throughtime;			//ジャンプ中の落下値
+	float height;				//ジャンプの上昇値
 
 	bool motionRes = false;
 	int HP;
-	bool goal = false;//TRUEならゴールした
+	bool goal = false;			//TRUEならゴールした
 
-	int Playercenter; //プレイヤーの中心をとる
-	int Playerhead; //プレイヤーの頭上をとる
+	int Playercenter;			//プレイヤーの中心をとる
+	int Playerhead;				//プレイヤーの頭上をとる
 	float Playerbombsize;
 	float Playercirclesize;
 
-	void Landing(float HitYPos);
+	void Landing(float HitYPos);//接地処理
 
 	//デバッグ表示用
 	bool debagMode = false;
