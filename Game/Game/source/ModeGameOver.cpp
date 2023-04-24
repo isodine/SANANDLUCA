@@ -1,8 +1,5 @@
 #include "AppFrame.h"
 #include "ModeGameOver.h"
-#include "ModeStage1.h"
-#include "ModeStage2.h"
-#include "ModeStage3.h"
 #include "ModeBoss.h"
 #include "ModeTitle.h"
 

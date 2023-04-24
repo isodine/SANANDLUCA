@@ -16,6 +16,6 @@ private:
 	int oldcount;//サークルの再生時間管理
 	bool Iscircle;//サークルは出現しているか
 	int IsPlaying;//サークルは再生されているか
-
+	int cautionHandle;
 
 };
