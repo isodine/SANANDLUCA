@@ -69,7 +69,6 @@ void SanBomb::Update(SAN& san)
 			_playingEffectHandle[0] = PlayEffekseer3DEffect(_effectResourceHandle[0]);
 			// 再生中のエフェクトを移動する。
 			SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], vPos.x, vPos.y, vPos.z);
-	/*		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[0], 10.0f, 10.0f, 10.0f);*/
 		}
 		bomblive = true;
 		if (sphereSize <= sphereMax)

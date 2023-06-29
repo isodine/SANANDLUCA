@@ -4,7 +4,7 @@
  * @author 磯島武尊
  * @date December 2022
  * 
- * @note HPゲージ周りは	@author 田原魁人
+ * @note HPゲージ周りは	@author 田原魁人 ,	ノックバックは	@author 土屋涼乃
  */
 
 #pragma once

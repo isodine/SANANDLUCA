@@ -50,6 +50,5 @@ void BossSwamp::CollCheck(std::vector<std::unique_ptr<BossSwamp>>& swamps)
 			neutralization = true;
 			swamps[i]->neutralization = true;
 		}
-		//else{ neutralization = false; }
 	}
 }

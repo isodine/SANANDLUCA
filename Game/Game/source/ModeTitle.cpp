@@ -1,7 +1,5 @@
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
 #include "ModeTitle.h"
-//#include "ModeGame.h"
 #include "ModeStage0.h"
 #include "ModeRule.h"
 

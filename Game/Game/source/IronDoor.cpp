@@ -27,10 +27,6 @@ void IronDoor::Initialize(bool type, VECTOR Pos)
 		handleIronDoor = MV1LoadModel("res/02_Object_Model/iron__Door/Alc_iron/Irondoor_melt_A.mv1");
 		handleIronMeltDoor = MV1LoadModel("res/02_Object_Model/iron__Door/Alc_iron_melt/Irondoor_melt_A.mv1");
 	}
-/*	type ? handleIronDoor = MV1LoadModel("res/02_Object_Model/iron__Door/San_iron/Irondoor_S.mv1"),
-			  handleIronMeltDoor = MV1LoadModel("res/02_Object_Model/iron__Door/Alc_iron_melt/Irondoor_melt_A.mv1") :
-			  handleIronDoor = MV1LoadModel("res/02_Object_Model/iron__Door/Alc_iron/Irondoor_melt_A.mv1"),
-			  handleIronMeltDoor = MV1LoadModel("res/02_Object_Model/iron__Door/San_iron_melt/Irondoor_melt_S.mv1");*/ /*Alc_iron_melt / Irondoor_melt_A*/
 	MV1SetPosition(handleIronDoor, Pos);
 	MV1SetPosition(handleIronMeltDoor, Pos);
 	MV1SetScale(handleIronDoor, VGet(1.5f, 1.5f, 1.5f));
@@ -43,7 +39,6 @@ void IronDoor::Initialize(bool type, VECTOR Pos)
 
 void IronDoor::Update(SanBomb& sanbomb, LkaBomb& lkabomb)
 {
-	//if (melt) { return; }
 	if(isSan)
 	{
 		auto hitPolyDim{ MV1CollCheck_Sphere(handleIronDoor, handleCol, lkabomb.vPos, lkabomb.sphereSize) };

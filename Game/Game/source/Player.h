@@ -102,9 +102,6 @@ public:
 	};
 	STATUS _status;
 	STATUS oldStatus;
-	//Camera _cam;
-
-	//std::unique_ptr<Camera> cam = std::make_unique<Camera>();
 
 	int Key1P, Key2P;
 	int Trg1P, Trg2P;

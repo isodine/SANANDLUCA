@@ -78,9 +78,6 @@ public:
 	bool respawn2nd = false;
 	VECTOR respawn2ndPosSan;
 	VECTOR respawn2ndPosLka;
-	//bool respawn3rd = false;
-	//VECTOR respawn3rdPosSan;
-	//VECTOR respawn3rdPosLka;
 
 	int LightHandle;
 	int MaskHandle;

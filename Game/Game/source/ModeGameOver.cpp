@@ -52,16 +52,6 @@ bool ModeGameOver::Process() {
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	}
-	//IsPlayingGameOver = GetMovieStateToGraph(Gameoverhandle);
-	//IsPlayingTimeUp = GetMovieStateToGraph(TimeUphandle);
-	//if (IsPlayingGameOver == 0)
-	//{
-	//	PauseMovieToGraph(Gameoverhandle);
-	//}
-	//else if (IsPlayingTimeUp == 0)
-	//{
-	//	PauseMovieToGraph(TimeUphandle);
-	//}
 	return true;
 }
 

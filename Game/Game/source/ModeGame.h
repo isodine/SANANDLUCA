@@ -53,10 +53,6 @@ public:
 
 
 	// 3Dモデル描画用
-	//int _handle;
-	//int _attach_index;
-	//float _total_time;
-	//float _play_time;
 	VECTOR _vPos;	// 位置
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
@@ -124,7 +120,6 @@ public:
 	Lkacircle lkacircle;
 	Damage damage;
 	Gimmick gimmick;
-	//Slime slime;
 	IronDoor irondoor;
 	Electrode electrode;
 	Elevator elevator;

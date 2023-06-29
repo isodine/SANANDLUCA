@@ -1,5 +1,4 @@
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
 #include "ModeLogo.h"
 #include "ModeTitle.h"
 

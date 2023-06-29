@@ -108,10 +108,6 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 	}
 	else {}
 
-	//if (key & PAD_INPUT_5) {	//多分L1ボタン
-	//	PlaySoundMem(VOICEpose[GetRand(1)], DX_PLAYTYPE_BACK, true);
-	//	WaitKey();
-	//}
 	{
 
 		
@@ -136,7 +132,6 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 				mypH == San ? PlaySoundMem(VOICEjumpSAN[GetRand(3)], DX_PLAYTYPE_BACK, true) : PlaySoundMem(VOICEjumpLKA[GetRand(3)], DX_PLAYTYPE_BACK, true);
 			}
 		}
-		//if (key & PAD_INPUT_10) { _status = STATUS::DOWN; }
 
 		if (_bomb->situation == None) { attack = Attack::None; }
 		if (trg & PAD_INPUT_6 && (attack == Attack::None)) {
@@ -242,9 +237,7 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 					Landing(hitPolyElevator.HitPosition.y);
 				}
 			}
-			else {
-				//freeFall();
-			}
+			else {}
 
 			//チューブとの当たり判定
 			for (auto i = 0; i < 3; i++) {
@@ -300,17 +293,6 @@ void Player::Update(std::vector<std::unique_ptr<IronDoor>>* irondoors)
 				}
 				break;
 			}
-			//hitPolyIronDoor = MV1CollCheck_Line(ironDoorHandle, ironDoorCol,
-			//	VAdd(vPos, VGet(0, _colSubY, -50)), VAdd(vPos, VGet(0, _colSubY, 500.f)));
-			//if (hitPolyIronDoor.HitFlag && (vPos.z + 30 >= hitPolyIronDoor.HitPosition.z)) {
-			//	float subX = vPos.x - oldvPos.x;
-			//	float subZ = vPos.z - oldvPos.z;
-			//	vPos.x = oldvPos.x;
-			//	vPos.z = oldvPos.z;
-
-			//	v = { 0,0,0 };
-			//}
-
 		}
 
 
@@ -485,9 +467,7 @@ void Player::Render()
 
 void Player::Landing(float HitYPos) {
 	_status = STATUS::WAIT;
-	//oldStatus = STATUS::WAIT;
 	throughtime = 0.0f;
-	//float minusY = vPos.y;
 	// 当たったY位置をキャラ座標にする
 	vPos.y = HitYPos - 0.5f;
 }

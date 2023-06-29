@@ -1,6 +1,4 @@
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
-//#include "ModeGame.h"
 #include "ModeGameOver.h"
 
 namespace {
@@ -35,8 +33,6 @@ ModeBoss::ModeBoss() : ModeBase()
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
-	/*MV1SetFrameVisible(_handleMap, 0, FALSE);
-	MV1SetFrameVisible(_handleMap, 1, FALSE);*/
 
 	// その他初期化
 	_bViewCollision = FALSE;
@@ -72,6 +68,7 @@ bool ModeBoss::Initialize() {
 	frameMapCollisionwall = MV1SearchFrame(_handleMap, "coStage_wall1");
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
 	MV1SetupCollInfo(_handleMap, frameMapCollisionwall, 16, 16, 16);
+
 	// コリジョンのフレームを描画しない設定
 	MV1SetFrameVisible(_handleMap, frameMapCollisionfloor, FALSE);
 	MV1SetFrameVisible(_handleMap, frameMapCollisionwall, FALSE);
@@ -112,7 +109,8 @@ bool ModeBoss::Initialize() {
 	damage.Initialize(&san, &lka);
 	damage.SetBomb(&sanbomb, &lkabomb);
 	damage.stageFlag = false;
-	//enemy.Initialize();
+
+
 	//CSVによる初期化（レベルデザイン時に実装）
 
 	std::ifstream ifs("res/test.csv");
@@ -161,40 +159,6 @@ bool ModeBoss::Initialize() {
 		}
 		cnt++;
 	}
-
-	//std::ifstream ifs2("res/SALKApH.csv");
-
-	//std::string line2;
-	//std::vector<std::string> strresult2;
-	//std::vector<int> intresult2;
-	//int hp;
-	//int cntt = 0;
-	//while (std::getline(ifs2, line2)) {
-
-	//	std::vector < std::string > strvec = splitme(line2, ',');
-
-	//	for (int i = 0; i < strvec.size(); i++) {
-	//		int readInteger = atoi(strvec.at(i).c_str());
-	//		if (readInteger != 0 || (strlen(strvec.at(i).c_str()) == 1 && strvec.at(i).c_str()[0] == '0'))
-	//		{
-	//			std::cout << readInteger << "\n";
-	//			intresult2.push_back(readInteger);
-	//			if (i == 1) {
-	//				hp = readInteger;
-
-	//				if (cntt == 1) { san.HP = hp; }
-	//				else if (cntt == 2) { lka.HP = hp; }
-
-	//			}
-	//		}
-	//		else
-	//		{
-	//			std::cout << strvec.at(i) << "\n";
-	//			strresult2.push_back(strvec.at(i));
-	//		}
-	//	}
-	//	cntt++;
-	//}
 
 	PlayMusic("res/06_Sound/01_BGM/88_BOSS/Gemini01.mp3", DX_PLAYTYPE_LOOP);
 
@@ -309,7 +273,6 @@ bool ModeBoss::Render() {
 		MV1DrawModel(_handleSkySphere);
 
 		MV1DrawModel(_handleMap);
-		//DrawMask(0, 0, MaskHandle, DX_MASKTRANS_BLACK);
 	}
 	boss.Render();
 	san.Render(damage);

@@ -1,7 +1,5 @@
 
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
-//#include "ModeGame.h"
 #include "ModeGameOver.h"
 
 std::vector<std::string> splitme(std::string& input, char delimiter)
@@ -24,8 +22,8 @@ ModeGame::ModeGame() : ModeBase()
 	_handleSkySphere = MV1LoadModel("res/SkySphia/sky.mv1");
 
 	// コリジョン情報の生成
-	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
-	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
+	frameMapCollisionfloor = 0;
+	frameMapCollisionwall = 1;
 	frameMapCollisiongoalSAN = 4;
 	frameMapCollisiongoalLKA = 5;
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
@@ -37,9 +35,6 @@ ModeGame::ModeGame() : ModeBase()
 	MV1SetFrameVisible(_handleMap, 2, FALSE);
 	MV1SetFrameVisible(_handleMap, 3, FALSE);
 
-	////マスクの試験運用
-	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	//CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
 	_cam._vPos = VGet(0, 700.f, -900.f);
@@ -51,14 +46,6 @@ ModeGame::ModeGame() : ModeBase()
 	ShadowMapUpVec = VGet(-500.f, -1000.f, -1000.f);     //サン側想定
 	ShadowMapDownVec = VGet(500.f, 1000.f, 1000.f);      //ルカ側想定
 
-	//フォグを使ってみる
-	//SetFogEnable(TRUE);
-
-	// フォグの色を設定
-	//SetFogColor(255, 255, 255);
-
-	// フォグの開始距離、終了距離を設定
-	//SetFogStartEnd(0.0f, 3000.0f);
 
 	// その他初期化
 	_bViewCollision = FALSE;
@@ -68,15 +55,14 @@ ModeGame::ModeGame() : ModeBase()
 }
 
 bool ModeGame::Initialize() {
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	if (!base::Initialize()) { return false; }
 	// マップ
 	_handleMap = MV1LoadModel("res/07_Stage_map/01_Stage/Stage_01.fbm/Stage_01.mv1");
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 	_handleSkySphere = MV1LoadModel("res/07_Stage_map/00_Stage/00SkyCube_B/sky.mv1");
 	// コリジョン情報の生成
-	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
-	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
+	frameMapCollisionfloor = 0;
+	frameMapCollisionwall = 1;
 	frameMapCollisiongoalSAN = 4;
 	frameMapCollisiongoalLKA = 5;
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
@@ -117,9 +103,6 @@ bool ModeGame::Initialize() {
 	Isgamestart = true;
 	gameovercount = 0;
 	gamestartcount = 19;
-	////マスクの試験運用
-	//MaskHandle = LoadMask("res/San_Lka_Mask.png");
-	//CreateMaskScreen();
 
 	// カメラの設定（わかりやすい位置に）
 	_cam._vPos = VGet(0, 700.f, -900.f);
@@ -150,28 +133,6 @@ bool ModeGame::Initialize() {
 	respawn2ndPosSan = VGet(-84.f, 529.f, 6296.f);
 	respawn2ndPosLka = VGet(153.f, 529.f, 6296.f);
 
-	//auto IronDoor1 = std::make_unique<IronDoor>();
-	//IronDoor1->Initialize(false, VGet(-100.0f, 70.0f, 1100.0f));
-	////MV1SetupCollInfo(IronDoor1->handleIronMeltDoor, IronDoor1->handleCol, 2, 2, 2);
-	//irondoors.emplace_back(std::move(IronDoor1));
-
-	//auto IronDoor2 = std::make_unique<IronDoor>();
-	//IronDoor2->Initialize(true, VGet(200.0f, 70.0f, 900.0f));
-	////MV1SetupCollInfo(IronDoor2->handleIronMeltDoor, IronDoor2->handleCol, 2, 2, 2);
-	//irondoors.emplace_back(std::move(IronDoor2));
-
-	//electrode.Initialize(VGet(200.f, 70.f, 1000.f), false);
-	//elevator.Initialize();
-	//MV1SetupCollInfo(elevator.handle, elevator.handleCol, 4, 4, 4);
-
-	//auto Tube1 = std::make_unique<Tube>();
-	//Tube1->Initialize(0, VGet(-113.f, 301.f, 3389.f));
-	//MV1SetupCollInfo(Tube1->handle, tube.handleCol, 4, 4, 4);
-	//san.tubeCol[0] = tube.handleCol;
-	//lka.tubeCol[0] = tube.handleCol;
-	//san.tubeHandle[0] = Tube1->handle;
-	//lka.tubeHandle[0] = Tube1->handle;
-	//tubes.emplace_back(std::move(Tube1));
 
 	auto Tube2 = std::make_unique<Tube>();
 	Tube2->Initialize(1, VGet(-113.f, 301.f, 3389.f));
@@ -191,7 +152,6 @@ bool ModeGame::Initialize() {
 	lka.tubeHandle[2] = Tube3->handle;
 	tubes.emplace_back(std::move(Tube3));
 
-	//damage.SetGame(this);
 
 	timer.Initialize(8, 0, 80);
 
@@ -297,43 +257,9 @@ bool ModeGame::Initialize() {
 		cnt++;
 	}
 
-	//std::ifstream ifs2("res/SALKApH.csv");
-
-	//std::string line2;
-	//std::vector<std::string> strresult2;
-	//std::vector<int> intresult2;
-	//int hp;
-	//int cntt = 0;
-	//while (std::getline(ifs2, line2)) {
-
-	//	std::vector < std::string > strvec = splitme(line2, ',');
-
-	//	for (int i = 0; i < strvec.size(); i++) {
-	//		int readInteger = atoi(strvec.at(i).c_str());
-	//		if (readInteger != 0 || (strlen(strvec.at(i).c_str()) == 1 && strvec.at(i).c_str()[0] == '0'))
-	//		{
-	//			std::cout << readInteger << "\n";
-	//			intresult2.push_back(readInteger);
-	//			if (i == 2) {
-	//				hp = readInteger;
-
-	//				if (cntt == 1) { san.HP = hp; }
-	//				else if (cntt == 2) { lka.HP = hp; }
-
-	//			}
-	//		}
-	//		else
-	//		{
-	//			std::cout << strvec.at(i) << "\n";
-	//			strresult2.push_back(strvec.at(i));
-	//		}
-	//	}
-	//	cnt++;
-	//}
 
 	//CSVの調整にカメラを追いつかせる
 	_cam._vPos.x += (san.vPos.x + lka.vPos.x) / 2.f;
-	//_cam._vPos.y += (san.vPos.y + lka.vPos.y) / 2.f;
 	if (san.vPos.y > lka.vPos.y) {
 		_cam._vPos.y += (lka.vPos.y);
 	}
@@ -357,9 +283,6 @@ bool ModeGame::Initialize() {
 
 	// シャドウマップへの描画の準備
 	ShadowMap_DrawSetup(ShadowMapHandle);
-
-	// シャドウマップへステージモデルの描画
-	//MV1DrawModel(_handleMap);
 
 	// シャドウマップへキャラクターモデルの描画
 	MV1DrawModel(san.Mhandle);
@@ -406,7 +329,6 @@ bool ModeGame::Process() {
 	lka.SetOnBalance(gimmick.GetLkaHitFlag());
 	gimmick.SanHitFlag = false;
 	gimmick.LkaHitFlag = false;
-	//gimmick.Balance(san.vPos, lka.vPos);
 	san.Update(damage, nullptr);
 	lka.Update(damage, nullptr);
 
@@ -435,12 +357,6 @@ bool ModeGame::Process() {
 
 	if (timer.timeup == true)
 	{
-		//if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0)) {
-		//	gameover.timeupFlag = false;
-		//}
-		//else if (timer.timeup == true) {
-		//	gameover.timeupFlag = true;
-		//}
 		Isgameover = true;
 		sanbomb.EffectReset();
 		sancircle.EffectReset();
@@ -499,21 +415,6 @@ bool ModeGame::Process() {
 	lkabomb.Update(lka);
 	sancircle.Update(san, lka);
 	lkacircle.Update(san, lka);
-	//if (!(irondoor.melt))
-	//{
-	//	irondoor.Update(sanbomb, lkabomb);
-	//	if (irondoor.melt)
-	//	{
-	//		san.ironDoorHandle = irondoor.handle;
-	//		lka.ironDoorHandle = irondoor.handle;
-	//	}
-	//}
-
-	//for (auto&& Irondoors : irondoors) {
-	//	if (!Irondoors->melt) {
-	//		Irondoors->Update(sanbomb, lkabomb);
-	//	}
-	//}
 
 	electrode.Update(sanbomb, lkabomb);
 	elevator.Update(electrode);
@@ -528,30 +429,6 @@ bool ModeGame::Process() {
 		// シャドウマップの削除
 		DeleteShadowMap(ShadowMapHandle);
 
-		//const char* dir("res/SALKApH.csv");
-		//std::vector<std::string> _data;
-		//fileIO::loadCSV(&_data, dir, false);
-		////san.HP = atoi(_data.at(3).c_str());
-		////lka.HP = atoi(_data.at(5).c_str());
-
-
-		////std::istringstream ss = std::istringstream(_data.at(3).c_str());
-		////int num = atoi(_data.at(3).c_str());
-		////ss >> num;
-		//_data[3] = std::to_string(san.HP);
-		//_data[5] = std::to_string(lka.HP);
-
-		//std::string insStr = "";
-		//for (auto insData : _data)
-		//{
-		//	insStr += insData;
-		//	if (insStr.size() == 3 || insStr.size() == 10 || insStr.size() == 17) { insStr += "\n"; }
-		//	else { insStr += ","; }
-		//	//if (insStr.size() == 2 || insStr.size() == 4) { insStr += "\n"; }
-		//}
-		//std::ofstream ofs(dir);
-		//ofs << insStr;
-		//ofs.close();
 		Terminate();
 		ModeServer::GetInstance()->Del(this);
 		ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
@@ -672,7 +549,6 @@ bool ModeGame::Render() {
 #endif
 	//マップのUVスクロール
 	_UVScroll_U += 0.001f;
-		//_UVScroll_V += 0.01f;
 	MV1SetFrameTextureAddressTransform(
 		_handleSkySphere	// モデルハンドル
 		, 0				// UV操作するフレーム番号
@@ -692,9 +568,7 @@ bool ModeGame::Render() {
 	for (auto&& Irondoors : irondoors) {
 		Irondoors->Render();
 	}
-	//irondoor.Render();
 	electrode.Render();
-	//elevator.Render();
 	for (auto&& Tubes : tubes) {
 		Tubes->Render();
 	}
@@ -716,11 +590,6 @@ bool ModeGame::Render() {
 
 void ModeGame::Respawn()
 {
-	//if (respawn3rd)
-	//{
-	//	san.vPos = respawn3rdPosSan;
-	//	lka.vPos = respawn3rdPosLka;
-	//}
 	if (respawn2nd)
 	{
 		san.vPos = respawn2ndPosSan;

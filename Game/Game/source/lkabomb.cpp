@@ -39,7 +39,6 @@ void LkaBomb::Update(LKA& lka)
 	if (lka.attack == Pop)
 	{
 		situation = PlayerBomb::Pop;
-		//bomblive = true;
 	}
 
 	if (lka.attack == Keep)
@@ -69,7 +68,6 @@ void LkaBomb::Update(LKA& lka)
 			_playingEffectHandle[0] = PlayEffekseer3DEffect(_effectResourceHandle[0]);
 			// 再生中のエフェクトを移動する。
 			SetPosPlayingEffekseer3DEffect(_playingEffectHandle[0], vPos.x, vPos.y, vPos.z);
-			/*		SetScalePlayingEffekseer3DEffect(_playingEffectHandle[0], 10.0f, 10.0f, 10.0f);*/
 		}
 		bomblive = true;
 		if (sphereSize <= sphereMax)
@@ -106,7 +104,6 @@ void LkaBomb::Update(LKA& lka)
 
 void LkaBomb::Render()
 {
-	//DrawSphere3D(vPos, sphereSize, 8, GetColor(255, 0, 0), GetColor(255, 255, 255), FALSE);
 	DrawEffekseer3D();
 }
 
@@ -121,7 +118,6 @@ void LkaBomb::Throw(LKA& lka)
 	{
 		vDir = VGet(0.f, 0.f, 0.f);
 		vDir = VAdd(vDir, lka.vDir);
-		//vDir.x = vDir.x * 2.f; vDir.y = vDir.y * 2.f; vDir.z = vDir.z * 2.f;
 		firstdir = true;
 	}
 	vPos = VAdd(vPos, vDir);

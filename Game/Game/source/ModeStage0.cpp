@@ -1,7 +1,5 @@
 
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
-//#include "ModeGame.h"
 #include "ModeGameOver.h"
 
 std::vector<std::string> splitme00(std::string& input, char delimiter)
@@ -28,8 +26,8 @@ bool ModeStage0::Initialize() {
 	MV1SetPosition(_handleMap, VGet(50.0f, 0.0f, 700.0f));
 
 	// コリジョン情報の生成
-	frameMapCollisionfloor = 0;  /*MV1SearchFrame(_handleMap, "Con_bot_pPlane6");*/
-	frameMapCollisionwall = 1;  /*MV1SearchFrame(_handleMap, "Con_tate_pPlane3");*/
+	frameMapCollisionfloor = 0;
+	frameMapCollisionwall = 1;
 	frameMapCollisiongoalSAN = 4;
 	frameMapCollisiongoalLKA = 5;
 	MV1SetupCollInfo(_handleMap, frameMapCollisionfloor, 16, 16, 16);
@@ -67,8 +65,6 @@ bool ModeStage0::Initialize() {
 	respawn2ndPosSan = VGet(-151.f, 73.f, 3937.f);
 	respawn2ndPosLka = VGet(146.f, 73.f, 3930.f);
 
-	//respawn3rdPosSan = VGet(-3.f, 230.f, 5849.f);
-	//respawn3rdPosLka = VGet(-3.f, 230.f, 5849.f);
 
 	timer.Initialize(9, 9, 99);
 
@@ -96,22 +92,18 @@ bool ModeStage0::Initialize() {
 
 	auto IronDoor1 = std::make_unique<IronDoor>();
 	IronDoor1->Initialize(true, VGet(-290.f, 25.f, 2129.f));
-	//MV1SetupCollInfo(IronDoor1->handleIronMeltDoor, IronDoor1->handleCol, 2, 2, 2);
 	irondoors.emplace_back(std::move(IronDoor1));
 
 	auto IronDoor2 = std::make_unique<IronDoor>();
 	IronDoor2->Initialize(false, VGet(421.f, 25.f, 2118.f));
-	//MV1SetupCollInfo(IronDoor2->handleIronMeltDoor, IronDoor2->handleCol, 2, 2, 2);
 	irondoors.emplace_back(std::move(IronDoor2));
 
 	auto IronDoor3 = std::make_unique<IronDoor>();
 	IronDoor3->Initialize(false, VGet(-2.f, 135.f, 4301.f));
-	//MV1SetupCollInfo(IronDoor1->handleIronMeltDoor, IronDoor1->handleCol, 2, 2, 2);
 	irondoors.emplace_back(std::move(IronDoor3));
 
 	auto IronDoor4 = std::make_unique<IronDoor>();
 	IronDoor4->Initialize(true, VGet(-3.f, 230.f, 5849.f));
-	//MV1SetupCollInfo(IronDoor2->handleIronMeltDoor, IronDoor2->handleCol, 2, 2, 2);
 	irondoors.emplace_back(std::move(IronDoor4));
 
 	damage.Initialize(&san, &lka);
@@ -224,10 +216,6 @@ bool ModeStage0::Process() {
 
 	damage.StageDamage(_handleMap);
 
-	//if ((respawn3rdPosSan.y <= san.vPos.y && respawn3rdPosSan.z <= san.vPos.z) && (respawn3rdPosLka.y <= lka.vPos.y && respawn3rdPosLka.z <= lka.vPos.z) && !respawn3rd)
-	//{
-	//	respawn3rd = true;
-	//}
 	if ((respawn2ndPosSan.y <= san.vPos.y && respawn2ndPosSan.z <= san.vPos.z) && (respawn2ndPosLka.y <= lka.vPos.y && respawn2ndPosLka.z <= lka.vPos.z) && !respawn2nd)
 	{
 		respawn2nd = true;
@@ -243,27 +231,6 @@ bool ModeStage0::Process() {
 		Respawn();
 	}
 
-	//if ((san.vPos.y <= -1000.0f) || (lka.vPos.y <= -1000.0f) || (san.HP <= 0) || (lka.HP <= 0))
-	//{
-	//	//BGM停止
-	//	StopMusic();
-		//gameover.gameoverFlag = true;
-		////BGM停止
-		//StopMusic();
-
-		//// シャドウマップの削除
-		//DeleteShadowMap(ShadowMapHandle);
-		//sanbomb.EffectReset();
-		//lkabomb.EffectReset();
-		//ChangePanSoundMem(255, san.VOICEdeathSAN);
-		//ChangePanSoundMem(-255, lka.VOICEdeathLKA);
-		//PlaySoundMem(san.VOICEdeathSAN, DX_PLAYTYPE_BACK, true);
-		//PlaySoundMem(lka.VOICEdeathLKA, DX_PLAYTYPE_BACK, true);
-		//Terminate();
-
-	//	ModeServer::GetInstance()->Del(this);
-	//	ModeServer::GetInstance()->Add(new ModeGameOver(0, false), 1, "gameover");
-	//}
 
 	int Trg;
 	int keyold = Key;
@@ -293,7 +260,6 @@ bool ModeStage0::Process() {
 		if (!Irondoors->melt) {
 			Irondoors->Update(sanbomb, lkabomb);
 		}
-		//Irondoors->CollCheck(san, lka);
 	}
 
 	if (timer.timeup == true)
@@ -392,7 +358,6 @@ bool ModeStage0::Render() {
 
 		//マップのUVスクロール
 		_UVScroll_U -= 0.001f;
-		//_UVScroll_V += 0.01f;
 		MV1SetFrameTextureAddressTransform(
 			_handleSkySphere	// モデルハンドル
 			, 0				// UV操作するフレーム番号
@@ -468,11 +433,6 @@ bool ModeStage0::Render() {
 
 void ModeStage0::Respawn()
 {
-	//if (respawn3rd)
-	//{
-	//	san.vPos = respawn3rdPosSan;
-	//	lka.vPos = respawn3rdPosLka;
-	//}
 	if (respawn2nd)
 	{
 		san.vPos = respawn2ndPosSan;
