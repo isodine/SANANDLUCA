@@ -1,3 +1,12 @@
+/**
+ * @file LKAclass.cpp
+ * @brief ルカ特有の動きを処理するプログラム
+ * @author 磯島武尊
+ * @date December 2022
+ *
+ * @note HPゲージ周りは	@author 田原魁人
+ */
+
 #include"LKAclass.h"
 #include "AppFrame.h"
 

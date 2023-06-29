@@ -1,5 +1,10 @@
-//BossSwamp::BossSwamp(){}
-//BossSwamp::~BossSwamp() {}
+/**
+ * @file BossSwamp.cpp
+ * @brief ボスに属性がついた状態で壁にぶつかると出てくる沼のプログラム
+ * @author 磯島武尊
+ * @date March 2023
+ */
+
 void BossSwamp::ModelInitialize()
 {
 	handleBaseSan = MV1LoadModel("res/07_Stage_map/Boss_Stage/acid.mv1");

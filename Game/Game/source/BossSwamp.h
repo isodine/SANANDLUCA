@@ -1,9 +1,14 @@
+/**
+ * @file BossSwamp.h
+ * @brief ボスに属性がついた状態で壁にぶつかると出てくる沼のプログラム
+ * @author 磯島武尊
+ * @date March 2023
+ */
+
 #pragma once
 class BossSwamp
 {
 public:
-	//BossSwamp();
-	//~BossSwamp();
 	void ModelInitialize();
 	void Initialize(bool IsSan,VECTOR Pos,int handleSan, int handleLka);
 	void Update(std::vector<std::unique_ptr<BossSwamp>>& swamps);

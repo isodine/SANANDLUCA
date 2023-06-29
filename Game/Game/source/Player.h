@@ -1,3 +1,10 @@
+/**
+ * @file player.h
+ * @brief プレイヤーのベースクラス
+ * @author 磯島武尊
+ * @date December 2022
+ */
+
 #pragma once
 #include <memory>
 #include <vector>

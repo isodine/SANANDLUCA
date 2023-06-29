@@ -1,11 +1,13 @@
+/**
+ * @file player.cpp
+ * @brief プレイヤーのベースクラス
+ * @author 磯島武尊
+ * @date December 2022
+ */
+
 #include "Player.h"
 #include "Gimmick.h"
 #include "ModeBoss.h"
-
-//extern int _handleMap;
-//extern int _handleSkySphere;
-//extern int frameMapCollisionfloor;
-//extern int frameMapCollisionwall;
 
 Player::Player()
 {

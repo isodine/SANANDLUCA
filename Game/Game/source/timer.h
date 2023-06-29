@@ -1,3 +1,10 @@
+/**
+ * @file timer.h
+ * @brief 制限時間等で使うタイマー
+ * @author 磯島武尊
+ * @date July 2022
+ */
+
 #pragma once
 
 //制限時間設定用クラス

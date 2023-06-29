@@ -1,3 +1,10 @@
+/**
+ * @file playerbomb.h
+ * @brief ボムのベースクラス
+ * @author 磯島武尊
+ * @date January 2023
+ */
+
 #pragma once
 
 class PlayerBomb

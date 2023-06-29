@@ -1,3 +1,10 @@
+/**
+ * @file Elevator.h
+ * @brief エレベーターのギミックを動かすプログラム(未実装)
+ * @author 磯島武尊
+ * @date February 2023
+ */
+
 #pragma once
 
 class Elevator

@@ -1,3 +1,10 @@
+/**
+ * @file Tube.h
+ * @brief パイプのギミックを動かすプログラム
+ * @author 磯島武尊
+ * @date February 2023
+ */
+
 #pragma once
 
 class Tube

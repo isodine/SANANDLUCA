@@ -1,3 +1,10 @@
+/**
+ * @file IronDoor.h
+ * @brief 鉄ドアのギミックを動かすプログラム
+ * @author 磯島武尊
+ * @date March 2023
+ */
+
 #pragma once
 class IronDoor
 {

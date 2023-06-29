@@ -1,3 +1,12 @@
+/**
+ * @file SANclass.h
+ * @brief サン特有の動きを処理するプログラム
+ * @author 磯島武尊
+ * @date December 2022
+ * 
+ * @note HPゲージ周りは	@author 田原魁人
+ */
+
 #pragma once
 #include"Player.h"
 #include "Boss.h"

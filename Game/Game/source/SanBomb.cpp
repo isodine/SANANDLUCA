@@ -1,3 +1,12 @@
+/**
+ * @file sanbomb.cpp
+ * @brief サンのボムの動きを処理するプログラム
+ * @author 磯島武尊
+ * @date January 2023
+ *
+ * @note エフェクト周りは	@author 田原魁人
+ */
+
 SanBomb::SanBomb() :PlayerBomb()
 {
 

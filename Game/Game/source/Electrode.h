@@ -1,3 +1,10 @@
+/**
+ * @file Electrode.h
+ * @brief 電極のギミックを動かすプログラム
+ * @author 磯島武尊
+ * @date January 2023
+ */
+
 #pragma once
 class Electrode
 {

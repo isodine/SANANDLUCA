@@ -1,3 +1,10 @@
+/**
+ * @file timer.cpp
+ * @brief 制限時間等で使うタイマー
+ * @author 磯島武尊
+ * @date July 2022
+ */
+
 #include "timer.h"
 #include "DxLib.h"
 

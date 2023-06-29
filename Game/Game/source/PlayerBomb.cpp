@@ -1,3 +1,10 @@
+/**
+ * @file playerbomb.cpp
+ * @brief ボムのベースクラス
+ * @author 磯島武尊
+ * @date January 2023
+ */
+
 PlayerBomb::PlayerBomb() {}
 
 PlayerBomb::~PlayerBomb() {}

@@ -1,7 +1,13 @@
-//#include "SANclass.h"
+/**
+ * @file SANclass.cpp
+ * @brief サン特有の動きを処理するプログラム
+ * @author 磯島武尊
+ * @date December 2022
+ *
+ * @note HPゲージ周りは	@author 田原魁人
+ */
+
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
-//#include "ModeGame.h"
 
 SAN::SAN()
 	:Player()

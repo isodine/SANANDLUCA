@@ -1,3 +1,10 @@
+/**
+ * @file IronDoor.cpp
+ * @brief 鉄ドアのギミックを動かすプログラム
+ * @author 磯島武尊
+ * @date March 2023
+ */
+
 IronDoor::IronDoor()
 {
 	handle = -1;

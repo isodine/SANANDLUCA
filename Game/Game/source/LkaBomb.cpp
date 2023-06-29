@@ -1,3 +1,12 @@
+/**
+ * @file Lkabomb.cpp
+ * @brief ルカのボムの動きを処理するプログラム
+ * @author 磯島武尊
+ * @date January 2023
+ *
+ * @note エフェクト周りは	@author 田原魁人
+ */
+
 LkaBomb::LkaBomb() :PlayerBomb()
 {
 }
