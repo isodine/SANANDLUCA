@@ -1,7 +1,7 @@
 #include"Bossdamage.h"
 #include "AppFrame.h"
 #include "ApplicationMain.h"
-#include "ModeBoss.h"
+#include "GameMode/ModeBoss.h"
 
 Bossdamage::Bossdamage()
 {

@@ -166,36 +166,31 @@
     <ClCompile Include="source\BossSwamp.cpp" />
     <ClCompile Include="source\Electrode.cpp" />
     <ClCompile Include="source\Elevator.cpp" />
+    <ClCompile Include="source\GameMode\ModeBoss.cpp" />
+    <ClCompile Include="source\GameMode\ModeEnding.cpp" />
+    <ClCompile Include="source\GameMode\ModeGame.cpp" />
+    <ClCompile Include="source\GameMode\ModeGameOver.cpp" />
+    <ClCompile Include="source\GameMode\ModeLogo.cpp" />
+    <ClCompile Include="source\GameMode\ModeRule.cpp" />
+    <ClCompile Include="source\GameMode\ModeStage0.cpp" />
+    <ClCompile Include="source\GameMode\ModeTitle.cpp" />
     <ClCompile Include="source\IronDoor.cpp" />
-    <ClCompile Include="source\lkacircle.cpp" />
-    <ClCompile Include="source\lkaheal.cpp" />
-    <ClCompile Include="source\ModeRule.cpp" />
-    <ClCompile Include="source\PlayerBomb.cpp" />
     <ClCompile Include="source\ApplicationMain.cpp" />
     <ClCompile Include="source\Boss.cpp" />
     <ClCompile Include="source\Camera.cpp" />
     <ClCompile Include="source\Damage.cpp" />
-    <ClCompile Include="source\sancircle.cpp" />
-    <ClCompile Include="source\sanheal.cpp" />
+    <ClCompile Include="source\Player\lkabomb.cpp" />
+    <ClCompile Include="source\Player\lkacircle.cpp" />
+    <ClCompile Include="source\Player\LKAclass.cpp" />
+    <ClCompile Include="source\Player\lkaheal.cpp" />
+    <ClCompile Include="source\Player\Player.cpp" />
+    <ClCompile Include="source\Player\PlayerBomb.cpp" />
+    <ClCompile Include="source\Player\sanbomb.cpp" />
+    <ClCompile Include="source\Player\sancircle.cpp" />
+    <ClCompile Include="source\Player\SANclass.cpp" />
+    <ClCompile Include="source\Player\sanheal.cpp" />
     <ClCompile Include="source\Slime.cpp" />
     <ClCompile Include="source\Gimmick.cpp" />
-    <ClCompile Include="source\LkaBomb.cpp" />
-    <ClCompile Include="source\LKAclass.cpp" />
-    <ClCompile Include="source\ModeBoss.cpp" />
-    <ClCompile Include="source\ModeEnding.cpp" />
-    <ClCompile Include="source\ModeGame.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="source\ModeGameOver.cpp" />
-    <ClCompile Include="source\ModeLogo.cpp" />
-    <ClCompile Include="source\ModeStage0.cpp" />
-    <ClCompile Include="source\ModeTitle.cpp" />
-    <ClCompile Include="source\Player.cpp" />
-    <ClCompile Include="source\sanbomb.cpp" />
-    <ClCompile Include="source\SANclass.cpp" />
     <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -221,32 +216,27 @@
     <ClInclude Include="source\Damage.h" />
     <ClInclude Include="source\Electrode.h" />
     <ClInclude Include="source\Elevator.h" />
+    <ClInclude Include="source\GameMode\ModeBoss.h" />
+    <ClInclude Include="source\GameMode\ModeEnding.h" />
+    <ClInclude Include="source\GameMode\ModeGame.h" />
+    <ClInclude Include="source\GameMode\ModeGameOver.h" />
+    <ClInclude Include="source\GameMode\ModeLogo.h" />
+    <ClInclude Include="source\GameMode\ModeRule.h" />
+    <ClInclude Include="source\GameMode\ModeStage0.h" />
+    <ClInclude Include="source\GameMode\ModeTitle.h" />
     <ClInclude Include="source\IronDoor.h" />
-    <ClInclude Include="source\lkacircle.h" />
-    <ClInclude Include="source\lkaheal.h" />
-    <ClInclude Include="source\ModeRule.h" />
-    <ClInclude Include="source\sanbomb.h" />
-    <ClInclude Include="source\sanheal.h" />
+    <ClInclude Include="source\Player\lkabomb.h" />
+    <ClInclude Include="source\Player\lkacircle.h" />
+    <ClInclude Include="source\Player\LKAclass.h" />
+    <ClInclude Include="source\Player\lkaheal.h" />
+    <ClInclude Include="source\Player\Player.h" />
+    <ClInclude Include="source\Player\PlayerBomb.h" />
+    <ClInclude Include="source\Player\sanbomb.h" />
+    <ClInclude Include="source\Player\sancircle.h" />
+    <ClInclude Include="source\Player\SANclass.h" />
+    <ClInclude Include="source\Player\sanheal.h" />
     <ClInclude Include="source\Slime.h" />
     <ClInclude Include="source\Gimmick.h" />
-    <ClInclude Include="source\LkaBomb.h" />
-    <ClInclude Include="source\LKAclass.h" />
-    <ClInclude Include="source\ModeBoss.h" />
-    <ClInclude Include="source\ModeEnding.h" />
-    <ClInclude Include="source\ModeGame.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="source\ModeGameOver.h" />
-    <ClInclude Include="source\ModeLogo.h" />
-    <ClInclude Include="source\ModeStage0.h" />
-    <ClInclude Include="source\ModeTitle.h" />
-    <ClInclude Include="source\Player.h" />
-    <ClInclude Include="source\sancircle.h" />
-    <ClInclude Include="source\PlayerBomb.h" />
-    <ClInclude Include="source\SANclass.h" />
     <ClInclude Include="source\stdafx.h" />
     <ClInclude Include="source\timer.h" />
     <ClInclude Include="source\Tube.h" />

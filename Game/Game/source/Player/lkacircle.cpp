@@ -1,7 +1,7 @@
 #include"lkacircle.h"
 #include "AppFrame.h"
-#include "ApplicationMain.h"
-#include "ModeGame.h"
+#include <../Game/Game/source/ApplicationMain.h>
+#include <../Game/Game/source/GameMode/ModeGame.h>
 
 Lkacircle::Lkacircle()
 {

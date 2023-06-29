@@ -1,7 +1,7 @@
 #include"Bossdown.h"
 #include "AppFrame.h"
 #include "ApplicationMain.h"
-#include "ModeBoss.h"
+#include "GameMode/ModeBoss.h"
 
 Bossdown::Bossdown()
 {

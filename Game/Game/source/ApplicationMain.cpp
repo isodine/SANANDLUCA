@@ -1,8 +1,7 @@
 
 #include "AppFrame.h"
-//#include "ApplicationMain.h"
-#include "ModeTitle.h"
-#include "ModeLogo.h"
+#include "GameMode/ModeTitle.h"
+#include "GameMode/ModeLogo.h"
 
 // ŽÀ‘Ì
 ApplicationMain				g_oApplicationMain;
@@ -12,9 +11,6 @@ bool ApplicationMain::Initialize(HINSTANCE hInstance) {
 
 	// ƒ‚[ƒh‚Ì“o˜^
 	ModeServer::GetInstance()->Add(new ModeLogo(), 1, "logo");
-	//ModeServer::GetInstance()->Add(new ModeStage0(), 1, "stage00");
-	//ModeServer::GetInstance()->Add(new ModeGame(), 1, "stage01");
-	//ModeServer::GetInstance()->Add(new ModeBoss(), 1, "boss");
 	return true;
 }
 

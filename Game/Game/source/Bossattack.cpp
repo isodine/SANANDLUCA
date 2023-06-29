@@ -1,7 +1,7 @@
 #include"Bossattack.h"
 #include "AppFrame.h"
 #include "ApplicationMain.h"
-#include "ModeBoss.h"
+#include "GameMode/ModeBoss.h"
 
 Bossattack::Bossattack()
 {

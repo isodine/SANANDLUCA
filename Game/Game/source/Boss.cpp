@@ -6,8 +6,8 @@
  * \date   February 2023
  * \details SwampSpawn(bool IsSan)ÇÃÇ›author àÈìáÅ@ïêë∏
  *********************************************************************/
-#include "SANclass.h"
-#include "LKAclass.h"
+#include "Player/SANclass.h"
+#include "Player/LKAclass.h"
 
 void Boss::Initialize() {
 	model.pos = VGet(0, 60, 750);

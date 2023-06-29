@@ -7,7 +7,7 @@
 
 #include "Player.h"
 #include "Gimmick.h"
-#include "ModeBoss.h"
+#include "GameMode/ModeBoss.h"
 
 Player::Player()
 {

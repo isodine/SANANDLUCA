@@ -1,7 +1,7 @@
 #include"sancircle.h"
 #include "AppFrame.h"
 #include "ApplicationMain.h"
-#include "ModeGame.h"
+#include "GameMode/ModeGame.h"
 
 Sancircle::Sancircle()
 {
